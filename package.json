@@ -1,11 +1,48 @@
 {
   "name": "fs-middlelayer-api",
-  "version": "1.0.0",
-  "description": "fs api",
+  "version": "0.0.1",
+  "description": "US Forest Service ePermit Middlelayer API",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test",
+    "start": "node index.js",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha"
   },
-  "author": "",
-  "license": "ISC"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/18F/fs-middlelayer-api"
+  },
+  "keywords": [
+    "gsa",
+    "tts",
+    "18f",
+    "usda",
+    "fs",
+    "forest service",
+    "epermit",
+    "api"
+  ],
+  "author": "NCI",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/18F/fs-middlelayer-api/issues"
+  },
+  "homepage": "https://github.com/18F/fs-middlelayer-api#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "codeclimate-test-reporter": "^0.4.0",
+    "codecov": "^1.0.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "supertest": "^3.0.0"
+  },
+  "dependencies": {
+    "cors": "^2.8.1",
+    "dotenv": "^4.0.0",
+    "express": "^4.14.1",
+    "file-stream-rotator": "0.0.7",
+    "helmet": "^3.4.0",
+    "mkdirp": "^0.5.1",
+    "morgan": "^1.8.1"
+  }
 }
