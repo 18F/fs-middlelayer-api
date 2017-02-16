@@ -53,15 +53,34 @@ var accessLogStream = fsr.getStream({
 app.use(morgan('combined', {stream: accessLogStream}));
 
 //*******************************************************************
-
+//Public 
 app.use(express.static('public'));
 
-app.get('/api', function (req, res) {
-	var output = {
+//*******************************************************************
+//generic routes
+
+app.get('/permit', function(req,res){
+  var output = {
         "success" : true,
         "api": "FS ePermit API"
     };
-    res.json(output);
+  res.json(output);
+});
+
+app.post('/permit', function(req,res){
+  var output = {
+        "success" : true,
+        "api": "FS ePermit API"
+    };
+  res.json(output);
+});
+
+app.put('/permit', function(req,res){
+  var output = {
+        "success" : true,
+        "api": "FS ePermit API"
+    };
+  res.json(output);
 });
 
 //*******************************************************************

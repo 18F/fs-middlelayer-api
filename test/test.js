@@ -33,14 +33,6 @@ describe('FS ePermit API', function() {
             .expect(200, done);
     });
     
-    it('should return json format if api', function(done) {
-
-        request(server)
-            .get('/api')
-            .expect('Content-Type', /json/)
-            .expect(200, done);
-    });
-    
     it('should return a 404 error if invalid', function(done) {
         request(server)
             .get('/asdfsad')
@@ -49,7 +41,7 @@ describe('FS ePermit API', function() {
     
     it('should not have x-powered-by header', function(done) {
         request(server)
-            .get('/api')
+            .get('/permit')
             .expect(function(res) {
                 expect(res.headers).to.not.have.key('x-powered-by');
             })
@@ -58,7 +50,7 @@ describe('FS ePermit API', function() {
     
     it('should have cors support', function(done) {
         request(server)
-            .get('/api')
+            .get('/permit')
             .expect(function(res) {
                 expect(res.headers['access-control-allow-origin']).to.equal('*');
             })
