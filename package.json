@@ -20,7 +20,9 @@
     "fs",
     "forest service",
     "epermit",
-    "api"
+    "api",
+    "node",
+    "express"
   ],
   "author": "NCI",
   "license": "CC0-1.0",

@@ -1,0 +1,34 @@
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - javascript
+  eslint:
+    enabled: true
+    checks:
+      no-unused-expressions:
+        enabled: false
+  fixme:
+    enabled: true
+  nodesecurity:
+    enabled: true
+  markdownlint:
+    enabled: true
+ratings:
+  paths:
+  - "**.js"
+  - "**.module"
+exclude_paths:
+- node_modules/
+- coverage/
+- test/
+ecmaFeatures:
+  modules: true
+  jsx: true
+env:
+  amd: true
+  browser: true
+  es6: true
+  jquery: true
+  node: true
