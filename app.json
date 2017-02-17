@@ -1,0 +1,17 @@
+{
+  "name": "FS ePermit API",
+  "description": "US Forest Service ePermit Middlelayer API",
+  "repository": "https://github.com/nci-ats/fs-middlelayer-api",
+  "keywords": [
+    "gsa",
+    "tts",
+    "18f",
+    "usda",
+    "fs",
+    "forest service",
+    "epermit",
+    "api",
+    "node",
+    "express"
+  ]
+}
