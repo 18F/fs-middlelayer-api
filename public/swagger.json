@@ -1,0 +1,227 @@
+
+
+{
+   "swagger": "2.0",
+   "info": {
+      "description": "This page is for developers. We built this site entirely off the APIs (Application Programming Interfaces) below and we want to share them with you.",
+      "version": "1.0.0",
+      "title": "API Documentation for Developers"
+   },
+   "host": "",
+   "basePath": "/",
+   "tags": [
+      {
+         "name": "  ",
+         "description": "e-Permitting API"
+      }
+   ],
+   "schemes": [
+      "http"
+   ],
+   "paths": {
+      "/permit": {
+         "post": {
+            "tags": [
+               "permit"
+            ],
+            "summary": "Submit a new Permit",
+            "description": "",
+            "operationId": "createPermit",
+            "consumes": [
+               "application/json"
+            ],
+            "produces": [
+               "application/json"
+            ],
+            "parameters": [
+               {
+                  "in": "body",
+                  "name": "body",
+                  "description": "permit information",
+                  "required": true,
+                  "schema": {
+                     "$ref": "#/definitions/Permit"
+                  }
+               }
+            ],
+            "responses": {
+               "405": {
+                  "description": "Invalid input"
+               }
+            },
+            "security": [
+               {
+                  "permit_auth": [
+                     "write:permits",
+                     "read:permits"
+                  ]
+               }
+            ]
+         },
+         "put": {
+            "tags": [
+               "permit"
+            ],
+            "summary": "Update an existing Permit",
+            "description": "",
+            "operationId": "updatePermit",
+            "consumes": [
+               "application/json"
+            ],
+            "produces": [
+               "application/json"
+            ],
+            "parameters": [
+               {
+                  "in": "body",
+                  "name": "body",
+                  "description": "Permit object that needs to be added",
+                  "required": true,
+                  "schema": {
+                     "$ref": "#/definitions/Permit"
+                  }
+               }
+            ],
+            "responses": {
+               "400": {
+                  "description": "Invalid ID supplied"
+               },
+               "404": {
+                  "description": "Permit not found"
+               },
+               "405": {
+                  "description": "Validation exception"
+               }
+            },
+            "security": [
+               {
+                  "permit_auth": [
+                     "write:permits",
+                     "read:permits"
+                  ]
+               }
+            ]
+         }
+      },
+      "/permit/{permitId}": {
+         "get": {
+            "tags": [
+               "permit"
+            ],
+            "summary": "Find permit by ID",
+            "description": "Returns a single permit",
+            "operationId": "getPermitById",
+            "produces": [
+               "application/json"
+            ],
+            "parameters": [
+               {
+                  "name": "permitId",
+                  "in": "path",
+                  "description": "ID of permit to return",
+                  "required": true,
+                  "type": "integer",
+                  "format": "int64"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "successful operation",
+                  "schema": {
+                     "$ref": "#/definitions/Permit"
+                  }
+               },
+               "400": {
+                  "description": "Invalid ID supplied"
+               },
+               "404": {
+                  "description": "Permit not found"
+               }
+            },
+            "security": [
+               {
+                  "api_key": []
+               }
+            ]
+         }
+      }
+   },
+   "securityDefinitions": {
+      "permit_auth": {
+         "type": "oauth2",
+         "flow": "implicit",
+         "scopes": {
+            "write:permits": "modify permits",
+            "read:permits": "read permits"
+         }
+      },
+      "api_key": {
+         "type": "apiKey",
+         "name": "api_key",
+         "in": "header"
+      }
+   },
+   "definitions": {
+       "ApplicantInfo": {
+         "type": "object",
+         "properties": {
+            "firstName": {
+               "type": "string"
+            },
+            "lastName": {
+               "type": "string"
+            },
+            "dayPhone": { "type": "integer" },
+            "eveningPhone": { "type": "integer" },
+            "emailAddress": { "type": "string" },
+            "mailingAddress": { "type": "string" },
+            "mailingCity": { "type": "string" },
+            "mailingState": { "type": "string" },
+            "mailingZIP": { "type": "integer" },
+            "organizationName": { "type": "string"},
+            "website":{"type": "string"},
+            "orgType":{
+               "type":"string",
+               "description":"Organization Type",
+               "enum":[
+                  "Individual",
+                  "Corporation",
+                  "Nonprofit"
+               ]
+            }
+         },
+         "xml": {
+            "name": "ApplicantInfo"
+         }
+      },
+      "Permit": {
+         "type": "object",
+         "required": [
+            "applicant-info"
+         ],
+         "properties": {
+            "applicant-info": {
+              "$ref": "#/definitions/ApplicantInfo"
+            }
+         },
+         "xml": {
+            "name": "Permit"
+         }
+      },
+      "ApiResponse": {
+         "type": "object",
+         "properties": {
+            "code": {
+               "type": "integer",
+               "format": "int32"
+            },
+            "type": {
+               "type": "string"
+            },
+            "message": {
+               "type": "string"
+            }
+         }
+      }
+   }
+}
