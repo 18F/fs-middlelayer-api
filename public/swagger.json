@@ -19,12 +19,12 @@
       "http"
    ],
    "paths": {
-      "/permit": {
+      "/permit/special-uses/non-commercial/": {
          "post": {
             "tags": [
-               "permit"
+               "non-commercial permit"
             ],
-            "summary": "Submit a new Permit",
+            "summary": "Submit a new non-commercial permit",
             "description": "",
             "operationId": "createPermit",
             "consumes": [
@@ -37,10 +37,10 @@
                {
                   "in": "body",
                   "name": "body",
-                  "description": "permit information",
+                  "description": "non-commercial permit information",
                   "required": true,
                   "schema": {
-                     "$ref": "#/definitions/permit"
+                     "$ref": "#/definitions/non-commercial-permit"
                   }
                }
             ],
@@ -60,7 +60,7 @@
          },
          "put": {
             "tags": [
-               "permit"
+               "non-commercial permit"
             ],
             "summary": "Update an existing Permit",
             "description": "",
@@ -162,10 +162,9 @@
       }
    },
    "definitions": {
-       "properties": {
+       "non-commercial-properties": {
           "type": "object",
           "properties": {
-            "type" : { "type":"string"},
             "region": { "type" : "integer" },
             "forest": { "type" : "integer" },
             "district": { "type" : "integer" },
@@ -174,16 +173,16 @@
             "applicant-info": {
                "$ref": "#/definitions/applicant-info"
             },
-            "type-specific-fields": {
+            "non-commercial-fields": {
               "$ref": "#/definitions/non-commercial-fields"
             }
           },
-          "required": ["type","region","forest","district","applicant-info"],
+          "required": ["region","forest","district","applicant-info","non-commercial-fields"],
           "xml": {
             "name": "properties"
           }
         },
-       "applicant-info": {
+        "applicant-info": {
          "type": "object",
          "properties": {
             "firstName": { "type": "string" },
@@ -253,16 +252,16 @@
             "name": "temp-outfitter-fields"
          } 
       },
-      "permit": {
+      "non-commercial-permit": {
          "type": "object",
          "properties": {
             "properties": {
-              "$ref": "#/definitions/properties"  
+              "$ref": "#/definitions/non-commercial-properties"  
             }
          },
          "required": ["properties"],
          "xml": {
-            "name": "permit"
+            "name": "non-commercial-permit"
          }
       },
       "ApiResponse": {
