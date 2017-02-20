@@ -1,0 +1,8 @@
+{
+    "success" : true,
+    "api": "FS ePermit API",
+    "type": "controller",
+    "verb": "get",
+    "src": "json",
+    "route": "permits/special-uses/non-commercial"
+}
