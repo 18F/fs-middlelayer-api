@@ -194,6 +194,11 @@
       "from": "ienoopen@1.0.0",
       "resolved": "https://registry.npmjs.org/ienoopen/-/ienoopen-1.0.0.tgz"
     },
+    "include": {
+      "version": "1.1.0",
+      "from": "include@latest",
+      "resolved": "https://registry.npmjs.org/include/-/include-1.1.0.tgz"
+    },
     "inherits": {
       "version": "2.0.3",
       "from": "inherits@2.0.3",
