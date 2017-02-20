@@ -40,7 +40,7 @@
                   "description": "permit information",
                   "required": true,
                   "schema": {
-                     "$ref": "#/definitions/Permit"
+                     "$ref": "#/definitions/permit"
                   }
                }
             ],
@@ -162,17 +162,34 @@
       }
    },
    "definitions": {
-       "ApplicantInfo": {
+       "properties": {
+          "type": "object",
+          "properties": {
+            "type" : { "type":"string"},
+            "region": { "type" : "integer" },
+            "forest": { "type" : "integer" },
+            "district": { "type" : "integer" },
+            "authorizingOfficerName": { "type" : "string"},
+            "authorizingOfficerTitle": { "type" : "string"},
+            "applicant-info": {
+               "$ref": "#/definitions/applicant-info"
+            },
+            "type-specific-fields": {
+              "$ref": "#/definitions/non-commercial-fields"
+            }
+          },
+          "required": ["type","region","forest","district","applicant-info"],
+          "xml": {
+            "name": "properties"
+          }
+        },
+       "applicant-info": {
          "type": "object",
          "properties": {
-            "firstName": {
-               "type": "string"
-            },
-            "lastName": {
-               "type": "string"
-            },
-            "dayPhone": { "type": "integer" },
-            "eveningPhone": { "type": "integer" },
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "dayPhone": { "$ref": "#/definitions/phone-number" },
+            "eveningPhone": { "$ref": "#/definitions/phone-number" },
             "emailAddress": { "type": "string" },
             "mailingAddress": { "type": "string" },
             "mailingCity": { "type": "string" },
@@ -186,26 +203,66 @@
                "enum":[
                   "Individual",
                   "Corporation",
+                  "Limited Liability Company",
+                  "Partnership or Association",
+                  "State Government or Agency",
+                  "Local Government or Agency",
                   "Nonprofit"
                ]
-            }
+            }            
          },
+         "required": ["firstName","lastName","dayPhone","emailAddress","mailingAddress","mailingCity","mailingZIP","mailingState"],
          "xml": {
-            "name": "ApplicantInfo"
+            "name": "applicant-info"
          }
       },
-      "Permit": {
-         "type": "object",
-         "required": [
-            "applicant-info"
-         ],
+      "phone-number": {
+        "type": "object",
          "properties": {
-            "applicant-info": {
-              "$ref": "#/definitions/ApplicantInfo"
+            "areaCode": { "type": "integer"},
+            "number": { "type": "integer"},
+            "extension": { "type": "integer"},
+            "type": {"type": "string"}
+         },
+         "required": ["areaCode","number","type"],
+         "xml": {
+            "name": "phone-number"
+         }  
+      },
+      "non-commercial-fields": {
+        "type": "object",
+        "properties": {
+          "activityDescription": { "type": "string"},
+          "locationDescription": {  "type": "string"},
+          "startDateTime": { "type": "string"},
+          "endDateTime": { "type": "string"},
+          "numberParticipants" : { "type": "integer"}
+        },
+        "required": ["activityDescription","locationDescription","startDateTime","endDateTime","numberParticipants"],
+        "xml": {
+            "name": "non-commercial-fields"
+         } 
+      },
+      "temp-outfitter-fields": {
+        "type": "object",
+        "properties": {
+          "insuranceCertificate": { "type": "string"}
+        },
+        "required": ["insuranceCertificate"],
+        "xml": {
+            "name": "temp-outfitter-fields"
+         } 
+      },
+      "permit": {
+         "type": "object",
+         "properties": {
+            "properties": {
+              "$ref": "#/definitions/properties"  
             }
          },
+         "required": ["properties"],
          "xml": {
-            "name": "Permit"
+            "name": "permit"
          }
       },
       "ApiResponse": {
