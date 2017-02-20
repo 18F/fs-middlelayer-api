@@ -62,7 +62,7 @@
             "tags": [
                "non-commercial permit"
             ],
-            "summary": "Update an existing Permit",
+            "summary": "Update an existing non-commercial permit",
             "description": "",
             "operationId": "updatePermit",
             "consumes": [
@@ -78,7 +78,7 @@
                   "description": "Permit object that needs to be added",
                   "required": true,
                   "schema": {
-                     "$ref": "#/definitions/Permit"
+                     "$ref": "#/definitions/non-commercial-permit"
                   }
                }
             ],
@@ -103,14 +103,95 @@
             ]
          }
       },
-      "/permit/{permitId}": {
+      "/permit/special-uses/commercial/outfitters/": {
+         "post": {
+            "tags": [
+               "temp-outfitter permit"
+            ],
+            "summary": "Submit a new temp-outfitter permit",
+            "description": "",
+            "consumes": [
+               "application/json"
+            ],
+            "produces": [
+               "application/json"
+            ],
+            "parameters": [
+               {
+                  "in": "body",
+                  "name": "body",
+                  "description": "temp-outfitter permit information",
+                  "required": true,
+                  "schema": {
+                     "$ref": "#/definitions/temp-outfitter-permit"
+                  }
+               }
+            ],
+            "responses": {
+               "405": {
+                  "description": "Invalid input"
+               }
+            },
+            "security": [
+               {
+                  "permit_auth": [
+                     "write:permits",
+                     "read:permits"
+                  ]
+               }
+            ]
+         },
+         "put": {
+            "tags": [
+               "temp-outfitter permit"
+            ],
+            "summary": "Update an existing temp-outfitter Permit",
+            "description": "",
+            "consumes": [
+               "application/json"
+            ],
+            "produces": [
+               "application/json"
+            ],
+            "parameters": [
+               {
+                  "in": "body",
+                  "name": "body",
+                  "description": "Permit object that needs to be updated",
+                  "required": true,
+                  "schema": {
+                     "$ref": "#/definitions/temp-outfitter-permit"
+                  }
+               }
+            ],
+            "responses": {
+               "400": {
+                  "description": "Invalid ID supplied"
+               },
+               "404": {
+                  "description": "Permit not found"
+               },
+               "405": {
+                  "description": "Validation exception"
+               }
+            },
+            "security": [
+               {
+                  "permit_auth": [
+                     "write:permits",
+                     "read:permits"
+                  ]
+               }
+            ]
+         }
+      },
+      "/permit/special-uses/non-commercial/{permitId}": {
          "get": {
             "tags": [
-               "permit"
+               "non-commercial permit"
             ],
-            "summary": "Find permit by ID",
+            "summary": "Find non-commerial permit by ID",
             "description": "Returns a single permit",
-            "operationId": "getPermitById",
             "produces": [
                "application/json"
             ],
@@ -118,7 +199,7 @@
                {
                   "name": "permitId",
                   "in": "path",
-                  "description": "ID of permit to return",
+                  "description": "ID of non-commercial permit to return",
                   "required": true,
                   "type": "integer",
                   "format": "int64"
@@ -128,7 +209,48 @@
                "200": {
                   "description": "successful operation",
                   "schema": {
-                     "$ref": "#/definitions/Permit"
+                     "$ref": "#/definitions/non-commercial-permit"
+                  }
+               },
+               "400": {
+                  "description": "Invalid ID supplied"
+               },
+               "404": {
+                  "description": "Permit not found"
+               }
+            },
+            "security": [
+               {
+                  "api_key": []
+               }
+            ]
+         }
+      },
+      "/permit/special-uses/commercial/outfitters/{permitId}": {
+         "get": {
+            "tags": [
+               "temp-outfitter permit"
+            ],
+            "summary": "Find temp-outfitter permit by ID",
+            "description": "Returns a single permit",
+            "produces": [
+               "application/json"
+            ],
+            "parameters": [
+               {
+                  "name": "permitId",
+                  "in": "path",
+                  "description": "ID of temp-outfitter permit to return",
+                  "required": true,
+                  "type": "integer",
+                  "format": "int64"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "successful operation",
+                  "schema": {
+                     "$ref": "#/definitions/temp-outfitter-permit"
                   }
                },
                "400": {
@@ -171,7 +293,7 @@
             "authorizingOfficerName": { "type" : "string"},
             "authorizingOfficerTitle": { "type" : "string"},
             "applicant-info": {
-               "$ref": "#/definitions/applicant-info"
+               "$ref": "#/definitions/applicant-info-temp-outfitter"
             },
             "non-commercial-fields": {
               "$ref": "#/definitions/non-commercial-fields"
@@ -182,7 +304,27 @@
             "name": "properties"
           }
         },
-        "applicant-info": {
+        "temp-outfitter-properties": {
+          "type": "object",
+          "properties": {
+            "region": { "type" : "integer" },
+            "forest": { "type" : "integer" },
+            "district": { "type" : "integer" },
+            "authorizingOfficerName": { "type" : "string"},
+            "authorizingOfficerTitle": { "type" : "string"},
+            "applicant-info": {
+               "$ref": "#/definitions/applicant-info-temp-outfitter"
+            },
+            "temp-outfitter-fields": {
+              "$ref": "#/definitions/temp-outfitter-fields"
+            }
+          },
+          "required": ["region","forest","district","applicant-info", "applicant-info/orgType" ,"non-commercial-fields"],
+          "xml": {
+            "name": "properties"
+          }
+        },
+        "applicant-info-non-commercial": {
          "type": "object",
          "properties": {
             "firstName": { "type": "string" },
@@ -212,7 +354,40 @@
          },
          "required": ["firstName","lastName","dayPhone","emailAddress","mailingAddress","mailingCity","mailingZIP","mailingState"],
          "xml": {
-            "name": "applicant-info"
+            "name": "applicant-info-non-commercial"
+         }
+      },
+      "applicant-info-temp-outfitter": {
+         "type": "object",
+         "properties": {
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "dayPhone": { "$ref": "#/definitions/phone-number" },
+            "eveningPhone": { "$ref": "#/definitions/phone-number" },
+            "emailAddress": { "type": "string" },
+            "mailingAddress": { "type": "string" },
+            "mailingCity": { "type": "string" },
+            "mailingState": { "type": "string" },
+            "mailingZIP": { "type": "integer" },
+            "organizationName": { "type": "string"},
+            "website":{"type": "string"},
+            "orgType":{
+               "type":"string",
+               "description":"Organization Type",
+               "enum":[
+                  "Individual",
+                  "Corporation",
+                  "Limited Liability Company",
+                  "Partnership or Association",
+                  "State Government or Agency",
+                  "Local Government or Agency",
+                  "Nonprofit"
+               ]
+            }            
+         },
+         "required": ["firstName","lastName","dayPhone","emailAddress","mailingAddress","mailingCity","mailingZIP","mailingState","orgType"],
+         "xml": {
+            "name": "applicant-info-temp-outfitter"
          }
       },
       "phone-number": {
@@ -245,7 +420,15 @@
       "temp-outfitter-fields": {
         "type": "object",
         "properties": {
-          "insuranceCertificate": { "type": "string"}
+          "insuranceCertificate": { "type": "string"},
+          "goodStandingEvidence": {
+            "description": "Certificate of good standing, operating agreement, or other evidence the business is in good standing",
+            "type": "string"
+          },
+          "operatingPlan": {
+            "description": "A completed Word or RTF operating plan template.",
+            "type": "string"
+          }
         },
         "required": ["insuranceCertificate"],
         "xml": {
@@ -262,6 +445,18 @@
          "required": ["properties"],
          "xml": {
             "name": "non-commercial-permit"
+         }
+      },
+      "temp-outfitter-permit": {
+         "type": "object",
+         "properties": {
+            "properties": {
+              "$ref": "#/definitions/temp-outfitter-properties"  
+            }
+         },
+         "required": ["properties"],
+         "xml": {
+            "name": "temp-outfitter-permit"
          }
       },
       "ApiResponse": {
