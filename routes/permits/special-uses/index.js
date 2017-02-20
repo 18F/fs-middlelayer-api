@@ -25,7 +25,5 @@ var non_commercial = require('./non-commercial');
 
 router.use('/commercial', commercial);
 router.use('/non-commercial', non_commercial);
-//router.put();
-//router.post();
 
 module.exports = router;

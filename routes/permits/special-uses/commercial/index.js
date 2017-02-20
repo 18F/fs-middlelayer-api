@@ -23,7 +23,5 @@ var outfitters = require('./outfitters');
 // router
 
 router.use('/outfitters', outfitters);
-//router.put();
-//router.post();
 
 module.exports = router;

@@ -16,6 +16,9 @@
 
 var express = require('express');
 var router = express.Router();
+var include = require('include')(__dirname);
+
+var non_commercial = include('controllers/permits/special-uses/non-commercial');
 
 //*******************************************************************
 // router
@@ -23,52 +26,28 @@ var router = express.Router();
 // get all
 router.get('/',function(req,res){
     
-    var output = {
-        "success" : true,
-        "api": "FS ePermit API",
-        "verb": "get",
-        "route": "permits/special-uses/non-commercial"
-    };
-    res.json(output);
+    non_commercial.get.all(req,res);
     
 });
 
 // get id
 router.get('/:id(\\d+)',function(req,res){
     
-    var output = {
-        "success" : true,
-        "api": "FS ePermit API",
-        "verb": "get",
-        "route": "permits/special-uses/non-commercial/id"
-    };
-    res.json(output);
+    non_commercial.get.id(req,res);
     
 });
 
 // put id
 router.put('/:id(\\d+)',function(req,res){
     
-    var output = {
-        "success" : true,
-        "api": "FS ePermit API",
-        "verb": "put",
-        "route": "permits/special-uses/non-commercial/id"
-    };
-    res.json(output);
+    non_commercial.put.id(req,res);
     
 });
 
 // post
 router.post('/',function(req,res){
     
-    var output = {
-        "success" : true,
-        "api": "FS ePermit API",
-        "verb": "post",
-        "route": "permits/special-uses/non-commercial"
-    };
-    res.json(output);
+    non_commercial.post(req,res);
     
 });
 

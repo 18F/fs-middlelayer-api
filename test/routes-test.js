@@ -89,4 +89,3 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 
 //*******************************************************************
-

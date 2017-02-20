@@ -23,7 +23,5 @@ var permits = require('./permits');
 // router
 
 router.use('/permits', permits);
-//router.put();
-//router.post();
 
 module.exports = router;

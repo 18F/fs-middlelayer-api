@@ -23,7 +23,5 @@ var special_uses = require('./special-uses');
 // router
 
 router.use('/special-uses', special_uses);
-//router.put();
-//router.post();
 
 module.exports = router;
