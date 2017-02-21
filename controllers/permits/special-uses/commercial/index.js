@@ -16,40 +16,38 @@
 
 var include = require('include')(__dirname);
 
+var outfitters = require('./outfitters');
+
 //*******************************************************************
 // controller
 
 var get = {};
-var put = {};
-var post;
 
 // get all
 
-get.all = function(req){
-    return include('test/data/outfitters.get.all.json');
-}
+get.all = function(req,res){
 
-// get id
+    var outfitter = outfitters.get.all(req)['outfitters'];
 
-get.id = function(req,res){
-    res.json(include('test/data/outfitters.get.id.json'));
-}
+    var commercial = {
+    	"response":{
+    		"success" : true,
+	        "api": "FS ePermit API",
+	        "type": "controller",
+	        "verb": "get",
+	        "src": "json",
+	        "route": "permits/special-uses/commercial"
+    	},
+    	"commercial":{
+    		"outfitters": outfitter
+    	}
+    }
 
-// put id
+    return commercial;
 
-put.id = function(req,res){
-    res.json(include('test/data/outfitters.put.id.json'));
-}
-
-// post
-
-post = function(req,res){
-    res.json(include('test/data/outfitters.post.json'));
-}
+};
 
 //*******************************************************************
 // exports
 
 module.exports.get = get;
-module.exports.put = put;
-module.exports.post = post;
