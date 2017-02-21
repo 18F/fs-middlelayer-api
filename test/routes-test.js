@@ -87,5 +87,27 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 });
 
+describe('API Routes: permits/special-uses/commercial', function() {
+    
+    it('should return valid json for commercial GET request for all', function(done) {
+        request(server)
+            .get('/permits/special-uses/commercial')
+            .expect('Content-Type', /json/)
+            .expect(200, done);
+    });
+
+});
+
+describe('API Routes: permits/special-uses', function() {
+    
+    it('should return valid json for special-uses GET request for all', function(done) {
+        request(server)
+            .get('/permits/special-uses')
+            .expect('Content-Type', /json/)
+            .expect(200, done);
+    });
+
+});
+
 
 //*******************************************************************
