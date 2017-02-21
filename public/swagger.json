@@ -361,6 +361,10 @@
       "temp-outfitter-fields": {
         "type": "object",
         "properties": {
+          "activityDescription": { "type": "string"},
+          "locationDescription": {  "type": "string"},
+          "startDateTime": { "type": "string"},
+          "endDateTime": { "type": "string"},
           "insuranceCertificate": { "type": "string"},
           "goodStandingEvidence": {
             "description": "Certificate of good standing, operating agreement, or other evidence the business is in good standing",
