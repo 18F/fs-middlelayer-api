@@ -7,8 +7,6 @@
       "version": "1.0.0",
       "title": "API Documentation for Developers"
    },
-   "host": "",
-   "basePath": "/",
    "tags": [
       {
          "name": "  ",
@@ -48,15 +46,7 @@
                "405": {
                   "description": "Invalid input"
                }
-            },
-            "security": [
-               {
-                  "permit_auth": [
-                     "write:permits",
-                     "read:permits"
-                  ]
-               }
-            ]
+            }
          },
          "put": {
             "tags": [
@@ -92,15 +82,7 @@
                "405": {
                   "description": "Validation exception"
                }
-            },
-            "security": [
-               {
-                  "permit_auth": [
-                     "write:permits",
-                     "read:permits"
-                  ]
-               }
-            ]
+            }
          }
       },
       "/permit/special-uses/commercial/outfitters/": {
@@ -131,15 +113,7 @@
                "405": {
                   "description": "Invalid input"
                }
-            },
-            "security": [
-               {
-                  "permit_auth": [
-                     "write:permits",
-                     "read:permits"
-                  ]
-               }
-            ]
+            }
          },
          "put": {
             "tags": [
@@ -174,15 +148,7 @@
                "405": {
                   "description": "Validation exception"
                }
-            },
-            "security": [
-               {
-                  "permit_auth": [
-                     "write:permits",
-                     "read:permits"
-                  ]
-               }
-            ]
+            }
          }
       },
       "/permit/special-uses/non-commercial/{permitId}": {
@@ -218,12 +184,7 @@
                "404": {
                   "description": "Permit not found"
                }
-            },
-            "security": [
-               {
-                  "api_key": []
-               }
-            ]
+            }
          }
       },
       "/permit/special-uses/commercial/outfitters/{permitId}": {
@@ -259,28 +220,8 @@
                "404": {
                   "description": "Permit not found"
                }
-            },
-            "security": [
-               {
-                  "api_key": []
-               }
-            ]
+            }
          }
-      }
-   },
-   "securityDefinitions": {
-      "permit_auth": {
-         "type": "oauth2",
-         "flow": "implicit",
-         "scopes": {
-            "write:permits": "modify permits",
-            "read:permits": "read permits"
-         }
-      },
-      "api_key": {
-         "type": "apiKey",
-         "name": "api_key",
-         "in": "header"
       }
    },
    "definitions": {
@@ -293,7 +234,7 @@
             "authorizingOfficerName": { "type" : "string"},
             "authorizingOfficerTitle": { "type" : "string"},
             "applicant-info": {
-               "$ref": "#/definitions/applicant-info-temp-outfitter"
+               "$ref": "#/definitions/applicant-info-non-commercial"
             },
             "non-commercial-fields": {
               "$ref": "#/definitions/non-commercial-fields"
@@ -319,7 +260,7 @@
               "$ref": "#/definitions/temp-outfitter-fields"
             }
           },
-          "required": ["region","forest","district","applicant-info", "applicant-info/orgType" ,"non-commercial-fields"],
+          "required": ["region","forest","district","applicant-info","temp-outfitter-fields"],
           "xml": {
             "name": "properties"
           }
@@ -457,21 +398,6 @@
          "required": ["properties"],
          "xml": {
             "name": "temp-outfitter-permit"
-         }
-      },
-      "ApiResponse": {
-         "type": "object",
-         "properties": {
-            "code": {
-               "type": "integer",
-               "format": "int32"
-            },
-            "type": {
-               "type": "string"
-            },
-            "message": {
-               "type": "string"
-            }
          }
       }
    }
