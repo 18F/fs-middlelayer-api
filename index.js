@@ -25,12 +25,15 @@ var fsr = require('file-stream-rotator');
 var mkdirp = require('mkdirp');
 var morgan = require('morgan');
 
+var routes = require('./routes');
+
 //*******************************************************************
 // environment variables
 
 var PORT = process.env.PORT;
 
 //*******************************************************************
+// express
 
 var app = express();
 
@@ -53,35 +56,14 @@ var accessLogStream = fsr.getStream({
 app.use(morgan('combined', {stream: accessLogStream}));
 
 //*******************************************************************
-//Public 
+// public 
+
 app.use(express.static('public'));
 
 //*******************************************************************
-//generic routes
+// routes
 
-app.get('/permit', function(req,res){
-  var output = {
-        "success" : true,
-        "api": "FS ePermit API"
-    };
-  res.json(output);
-});
-
-app.post('/permit', function(req,res){
-  var output = {
-        "success" : true,
-        "api": "FS ePermit API"
-    };
-  res.json(output);
-});
-
-app.put('/permit', function(req,res){
-  var output = {
-        "success" : true,
-        "api": "FS ePermit API"
-    };
-  res.json(output);
-});
+app.use('/', routes);
 
 //*******************************************************************
 // listen
