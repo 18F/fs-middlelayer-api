@@ -13,9 +13,6 @@
          "description": "e-Permitting API"
       }
    ],
-   "schemes": [
-      "http"
-   ],
    "paths": {
       "/permits/special-uses/non-commercial/": {
          "post": {
