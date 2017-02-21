@@ -17,7 +17,7 @@
       "http"
    ],
    "paths": {
-      "/permit/special-uses/non-commercial/": {
+      "/permits/special-uses/non-commercial/": {
          "post": {
             "tags": [
                "non-commercial permit"
@@ -85,7 +85,7 @@
             }
          }
       },
-      "/permit/special-uses/commercial/outfitters/": {
+      "/permits/special-uses/commercial/outfitters/": {
          "post": {
             "tags": [
                "temp-outfitter permit"
@@ -151,7 +151,7 @@
             }
          }
       },
-      "/permit/special-uses/non-commercial/{permitId}": {
+      "/permits/special-uses/non-commercial/{permitId}": {
          "get": {
             "tags": [
                "non-commercial permit"
@@ -187,7 +187,7 @@
             }
          }
       },
-      "/permit/special-uses/commercial/outfitters/{permitId}": {
+      "/permits/special-uses/commercial/outfitters/{permitId}": {
          "get": {
             "tags": [
                "temp-outfitter permit"
