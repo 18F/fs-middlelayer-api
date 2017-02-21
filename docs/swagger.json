@@ -3,21 +3,21 @@
 {
    "swagger": "2.0",
    "info": {
-      "description": "This page is for developers. We built this site entirely off the APIs (Application Programming Interfaces) below and we want to share them with you.",
-      "version": "1.0.0",
+      "description": "This page is for developers. We built this site entirely off the APIs below and we want to share them with you.",
+      "version": "0.0.3",
       "title": "API Documentation for Developers"
    },
    "tags": [
       {
          "name": "  ",
-         "description": "e-Permitting API"
+         "description": "Forest Service ePermit API"
       }
    ],
    "paths": {
       "/permits/special-uses/non-commercial/": {
          "post": {
             "tags": [
-               "non-commercial permit"
+               "Non-commercial Permit"
             ],
             "summary": "Submit a new non-commercial permit",
             "description": "",
@@ -47,7 +47,7 @@
          },
          "put": {
             "tags": [
-               "non-commercial permit"
+               "Non-commercial Permit"
             ],
             "summary": "Update an existing non-commercial permit",
             "description": "",
@@ -85,7 +85,7 @@
       "/permits/special-uses/commercial/outfitters/": {
          "post": {
             "tags": [
-               "temp-outfitter permit"
+               "Outfitter and Guide Permit"
             ],
             "summary": "Submit a new temp-outfitter permit",
             "description": "",
@@ -114,7 +114,7 @@
          },
          "put": {
             "tags": [
-               "temp-outfitter permit"
+               "Outfitter and Guide Permit"
             ],
             "summary": "Update an existing temp-outfitter Permit",
             "description": "",
@@ -151,7 +151,7 @@
       "/permits/special-uses/non-commercial/{permitId}": {
          "get": {
             "tags": [
-               "non-commercial permit"
+               "Non-commercial Permit"
             ],
             "summary": "Find non-commerial permit by ID",
             "description": "Returns a single permit",
@@ -187,7 +187,7 @@
       "/permits/special-uses/commercial/outfitters/{permitId}": {
          "get": {
             "tags": [
-               "temp-outfitter permit"
+               "Outfitter and Guide Permit"
             ],
             "summary": "Find temp-outfitter permit by ID",
             "description": "Returns a single permit",

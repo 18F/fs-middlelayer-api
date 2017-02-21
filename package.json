@@ -1,6 +1,6 @@
 {
   "name": "fs-middlelayer-api",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "US Forest Service ePermit Middlelayer API",
   "main": "index.js",
   "scripts": {
