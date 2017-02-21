@@ -16,40 +16,41 @@
 
 var include = require('include')(__dirname);
 
+var commercial = require('./commercial/');
+var non_commercial = require('./non-commercial/');
+
 //*******************************************************************
 // controller
 
 var get = {};
-var put = {};
-var post;
 
 // get all
 
-get.all = function(req){
-    return include('test/data/outfitters.get.all.json');
-}
+get.all = function(req,res){
 
-// get id
+    var commercial_res = commercial.get.all(req)['commercial'];
+    var non_commercial_res = non_commercial.get.all(req)['non-commercial'];
 
-get.id = function(req,res){
-    res.json(include('test/data/outfitters.get.id.json'));
-}
+    var special_uses = {
+    	"response":{
+    		"success" : true,
+	        "api": "FS ePermit API",
+	        "type": "controller",
+	        "verb": "get",
+	        "src": "json",
+	        "route": "permits/special-uses"
+    	},
+    	"special-uses":{
+    		"commercial" : commercial_res,
+            "non-commercial" : non_commercial_res
+    	}
+    }
 
-// put id
+    return special_uses;
 
-put.id = function(req,res){
-    res.json(include('test/data/outfitters.put.id.json'));
-}
-
-// post
-
-post = function(req,res){
-    res.json(include('test/data/outfitters.post.json'));
-}
+};
 
 //*******************************************************************
 // exports
 
 module.exports.get = get;
-module.exports.put = put;
-module.exports.post = post;

@@ -33,7 +33,7 @@ var post;
 
 get.all = function(req,res){
 
-    res.json(include('test/data/non-commercial.get.all.json'));
+    return include('test/data/non-commercial.get.all.json');
 
 };
 
