@@ -16,6 +16,9 @@
 
 var express = require('express');
 var router = express.Router();
+var include = require('include')(__dirname);
+
+var outfitters = include('controllers/permits/special-uses/commercial/outfitters');
 
 //*******************************************************************
 // router
@@ -23,52 +26,28 @@ var router = express.Router();
 // get all
 router.get('/',function(req,res){
     
-    var output = {
-        "success" : true,
-        "api": "FS ePermit API",
-        "verb": "get",
-        "route": "permits/special-uses/commercial/outfitters"
-    };
-    res.json(output);
+    res.json(outfitters.get.all(req));
     
 });
 
 // get id
 router.get('/:id(\\d+)',function(req,res){
     
-    var output = {
-        "success" : true,
-        "api": "FS ePermit API",
-        "verb": "get",
-        "route": "permits/special-uses/commercial/outfitters/id"
-    };
-    res.json(output);
+    outfitters.get.id(req,res)
     
 });
 
 // put id
 router.put('/:id(\\d+)',function(req,res){
     
-    var output = {
-        "success" : true,
-        "api": "FS ePermit API",
-        "verb": "put",
-        "route": "permits/special-uses/commercial/outfitters/id"
-    };
-    res.json(output);
+    outfitters.put.id(req,res)
     
 });
 
 // post
 router.post('/',function(req,res){
     
-    var output = {
-        "success" : true,
-        "api": "FS ePermit API",
-        "verb": "post",
-        "route": "permits/special-uses/commercial/outfitters"
-    };
-    res.json(output);
+    outfitters.post(req,res)
     
 });
 
