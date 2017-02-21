@@ -14,20 +14,40 @@
 //*******************************************************************
 // required modules
 
-var express = require('express');
-var router = express.Router();
 var include = require('include')(__dirname);
 
 var outfitters = require('./outfitters');
-var commercial = include('controllers/permits/special-uses/commercial');
 
 //*******************************************************************
-// router
+// controller
 
-router.use('/outfitters', outfitters);
+var get = {};
 
-router.get('/',function(req,res){
-	res.json(commercial.get.all(req));
-});
+// get all
 
-module.exports = router;
+get.all = function(req,res){
+
+    var outfitter = outfitters.get.all(req)['outfitters'];
+
+    var commercial = {
+    	"response":{
+    		"success" : true,
+	        "api": "FS ePermit API",
+	        "type": "controller",
+	        "verb": "get",
+	        "src": "json",
+	        "route": "permits/special-uses/commercial"
+    	},
+    	"commercial":{
+    		"outfitters": outfitter
+    	}
+    }
+
+    return commercial;
+
+};
+
+//*******************************************************************
+// exports
+
+module.exports.get = get;
