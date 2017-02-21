@@ -1,6 +1,6 @@
 {
   "name": "fs-middlelayer-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "US Forest Service ePermit Middlelayer API",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,8 @@
     "fs",
     "forest service",
     "epermit",
+    "agile",
+    "agile-bpa",
     "api",
     "node",
     "express"
