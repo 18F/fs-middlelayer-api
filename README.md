@@ -3,6 +3,8 @@
 [![Code Climate Coverage](https://codeclimate.com/github/nci-ats/fs-middlelayer-api/badges/coverage.svg)](https://codeclimate.com/github/nci-ats/fs-middlelayer-api/coverage)
 [![Codecov](https://codecov.io/gh/nci-ats/fs-middlelayer-api/branch/master/graph/badge.svg)](https://codecov.io/gh/nci-ats/fs-middlelayer-api)
 [![TravisCI](https://travis-ci.org/nci-ats/fs-middlelayer-api.svg?branch=dev)](https://travis-ci.org/nci-ats/fs-middlelayer-api)
+[![bitHound Overall Score](https://www.bithound.io/github/nci-ats/fs-middlelayer-api/badges/score.svg)](https://www.bithound.io/github/nci-ats/fs-middlelayer-api)
+[![bitHound Dependencies](https://www.bithound.io/github/nci-ats/fs-middlelayer-api/badges/dependencies.svg)](https://www.bithound.io/github/nci-ats/fs-middlelayer-api/feat%2Fswagger-ui/dependencies/npm)
 [![Gemnasium Dependency Status](https://gemnasium.com/badges/github.com/nci-ats/fs-middlelayer-api.svg)](https://gemnasium.com/github.com/nci-ats/fs-middlelayer-api)
 [![VersionEye Dependency Status](https://www.versioneye.com/user/projects/58a669e7b4d2a20055fcb84c/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58a669e7b4d2a20055fcb84c)
 [![GitHub Tags](https://img.shields.io/github/tag/nci-ats/fs-middlelayer-api.svg)](https://github.com/nci-ats/fs-middlelayer-api/tags)
