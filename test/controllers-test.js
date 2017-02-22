@@ -27,11 +27,11 @@ non_commercial.validate = require('../controllers/permits/special-uses/non-comme
 describe('API Controllers: validate non-commercial', function() {
     
     it('should return valid false if id length < 3', function() {
-        expect( non_commercial.validate.permit_id(12) ).to.be.false;
+        expect( non_commercial.validate.permit_id(12) ).to.be.equal(false);
     });
     
     it('should return valid true if id is valid', function() {
-        expect( non_commercial.validate.permit_id(12345) ).to.be.true;
+        expect( non_commercial.validate.permit_id(12345) ).to.be.equal(true);
     });
 
 });

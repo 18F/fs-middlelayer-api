@@ -5,9 +5,9 @@
       "type": "controller",
       "verb": "get",
       "src": "json",
-      "route": "permits/special-uses/non-commercial"
+      "route": "permits/special-uses/noncommercial"
   },
-  "non-commercial" : [
+  "noncommercial" : [
     {
       "accinstCn": "1095010356",
       "region": 3,
@@ -39,7 +39,7 @@
         "website": null,
         "orgType": "Corporation"
       },
-      "non-commercial-fields": {
+      "noncommercial-fields": {
         "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
         "locationDescription": "string",
         "startDateTime": "2013-01-12",
