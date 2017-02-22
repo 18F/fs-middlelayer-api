@@ -3,21 +3,21 @@
 {
    "swagger": "2.0",
    "info": {
-      "description": "This page is for developers. We built this site entirely off the APIs (Application Programming Interfaces) below and we want to share them with you.",
-      "version": "1.0.0",
+      "description": "This page is for developers. We built this site entirely off the APIs below and we want to share them with you.",
+      "version": "0.0.3",
       "title": "API Documentation for Developers"
    },
    "tags": [
       {
          "name": "  ",
-         "description": "e-Permitting API"
+         "description": "Forest Service ePermit API"
       }
    ],
    "paths": {
       "/permits/special-uses/non-commercial/": {
          "post": {
             "tags": [
-               "non-commercial permit"
+               "Non-commercial Permit"
             ],
             "summary": "Submit a new non-commercial permit",
             "description": "",
@@ -44,48 +44,12 @@
                   "description": "Invalid input"
                }
             }
-         },
-         "put": {
-            "tags": [
-               "non-commercial permit"
-            ],
-            "summary": "Update an existing non-commercial permit",
-            "description": "",
-            "operationId": "updatePermit",
-            "consumes": [
-               "application/json"
-            ],
-            "produces": [
-               "application/json"
-            ],
-            "parameters": [
-               {
-                  "in": "body",
-                  "name": "body",
-                  "description": "Permit object that needs to be added",
-                  "required": true,
-                  "schema": {
-                     "$ref": "#/definitions/non-commercial-permit"
-                  }
-               }
-            ],
-            "responses": {
-               "400": {
-                  "description": "Invalid ID supplied"
-               },
-               "404": {
-                  "description": "Permit not found"
-               },
-               "405": {
-                  "description": "Validation exception"
-               }
-            }
          }
       },
       "/permits/special-uses/commercial/outfitters/": {
          "post": {
             "tags": [
-               "temp-outfitter permit"
+               "Outfitter and Guide Permit"
             ],
             "summary": "Submit a new temp-outfitter permit",
             "description": "",
@@ -111,13 +75,16 @@
                   "description": "Invalid input"
                }
             }
-         },
+         }
+      },
+      "/permits/special-uses/non-commercial/{permitId}": {
          "put": {
             "tags": [
-               "temp-outfitter permit"
+               "Non-commercial Permit"
             ],
-            "summary": "Update an existing temp-outfitter Permit",
+            "summary": "Update an existing non-commercial permit",
             "description": "",
+            "operationId": "updatePermit",
             "consumes": [
                "application/json"
             ],
@@ -125,13 +92,21 @@
                "application/json"
             ],
             "parameters": [
+                {
+                  "name": "permitId",
+                  "in": "path",
+                  "description": "ID of non-commercial permit to be updated",
+                  "required": true,
+                  "type": "integer",
+                  "format": "int64"
+               },
                {
                   "in": "body",
                   "name": "body",
                   "description": "Permit object that needs to be updated",
                   "required": true,
                   "schema": {
-                     "$ref": "#/definitions/temp-outfitter-permit"
+                     "$ref": "#/definitions/non-commercial-permit"
                   }
                }
             ],
@@ -146,14 +121,12 @@
                   "description": "Validation exception"
                }
             }
-         }
-      },
-      "/permits/special-uses/non-commercial/{permitId}": {
+         },
          "get": {
             "tags": [
-               "non-commercial permit"
+               "Non-commercial Permit"
             ],
-            "summary": "Find non-commerial permit by ID",
+            "summary": "Find non-commercial permit by ID",
             "description": "Returns a single permit",
             "produces": [
                "application/json"
@@ -185,9 +158,52 @@
          }
       },
       "/permits/special-uses/commercial/outfitters/{permitId}": {
+        "put": {
+            "tags": [
+               "Outfitter and Guide Permit"
+            ],
+            "summary": "Update an existing temp-outfitter Permit",
+            "description": "",
+            "consumes": [
+               "application/json"
+            ],
+            "produces": [
+               "application/json"
+            ],
+            "parameters": [
+                {
+                  "name": "permitId",
+                  "in": "path",
+                  "description": "ID of temp-outfitter permit to be updated",
+                  "required": true,
+                  "type": "integer",
+                  "format": "int64"
+               },
+               {
+                  "in": "body",
+                  "name": "body",
+                  "description": "Permit object that needs to be updated",
+                  "required": true,
+                  "schema": {
+                     "$ref": "#/definitions/temp-outfitter-permit"
+                  }
+               }
+            ],
+            "responses": {
+               "400": {
+                  "description": "Invalid ID supplied"
+               },
+               "404": {
+                  "description": "Permit not found"
+               },
+               "405": {
+                  "description": "Validation exception"
+               }
+            }
+         },
          "get": {
             "tags": [
-               "temp-outfitter permit"
+               "Outfitter and Guide Permit"
             ],
             "summary": "Find temp-outfitter permit by ID",
             "description": "Returns a single permit",
