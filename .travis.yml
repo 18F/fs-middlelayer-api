@@ -27,3 +27,5 @@ deploy:
   app:
     master: fs-epermit-st
     dev: fs-epermit-dev
+  on:
+    repo: nci-ats/fs-middlelayer-api

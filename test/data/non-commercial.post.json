@@ -1,0 +1,11 @@
+{
+    "response":{
+    	"success" : true,
+	    "api": "FS ePermit API",
+	    "type": "controller",
+	    "verb": "post",
+	    "src": "json",
+	    "route": "permits/special-uses/non-commercial"
+    },
+    "accinstCn": "1095010356"
+}

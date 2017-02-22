@@ -15,6 +15,9 @@ engines:
     enabled: true
   markdownlint:
     enabled: true
+    checks:
+      MD013:
+        enabled: false
 ratings:
   paths:
   - "**.js"
@@ -23,6 +26,8 @@ exclude_paths:
 - node_modules/
 - coverage/
 - test/
+- "**/lang/"
+- "**/lib/"
 ecmaFeatures:
   modules: true
   jsx: true
