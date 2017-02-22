@@ -103,7 +103,7 @@
                {
                   "in": "body",
                   "name": "body",
-                  "description": "Permit object that needs to be added",
+                  "description": "Permit object that needs to be updated",
                   "required": true,
                   "schema": {
                      "$ref": "#/definitions/non-commercial-permit"
