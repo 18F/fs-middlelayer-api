@@ -27,25 +27,25 @@ var post;
 
 get.all = function(req){
     return include('test/data/outfitters.get.all.json');
-}
+};
 
 // get id
 
 get.id = function(req,res){
     res.json(include('test/data/outfitters.get.id.json'));
-}
+};
 
 // put id
 
 put.id = function(req,res){
     res.json(include('test/data/outfitters.put.id.json'));
-}
+};
 
 // post
 
 post = function(req,res){
     res.json(include('test/data/outfitters.post.json'));
-}
+};
 
 //*******************************************************************
 // exports
