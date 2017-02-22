@@ -27,10 +27,10 @@ var special_uses = include('controllers/permits/special-uses');
 // router
 
 router.use('/commercial', commercial);
-router.use('/non-commercial', non_commercial);
+router.use('/noncommercial', non_commercial);
 
 router.get('/',function(req,res){
-	res.json(special_uses.get.all(req))
+	res.json(special_uses.get.all(req));
 });
 
 module.exports = router;
