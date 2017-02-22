@@ -126,7 +126,7 @@
             "tags": [
                "Non-commercial Permit"
             ],
-            "summary": "Find non-commerial permit by ID",
+            "summary": "Find non-commercial permit by ID",
             "description": "Returns a single permit",
             "produces": [
                "application/json"
