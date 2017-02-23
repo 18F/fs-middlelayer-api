@@ -21,10 +21,6 @@ var expect = chai.expect;
 var assert = chai.assert;
 var should = chai.should;
 
-var non_commercial = {};
-
-non_commercial.validate = require('../error.js');
-
 //*******************************************************************
 
 describe('Error function: sendError', function() {

@@ -24,7 +24,6 @@ var sendError = function(req, res, code, message){
 		}
 	};
 
-	//referer, browser
 	logging(req, message);
 
 	res.status(code).json(output);
