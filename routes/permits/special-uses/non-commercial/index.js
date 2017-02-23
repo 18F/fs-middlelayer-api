@@ -19,6 +19,7 @@ var router = express.Router();
 var include = require('include')(__dirname);
 
 var non_commercial = include('controllers/permits/special-uses/non-commercial');
+var error = include('error.js');
 
 //*******************************************************************
 // router
@@ -50,6 +51,16 @@ router.post('/',function(req,res){
     non_commercial.post(req,res);
     
 });
+
+
+router.get('/errorTest',function(req,res){
+
+	var statusCode = 400;
+	var message = "Success!!";
+	error.sendError(req, res, statusCode, message);
+	
+});
+
 
 //*******************************************************************
 // exports

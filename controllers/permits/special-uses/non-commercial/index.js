@@ -17,12 +17,6 @@
 var include = require('include')(__dirname);
 
 //*******************************************************************
-// mock data
-var mock = {};
-
-mock.non_commercial_get_id = include('test/data/non-commercial.get.id.json');
-
-//*******************************************************************
 // controller
 
 var get = {};

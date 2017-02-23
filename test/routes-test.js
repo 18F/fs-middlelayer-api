@@ -25,30 +25,30 @@ var should = chai.should;
 
 describe('API Routes: permits/special-uses/non-commercial', function() {
     
-    it('should return valid json for non-commercial GET request for all', function(done) {
+    it('should return valid json for non commercial GET request for all', function(done) {
         request(server)
-            .get('/permits/special-uses/non-commercial')
+            .get('/permits/special-uses/noncommercial')
             .expect('Content-Type', /json/)
             .expect(200, done);
     });
     
-    it('should return valid json for non-commercial GET request for id', function(done) {
+    it('should return valid json for non commercial GET request for id', function(done) {
         request(server)
-            .get('/permits/special-uses/non-commercial/1234')
+            .get('/permits/special-uses/noncommercial/1234')
             .expect('Content-Type', /json/)
             .expect(200, done);
     });
     
-    it('should return valid json for non-commercial PUT request for id', function(done) {
+    it('should return valid json for non commercial PUT request for id', function(done) {
         request(server)
-            .put('/permits/special-uses/non-commercial/1234')
+            .put('/permits/special-uses/noncommercial/1234')
             .expect('Content-Type', /json/)
             .expect(200, done);
     });
     
-    it('should return valid json for non-commercial POST request', function(done) {
+    it('should return valid json for non commercial POST request', function(done) {
         request(server)
-            .post('/permits/special-uses/non-commercial')
+            .post('/permits/special-uses/noncommercial')
             .expect('Content-Type', /json/)
             .expect(200, done);
     });

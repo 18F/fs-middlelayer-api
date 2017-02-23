@@ -44,7 +44,7 @@ get.all = function(req,res){
     		"commercial" : commercial_res,
             "non-commercial" : non_commercial_res
     	}
-    }
+    };
 
     return special_uses;
 

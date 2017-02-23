@@ -41,7 +41,7 @@ get.all = function(req,res){
     	"commercial":{
     		"outfitters": outfitter
     	}
-    }
+    };
 
     return commercial;
 
