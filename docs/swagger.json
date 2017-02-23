@@ -14,12 +14,12 @@
       }
    ],
    "paths": {
-      "/permits/special-uses/non-commercial/": {
+      "/permits/special-uses/noncommercial/": {
          "post": {
             "tags": [
-               "Non-commercial Permit"
+               "Noncommercial Permit"
             ],
-            "summary": "Submit a new non-commercial permit",
+            "summary": "Submit a new noncommercial permit",
             "description": "",
             "operationId": "createPermit",
             "consumes": [
@@ -32,7 +32,7 @@
                {
                   "in": "body",
                   "name": "body",
-                  "description": "non-commercial permit information",
+                  "description": "noncommercial permit information",
                   "required": true,
                   "schema": {
                      "$ref": "#/definitions/non-commercial-permit"
@@ -77,12 +77,12 @@
             }
          }
       },
-      "/permits/special-uses/non-commercial/{permitId}": {
+      "/permits/special-uses/noncommercial/{permitId}": {
          "put": {
             "tags": [
-               "Non-commercial Permit"
+               "Noncommercial Permit"
             ],
-            "summary": "Update an existing non-commercial permit",
+            "summary": "Update an existing noncommercial permit",
             "description": "",
             "operationId": "updatePermit",
             "consumes": [
@@ -95,7 +95,7 @@
                 {
                   "name": "permitId",
                   "in": "path",
-                  "description": "ID of non-commercial permit to be updated",
+                  "description": "ID of noncommercial permit to be updated",
                   "required": true,
                   "type": "integer",
                   "format": "int64"
@@ -124,9 +124,9 @@
          },
          "get": {
             "tags": [
-               "Non-commercial Permit"
+               "Noncommercial Permit"
             ],
-            "summary": "Find non-commercial permit by ID",
+            "summary": "Find noncommercial permit by ID",
             "description": "Returns a single permit",
             "produces": [
                "application/json"
@@ -135,7 +135,7 @@
                {
                   "name": "permitId",
                   "in": "path",
-                  "description": "ID of non-commercial permit to return",
+                  "description": "ID of noncommercial permit to return",
                   "required": true,
                   "type": "integer",
                   "format": "int64"

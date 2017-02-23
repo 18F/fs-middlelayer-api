@@ -13,27 +13,27 @@
 
 //*******************************************************************
 
+var request = require('supertest');
+var server = require('../index.js');
+
 var chai = require('chai');
 var expect = chai.expect;
 var assert = chai.assert;
 var should = chai.should;
 
-var non_commercial = {};
-
-non_commercial.validate = require('../controllers/permits/special-uses/non-commercial/validate.js');
-
 //*******************************************************************
 
-describe('API Controllers: validate non-commercial', function() {
+describe('Error function: sendError', function() {
     
-    it('should return valid false if id length < 3', function() {
-        expect( non_commercial.validate.permit_id(12) ).to.be.equal(false);
-    });
-    
-    it('should return valid true if id is valid', function() {
-        expect( non_commercial.validate.permit_id(12345) ).to.be.equal(true);
+    it('should return valid json and a status code of 400', function(done) {
+        request(server)
+            .get('/permits/special-uses/noncommercial/errorTest')
+            .expect('Content-Type', /json/)
+            .expect(400, done);
     });
 
 });
+
+
 
 //*******************************************************************
