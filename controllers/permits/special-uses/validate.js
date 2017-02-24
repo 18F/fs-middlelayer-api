@@ -47,23 +47,49 @@ var applicant_info = function(req){
         output.fields_valid = false;
         output.object_missing = 'dayPhone cannot be empty!';
     }else{
-        if(!req.body['applicant-info'].dayPhone.areaCode){
-            output.fields_valid = false;
-            output.error_array.push('dayPhone/areaCode');
-        }
-        if(!req.body['applicant-info'].dayPhone.number){
-            output.fields_valid = false;
-            output.error_array.push('dayPhone/number');
-        }
-        if(!req.body['applicant-info'].dayPhone.type){
-            output.fields_valid = false;
-            output.error_array.push('dayPhone/type');
-        }
+        var phone_res = validate_day_phone(req);
+        output.fields_valid = output.fields_valid && phone_res.fields_valid;
+        output.error_array =  output.error_array.concat(phone_res.error_array);
     }
     if(!req.body['applicant-info'].emailAddress){
         output.fields_valid = false;
         output.error_array.push('emailAddress');
     }
+    var mailing_info_res = validate_mailing_info(req);
+    
+    output.fields_valid = output.fields_valid && mailing_info_res.fields_valid;
+    output.error_array =  output.error_array.concat(mailing_info_res.error_array);
+
+    return output;
+};
+
+function validate_day_phone(req){
+
+    var output = {
+        'fields_valid': true,
+        'error_array':[]
+    };
+    if(!req.body['applicant-info'].dayPhone.areaCode){
+        output.fields_valid = false;
+        output.error_array.push('dayPhone/areaCode');
+    }
+    if(!req.body['applicant-info'].dayPhone.number){
+        output.fields_valid = false;
+        output.error_array.push('dayPhone/number');
+    }
+    if(!req.body['applicant-info'].dayPhone.type){
+        output.fields_valid = false;
+        output.error_array.push('dayPhone/type');
+    }
+    return output;
+}
+
+function validate_mailing_info(req){
+    var output = {
+        'fields_valid': true,
+        'error_array': []
+    };
+
     if(!req.body['applicant-info'].mailingAddress){
         output.fields_valid = false;
         output.error_array.push('mailingAddress');
@@ -82,7 +108,7 @@ var applicant_info = function(req){
     }
 
     return output;
-};
+}
 
 //*******************************************************************
 // exports

@@ -96,48 +96,32 @@ function validate_post_input(req){
         output.fieldsValid = false;
         output.error_message = 'Body cannot be empty.';
     
+    }else if(_.isEmpty(req.body['applicant-info'])){
+    
+        output.fieldsValid = false;
+        output.error_message = 'applicant-info field cannot be empty.';
+
+    }else if (_.isEmpty(req.body['noncommercial-fields'])){
+
+        output.fieldsValid = false;
+        output.error_message = 'noncommercial field cannot be empty.';
+
     }else{
-    
-        if(_.isEmpty(req.body['applicant-info'])){  
-    
-            output.fieldsValid = false;
-            output.error_message = 'applicant-info field cannot be empty.';
-    
-        }else{
-    
-            var applicant_info = validate_special_use.applicant_info(req);
-    
-            if(!applicant_info.fields_valid){
-    
-                output.fieldsValid = false;
-                output.error_message = applicant_info.object_missing_message;
-                error_array = error_array.concat(applicant_info.error_array);
-    
-            }
-    
+
+        var applicant_info = validate_special_use.applicant_info(req);
+        var noncommercial = validate_noncommercial.noncommercial(req);
+
+        if(!applicant_info.fields_valid){
+
+            output.error_message = applicant_info.object_missing_message;
+            
         }
+        
+        output.fieldsValid  = output.fieldsValid  && applicant_info.fields_valid;
+        error_array = error_array.concat(applicant_info.error_array);
 
-        if (_.isEmpty(req.body['noncommercial-fields'])) {
-
-            output.fieldsValid = false;
-            output.error_message = 'noncommercial field cannot be empty.';
-
-        } else {
-
-            var noncommercial = validate_noncommercial.noncommercial(req);
-
-            if(!noncommercial.fields_valid){
-
-                output.fieldsValid = false;
-                error_array = error_array.concat(noncommercial.error_array);
-
-            }
-
-        }
-
-    }
-
-    if(!output.error_message){
+        output.fieldsValid  = output.fieldsValid  && noncommercial.fields_valid;
+        error_array = error_array.concat(noncommercial.error_array);
 
         output.error_message = build_error_message(error_array);
 
