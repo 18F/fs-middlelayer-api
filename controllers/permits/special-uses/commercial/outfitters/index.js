@@ -15,11 +15,13 @@
 // required modules
 
 var include = require('include')(__dirname);
+var _ = require('lodash');
 
 //*******************************************************************
 // validation
 
-var validate = include('controllers/permits/special-uses/validate.js');
+var validate_special_use = include('controllers/permits/special-uses/validate.js');
+var validate_outfitters = include('controllers/permits/special-uses/commercial/outfitters/validate.js');
 var error = include('error.js');
 
 //*******************************************************************
@@ -41,7 +43,7 @@ get.all = function(req){
 
 get.id = function(req,res){
     
-    if(validate.permit_id(req.params.id)){
+    if(validate_special_use.permit_id(req.params.id)){
     
 		res.json(include('test/data/outfitters.get.id.json'));
     
@@ -62,8 +64,89 @@ put.id = function(req,res){
 // post
 
 post = function(req,res){
-    res.json(include('test/data/outfitters.post.json'));
+
+	var validate_res = validate_post_input(req);
+    
+    if(validate_res.fieldsValid){
+    
+        res.json(include('test/data/outfitters.post.json'));
+    
+    }else{
+    
+        error.sendError(req,res,400,validate_res.error_message);
+    
+    }
+
 };
+
+function validate_post_input(req){
+    
+    var output = {
+    
+      'fieldsValid': true,
+      'error_message': undefined
+    
+    };
+    var error_array = [];
+
+    if(_.isEmpty(req.body)){
+    
+        output.fieldsValid = false;
+        output.error_message = 'Body cannot be empty.';
+    
+    }else if(_.isEmpty(req.body['applicant-info'])){
+    
+        output.fieldsValid = false;
+        output.error_message = 'applicant-info field cannot be empty.';
+
+    }else if (_.isEmpty(req.body['temp-outfitter-fields'])){
+
+        output.fieldsValid = false;
+        output.error_message = 'temp-outfitter field cannot be empty.';
+
+    }else{
+
+        var applicant_info = validate_special_use.applicant_info(req);
+        var outfitters = validate_outfitters.outfitters(req);
+
+        if(!applicant_info.fields_valid){
+
+            output.error_message = applicant_info.object_missing_message;
+            
+        }
+
+        output.fieldsValid  = output.fieldsValid  && applicant_info.fields_valid;
+        error_array = error_array.concat(applicant_info.error_array);
+
+        output.fieldsValid  = output.fieldsValid  && outfitters.fields_valid;
+        error_array = error_array.concat(outfitters.error_array);
+
+        if(!output.error_message){
+            output.error_message = build_error_message(error_array);
+        }
+
+    }
+
+    return output;
+}
+
+function build_error_message(error_array){
+
+    var error_message = _.join(error_array,' and ');
+
+    if(error_array.length>1){
+
+        error_message += ' are required fields!';
+
+    }else{
+
+        error_message += ' is a required field!';
+
+    }
+
+    return error_message;
+
+}
 
 //*******************************************************************
 // exports
