@@ -30,7 +30,7 @@ var routes = require('./routes');
 //*******************************************************************
 // environment variables
 
-var PORT = process.env.PORT;
+var PORT = process.env.PORT || 8000;
 
 //*******************************************************************
 // express
