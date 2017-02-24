@@ -320,6 +320,32 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(400, done);
     });
+
+    it('should return valid json with a 400 status code for noncommercial POST request with all invalid fields listed', function(done) {
+        request(server)
+            .post('/permits/special-uses/noncommercial')
+            .send(
+            	updateInputData(
+            		{
+		            	"applicant-info": {
+		      				"firstName": "John",
+		      				"lastName": "Doe",
+							"dayPhone": {
+								"areaCode": 541,
+								"number": 8156141,
+								"extension": 0,
+								"type": "BUSINESS"
+	      					},
+							"emailAddress": "test@email.org",
+							"mailingAddress": "ON ANW 0953"
+	            		}
+	        		}
+	        	)
+    		)
+            .expect('Content-Type', /json/)
+            .expect(400, done);
+    });
+
 });
 
 //*******************************************************************
@@ -622,6 +648,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(400, done);
     });
+
 });
 
 function updateInputData(update){
