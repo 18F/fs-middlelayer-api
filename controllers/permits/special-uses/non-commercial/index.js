@@ -116,14 +116,16 @@ function validate_post_input(req){
             output.error_message = applicant_info.object_missing_message;
             
         }
-        
+
         output.fieldsValid  = output.fieldsValid  && applicant_info.fields_valid;
         error_array = error_array.concat(applicant_info.error_array);
 
         output.fieldsValid  = output.fieldsValid  && noncommercial.fields_valid;
         error_array = error_array.concat(noncommercial.error_array);
 
-        output.error_message = build_error_message(error_array);
+        if(!output.error_message){
+            output.error_message = build_error_message(error_array);
+        }
 
     }
 
