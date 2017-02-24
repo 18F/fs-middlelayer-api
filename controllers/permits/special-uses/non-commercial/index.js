@@ -17,6 +17,12 @@
 var include = require('include')(__dirname);
 
 //*******************************************************************
+// validation
+
+var validate = include('controllers/permits/special-uses/validate.js');
+var error = include('error.js');
+
+//*******************************************************************
 // controller
 
 var get = {};
@@ -35,7 +41,15 @@ get.all = function(req,res){
 
 get.id = function(req,res){
     
-    res.json(include('test/data/non-commercial.get.id.json'));
+    if(validate.permit_id(req.params.id)){
+    
+        res.json(include('test/data/non-commercial.get.id.json'));
+    
+    }else{
+    
+        error.sendError(req,res,400,'permitId supplied is invalid');
+    
+    }
 
 };
 

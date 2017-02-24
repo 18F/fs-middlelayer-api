@@ -17,6 +17,12 @@
 var include = require('include')(__dirname);
 
 //*******************************************************************
+// validation
+
+var validate = include('controllers/permits/special-uses/validate.js');
+var error = include('error.js');
+
+//*******************************************************************
 // controller
 
 var get = {};
@@ -26,13 +32,25 @@ var post;
 // get all
 
 get.all = function(req){
+
     return include('test/data/outfitters.get.all.json');
+
 };
 
 // get id
 
 get.id = function(req,res){
-    res.json(include('test/data/outfitters.get.id.json'));
+    
+    if(validate.permit_id(req.params.id)){
+    
+		res.json(include('test/data/outfitters.get.id.json'));
+    
+    }else{
+    
+		error.sendError(req,res,400,"permitId supplied is invalid");
+    
+    }
+    
 };
 
 // put id
