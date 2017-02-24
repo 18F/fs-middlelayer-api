@@ -15,11 +15,47 @@
 
 var request = require('supertest');
 var server = require('../index.js');
+var util = require('./utility.js');
 
 var chai = require('chai');
 var expect = chai.expect;
 var assert = chai.assert;
 var should = chai.should;
+
+//*******************************************************************
+//Mock Input
+
+var post_input = {
+	"region": 3,
+    "forest": 50552,
+    "district": 50552,
+    "authorizingOfficerName": "WILLIAM L.NOXON",
+    "authorizingOfficerTitle": null,
+    "applicant-info": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "dayPhone": {
+        "areaCode": 541,
+        "number": 8156141,
+        "extension": 0,
+        "type": "BUSINESS"
+      },
+      "emailAddress": "test@email.org",
+      "mailingAddress": "ON ANW 0953",
+      "mailingCity": "ALBANY",
+      "mailingState": "OR",
+      "mailingZIP": 97321
+    },
+    "noncommercial-fields": {
+      "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
+      "locationDescription": "string",
+      "startDateTime": "2013-01-12",
+      "endDateTime": "2013-01-19",
+      "numberParticipants": 45
+	}
+};
+
+
 
 //*******************************************************************
 
@@ -36,7 +72,8 @@ describe('noncommercial POST required noncommercial fields', function(){
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
-            	updateInputData(
+            	util.update_input_data(
+            		post_input,
             		{
 						"noncommercial-fields": null
 	        		}
@@ -50,7 +87,8 @@ describe('noncommercial POST required noncommercial fields', function(){
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
-            	updateInputData(
+            	util.update_input_data(
+            		post_input,
             		{
 						"noncommercial-fields": {
 							"locationDescription": "string",
@@ -69,7 +107,8 @@ describe('noncommercial POST required noncommercial fields', function(){
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
-            	updateInputData(
+            	util.update_input_data(
+            		post_input,
             		{
 						"noncommercial-fields": {
 							"activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
@@ -88,7 +127,8 @@ describe('noncommercial POST required noncommercial fields', function(){
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
-            	updateInputData(
+            	util.update_input_data(
+            		post_input,
             		{
 						"noncommercial-fields": {
 							"activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
@@ -107,7 +147,8 @@ describe('noncommercial POST required noncommercial fields', function(){
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
-            	updateInputData(
+            	util.update_input_data(
+            		post_input,
             		{
 						"noncommercial-fields": {
 							"activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
@@ -126,7 +167,8 @@ describe('noncommercial POST required noncommercial fields', function(){
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
-            	updateInputData(
+            	util.update_input_data(
+            		post_input,
             		{
 						"noncommercial-fields": {
 							"activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
@@ -145,7 +187,8 @@ describe('noncommercial POST required noncommercial fields', function(){
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
-            	updateInputData(
+            	util.update_input_data(
+            		post_input,
             		{
 						"noncommercial-fields": {
 							"activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
@@ -159,43 +202,3 @@ describe('noncommercial POST required noncommercial fields', function(){
             .expect(400, done);
     });
 });
-
-function updateInputData(update){
-	var post_input = {
-		"region": 3,
-	    "forest": 50552,
-	    "district": 50552,
-	    "authorizingOfficerName": "WILLIAM L.NOXON",
-	    "authorizingOfficerTitle": null,
-	    "applicant-info": {
-	      "firstName": "John",
-	      "lastName": "Doe",
-	      "dayPhone": {
-	        "areaCode": 541,
-	        "number": 8156141,
-	        "extension": 0,
-	        "type": "BUSINESS"
-	      },
-	      "emailAddress": "test@email.org",
-	      "mailingAddress": "ON ANW 0953",
-	      "mailingCity": "ALBANY",
-	      "mailingState": "OR",
-	      "mailingZIP": 97321
-	    },
-	    "noncommercial-fields": {
-	      "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
-	      "locationDescription": "string",
-	      "startDateTime": "2013-01-12",
-	      "endDateTime": "2013-01-19",
-	      "numberParticipants": 45
-    	}
-	};
-
-	var updated_input = Object.assign(
-		{},
-		post_input,
-    	update
-	);
-	
-	return updated_input;
-}
