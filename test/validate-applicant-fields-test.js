@@ -68,6 +68,9 @@ describe('noncommercial POST required applicant-info fields',function(){
         		})
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+            	expect(res.body.response.message).to.equal('applicant-info field cannot be empty.');
+            })
             .expect(400, done);
     });
 
@@ -75,24 +78,30 @@ describe('noncommercial POST required applicant-info fields',function(){
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
-            	util.update_input_data({
-	            	"applicant-info": {
-	      				"lastName": "Doe",
-						"dayPhone": {
-							"areaCode": 541,
-							"number": 8156141,
-							"extension": 0,
-							"type": "BUSINESS"
-      					},
-						"emailAddress": "test@email.org",
-						"mailingAddress": "ON ANW 0953",
-						"mailingCity": "ALBANY",
-						"mailingState": "OR",
-						"mailingZIP": 97321
-            		}
-        		})
+            	util.update_input_data(
+            		post_input,
+            		{
+		            	"applicant-info": {
+		      				"lastName": "Doe",
+							"dayPhone": {
+								"areaCode": 541,
+								"number": 8156141,
+								"extension": 0,
+								"type": "BUSINESS"
+	      					},
+							"emailAddress": "test@email.org",
+							"mailingAddress": "ON ANW 0953",
+							"mailingCity": "ALBANY",
+							"mailingState": "OR",
+							"mailingZIP": 97321
+	            		}
+        			}
+        		)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+            	expect(res.body.response.message).to.equal('firstName is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -121,6 +130,9 @@ describe('noncommercial POST required applicant-info fields',function(){
         		)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+            	expect(res.body.response.message).to.equal('lastName is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -144,6 +156,9 @@ describe('noncommercial POST required applicant-info fields',function(){
         		)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+            	expect(res.body.response.message).to.equal('dayPhone cannot be empty!');
+            })
             .expect(400, done);
     });
 
