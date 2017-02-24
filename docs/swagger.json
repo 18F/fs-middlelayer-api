@@ -40,7 +40,7 @@
                }
             ],
             "responses": {
-               "405": {
+               "400": {
                   "description": "Invalid input"
                }
             }
@@ -238,46 +238,6 @@
       }
    },
    "definitions": {
-       "non-commercial-properties": {
-          "type": "object",
-          "properties": {
-            "region": { "type" : "integer" },
-            "forest": { "type" : "integer" },
-            "district": { "type" : "integer" },
-            "authorizingOfficerName": { "type" : "string"},
-            "authorizingOfficerTitle": { "type" : "string"},
-            "applicant-info": {
-               "$ref": "#/definitions/applicant-info-non-commercial"
-            },
-            "non-commercial-fields": {
-              "$ref": "#/definitions/non-commercial-fields"
-            }
-          },
-          "required": ["region","forest","district","applicant-info","non-commercial-fields"],
-          "xml": {
-            "name": "properties"
-          }
-        },
-        "temp-outfitter-properties": {
-          "type": "object",
-          "properties": {
-            "region": { "type" : "integer" },
-            "forest": { "type" : "integer" },
-            "district": { "type" : "integer" },
-            "authorizingOfficerName": { "type" : "string"},
-            "authorizingOfficerTitle": { "type" : "string"},
-            "applicant-info": {
-               "$ref": "#/definitions/applicant-info-temp-outfitter"
-            },
-            "temp-outfitter-fields": {
-              "$ref": "#/definitions/temp-outfitter-fields"
-            }
-          },
-          "required": ["region","forest","district","applicant-info","temp-outfitter-fields"],
-          "xml": {
-            "name": "properties"
-          }
-        },
         "applicant-info-non-commercial": {
          "type": "object",
          "properties": {
@@ -396,23 +356,39 @@
       "non-commercial-permit": {
          "type": "object",
          "properties": {
-            "properties": {
-              "$ref": "#/definitions/non-commercial-properties"  
+            "region": { "type" : "integer" },
+            "forest": { "type" : "integer" },
+            "district": { "type" : "integer" },
+            "authorizingOfficerName": { "type" : "string"},
+            "authorizingOfficerTitle": { "type" : "string"},
+            "applicant-info": {
+               "$ref": "#/definitions/applicant-info-non-commercial"
+            },
+            "noncommercial-fields": {
+              "$ref": "#/definitions/non-commercial-fields"
             }
          },
-         "required": ["properties"],
+         "required": ["region","forest","district","applicant-info","non-commercial-fields"],
          "xml": {
             "name": "non-commercial-permit"
          }
       },
       "temp-outfitter-permit": {
          "type": "object",
-         "properties": {
-            "properties": {
-              "$ref": "#/definitions/temp-outfitter-properties"  
+          "properties": {
+            "region": { "type" : "integer" },
+            "forest": { "type" : "integer" },
+            "district": { "type" : "integer" },
+            "authorizingOfficerName": { "type" : "string"},
+            "authorizingOfficerTitle": { "type" : "string"},
+            "applicant-info": {
+               "$ref": "#/definitions/applicant-info-temp-outfitter"
+            },
+            "temp-outfitter-fields": {
+              "$ref": "#/definitions/temp-outfitter-fields"
             }
-         },
-         "required": ["properties"],
+          },
+          "required": ["region","forest","district","applicant-info","temp-outfitter-fields"],
          "xml": {
             "name": "temp-outfitter-permit"
          }
