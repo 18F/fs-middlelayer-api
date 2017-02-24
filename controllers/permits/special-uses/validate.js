@@ -19,7 +19,7 @@ var permit_id = function(id){
     
     var id_str = ''+ id;
     
-    if (id_str.length < 3) {   
+    if (id_str.length !== 10) {   
         valid = false;
     }
     
