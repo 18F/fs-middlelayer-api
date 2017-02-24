@@ -18,20 +18,24 @@ var expect = chai.expect;
 var assert = chai.assert;
 var should = chai.should;
 
-var non_commercial = {};
+var special_uses = {};
 
-non_commercial.validate = require('../controllers/permits/special-uses/non-commercial/validate.js');
+special_uses.validate = require('../controllers/permits/special-uses/validate.js');
 
 //*******************************************************************
 
-describe('API Controllers: validate non-commercial', function() {
+describe('API Controllers: validate GET permitId', function() {
     
-    it('should return valid false if id length < 3', function() {
-        expect( non_commercial.validate.permit_id(12) ).to.be.equal(false);
+    it('should return valid false if id length < 10', function() {
+        expect( special_uses.validate.permit_id(123456789) ).to.be.equal(false);
+    });
+
+    it('should return valid false if id length > 10', function() {
+        expect( special_uses.validate.permit_id(12345678901) ).to.be.equal(false);
     });
     
     it('should return valid true if id is valid', function() {
-        expect( non_commercial.validate.permit_id(12345) ).to.be.equal(true);
+        expect( special_uses.validate.permit_id(1234567890) ).to.be.equal(true);
     });
 
 });
