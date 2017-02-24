@@ -56,6 +56,35 @@ describe('API Routes: permits/special-uses/non-commercial', function() {
     it('should return valid json for non commercial POST request', function(done) {
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .send({
+                "region": 3,
+                "forest": 50552,
+                "district": 50552,
+                "authorizingOfficerName": "WILLIAM L.NOXON",
+                "authorizingOfficerTitle": null,
+                "applicant-info": {
+                  "firstName": "John",
+                  "lastName": "Doe",
+                  "dayPhone": {
+                    "areaCode": 541,
+                    "number": 8156141,
+                    "extension": 0,
+                    "type": "BUSINESS"
+                  },
+                  "emailAddress": "test@email.org",
+                  "mailingAddress": "ON ANW 0953",
+                  "mailingCity": "ALBANY",
+                  "mailingState": "OR",
+                  "mailingZIP": 97321,
+                },
+                "noncommercial-fields": {
+                  "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
+                  "locationDescription": "string",
+                  "startDateTime": "2013-01-12",
+                  "endDateTime": "2013-01-19",
+                  "numberParticipants": 45
+                }
+            })
             .expect('Content-Type', /json/)
             .expect(200, done);
     });
