@@ -7,13 +7,14 @@
         "src": "json",
         "route": "permits/special-uses/commercial/outfitters/id"
     },
-    "accinstCn": "1095010376",
-    "region": 3,
-    "forest": 50553,
-    "district": 50553,
+    "controlNumber": "1095010376",
+    "region": 1,
+    "forest": 23,
+    "district": 45,
     "authorizingOfficerName": "WILLIAM L.NOXON",
     "authorizingOfficerTitle": null,
     "applicant-info": {
+      "contactControlNumber":012345,
       "firstName": null,
       "lastName": null,
       "dayPhone": {
