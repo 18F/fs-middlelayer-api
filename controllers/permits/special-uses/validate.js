@@ -45,7 +45,7 @@ var applicant_info = function(req){
     }
     if(!req.body['applicant-info'].dayPhone){
         output.fields_valid = false;
-        output.object_missing_message = 'dayPhone cannot be empty!';
+        output.object_missing_message = 'dayPhone cannot be empty.';
     }else{
         var phone_res = validate_day_phone(req);
         output.fields_valid = output.fields_valid && phone_res.fields_valid;

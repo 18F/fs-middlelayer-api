@@ -157,7 +157,7 @@ describe('noncommercial POST required applicant-info fields',function(){
     		)
             .expect('Content-Type', /json/)
             .expect(function(res){
-            	expect(res.body.response.message).to.equal('dayPhone cannot be empty!');
+            	expect(res.body.response.message).to.equal('dayPhone cannot be empty.');
             })
             .expect(400, done);
     });
