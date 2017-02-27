@@ -21,11 +21,35 @@ A repository for the development of an API to support the public facing ePermit 
 
 This repository is being development under a task order of the Agile Blanket Purchase Agreement.
 
+## Setup
+
+Clone this repo to your desktop and run `npm install` to complete installation.
+
+## How to Test
+
+Run `npm run test`.
+
+## Deployment
+
+1. Clone the repository.
+2. Run `npm install`.
+3. If you want it exposed on a different port than `8000`, create an .env file and and set the contents to `PORT=8080`.
+4. Update `8080` to be whatever port you want exposed.
+
+## Configuration
+
+1. Create an .env file.
+2. Set the contents to `PORT=8080`.
+
+## Dependencies
+
+There are no dependencies.
+
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
 
-## Public domain
+## Public Domain
 
 This project is in the worldwide [public domain](LICENSE.md). As stated in [CONTRIBUTING](CONTRIBUTING.md):
 
