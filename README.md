@@ -29,13 +29,6 @@ Clone this repo to your desktop and run `npm install` to complete installation.
 
 Run `npm run test`.
 
-## Deployment
-
-1. Clone the repository.
-2. Run `npm install`.
-3. If you want it exposed on a different port than `8000`, create an .env file and and set the contents to `PORT=8080`.
-4. Update `8080` to be whatever port you want exposed.
-
 ## Configuration
 
 1. Create an .env file.
@@ -43,7 +36,7 @@ Run `npm run test`.
 
 ## Dependencies
 
-There are no dependencies.
+For information on dependencies, refer to [package.json](https://github.com/nci-ats/fs-middlelayer-api/blob/dev/package.json) and the dependency checkers, especially [Gemnasium](https://gemnasium.com/github.com/nci-ats/fs-middlelayer-api/).
 
 ## Contributing
 
