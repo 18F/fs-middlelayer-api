@@ -39,6 +39,21 @@ var outfitters = function(req){
         output.fields_valid = false;
         output.error_array.push('endDateTime');
     }
+
+    var files_res = validate_files(req);
+    output.fields_valid = output.fields_valid && files_res.fields_valid;
+    output.error_array =  output.error_array.concat(files_res.error_array);
+
+    return output;
+};
+
+function validate_files (req){
+
+    var output = {
+        'fields_valid': true,
+        'error_array':[]
+    };
+
     if (!req.body['temp-outfitter-fields'].insuranceCertificate) {
         output.fields_valid = false;
         output.error_array.push('insuranceCertificate');
@@ -53,7 +68,7 @@ var outfitters = function(req){
     }
 
     return output;
-};
+}
 
 //*******************************************************************
 // exports
