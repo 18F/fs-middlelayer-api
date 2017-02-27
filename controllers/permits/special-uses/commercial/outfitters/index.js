@@ -44,15 +44,7 @@ get.all = function(req){
 
 get.id = function(req,res){
     
-    if(validate_special_use.permit_id(req.params.id)){
-    
-		res.json(include('test/data/outfitters.get.id.json'));
-    
-    }else{
-    
-		error.sendError(req,res,400,"permitId supplied is invalid");
-    
-    }
+    res.json(include('test/data/outfitters.get.id.json'));
     
 };
 

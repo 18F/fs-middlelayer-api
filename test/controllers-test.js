@@ -25,6 +25,7 @@ special_uses.build_error_message = require('../controllers/permits/special-uses/
 
 //*******************************************************************
 
+/*
 describe('API Controllers: validate GET permitId', function() {
     
     it('should return valid false if id length < 10', function() {
@@ -40,6 +41,7 @@ describe('API Controllers: validate GET permitId', function() {
     });
 
 });
+*/
 
 describe('API Controllers: build error message',function(){
 

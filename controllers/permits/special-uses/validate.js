@@ -13,6 +13,7 @@
 
 //*******************************************************************
 
+/*
 var permit_id = function(id){
     
     var valid = true;
@@ -26,6 +27,7 @@ var permit_id = function(id){
     return valid;
 
 };
+*/
 
 var applicant_info = function(req){
 
@@ -113,5 +115,5 @@ function validate_mailing_info(req){
 //*******************************************************************
 // exports
 
-module.exports.permit_id = permit_id;
+//module.exports.permit_id = permit_id;
 module.exports.applicant_info = applicant_info;

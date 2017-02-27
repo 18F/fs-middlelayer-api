@@ -25,6 +25,7 @@ var should = chai.should;
 
 describe('permitId validation', function() {
 
+/*
 	it('should return valid json with a 400 status code for non-commercial GET request with invalid id', function(done) {
         request(server)
             .get('/permits/special-uses/noncommercial/1234')
@@ -38,5 +39,6 @@ describe('permitId validation', function() {
             .expect('Content-Type', /json/)
             .expect(400, done);
     });
+*/
 
 });
