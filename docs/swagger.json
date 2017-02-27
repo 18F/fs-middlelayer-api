@@ -35,7 +35,7 @@
                   "description": "noncommercial permit information",
                   "required": true,
                   "schema": {
-                     "$ref": "#/definitions/non-commercial-permit"
+                     "$ref": "#/definitions/noncommercial-permit"
                   }
                }
             ],
@@ -77,7 +77,7 @@
             }
          }
       },
-      "/permits/special-uses/noncommercial/{permitId}": {
+      "/permits/special-uses/noncommercial/{controlNumber}": {
          "put": {
             "tags": [
                "Noncommercial Permit"
@@ -93,7 +93,7 @@
             ],
             "parameters": [
                 {
-                  "name": "permitId",
+                  "name": "controlNumber",
                   "in": "path",
                   "description": "ID of noncommercial permit to be updated",
                   "required": true,
@@ -106,7 +106,7 @@
                   "description": "Permit object that needs to be updated",
                   "required": true,
                   "schema": {
-                     "$ref": "#/definitions/non-commercial-permit"
+                     "$ref": "#/definitions/noncommercial-permit"
                   }
                }
             ],
@@ -133,7 +133,7 @@
             ],
             "parameters": [
                {
-                  "name": "permitId",
+                  "name": "controlNumber",
                   "in": "path",
                   "description": "ID of noncommercial permit to return",
                   "required": true,
@@ -145,7 +145,7 @@
                "200": {
                   "description": "successful operation",
                   "schema": {
-                     "$ref": "#/definitions/non-commercial-permit"
+                     "$ref": "#/definitions/noncommercial-permit-get"
                   }
                },
                "400": {
@@ -157,7 +157,7 @@
             }
          }
       },
-      "/permits/special-uses/commercial/outfitters/{permitId}": {
+      "/permits/special-uses/commercial/outfitters/{controlNumber}": {
         "put": {
             "tags": [
                "Outfitter and Guide Permit"
@@ -172,7 +172,7 @@
             ],
             "parameters": [
                 {
-                  "name": "permitId",
+                  "name": "controlNumber",
                   "in": "path",
                   "description": "ID of temp-outfitter permit to be updated",
                   "required": true,
@@ -212,7 +212,7 @@
             ],
             "parameters": [
                {
-                  "name": "permitId",
+                  "name": "controlNumber",
                   "in": "path",
                   "description": "ID of temp-outfitter permit to return",
                   "required": true,
@@ -224,7 +224,7 @@
                "200": {
                   "description": "successful operation",
                   "schema": {
-                     "$ref": "#/definitions/temp-outfitter-permit"
+                     "$ref": "#/definitions/temp-outfitter-permit-get"
                   }
                },
                "400": {
@@ -355,7 +355,7 @@
             "name": "temp-outfitter-fields"
          } 
       },
-      "non-commercial-permit": {
+      "noncommercial-permit": {
          "type": "object",
          "properties": {
             "region": { "type" : "integer" },
@@ -380,7 +380,35 @@
          },
          "required": ["region","forest","district","applicant-info","type","noncommercial-fields"],
          "xml": {
-            "name": "non-commercial-permit"
+            "name": "noncommercial-permit"
+         }
+      },
+      "noncommercial-permit-get": {
+         "type": "object",
+         "properties": {
+            "controlNumber": {"type": "integer"},
+            "region": { "type" : "integer" },
+            "forest": { "type" : "integer" },
+            "district": { "type" : "integer" },
+            "authorizingOfficerName": { "type" : "string"},
+            "authorizingOfficerTitle": { "type" : "string"},
+            "applicant-info": {
+               "$ref": "#/definitions/applicant-info-non-commercial"
+            },
+            "type": {
+               "type": "string", 
+               "default": "noncommercial",
+               "enum":[
+                  "noncommercial"
+               ]
+            },
+            "noncommercial-fields": {
+              "$ref": "#/definitions/non-commercial-fields"
+            }
+         },
+         "required": ["controlNumber","region","forest","district","applicant-info","type","noncommercial-fields"],
+         "xml": {
+            "name": "noncommercial-permit-get"
          }
       },
       "temp-outfitter-permit": {
@@ -409,6 +437,35 @@
           "required": ["region","forest","district","applicant-info","type","temp-outfitter-fields"],
          "xml": {
             "name": "temp-outfitter-permit"
+         }
+      },
+      "temp-outfitter-permit-get": {
+         "type": "object",
+          "properties": {
+            "controlNumber": { "type": "integer"},
+            "region": { "type" : "integer" },
+            "forest": { "type" : "integer" },
+            "district": { "type" : "integer" },
+            "authorizingOfficerName": { "type" : "string"},
+            "authorizingOfficerTitle": { "type" : "string"},
+            "applicant-info": {
+               "$ref": "#/definitions/applicant-info-temp-outfitter"
+            },
+            "type": {
+               "type": "string", 
+               "default": "temp-outfitter-guide",
+               "value": "temp-outfitter-guide",
+               "enum":[                  
+                  "temp-outfitter-guide"
+               ]
+            },
+            "temp-outfitter-fields": {
+              "$ref": "#/definitions/temp-outfitter-fields"
+            }
+          },
+          "required": ["controlNumber","region","forest","district","applicant-info","type","temp-outfitter-fields"],
+         "xml": {
+            "name": "temp-outfitter-permit-get"
          }
       }
    }
