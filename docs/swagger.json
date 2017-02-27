@@ -366,11 +366,19 @@
             "applicant-info": {
                "$ref": "#/definitions/applicant-info-non-commercial"
             },
+            "type": {
+               "type": "string", 
+               "default": "noncommercial",
+               "enum":[
+                  "noncommercial",
+                  "temp-outfitter-guide"
+               ]
+            },
             "noncommercial-fields": {
               "$ref": "#/definitions/non-commercial-fields"
             }
          },
-         "required": ["region","forest","district","applicant-info","non-commercial-fields"],
+         "required": ["region","forest","district","applicant-info","type","noncommercial-fields"],
          "xml": {
             "name": "non-commercial-permit"
          }
@@ -386,11 +394,19 @@
             "applicant-info": {
                "$ref": "#/definitions/applicant-info-temp-outfitter"
             },
+            "type": {
+               "type": "string", 
+               "default": "temp-outfitter-guide",
+               "enum":[
+                  "noncommercial",
+                  "temp-outfitter-guide"
+               ]
+            },
             "temp-outfitter-fields": {
               "$ref": "#/definitions/temp-outfitter-fields"
             }
           },
-          "required": ["region","forest","district","applicant-info","temp-outfitter-fields"],
+          "required": ["region","forest","district","applicant-info","type","temp-outfitter-fields"],
          "xml": {
             "name": "temp-outfitter-permit"
          }
