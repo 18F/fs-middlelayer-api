@@ -31,6 +31,7 @@
       },
       "emailAddress": "test@email.org",
       "mailingAddress": "ON ANW 0953",
+      "mailingAddress2": "Suite 121",
       "mailingCity": "ALBANY",
       "mailingState": "OR",
       "mailingZIP": 97321,
