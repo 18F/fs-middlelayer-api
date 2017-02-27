@@ -33,8 +33,7 @@ This project is in the worldwide [public domain](LICENSE.md). As stated in [CONT
 >
 > All contributions to this project will be released under the CC0 dedication. By submitting a pull request, you are agreeing to comply with this waiver of copyright interest.
 
-## Point of Contact
+## Point of Contact and Notifications
+You can report issues and submit questions by opening a new issue in GitHub. You can also receive notifications from GitHub when a new issue is posted, when an existing issue’s status is updated, and when the code repository is updated. To receive these notifications from GitHub, select the Star button near the top of the page.
 
-
-## Notifications
 
