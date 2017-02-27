@@ -25,7 +25,7 @@ var should = chai.should;
 //*******************************************************************
 // Mock input
 
-var post_input = {
+var post_input_noncommercial = {
 	"region": 3,
     "forest": 50552,
     "district": 50552,
@@ -55,6 +55,39 @@ var post_input = {
 	}
 };
 
+var post_input_outfitters = {
+    "region": 3,
+    "forest": 50552,
+    "district": 50552,
+    "authorizingOfficerName": "WILLIAM L.NOXON",
+    "authorizingOfficerTitle": null,
+    "applicant-info": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "dayPhone": {
+        "areaCode": 541,
+        "number": 8156141,
+        "extension": 0,
+        "type": "BUSINESS"
+      },
+      "emailAddress": "test@email.org",
+      "mailingAddress": "ON ANW 0953",
+      "mailingCity": "ALBANY",
+      "mailingState": "OR",
+      "mailingZIP": 97321,
+      "orgType":"Limited Liability Company"
+    },
+    "temp-outfitter-fields": {
+      "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
+      "locationDescription": "string",
+      "startDateTime": "2013-01-12",
+      "endDateTime": "2013-01-19",
+      "insuranceCertificate":"File on S3",
+      "goodStandingEvidence":"File on S3",
+      "operatingPlan":"File on S3"
+    }
+};
+
 //*******************************************************************
 
 describe('noncommercial POST required applicant-info fields',function(){
@@ -63,9 +96,12 @@ describe('noncommercial POST required applicant-info fields',function(){
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
-            	util.update_input_data({
-	           	"applicant-info": null
-        		})
+            	util.update_input_data(
+                    post_input_noncommercial,
+                    {
+    	           	"applicant-info": null
+            		}
+                )
     		)
             .expect('Content-Type', /json/)
             .expect(function(res){
@@ -79,7 +115,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .post('/permits/special-uses/noncommercial')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_noncommercial,
             		{
 		            	"applicant-info": {
 		      				"lastName": "Doe",
@@ -110,7 +146,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .post('/permits/special-uses/noncommercial')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_noncommercial,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -141,7 +177,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .post('/permits/special-uses/noncommercial')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_noncommercial,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -167,7 +203,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .post('/permits/special-uses/noncommercial')
             .send(
             	util.update_input_data(
-	            	post_input,
+	            	post_input_noncommercial,
 	            	{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -198,7 +234,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .post('/permits/special-uses/noncommercial')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_noncommercial,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -229,7 +265,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .post('/permits/special-uses/noncommercial')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_noncommercial,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -260,7 +296,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .post('/permits/special-uses/noncommercial')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_noncommercial,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -291,7 +327,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .post('/permits/special-uses/noncommercial')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_noncommercial,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -322,7 +358,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .post('/permits/special-uses/noncommercial')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_noncommercial,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -353,7 +389,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .post('/permits/special-uses/noncommercial')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_noncommercial,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -384,7 +420,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .post('/permits/special-uses/noncommercial')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_noncommercial,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -415,7 +451,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .post('/permits/special-uses/noncommercial')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_noncommercial,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
