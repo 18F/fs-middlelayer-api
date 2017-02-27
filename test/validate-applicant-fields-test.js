@@ -846,5 +846,37 @@ describe('outfitters POST required applicant-info fields',function(){
             })
             .expect(400, done);
     });
-    //ADD test for missing "orgType":"Limited Liability Company"
+
+    it('should return valid json with a 400 status code for outfitters POST request without an orgType', function(done) {
+        request(server)
+            .post('/permits/special-uses/commercial/outfitters')
+            .send(
+                util.update_input_data(
+                    post_input_outfitters,
+                    {
+                        "applicant-info": {
+                            "firstName": "John",
+                            "lastName": "Doe",
+                            "dayPhone": {
+                                "areaCode": 541,
+                                "number": 8156141,
+                                "extension": 0,
+                                "type": "BUSINESS"
+                            },
+                            "emailAddress": "test@email.org",
+                            "mailingAddress": "ON ANW 0953",
+                            "mailingCity": "ALBANY",
+                            "mailingState": "OR",
+                            "mailingZIP": 97321
+                        }
+                    }
+                )
+            )
+            .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('orgType is a required field!');
+            })
+            .expect(400, done);
+    });
+
 });
