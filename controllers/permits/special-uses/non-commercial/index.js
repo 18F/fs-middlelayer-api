@@ -104,7 +104,7 @@ function validate_post_input(req){
     }else if (_.isEmpty(req.body['noncommercial-fields'])){
 
         output.fieldsValid = false;
-        output.error_message = 'noncommercial field cannot be empty.';
+        output.error_message = 'noncommercial-fields cannot be empty.';
 
     }else{
 
