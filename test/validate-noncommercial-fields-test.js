@@ -65,6 +65,9 @@ describe('noncommercial POST required noncommercial fields', function(){
         request(server)
             .post('/permits/special-uses/noncommercial')
 	       	.expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('Body cannot be empty.');
+            })
             .expect(400, done);
     });    
 
@@ -80,6 +83,9 @@ describe('noncommercial POST required noncommercial fields', function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('noncommercial-fields cannot be empty.');
+            })
             .expect(400, done);
     });
     
@@ -100,6 +106,9 @@ describe('noncommercial POST required noncommercial fields', function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('activityDescription is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -120,6 +129,9 @@ describe('noncommercial POST required noncommercial fields', function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('locationDescription is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -140,6 +152,9 @@ describe('noncommercial POST required noncommercial fields', function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('startDateTime is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -160,6 +175,9 @@ describe('noncommercial POST required noncommercial fields', function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('endDateTime is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -180,6 +198,9 @@ describe('noncommercial POST required noncommercial fields', function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('numberParticipants is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -199,6 +220,9 @@ describe('noncommercial POST required noncommercial fields', function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('endDateTime and numberParticipants are required fields!');
+            })
             .expect(400, done);
     });
 });

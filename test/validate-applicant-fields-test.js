@@ -187,6 +187,9 @@ describe('noncommercial POST required applicant-info fields',function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('dayPhone/areaCode is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -215,6 +218,9 @@ describe('noncommercial POST required applicant-info fields',function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('dayPhone/number is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -243,6 +249,9 @@ describe('noncommercial POST required applicant-info fields',function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('dayPhone/type is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -271,6 +280,9 @@ describe('noncommercial POST required applicant-info fields',function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('emailAddress is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -299,6 +311,9 @@ describe('noncommercial POST required applicant-info fields',function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('mailingAddress is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -327,6 +342,9 @@ describe('noncommercial POST required applicant-info fields',function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('mailingCity is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -355,6 +373,9 @@ describe('noncommercial POST required applicant-info fields',function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('mailingState is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -383,6 +404,9 @@ describe('noncommercial POST required applicant-info fields',function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('mailingZIP is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -409,6 +433,9 @@ describe('noncommercial POST required applicant-info fields',function(){
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('mailingCity and mailingState and mailingZIP are required fields!');
+            })
             .expect(400, done);
     });
 
