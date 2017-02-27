@@ -487,13 +487,16 @@ describe('outfitters POST required applicant-info fields',function(){
             .post('/permits/special-uses/commercial/outfitters')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_outfitters,
             		{
 	           			"applicant-info": null
         			}
         		)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('applicant-info field cannot be empty.');
+            })
             .expect(400, done);
     });
 
@@ -502,7 +505,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .post('/permits/special-uses/commercial/outfitters')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_outfitters,
             		{
 		            	"applicant-info": {
 		      				"lastName": "Doe",
@@ -516,12 +519,16 @@ describe('outfitters POST required applicant-info fields',function(){
 							"mailingAddress": "ON ANW 0953",
 							"mailingCity": "ALBANY",
 							"mailingState": "OR",
-							"mailingZIP": 97321
+							"mailingZIP": 97321,
+                            "orgType":"Limited Liability Company"
 	            		}
         			}
         		)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('firstName is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -530,7 +537,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .post('/permits/special-uses/commercial/outfitters')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_outfitters,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -544,21 +551,25 @@ describe('outfitters POST required applicant-info fields',function(){
 							"mailingAddress": "ON ANW 0953",
 							"mailingCity": "ALBANY",
 							"mailingState": "OR",
-							"mailingZIP": 97321
+							"mailingZIP": 97321,
+                            "orgType":"Limited Liability Company"
 	            		}
         			}
         		)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('lastName is a required field!');
+            })
             .expect(400, done);
     });
 
-    it('should return valid json with a 400 status code for outfitters POST request without a dayphone', function(done) {
+    it('should return valid json with a 400 status code for outfitters POST request without a dayPhone', function(done) {
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_outfitters,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -567,12 +578,16 @@ describe('outfitters POST required applicant-info fields',function(){
 							"mailingAddress": "ON ANW 0953",
 							"mailingCity": "ALBANY",
 							"mailingState": "OR",
-							"mailingZIP": 97321
+							"mailingZIP": 97321,
+                            "orgType":"Limited Liability Company"
 						}
         			}
         		)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('dayPhone cannot be empty.');
+            })
             .expect(400, done);
     });
 
@@ -581,7 +596,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .post('/permits/special-uses/commercial/outfitters')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_outfitters,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -595,12 +610,16 @@ describe('outfitters POST required applicant-info fields',function(){
 							"mailingAddress": "ON ANW 0953",
 							"mailingCity": "ALBANY",
 							"mailingState": "OR",
-							"mailingZIP": 97321
+							"mailingZIP": 97321,
+                            "orgType":"Limited Liability Company"
 	            		}
 	        		}
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('dayPhone/areaCode is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -609,7 +628,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .post('/permits/special-uses/commercial/outfitters')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_outfitters,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -623,12 +642,16 @@ describe('outfitters POST required applicant-info fields',function(){
 							"mailingAddress": "ON ANW 0953",
 							"mailingCity": "ALBANY",
 							"mailingState": "OR",
-							"mailingZIP": 97321
+							"mailingZIP": 97321,
+                            "orgType":"Limited Liability Company"
 	            		}
 	        		}
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('dayPhone/number is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -637,7 +660,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .post('/permits/special-uses/commercial/outfitters')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_outfitters,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -651,12 +674,16 @@ describe('outfitters POST required applicant-info fields',function(){
 							"mailingAddress": "ON ANW 0953",
 							"mailingCity": "ALBANY",
 							"mailingState": "OR",
-							"mailingZIP": 97321
+							"mailingZIP": 97321,
+                            "orgType":"Limited Liability Company"
 	            		}
 	        		}
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('dayPhone/type is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -665,7 +692,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .post('/permits/special-uses/commercial/outfitters')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_outfitters,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -679,12 +706,16 @@ describe('outfitters POST required applicant-info fields',function(){
 							"mailingAddress": "ON ANW 0953",
 							"mailingCity": "ALBANY",
 							"mailingState": "OR",
-							"mailingZIP": 97321
+							"mailingZIP": 97321,
+                            "orgType":"Limited Liability Company"
 	            		}
 	        		}
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('emailAddress is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -693,7 +724,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .post('/permits/special-uses/commercial/outfitters')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_outfitters,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -707,12 +738,16 @@ describe('outfitters POST required applicant-info fields',function(){
 							"emailAddress": "test@email.org",
 							"mailingCity": "ALBANY",
 							"mailingState": "OR",
-							"mailingZIP": 97321
+							"mailingZIP": 97321,
+                            "orgType":"Limited Liability Company"
 	            		}
 	        		}
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('mailingAddress is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -721,7 +756,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .post('/permits/special-uses/commercial/outfitters')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_outfitters,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -735,12 +770,16 @@ describe('outfitters POST required applicant-info fields',function(){
 							"emailAddress": "test@email.org",
 							"mailingAddress": "ON ANW 0953",
 							"mailingState": "OR",
-							"mailingZIP": 97321
+							"mailingZIP": 97321,
+                            "orgType":"Limited Liability Company"
 	            		}
 	        		}
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('mailingCity is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -749,7 +788,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .post('/permits/special-uses/commercial/outfitters')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_outfitters,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -763,12 +802,16 @@ describe('outfitters POST required applicant-info fields',function(){
 							"emailAddress": "test@email.org",
 							"mailingAddress": "ON ANW 0953",
 							"mailingCity": "ALBANY",
-							"mailingZIP": 97321
+							"mailingZIP": 97321,
+                            "orgType":"Limited Liability Company"
 	            		}
 	        		}
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('mailingState is a required field!');
+            })
             .expect(400, done);
     });
 
@@ -777,7 +820,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .post('/permits/special-uses/commercial/outfitters')
             .send(
             	util.update_input_data(
-            		post_input,
+            		post_input_outfitters,
             		{
 		            	"applicant-info": {
 		      				"firstName": "John",
@@ -791,13 +834,17 @@ describe('outfitters POST required applicant-info fields',function(){
 							"emailAddress": "test@email.org",
 							"mailingAddress": "ON ANW 0953",
 							"mailingCity": "ALBANY",
-							"mailingState": "OR"
+							"mailingState": "OR",
+                            "orgType":"Limited Liability Company"
 	            		}
 	        		}
 	        	)
     		)
             .expect('Content-Type', /json/)
+            .expect(function(res){
+                expect(res.body.response.message).to.equal('mailingZIP is a required field!');
+            })
             .expect(400, done);
     });
-
+    //ADD test for missing "orgType":"Limited Liability Company"
 });
