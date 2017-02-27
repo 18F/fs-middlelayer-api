@@ -59,7 +59,7 @@ var post_input = {
 
 //*******************************************************************
 
-describe('noncommercial POST required noncommercial fields', function(){
+describe('noncommercial POST: required noncommercial fields', function(){
 
 	it('should return valid json with a 400 status code for noncommercial POST request without a body', function(done) {
         request(server)
