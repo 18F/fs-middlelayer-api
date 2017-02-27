@@ -454,7 +454,6 @@
             "type": {
                "type": "string", 
                "default": "temp-outfitter-guide",
-               "value": "temp-outfitter-guide",
                "enum":[                  
                   "temp-outfitter-guide"
                ]
