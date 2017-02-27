@@ -23,6 +23,7 @@ var _ = require('lodash');
 var validate_special_use = include('controllers/permits/special-uses/validate.js');
 var validate_noncommercial = include('controllers/permits/special-uses/non-commercial/validate.js');
 var error = include('error.js');
+var util = include('controllers/permits/special-uses/utility.js');
 
 //*******************************************************************
 // controller
@@ -124,7 +125,7 @@ function validate_post_input(req){
         error_array = error_array.concat(noncommercial.error_array);
 
         if(!output.error_message){
-            output.error_message = build_error_message(error_array);
+            output.error_message = util.build_error_message(error_array);
         }
 
     }
@@ -132,23 +133,7 @@ function validate_post_input(req){
     return output;
 }
 
-function build_error_message(error_array){
 
-    var error_message = _.join(error_array,' and ');
-
-    if(error_array.length>1){
-
-        error_message += ' are required fields!';
-
-    }else{
-
-        error_message += ' is a required field!';
-
-    }
-
-    return error_message;
-
-}
 
 //*******************************************************************
 // exports
