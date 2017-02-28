@@ -40,6 +40,9 @@
                }
             ],
             "responses": {
+               "200": {
+                  "description": "Success"
+               },
                "400": {
                   "description": "Invalid input"
                }
@@ -71,6 +74,9 @@
                }
             ],
             "responses": {
+               "200": {
+                  "description": "Success"
+               },
                "405": {
                   "description": "Invalid input"
                }
@@ -111,6 +117,9 @@
                }
             ],
             "responses": {
+               "200": {
+                  "description": "Success"
+               },
                "400": {
                   "description": "Invalid ID supplied"
                },
@@ -190,6 +199,9 @@
                }
             ],
             "responses": {
+               "200": {
+                  "description": "Success"
+               },
                "400": {
                   "description": "Invalid ID supplied"
                },
