@@ -41,12 +41,14 @@
     "supertest": "^3.0.0"
   },
   "dependencies": {
+    "body-parser": "^1.16.1",
     "cors": "^2.8.1",
     "dotenv": "^4.0.0",
     "express": "^4.14.1",
     "file-stream-rotator": "0.0.7",
     "helmet": "^3.4.0",
     "include": "^1.1.0",
+    "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "morgan": "^1.8.1"
   }
