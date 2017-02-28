@@ -25,12 +25,14 @@ var fsr = require('file-stream-rotator');
 var mkdirp = require('mkdirp');
 var morgan = require('morgan');
 
+var body_parser = require('body-parser');
+
 var routes = require('./routes');
 
 //*******************************************************************
 // environment variables
 
-var PORT = process.env.PORT;
+var PORT = process.env.PORT || 8000;
 
 //*******************************************************************
 // express
@@ -39,6 +41,9 @@ var app = express();
 
 app.use(cors());
 app.use(helmet());
+
+app.use(body_parser.json());
+app.use(body_parser.urlencoded({extended: true}));
 
 // **********************************************************
 // log

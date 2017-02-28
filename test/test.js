@@ -40,7 +40,7 @@ describe('FS ePermit API', function() {
     
     it('should not have x-powered-by header', function(done) {
         request(server)
-            .get('/permits/special-uses/non-commercial/1234')
+            .get('/permits/special-uses/noncommercial/1234567890')
             .expect(function(res) {
                 expect(res.headers).to.not.have.key('x-powered-by');
             })
@@ -49,7 +49,7 @@ describe('FS ePermit API', function() {
     
     it('should have cors support', function(done) {
         request(server)
-            .get('/permits/special-uses/non-commercial/1234')
+            .get('/permits/special-uses/noncommercial/1234567890')
             .expect(function(res) {
                 expect(res.headers['access-control-allow-origin']).to.equal('*');
             })

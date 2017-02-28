@@ -14,40 +14,29 @@
 //*******************************************************************
 // required modules
 
-var include = require('include')(__dirname);
-
-var outfitters = require('./outfitters');
+var _ = require('lodash');
 
 //*******************************************************************
-// controller
 
-var get = {};
+function build_error_message(error_array){
 
-// get all
+    var error_message = _.join(error_array,' and ');
 
-get.all = function(req,res){
+    if(error_array.length>1){
 
-    var outfitter = outfitters.get.all(req)['outfitters'];
+        error_message += ' are required fields!';
 
-    var commercial = {
-    	"response":{
-    		"success" : true,
-	        "api": "FS ePermit API",
-	        "type": "controller",
-	        "verb": "get",
-	        "src": "json",
-	        "route": "permits/special-uses/commercial"
-    	},
-    	"commercial":{
-    		"outfitters": outfitter
-    	}
-    };
+    }else{
 
-    return commercial;
+        error_message += ' is a required field!';
 
-};
+    }
+
+    return error_message;
+
+}
 
 //*******************************************************************
 // exports
 
-module.exports.get = get;
+module.exports.build_error_message = build_error_message;

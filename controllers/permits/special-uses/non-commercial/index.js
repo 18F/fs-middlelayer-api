@@ -15,12 +15,15 @@
 // required modules
 
 var include = require('include')(__dirname);
+var _ = require('lodash');
 
 //*******************************************************************
-// mock data
-var mock = {};
+// validation
 
-mock.non_commercial_get_id = include('test/data/non-commercial.get.id.json');
+var validate_special_use = include('controllers/permits/special-uses/validate.js');
+var validate_noncommercial = include('controllers/permits/special-uses/non-commercial/validate.js');
+var error = include('error.js');
+var util = include('controllers/permits/special-uses/utility.js');
 
 //*******************************************************************
 // controller
@@ -56,10 +59,73 @@ put.id = function(req,res){
 // post
 
 post = function(req,res){
+
+    var validate_res = validate_post_input(req);
     
-    res.json(include('test/data/non-commercial.post.json'));
+    if(validate_res.fieldsValid){
+    
+        res.json(include('test/data/non-commercial.post.json'));
+    
+    }else{
+    
+        error.sendError(req,res,400,validate_res.error_message);
+    
+    }
 
 };
+
+function validate_post_input(req){
+    
+    var output = {
+    
+      'fieldsValid': true,
+      'error_message': undefined
+    
+    };
+    var error_array = [];
+
+    if(_.isEmpty(req.body)){
+    
+        output.fieldsValid = false;
+        output.error_message = 'Body cannot be empty.';
+    
+    }else if(_.isEmpty(req.body['applicant-info'])){
+    
+        output.fieldsValid = false;
+        output.error_message = 'applicant-info field cannot be empty.';
+
+    }else if (_.isEmpty(req.body['noncommercial-fields'])){
+
+        output.fieldsValid = false;
+        output.error_message = 'noncommercial-fields cannot be empty.';
+
+    }else{
+
+        var applicant_info = validate_special_use.applicant_info(req);
+        var noncommercial = validate_noncommercial.noncommercial(req);
+
+        if(!applicant_info.fields_valid){
+
+            output.error_message = applicant_info.object_missing_message;
+            
+        }
+
+        output.fieldsValid  = output.fieldsValid  && applicant_info.fields_valid;
+        error_array = error_array.concat(applicant_info.error_array);
+
+        output.fieldsValid  = output.fieldsValid  && noncommercial.fields_valid;
+        error_array = error_array.concat(noncommercial.error_array);
+
+        if(!output.error_message){
+            output.error_message = util.build_error_message(error_array);
+        }
+
+    }
+
+    return output;
+}
+
+
 
 //*******************************************************************
 // exports

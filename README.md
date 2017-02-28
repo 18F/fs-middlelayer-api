@@ -21,20 +21,47 @@ A repository for the development of an API to support the public facing ePermit 
 
 This repository is being development under a task order of the Agile Blanket Purchase Agreement.
 
+## Setup
+
+1. Clone or download this repository.
+2. Run `npm install` to install application and all dependencies.
+3. Run `npm start` to start Node.js server.
+
+## How to Test
+
+- Use `npm test` to run Mocha unit tests.
+- Use `npm run coverage` for Istanbul code coverage.
+
+## Configuration
+
+- Environment variables:
+  - PORT | Default: 8000
+- Dotenv:
+  - [Dotenv](https://www.npmjs.com/package/dotenv) is used which can load environment variables from a .env file into process.env
+  - Example: PORT=8080
+
+## Dependencies
+
+Refer to application package and dependency trackers for dependency information:
+- Application package:
+  - [package.json](https://github.com/nci-ats/fs-middlelayer-api/blob/dev/package.json)
+  - [npm-shrinkwrap.json](https://github.com/nci-ats/fs-middlelayer-api/blob/dev/npm-shrinkwrap.json)
+- Dependency trackers:
+  - [Gemnasium](https://gemnasium.com/github.com/nci-ats/fs-middlelayer-api/)
+  - [VersionEye](https://www.versioneye.com/user/projects/58a669e7b4d2a20055fcb84c)
+  - [Bithound](https://www.bithound.io/github/nci-ats/fs-middlelayer-api/feat%2Fswagger-ui/dependencies/npm)
+
+## Point of Contact and Notifications
+You can report issues and submit questions by opening a new [Issue](https://help.github.com/articles/creating-an-issue/) in GitHub. You can [Watch](https://help.github.com/articles/watching-repositories/) this repo to receive notifications from GitHub when a new issue is posted, when an existing issue’s status is updated, and when a pull request is created. 
+
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
 
-## Public domain
+## Public Domain
 
 This project is in the worldwide [public domain](LICENSE.md). As stated in [CONTRIBUTING](CONTRIBUTING.md):
 
 > This project is in the public domain within the United States, and copyright and related rights in the work worldwide are waived through the [CC0 1.0 Universal public domain dedication](https://creativecommons.org/publicdomain/zero/1.0/).
 >
 > All contributions to this project will be released under the CC0 dedication. By submitting a pull request, you are agreeing to comply with this waiver of copyright interest.
-
-## Point of Contact
-
-
-## Notifications
-
