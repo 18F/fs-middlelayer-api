@@ -14,14 +14,14 @@
 //*******************************************************************
 
 function update_input_data(base_data, update){
-	
-	var updated_input = Object.assign(
-		{},
-		base_data,
-    	update
-	);
-	
-	return updated_input;
+
+    var updated_input = Object.assign(
+        {},
+        base_data,
+        update
+    );
+
+    return updated_input;
 }
 
 //*******************************************************************

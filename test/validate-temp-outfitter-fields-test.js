@@ -32,29 +32,29 @@ var post_input = {
     "authorizingOfficerName": "WILLIAM L.NOXON",
     "authorizingOfficerTitle": null,
     "applicant-info": {
-      "firstName": "John",
-      "lastName": "Doe",
-      "dayPhone": {
-        "areaCode": 541,
-        "number": 8156141,
-        "extension": 0,
-        "type": "BUSINESS"
-      },
-      "emailAddress": "test@email.org",
-      "mailingAddress": "ON ANW 0953",
-      "mailingCity": "ALBANY",
-      "mailingState": "OR",
-      "mailingZIP": 97321,
-      "orgType":"Limited Liability Company"
+        "firstName": "John",
+        "lastName": "Doe",
+        "dayPhone": {
+            "areaCode": 541,
+            "number": 8156141,
+            "extension": 0,
+            "type": "BUSINESS"
+        },
+        "emailAddress": "test@email.org",
+        "mailingAddress": "ON ANW 0953",
+        "mailingCity": "ALBANY",
+        "mailingState": "OR",
+        "mailingZIP": 97321,
+        "orgType":"Limited Liability Company"
     },
     "temp-outfitter-fields": {
-      "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
-      "locationDescription": "string",
-      "startDateTime": "2013-01-12",
-      "endDateTime": "2013-01-19",
-      "insuranceCertificate":"File on S3",
-      "goodStandingEvidence":"File on S3",
-      "operatingPlan":"File on S3"
+        "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
+        "locationDescription": "string",
+        "startDateTime": "2013-01-12",
+        "endDateTime": "2013-01-19",
+        "insuranceCertificate":"File on S3",
+        "goodStandingEvidence":"File on S3",
+        "operatingPlan":"File on S3"
     }
 };
 
