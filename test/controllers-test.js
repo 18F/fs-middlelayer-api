@@ -25,24 +25,6 @@ special_uses.build_error_message = require('../controllers/permits/special-uses/
 
 //*******************************************************************
 
-/*
-describe('API Controllers: validate GET permitId', function() {
-    
-    it('should return valid false if id length < 10', function() {
-        expect( special_uses.validate.permit_id(123456789) ).to.be.equal(false);
-    });
-
-    it('should return valid false if id length > 10', function() {
-        expect( special_uses.validate.permit_id(12345678901) ).to.be.equal(false);
-    });
-    
-    it('should return valid true if id is valid', function() {
-        expect( special_uses.validate.permit_id(1234567890) ).to.be.equal(true);
-    });
-
-});
-*/
-
 describe('API Controllers: build error message',function(){
 
     it('should return "firstName is a required field!"',function(){

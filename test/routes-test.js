@@ -38,16 +38,7 @@ describe('API Routes: permits/special-uses/non-commercial', function() {
             .expect('Content-Type', /json/)
             .expect(200, done);
     });
-
-/*
-    it('should return valid json with a status code 400 for noncommercial GET request with invalid id', function(done) {
-        request(server)
-            .get('/permits/special-uses/noncommercial/1234')
-            .expect('Content-Type', /json/)
-            .expect(400, done);
-    });
-  
-*/  
+ 
     it('should return valid json for non commercial PUT request for id', function(done) {
         request(server)
             .put('/permits/special-uses/noncommercial/1234')
@@ -108,15 +99,6 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
             .expect('Content-Type', /json/)
             .expect(200, done);
     });
-
-/*
-    it('should return valid json with a status code 400 for outfitters GET request with invalid id', function(done) {
-        request(server)
-            .get('/permits/special-uses/commercial/outfitters/1234')
-            .expect('Content-Type', /json/)
-            .expect(400, done);
-    });
-*/  
 
     it('should return valid json for outfitters PUT request for id', function(done) {
         request(server)

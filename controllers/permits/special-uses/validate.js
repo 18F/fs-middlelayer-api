@@ -13,22 +13,6 @@
 
 //*******************************************************************
 
-/*
-var permit_id = function(id){
-    
-    var valid = true;
-    
-    var id_str = ''+ id;
-    
-    if (id_str.length !== 10) {   
-        valid = false;
-    }
-    
-    return valid;
-
-};
-*/
-
 var applicant_info = function(req){
 
 	var output = {
