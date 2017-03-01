@@ -21,7 +21,7 @@ var _ = require('lodash');
 // validation
 
 var validate_special_use = include('controllers/permits/special-uses/validate.js');
-var validate_noncommercial = include('controllers/permits/special-uses/non-commercial/validate.js');
+var validate_noncommercial = include('controllers/permits/special-uses/noncommercial/validate.js');
 var error = include('error.js');
 var util = include('controllers/permits/special-uses/utility.js');
 

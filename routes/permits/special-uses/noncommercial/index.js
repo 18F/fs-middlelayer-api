@@ -18,7 +18,7 @@ var express = require('express');
 var router = express.Router();
 var include = require('include')(__dirname);
 
-var non_commercial = include('controllers/permits/special-uses/non-commercial');
+var non_commercial = include('controllers/permits/special-uses/noncommercial');
 var error = include('error.js');
 
 //*******************************************************************
