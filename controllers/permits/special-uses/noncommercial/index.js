@@ -66,7 +66,8 @@ post = function(req,res){
     
         res.json(include('test/data/non-commercial.post.json'));
     
-    }else{
+    }
+    else{
     
         error.sendError(req,res,400,validate_res.error_message);
     
@@ -78,8 +79,8 @@ function validate_post_input(req){
     
     var output = {
     
-      'fieldsValid': true,
-      'error_message': undefined
+        'fieldsValid': true,
+        'error_message': undefined
     
     };
     var error_array = [];
@@ -89,17 +90,20 @@ function validate_post_input(req){
         output.fieldsValid = false;
         output.error_message = 'Body cannot be empty.';
     
-    }else if(_.isEmpty(req.body['applicant-info'])){
+    }
+    else if(_.isEmpty(req.body['applicant-info'])){
     
         output.fieldsValid = false;
         output.error_message = 'applicant-info field cannot be empty.';
 
-    }else if (_.isEmpty(req.body['noncommercial-fields'])){
+    }
+    else if (_.isEmpty(req.body['noncommercial-fields'])){
 
         output.fieldsValid = false;
         output.error_message = 'noncommercial-fields cannot be empty.';
 
-    }else{
+    }
+    else{
 
         var applicant_info = validate_special_use.applicant_info(req);
         var noncommercial = validate_noncommercial.noncommercial(req);
@@ -117,12 +121,15 @@ function validate_post_input(req){
         error_array = error_array.concat(noncommercial.error_array);
 
         if(!output.error_message){
+
             output.error_message = util.build_error_message(error_array);
+
         }
 
     }
 
     return output;
+
 }
 
 

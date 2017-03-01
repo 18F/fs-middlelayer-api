@@ -26,7 +26,8 @@ function build_error_message(error_array){
 
         error_message += ' are required fields!';
 
-    }else{
+    }
+    else{
 
         error_message += ' is a required field!';
 

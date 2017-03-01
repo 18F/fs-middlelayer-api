@@ -51,20 +51,23 @@ get.id = function(req,res){
 // put id
 
 put.id = function(req,res){
+
     res.json(include('test/data/outfitters.put.id.json'));
+
 };
 
 // post
 
 post = function(req,res){
 
-	var validate_res = validate_post_input(req);
+    var validate_res = validate_post_input(req);
     
     if(validate_res.fieldsValid){
     
         res.json(include('test/data/outfitters.post.json'));
     
-    }else{
+    }
+    else{
     
         error.sendError(req,res,400,validate_res.error_message);
     
@@ -76,8 +79,8 @@ function validate_post_input(req){
     
     var output = {
     
-      'fieldsValid': true,
-      'error_message': undefined
+        'fieldsValid': true,
+        'error_message': undefined
     
     };
     var error_array = [];
@@ -87,17 +90,20 @@ function validate_post_input(req){
         output.fieldsValid = false;
         output.error_message = 'Body cannot be empty.';
     
-    }else if(_.isEmpty(req.body['applicant-info'])){
+    }
+    else if(_.isEmpty(req.body['applicant-info'])){
     
         output.fieldsValid = false;
         output.error_message = 'applicant-info field cannot be empty.';
 
-    }else if (_.isEmpty(req.body['temp-outfitter-fields'])){
+    }
+    else if (_.isEmpty(req.body['temp-outfitter-fields'])){
 
         output.fieldsValid = false;
         output.error_message = 'temp-outfitter field cannot be empty.';
 
-    }else{
+    }
+    else{
 
         var applicant_info = validate_special_use.applicant_info(req);
         var outfitters = validate_outfitters.outfitters(req);
@@ -115,12 +121,15 @@ function validate_post_input(req){
         error_array = error_array.concat(outfitters.error_array);
 
         if(!output.error_message){
+
             output.error_message = util.build_error_message(error_array);
+
         }
 
     }
 
     return output;
+
 }
 
 //*******************************************************************
