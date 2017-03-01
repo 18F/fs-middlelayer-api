@@ -37,7 +37,17 @@ function build_error_message(error_array){
 
 }
 
+var invalid_field = function invalid_field(output, field){
+    
+    output.fields_valid = false;
+    output.error_array.push(field);
+
+    return output;
+
+};
+
 //*******************************************************************
 // exports
 
 module.exports.build_error_message = build_error_message;
+module.exports.invalid_field = invalid_field;

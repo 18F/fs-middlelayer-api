@@ -12,6 +12,15 @@
 'use strict';
 
 //*******************************************************************
+// required modules
+
+var include = require('include')(__dirname);
+
+//*******************************************************************
+
+var util = include('controllers/permits/special-uses/utility.js');
+
+//*******************************************************************
 
 var outfitters = function(req){
 
@@ -21,32 +30,27 @@ var outfitters = function(req){
     };
     if(!req.body['applicant-info'].orgType){
 
-        output.fields_valid = false;
-        output.error_array.push('orgType');
+        util.invalid_field(output, 'orgType');
 
     }
     if (!req.body['temp-outfitter-fields'].activityDescription) {
 
-        output.fields_valid = false;
-        output.error_array.push('activityDescription');
+        util.invalid_field(output, 'activityDescription');
 
     }
     if (!req.body['temp-outfitter-fields'].locationDescription) {
 
-        output.fields_valid = false;
-        output.error_array.push('locationDescription');
+        util.invalid_field(output, 'locationDescription');
 
     }
     if (!req.body['temp-outfitter-fields'].startDateTime) {
 
-        output.fields_valid = false;
-        output.error_array.push('startDateTime');
+        util.invalid_field(output, 'startDateTime');
 
     }
     if (!req.body['temp-outfitter-fields'].endDateTime) {
 
-        output.fields_valid = false;
-        output.error_array.push('endDateTime');
+        util.invalid_field(output, 'endDateTime');
 
     }
 
@@ -67,20 +71,17 @@ function validate_files (req){
 
     if (!req.body['temp-outfitter-fields'].insuranceCertificate) {
 
-        output.fields_valid = false;
-        output.error_array.push('insuranceCertificate');
+        util.invalid_field(output, 'insuranceCertificate');
 
     }
     if (!req.body['temp-outfitter-fields'].goodStandingEvidence) {
 
-        output.fields_valid = false;
-        output.error_array.push('goodStandingEvidence');
+        util.invalid_field(output, 'goodStandingEvidence');
 
     }
     if (!req.body['temp-outfitter-fields'].operatingPlan) {
 
-        output.fields_valid = false;
-        output.error_array.push('operatingPlan');
+        util.invalid_field(output, 'operatingPlan');
 
     }
 
