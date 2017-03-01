@@ -30,7 +30,9 @@ router.use('/commercial', commercial);
 router.use('/noncommercial', non_commercial);
 
 router.get('/',function(req,res){
-	res.json(special_uses.get.all(req));
+
+    res.json(special_uses.get.all(req));
+
 });
 
 module.exports = router;

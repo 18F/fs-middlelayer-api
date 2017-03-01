@@ -27,7 +27,9 @@ var commercial = include('controllers/permits/special-uses/commercial');
 router.use('/outfitters', outfitters);
 
 router.get('/',function(req,res){
-	res.json(commercial.get.all(req));
+
+    res.json(commercial.get.all(req));
+
 });
 
 module.exports = router;

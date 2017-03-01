@@ -26,39 +26,39 @@ var error = include('error.js');
 
 // get all
 router.get('/',function(req,res){
-    
+
     res.json(non_commercial.get.all(req,res));
-    
+
 });
 
 // get id
 router.get('/:id(\\d+)',function(req,res){
-    
+
     non_commercial.get.id(req,res);
-    
+
 });
 
 // put id
 router.put('/:id(\\d+)',function(req,res){
-    
+
     non_commercial.put.id(req,res);
-    
+
 });
 
 // post
 router.post('/',function(req,res){
-    
+
     non_commercial.post(req,res);
-    
+
 });
 
 
 router.get('/errorTest',function(req,res){
 
-	var statusCode = 400;
-	var message = "Success!!";
-	error.sendError(req, res, statusCode, message);
-	
+    var statusCode = 400;
+    var message = "Success!!";
+    error.sendError(req, res, statusCode, message);
+
 });
 
 
