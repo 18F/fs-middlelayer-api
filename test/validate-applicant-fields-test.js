@@ -93,6 +93,7 @@ var post_input_outfitters = {
 describe('noncommercial POST required applicant-info fields',function(){
 
     it('should return valid json with a 400 status code for noncommercial POST request without an applicant-info object', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -105,12 +106,16 @@ describe('noncommercial POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
-            	expect(res.body.response.message).to.equal('applicant-info field cannot be empty.');
+
+                expect(res.body.response.message).to.equal('applicant-info field cannot be empty.');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a firstName', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -136,12 +141,16 @@ describe('noncommercial POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
-            	expect(res.body.response.message).to.equal('firstName is a required field!');
+
+                expect(res.body.response.message).to.equal('firstName is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a lastName', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -167,12 +176,16 @@ describe('noncommercial POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
-            	expect(res.body.response.message).to.equal('lastName is a required field!');
+
+                expect(res.body.response.message).to.equal('lastName is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a dayphone', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -193,12 +206,16 @@ describe('noncommercial POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
             	expect(res.body.response.message).to.equal('dayPhone cannot be empty.');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a dayPhone/areaCode', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -224,12 +241,16 @@ describe('noncommercial POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('dayPhone/areaCode is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a dayPhone/number', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -255,12 +276,16 @@ describe('noncommercial POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('dayPhone/number is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a dayPhone/type', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -286,12 +311,16 @@ describe('noncommercial POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('dayPhone/type is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without an emailAddress', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -317,12 +346,16 @@ describe('noncommercial POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('emailAddress is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a mailingAddress', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -348,12 +381,16 @@ describe('noncommercial POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('mailingAddress is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a mailingCity', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -379,12 +416,16 @@ describe('noncommercial POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('mailingCity is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a mailingState', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -410,12 +451,16 @@ describe('noncommercial POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('mailingState is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a mailingZIP', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -441,12 +486,16 @@ describe('noncommercial POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('mailingZIP is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request with all invalid fields listed', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -470,9 +519,12 @@ describe('noncommercial POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('mailingCity and mailingState and mailingZIP are required fields!');
+
             })
             .expect(400, done);
+
     });
 
 });
@@ -483,6 +535,7 @@ describe('noncommercial POST required applicant-info fields',function(){
 describe('outfitters POST required applicant-info fields',function(){
 
     it('should return valid json with a 400 status code for outfitters POST request without an applicant-info object', function(done) {
+
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
@@ -495,12 +548,16 @@ describe('outfitters POST required applicant-info fields',function(){
     		)
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('applicant-info field cannot be empty.');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for outfitters POST request without a firstName', function(done) {
+
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
@@ -527,12 +584,16 @@ describe('outfitters POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('firstName is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for outfitters POST request without a lastName', function(done) {
+
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
@@ -559,12 +620,16 @@ describe('outfitters POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('lastName is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for outfitters POST request without a dayPhone', function(done) {
+
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
@@ -586,12 +651,16 @@ describe('outfitters POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('dayPhone cannot be empty.');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for outfitters POST request without a dayPhone/areaCode', function(done) {
+
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
@@ -618,12 +687,16 @@ describe('outfitters POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('dayPhone/areaCode is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for outfitters POST request without a dayPhone/number', function(done) {
+
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
@@ -650,12 +723,16 @@ describe('outfitters POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('dayPhone/number is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for outfitters POST request without a dayPhone/type', function(done) {
+
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
@@ -682,12 +759,16 @@ describe('outfitters POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('dayPhone/type is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for outfitters POST request without an emailAddress', function(done) {
+
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
@@ -714,12 +795,16 @@ describe('outfitters POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('emailAddress is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for outfitters POST request without a mailingAddress', function(done) {
+
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
@@ -746,12 +831,16 @@ describe('outfitters POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('mailingAddress is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for outfitters POST request without a mailingCity', function(done) {
+
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
@@ -778,12 +867,16 @@ describe('outfitters POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('mailingCity is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for outfitters POST request without a mailingState', function(done) {
+
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
@@ -810,12 +903,16 @@ describe('outfitters POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('mailingState is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for outfitters POST request without a mailingZIP', function(done) {
+
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
@@ -842,12 +939,16 @@ describe('outfitters POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('mailingZIP is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for outfitters POST request without an orgType', function(done) {
+
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
@@ -874,9 +975,12 @@ describe('outfitters POST required applicant-info fields',function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('orgType is a required field!');
+
             })
             .expect(400, done);
+
     });
 
 });

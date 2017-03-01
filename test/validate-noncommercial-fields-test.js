@@ -62,16 +62,21 @@ var post_input = {
 describe('noncommercial POST: required noncommercial fields', function(){
 
     it('should return valid json with a 400 status code for noncommercial POST request without a body', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('Body cannot be empty.');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a noncommercial-fields object', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -84,12 +89,16 @@ describe('noncommercial POST: required noncommercial fields', function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('noncommercial-fields cannot be empty.');
+
             })
             .expect(400, done);
+
     });
     
     it('should return valid json with a 400 status code for noncommercial POST request without an activityDescription', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -107,12 +116,16 @@ describe('noncommercial POST: required noncommercial fields', function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('activityDescription is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a locationDescription', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -130,12 +143,16 @@ describe('noncommercial POST: required noncommercial fields', function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('locationDescription is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a startDateTime', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -153,12 +170,16 @@ describe('noncommercial POST: required noncommercial fields', function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('startDateTime is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a endDateTime', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -176,12 +197,16 @@ describe('noncommercial POST: required noncommercial fields', function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('endDateTime is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for noncommercial POST request without a numberParticipants', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -199,12 +224,16 @@ describe('noncommercial POST: required noncommercial fields', function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('numberParticipants is a required field!');
+
             })
             .expect(400, done);
+
     });
 
     it('should return valid json with a 400 status code for an invalid noncommercial POST request', function(done) {
+
         request(server)
             .post('/permits/special-uses/noncommercial')
             .send(
@@ -221,8 +250,12 @@ describe('noncommercial POST: required noncommercial fields', function(){
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
+
                 expect(res.body.response.message).to.equal('endDateTime and numberParticipants are required fields!');
+
             })
             .expect(400, done);
+
     });
+
 });

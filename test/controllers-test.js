@@ -28,13 +28,17 @@ special_uses.build_error_message = require('../controllers/permits/special-uses/
 describe('API Controllers: build error message',function(){
 
     it('should return "firstName is a required field!"',function(){
+    
         var errors = ['firstName'];
         expect( special_uses.build_error_message.build_error_message(errors) ).to.be.equal('firstName is a required field!');
+    
     });
 
     it('should return "firstName and lastName are required fields!"',function(){
+    
         var errors = ['firstName', 'lastName'];
         expect( special_uses.build_error_message.build_error_message(errors) ).to.be.equal('firstName and lastName are required fields!');
+    
     });
     
 });
