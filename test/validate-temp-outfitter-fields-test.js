@@ -367,4 +367,42 @@ describe('outfitters POST: required outfitters fields', function(){
 
     });
 
+    it('should return valid json with all errors reported during validation', function(done){
+
+        request(server)
+            .post('/permits/special-uses/commercial/outfitters')
+            .send(
+                util.update_input_data(
+                    post_input,
+                    {
+                        "applicant-info": {
+                            "lastName": "Doe",
+                            "dayPhone": {
+                                "areaCode": 541,
+                                "number": 8156141,
+                                "extension": 0,
+                                "type": "BUSINESS"
+                            },
+                            "emailAddress": "test@email.org",
+                            "mailingAddress": "ON ANW 0953",
+                            "mailingCity": "ALBANY",
+                            "mailingState": "OR",
+                            "mailingZIP": 97321
+                        },
+                        "temp-outfitter-fields": {
+                            
+                        }
+                    }
+                )
+            )
+            .expect('Content-Type', /json/)
+            .expect(function(res){
+
+                expect(res.body.response.message).to.equal('firstName and orgType and temp-outfitter-fields are required fields!');
+
+            })
+            .expect(400, done);
+    
+    });
+
 });
