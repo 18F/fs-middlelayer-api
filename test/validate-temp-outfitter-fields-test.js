@@ -71,7 +71,7 @@ describe('outfitters POST: required outfitters fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('Body cannot be empty.');
+                expect(res.body.response.message).to.equal('Body is a required field!');
 
             })
             .expect(400, done);
@@ -93,7 +93,7 @@ describe('outfitters POST: required outfitters fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('temp-outfitter field cannot be empty.');
+                expect(res.body.response.message).to.equal('temp-outfitter-fields is a required field!');
 
             })
             .expect(400, done);

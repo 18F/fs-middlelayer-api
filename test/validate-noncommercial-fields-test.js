@@ -68,7 +68,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('Body cannot be empty.');
+                expect(res.body.response.message).to.equal('Body is a required field!');
 
             })
             .expect(400, done);
@@ -90,7 +90,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('noncommercial-fields cannot be empty.');
+                expect(res.body.response.message).to.equal('noncommercial-fields is a required field!');
 
             })
             .expect(400, done);

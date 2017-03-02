@@ -107,7 +107,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('applicant-info field cannot be empty.');
+                expect(res.body.response.message).to.equal('applicant-info is a required field!');
 
             })
             .expect(400, done);
@@ -207,7 +207,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-            	expect(res.body.response.message).to.equal('dayPhone cannot be empty.');
+            	expect(res.body.response.message).to.equal('dayPhone is a required field!');
 
             })
             .expect(400, done);
@@ -549,7 +549,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('applicant-info field cannot be empty.');
+                expect(res.body.response.message).to.equal('applicant-info is a required field!');
 
             })
             .expect(400, done);
@@ -652,7 +652,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('dayPhone cannot be empty.');
+                expect(res.body.response.message).to.equal('dayPhone is a required field!');
 
             })
             .expect(400, done);
