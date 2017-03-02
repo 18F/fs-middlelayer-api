@@ -45,8 +45,7 @@ var validate_applicant_info = function(req){
     }
     if(!req.body['applicant-info'].dayPhone){
     
-        output.fields_valid = false;
-        output.object_missing_message = 'dayPhone cannot be empty.';
+        util.invalid_field(output, 'dayPhone');
     
     }
     else{
@@ -129,59 +128,39 @@ function validate_mailing_info(req){
 
 var validate_input = function (req){
 
-    var path = req.originalUrl;
-    var route = path.substring((path.lastIndexOf('/'))+1, path.length);
+    var route = get_route(req);
 
     var output = {
     
         'fields_valid': true,
-        'error_message': undefined
-    
+        'error_message': undefined,
+        'error_array': []
+
     };
-    var error_array = [];
     var permit_specific;
     var applicant_info;
 
     if(_.isEmpty(req.body)){
     
-        output.fields_valid = false;
-        output.error_message = 'Body cannot be empty.';
+        util.invalid_field(output, 'Body');
     
     }
     else if(_.isEmpty(req.body['applicant-info'])){
-    
-        output.fields_valid = false;
-        output.error_message = 'applicant-info field cannot be empty.';
-
-    }
-    else if ((_.isEmpty(req.body['noncommercial-fields'])) && (_.isEmpty(req.body['temp-outfitter-fields']))){
-
-        if(route === 'noncommercial'){
-
-            output.fields_valid = false;
-            output.error_message = 'noncommercial-fields cannot be empty.';
-
-        }
-        else if(route === 'outfitters'){
-
-            output.fields_valid = false;
-            output.error_message = 'temp-outfitter field cannot be empty.';
-
-        }
+        
+        util.invalid_field(output, 'applicant-info');
 
     }
     else{
 
         applicant_info = validate_applicant_info(req);
         output.fields_valid  = output.fields_valid  && applicant_info.fields_valid;
-        error_array = error_array.concat(applicant_info.error_array);
+        output.error_array = output.error_array.concat(applicant_info.error_array);
 
         if(!applicant_info.fields_valid){
 
             output.error_message = applicant_info.object_missing_message;
             
         }
-
         if(route === 'noncommercial'){
 
             permit_specific = validate_noncommercial.noncommercial(req);
@@ -195,19 +174,34 @@ var validate_input = function (req){
         }
 
         output.fields_valid  = output.fields_valid  && permit_specific.fields_valid;
-        error_array = error_array.concat(permit_specific.error_array);
-
-        if(!output.error_message){
-
-            output.error_message = util.build_error_message(error_array);
-
-        }
+        output.error_array = output.error_array.concat(permit_specific.error_array);
 
     }
 
+    output.error_message = util.build_error_message(output.error_array);
     return output;
 
 };
+
+function get_route(req){
+
+    var path = req.originalUrl;
+    var parts = path.split('/');
+    var route;
+    if(path.charAt(path.length-1) === '/'){
+
+        route = parts[parts.length-2];
+
+    }
+    else{
+
+        route = parts[parts.length-1];
+
+    }
+
+    return route;
+
+}
 
 
 //*******************************************************************

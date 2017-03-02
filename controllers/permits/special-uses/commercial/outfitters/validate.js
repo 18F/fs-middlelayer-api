@@ -15,6 +15,7 @@
 // required modules
 
 var include = require('include')(__dirname);
+var _ = require('lodash');
 
 //*******************************************************************
 
@@ -28,35 +29,47 @@ var outfitters = function(req){
         'fields_valid': true,
         'error_array':[]
     };
+
     if(!req.body['applicant-info'].orgType){
 
         util.invalid_field(output, 'orgType');
 
     }
-    if (!req.body['temp-outfitter-fields'].activityDescription) {
+        
+    if(_.isEmpty(req.body['temp-outfitter-fields'])){
 
-        util.invalid_field(output, 'activityDescription');
-
-    }
-    if (!req.body['temp-outfitter-fields'].locationDescription) {
-
-        util.invalid_field(output, 'locationDescription');
+        util.invalid_field(output, 'temp-outfitter-fields');
 
     }
-    if (!req.body['temp-outfitter-fields'].startDateTime) {
+    else{
 
-        util.invalid_field(output, 'startDateTime');
+        if (!req.body['temp-outfitter-fields'].activityDescription) {
 
+            util.invalid_field(output, 'activityDescription');
+
+        }
+        if (!req.body['temp-outfitter-fields'].locationDescription) {
+
+            util.invalid_field(output, 'locationDescription');
+
+        }
+        if (!req.body['temp-outfitter-fields'].startDateTime) {
+
+            util.invalid_field(output, 'startDateTime');
+
+        }
+        if (!req.body['temp-outfitter-fields'].endDateTime) {
+
+            util.invalid_field(output, 'endDateTime');
+
+        }
+
+        var files_res = validate_files(req);
+        output.fields_valid = output.fields_valid && files_res.fields_valid;
+        output.error_array =  output.error_array.concat(files_res.error_array);
+    
     }
-    if (!req.body['temp-outfitter-fields'].endDateTime) {
-
-        util.invalid_field(output, 'endDateTime');
-
-    }
-
-    var files_res = validate_files(req);
-    output.fields_valid = output.fields_valid && files_res.fields_valid;
-    output.error_array =  output.error_array.concat(files_res.error_array);
+    
 
     return output;
 

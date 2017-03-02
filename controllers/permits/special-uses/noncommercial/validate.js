@@ -15,6 +15,7 @@
 // required modules
 
 var include = require('include')(__dirname);
+var _ = require('lodash');
 
 //*******************************************************************
 
@@ -29,30 +30,39 @@ var noncommercial = function(req){
         'error_array':[]
     };
 
-    if (!req.body['noncommercial-fields'].activityDescription) {
+    if(_.isEmpty(req.body['noncommercial-fields'])){
 
-        util.invalid_field(output, 'activityDescription');
-
-    }
-    if (!req.body['noncommercial-fields'].locationDescription) {
-
-        util.invalid_field(output, 'locationDescription');
+        util.invalid_field(output, 'noncommercial-fields');
 
     }
-    if (!req.body['noncommercial-fields'].startDateTime) {
+    else{
 
-        util.invalid_field(output, 'startDateTime');
+        if (!req.body['noncommercial-fields'].activityDescription) {
 
-    }
-    if (!req.body['noncommercial-fields'].endDateTime) {
+            util.invalid_field(output, 'activityDescription');
 
-        util.invalid_field(output, 'endDateTime');
+        }
+        if (!req.body['noncommercial-fields'].locationDescription) {
 
-    }
-    if (!req.body['noncommercial-fields'].numberParticipants) {
+            util.invalid_field(output, 'locationDescription');
 
-        util.invalid_field(output, 'numberParticipants');
+        }
+        if (!req.body['noncommercial-fields'].startDateTime) {
 
+            util.invalid_field(output, 'startDateTime');
+
+        }
+        if (!req.body['noncommercial-fields'].endDateTime) {
+
+            util.invalid_field(output, 'endDateTime');
+
+        }
+        if (!req.body['noncommercial-fields'].numberParticipants) {
+
+            util.invalid_field(output, 'numberParticipants');
+
+        }
+    
     }
 
     return output;
