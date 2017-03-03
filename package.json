@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha test",
     "start": "node index.js",
-    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha"
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha",
+    "build": "eslint --fix controllers routes"
   },
   "repository": {
     "type": "git",
@@ -36,6 +37,7 @@
     "chai": "^3.5.0",
     "codeclimate-test-reporter": "^0.4.0",
     "codecov": "^1.0.1",
+    "eslint": "^3.16.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "supertest": "^3.0.0"
