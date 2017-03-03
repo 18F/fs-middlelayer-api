@@ -7,7 +7,7 @@
     "test": "mocha test",
     "start": "node index.js",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha",
-    "build": "eslint --fix controllers routes"
+    "build": "eslint --fix controllers routes test"
   },
   "repository": {
     "type": "git",

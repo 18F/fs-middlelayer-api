@@ -81,9 +81,9 @@
         "no-shadow": "off",
         "no-undef-init": "error",
         "no-undef": "error",
-        "no-undefined": "off",
+        "no-undefined": "error",
         "no-unused-vars": "error",
-        "no-use-before-define": "off",
+        "no-use-before-define": "error",
         "callback-return": "error",
         "global-require": "error",
         "handle-callback-err": "error",
@@ -142,7 +142,7 @@
         "operator-linebreak": "off",
         "padded-blocks": "error",
         "quote-props": "off",
-        "quotes": "off",
+        "quotes": "error",
         "require-jsdoc": "off",
         "semi-spacing": "off",
         "semi": "error",
@@ -175,6 +175,7 @@
         "prefer-spread": "off",
         "prefer-template": "off",
         "require-yield": "off",
-        "keyword-spacing":"error"
+        "keyword-spacing":"error",
+        "comma-dangle":"error"
     }
 }
