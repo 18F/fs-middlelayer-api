@@ -30,7 +30,7 @@ var post_input_noncommercial = {
     "forest": 50552,
     "district": 50552,
     "authorizingOfficerName": "WILLIAM L.NOXON",
-    "authorizingOfficerTitle": null,
+    "authorizingOfficerTitle": "null",
     "applicant-info": {
         "firstName": "John",
         "lastName": "Doe",
@@ -46,6 +46,23 @@ var post_input_noncommercial = {
         "mailingState": "OR",
         "mailingZIP": 97321
     },
+    "type": "noncommercial",
+    "noncommercial-fields": {
+        "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
+        "locationDescription": "string",
+        "startDateTime": "2013-01-12",
+        "endDateTime": "2013-01-19",
+        "numberParticipants": 45
+    }
+};
+
+var post_input_noncommercial_no_applicant_info = {
+    "region": 3,
+    "forest": 50552,
+    "district": 50552,
+    "authorizingOfficerName": "WILLIAM L.NOXON",
+    "authorizingOfficerTitle": "null",
+    "type": "noncommercial",
     "noncommercial-fields": {
         "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
         "locationDescription": "string",
@@ -77,6 +94,25 @@ var post_input_outfitters = {
         "mailingZIP": 97321,
         "orgType":"Limited Liability Company"
     },
+    "type": "temp-outfitter-guide",
+    "temp-outfitter-fields": {
+        "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
+        "locationDescription": "string",
+        "startDateTime": "2013-01-12",
+        "endDateTime": "2013-01-19",
+        "insuranceCertificate":"File on S3",
+        "goodStandingEvidence":"File on S3",
+        "operatingPlan":"File on S3"
+    }
+};
+
+var post_input_outfitters_no_applicant_info = {
+    "region": 3,
+    "forest": 50552,
+    "district": 50552,
+    "authorizingOfficerName": "WILLIAM L.NOXON",
+    "authorizingOfficerTitle": null,
+    "type": "temp-outfitter-guide",
     "temp-outfitter-fields": {
         "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
         "locationDescription": "string",
@@ -98,10 +134,8 @@ describe('noncommercial POST required applicant-info fields',function(){
             .post('/permits/special-uses/noncommercial')
             .send(
                 util.update_input_data(
-                    post_input_noncommercial,
-                    {
-                        "applicant-info": null
-                    }
+                    post_input_noncommercial_no_applicant_info,
+                    {}
                 )
             )
             .expect('Content-Type', /json/)
@@ -142,7 +176,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('firstName is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.firstName is a required field!');
 
             })
             .expect(400, done);
@@ -177,7 +211,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('lastName is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.lastName is a required field!');
 
             })
             .expect(400, done);
@@ -207,7 +241,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-            	expect(res.body.response.message).to.equal('dayPhone is a required field!');
+            	expect(res.body.response.message).to.equal('applicant-info.dayPhone is a required field!');
 
             })
             .expect(400, done);
@@ -242,7 +276,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('dayPhone/areaCode is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.dayPhone.areaCode is a required field!');
 
             })
             .expect(400, done);
@@ -277,7 +311,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('dayPhone/number is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.dayPhone.number is a required field!');
 
             })
             .expect(400, done);
@@ -312,7 +346,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('dayPhone/type is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.dayPhone.type is a required field!');
 
             })
             .expect(400, done);
@@ -347,7 +381,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('emailAddress is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.emailAddress is a required field!');
 
             })
             .expect(400, done);
@@ -382,7 +416,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('mailingAddress is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.mailingAddress is a required field!');
 
             })
             .expect(400, done);
@@ -417,7 +451,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('mailingCity is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.mailingCity is a required field!');
 
             })
             .expect(400, done);
@@ -452,7 +486,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('mailingState is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.mailingState is a required field!');
 
             })
             .expect(400, done);
@@ -487,7 +521,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('mailingZIP is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.mailingZIP is a required field!');
 
             })
             .expect(400, done);
@@ -520,7 +554,7 @@ describe('noncommercial POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('mailingCity and mailingState and mailingZIP are required fields!');
+                expect(res.body.response.message).to.equal('applicant-info.mailingCity and applicant-info.mailingZIP and applicant-info.mailingState are required fields!');
 
             })
             .expect(400, done);
@@ -539,13 +573,11 @@ describe('outfitters POST required applicant-info fields',function(){
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
-            	util.update_input_data(
-            		post_input_outfitters,
-            		{
-	           			"applicant-info": null
-        			}
-        		)
-    		)
+                util.update_input_data(
+                    post_input_outfitters_no_applicant_info,
+                    {}
+                )
+            )
             .expect('Content-Type', /json/)
             .expect(function(res){
 
@@ -585,7 +617,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('firstName is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.firstName is a required field!');
 
             })
             .expect(400, done);
@@ -621,7 +653,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('lastName is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.lastName is a required field!');
 
             })
             .expect(400, done);
@@ -652,7 +684,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('dayPhone is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.dayPhone is a required field!');
 
             })
             .expect(400, done);
@@ -688,7 +720,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('dayPhone/areaCode is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.dayPhone.areaCode is a required field!');
 
             })
             .expect(400, done);
@@ -724,7 +756,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('dayPhone/number is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.dayPhone.number is a required field!');
 
             })
             .expect(400, done);
@@ -760,7 +792,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('dayPhone/type is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.dayPhone.type is a required field!');
 
             })
             .expect(400, done);
@@ -796,7 +828,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('emailAddress is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.emailAddress is a required field!');
 
             })
             .expect(400, done);
@@ -832,7 +864,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('mailingAddress is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.mailingAddress is a required field!');
 
             })
             .expect(400, done);
@@ -868,7 +900,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('mailingCity is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.mailingCity is a required field!');
 
             })
             .expect(400, done);
@@ -904,7 +936,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('mailingState is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.mailingState is a required field!');
 
             })
             .expect(400, done);
@@ -940,7 +972,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('mailingZIP is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.mailingZIP is a required field!');
 
             })
             .expect(400, done);
@@ -976,7 +1008,7 @@ describe('outfitters POST required applicant-info fields',function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('orgType is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.orgType is a required field!');
 
             })
             .expect(400, done);

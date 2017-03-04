@@ -77,6 +77,7 @@ describe('API Routes: permits/special-uses/non-commercial', function() {
                     "mailingState": "OR",
                     "mailingZIP": 97321,
                 },
+                "type": "noncommercial",
                 "noncommercial-fields": {
                     "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
                     "locationDescription": "string",
@@ -147,6 +148,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
                     "mailingZIP": 97321,
                     "orgType":"Limited Liability Company"
                 },
+                "type": "temp-outfitter-guide",
                 "temp-outfitter-fields": {
                     "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
                     "locationDescription": "string",

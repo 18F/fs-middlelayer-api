@@ -30,7 +30,7 @@ var post_input = {
     "forest": 50552,
     "district": 50552,
     "authorizingOfficerName": "WILLIAM L.NOXON",
-    "authorizingOfficerTitle": null,
+    "authorizingOfficerTitle": "null",
     "applicant-info": {
         "firstName": "John",
         "lastName": "Doe",
@@ -46,6 +46,7 @@ var post_input = {
         "mailingState": "OR",
         "mailingZIP": 97321
     },
+    "type": "noncommercial",
     "noncommercial-fields": {
         "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
         "locationDescription": "string",
@@ -53,6 +54,30 @@ var post_input = {
         "endDateTime": "2013-01-19",
         "numberParticipants": 45
     }
+};
+
+var post_input_no_noncommercial_field = {
+    "region": 3,
+    "forest": 50552,
+    "district": 50552,
+    "authorizingOfficerName": "WILLIAM L.NOXON",
+    "authorizingOfficerTitle": "null",
+    "applicant-info": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "dayPhone": {
+            "areaCode": 541,
+            "number": 8156141,
+            "extension": 0,
+            "type": "BUSINESS"
+        },
+        "emailAddress": "test@email.org",
+        "mailingAddress": "ON ANW 0953",
+        "mailingCity": "ALBANY",
+        "mailingState": "OR",
+        "mailingZIP": 97321
+    },
+    "type": "noncommercial"
 };
 
 
@@ -68,7 +93,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('Body is a required field!');
+                expect(res.body.response.message).to.equal('region and forest and district and applicant-info and type and noncommercial-fields are required fields!');
 
             })
             .expect(400, done);
@@ -81,10 +106,8 @@ describe('noncommercial POST: required noncommercial fields', function(){
             .post('/permits/special-uses/noncommercial')
             .send(
                 util.update_input_data(
-                    post_input,
-                    {
-                        "noncommercial-fields": null
-                    }
+                    post_input_no_noncommercial_field,
+                    {}
                 )
             )
             .expect('Content-Type', /json/)
@@ -117,7 +140,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('activityDescription is a required field!');
+                expect(res.body.response.message).to.equal('noncommercial-fields.activityDescription is a required field!');
 
             })
             .expect(400, done);
@@ -144,7 +167,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('locationDescription is a required field!');
+                expect(res.body.response.message).to.equal('noncommercial-fields.locationDescription is a required field!');
 
             })
             .expect(400, done);
@@ -171,7 +194,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('startDateTime is a required field!');
+                expect(res.body.response.message).to.equal('noncommercial-fields.startDateTime is a required field!');
 
             })
             .expect(400, done);
@@ -198,7 +221,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('endDateTime is a required field!');
+                expect(res.body.response.message).to.equal('noncommercial-fields.endDateTime is a required field!');
 
             })
             .expect(400, done);
@@ -217,7 +240,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
                             "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
                             "locationDescription": "string",
                             "startDateTime": "2013-01-12",
-                            "endDateTime": "2013-01-19",
+                            "endDateTime": "2013-01-19"
                         }
                     }
                 )
@@ -225,7 +248,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('numberParticipants is a required field!');
+                expect(res.body.response.message).to.equal('noncommercial-fields.numberParticipants is a required field!');
 
             })
             .expect(400, done);
@@ -251,7 +274,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('endDateTime and numberParticipants are required fields!');
+                expect(res.body.response.message).to.equal('noncommercial-fields.endDateTime and noncommercial-fields.numberParticipants are required fields!');
 
             })
             .expect(400, done);

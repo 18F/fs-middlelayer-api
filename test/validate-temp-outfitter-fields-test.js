@@ -30,7 +30,7 @@ var post_input = {
     "forest": 50552,
     "district": 50552,
     "authorizingOfficerName": "WILLIAM L.NOXON",
-    "authorizingOfficerTitle": null,
+    "authorizingOfficerTitle": "null",
     "applicant-info": {
         "firstName": "John",
         "lastName": "Doe",
@@ -45,8 +45,9 @@ var post_input = {
         "mailingCity": "ALBANY",
         "mailingState": "OR",
         "mailingZIP": 97321,
-        "orgType":"Limited Liability Company"
+        "orgType": "Limited Liability Company"
     },
+    "type": "temp-outfitter-guide",
     "temp-outfitter-fields": {
         "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
         "locationDescription": "string",
@@ -58,36 +59,59 @@ var post_input = {
     }
 };
 
+var post_input_no_outfitters_field = {
+    "region": 3,
+    "forest": 50552,
+    "district": 50552,
+    "authorizingOfficerName": "WILLIAM L.NOXON",
+    "authorizingOfficerTitle": "null",
+    "applicant-info": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "dayPhone": {
+            "areaCode": 541,
+            "number": 8156141,
+            "extension": 0,
+            "type": "BUSINESS"
+        },
+        "emailAddress": "test@email.org",
+        "mailingAddress": "ON ANW 0953",
+        "mailingCity": "ALBANY",
+        "mailingState": "OR",
+        "mailingZIP": 97321,
+        "orgType": "Limited Liability Company"
+    },
+    "type": "temp-outfitter-guide"
+};
+
 
 
 //*******************************************************************
 
 describe('outfitters POST: required outfitters fields', function(){
 
-    it('should return valid json with a 400 status code for noncommercial POST request without a body', function(done) {
+    it('should return valid json with a 400 status code for outfitters POST request without a body', function(done) {
         
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('Body is a required field!');
+                expect(res.body.response.message).to.equal('region and forest and district and applicant-info and type and temp-outfitter-fields are required fields!');
 
             })
             .expect(400, done);
 
     });
 
-    it('should return valid json with a 400 status code for noncommercial POST request without a temp-outfitter-fields object', function(done) {
+    it('should return valid json with a 400 status code for outfitters POST request without a temp-outfitter-fields object', function(done) {
 
         request(server)
             .post('/permits/special-uses/commercial/outfitters')
             .send(
                 util.update_input_data(
-                    post_input,
-                    {
-                        "temp-outfitter-fields": null
-                    }
+                    post_input_no_outfitters_field,
+                    {}
                 )
             )
             .expect('Content-Type', /json/)
@@ -129,7 +153,7 @@ describe('outfitters POST: required outfitters fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('orgType is a required field!');
+                expect(res.body.response.message).to.equal('applicant-info.orgType is a required field!');
 
             })
             .expect(400, done);
@@ -158,7 +182,7 @@ describe('outfitters POST: required outfitters fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('activityDescription is a required field!');
+                expect(res.body.response.message).to.equal('temp-outfitter-fields.activityDescription is a required field!');
 
             })
             .expect(400, done);
@@ -187,7 +211,7 @@ describe('outfitters POST: required outfitters fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('locationDescription is a required field!');
+                expect(res.body.response.message).to.equal('temp-outfitter-fields.locationDescription is a required field!');
 
             })
             .expect(400, done);
@@ -216,7 +240,7 @@ describe('outfitters POST: required outfitters fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('startDateTime is a required field!');
+                expect(res.body.response.message).to.equal('temp-outfitter-fields.startDateTime is a required field!');
 
             })
             .expect(400, done);
@@ -245,7 +269,7 @@ describe('outfitters POST: required outfitters fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('endDateTime is a required field!');
+                expect(res.body.response.message).to.equal('temp-outfitter-fields.endDateTime is a required field!');
 
             })
             .expect(400, done);
@@ -274,7 +298,7 @@ describe('outfitters POST: required outfitters fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('insuranceCertificate is a required field!');
+                expect(res.body.response.message).to.equal('temp-outfitter-fields.insuranceCertificate is a required field!');
 
             })
             .expect(400, done);
@@ -303,7 +327,7 @@ describe('outfitters POST: required outfitters fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('goodStandingEvidence is a required field!');
+                expect(res.body.response.message).to.equal('temp-outfitter-fields.goodStandingEvidence is a required field!');
 
             })
             .expect(400, done);
@@ -332,7 +356,7 @@ describe('outfitters POST: required outfitters fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('operatingPlan is a required field!');
+                expect(res.body.response.message).to.equal('temp-outfitter-fields.operatingPlan is a required field!');
 
             })
             .expect(400, done);
@@ -360,7 +384,7 @@ describe('outfitters POST: required outfitters fields', function(){
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('insuranceCertificate and goodStandingEvidence are required fields!');
+                expect(res.body.response.message).to.equal('temp-outfitter-fields.insuranceCertificate and temp-outfitter-fields.goodStandingEvidence are required fields!');
 
             })
             .expect(400, done);
@@ -373,8 +397,13 @@ describe('outfitters POST: required outfitters fields', function(){
             .post('/permits/special-uses/commercial/outfitters')
             .send(
                 util.update_input_data(
-                    post_input,
+                    post_input_no_outfitters_field,
                     {
+                        "region": 3,
+                        "forest": 50552,
+                        "district": 50552,
+                        "authorizingOfficerName": "WILLIAM L.NOXON",
+                        "authorizingOfficerTitle": "null",
                         "applicant-info": {
                             "lastName": "Doe",
                             "dayPhone": {
@@ -389,16 +418,14 @@ describe('outfitters POST: required outfitters fields', function(){
                             "mailingState": "OR",
                             "mailingZIP": 97321
                         },
-                        "temp-outfitter-fields": {
-                            
-                        }
+                        "type": "temp-outfitter-guide"
                     }
                 )
             )
             .expect('Content-Type', /json/)
             .expect(function(res){
 
-                expect(res.body.response.message).to.equal('firstName and orgType and temp-outfitter-fields are required fields!');
+                expect(res.body.response.message).to.equal('applicant-info.firstName and applicant-info.orgType and temp-outfitter-fields are required fields!');
 
             })
             .expect(400, done);
