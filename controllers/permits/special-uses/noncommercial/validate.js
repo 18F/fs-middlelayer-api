@@ -30,41 +30,6 @@ var noncommercial = function(req){
         'error_array':[]
     };
 
-    if(_.isEmpty(req.body['noncommercial-fields'])){
-
-        util.invalid_field(output, 'noncommercial-fields');
-
-    }
-    else{
-
-        if (!req.body['noncommercial-fields'].activityDescription) {
-
-            util.invalid_field(output, 'activityDescription');
-
-        }
-        if (!req.body['noncommercial-fields'].locationDescription) {
-
-            util.invalid_field(output, 'locationDescription');
-
-        }
-        if (!req.body['noncommercial-fields'].startDateTime) {
-
-            util.invalid_field(output, 'startDateTime');
-
-        }
-        if (!req.body['noncommercial-fields'].endDateTime) {
-
-            util.invalid_field(output, 'endDateTime');
-
-        }
-        if (!req.body['noncommercial-fields'].numberParticipants) {
-
-            util.invalid_field(output, 'numberParticipants');
-
-        }
-    
-    }
-
     return output;
 
 };

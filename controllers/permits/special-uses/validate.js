@@ -9,199 +9,310 @@
 
 //*******************************************************************
 
-'use strict';
+"use strict";
 
 //*******************************************************************
 // required modules
 
-var include = require('include')(__dirname);
-var _ = require('lodash');
+var include = require("include")(__dirname);
+var Validator = require("jsonschema").Validator;
 
 //*******************************************************************
 
-var validate_noncommercial = include('controllers/permits/special-uses/noncommercial/validate.js');
-var validate_outfitters = include('controllers/permits/special-uses/commercial/outfitters/validate.js');
-var util = include('controllers/permits/special-uses/utility.js');
+var util = include("controllers/permits/special-uses/utility.js");
+var v = new Validator();
+
+//*******************************************************************
+// schemas
+
+var outfitter_schema = {
+
+    "id":"temp-outfitter-permit",
+    "type":"object",
+    "properties":{
+        "region": { "type" : "integer" },
+        "forest": { "type" : "integer" },
+        "district": { "type" : "integer" },
+        "authorizingOfficerName": { "type" : "string"},
+        "authorizingOfficerTitle": { "type" : "string"},
+        "applicant-info": {
+            "$ref": "applicant-info-temp-outfitter"
+        },
+        "type": {
+            "type": "string", 
+            "default": "temp-outfitter-guide",
+            "enum":[
+                "noncommercial",
+                "temp-outfitter-guide"
+            ]
+        },
+        "temp-outfitter-fields": {
+            "$ref": "temp-outfitter-fields"
+        }
+    },
+    "required": ["region", "forest", "district", "applicant-info", "type", "temp-outfitter-fields"]
+
+};
+
+var applicant_info_temp_outfitter = {
+
+    "id": "/applicant-info-temp-outfitter",
+    "type": "object",
+    "properties": {
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "dayPhone": { "$ref": "phone-number" },
+        "eveningPhone": { "$ref": "phone-number" },
+        "emailAddress": { "type": "string" },
+        "mailingAddress": { "type": "string" },
+        "mailingAddress2": { "type": "string" },
+        "mailingCity": { "type": "string" },
+        "mailingState": { "type": "string" },
+        "mailingZIP": { "type": "integer" },
+        "organizationName": { "type": "string"},
+        "website":{"type": "string"},
+        "orgType":{
+            "type":"string",
+            "description":"Organization Type",
+            "enum":[
+                "Individual",
+                "Corporation",
+                "Limited Liability Company",
+                "Partnership or Association",
+                "State Government or Agency",
+                "Local Government or Agency",
+                "Nonprofit"
+            ]
+        }            
+    },
+    "required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState", "orgType"]
+
+};
+
+var temp_outfitter_fields = {
+
+    "id": "/temp-outfitter-fields",
+    "type": "object",
+    "properties": {
+        "activityDescription": { "type": "string"},
+        "locationDescription": {  "type": "string"},
+        "startDateTime": { "type": "string"},
+        "endDateTime": { "type": "string"},
+        "insuranceCertificate": { "type": "string"},
+        "goodStandingEvidence": {
+            "description": "Certificate of good standing, operating agreement, or other evidence the business is in good standing",
+            "type": "string"
+        },
+        "operatingPlan": {
+            "description": "A completed Word or RTF operating plan template.",
+            "type": "string"
+        }
+    },
+    "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime", "insuranceCertificate", "goodStandingEvidence", "operatingPlan"]
+
+};
+
+var noncommercial_schema = {
+
+    "id":"temp-outfitter-permit",
+    "type":"object",
+    "properties":{
+        "region": { "type" : "integer" },
+        "forest": { "type" : "integer" },
+        "district": { "type" : "integer" },
+        "authorizingOfficerName": { "type" : "string"},
+        "authorizingOfficerTitle": { "type" : "string"},
+        "applicant-info": {
+            "$ref": "applicant-info-non-commercial"
+        },
+        "type": {
+            "type": "string", 
+            "default": "noncommercial",
+            "enum":[
+                "noncommercial",
+                "temp-outfitter-guide"
+            ]
+        },
+        "noncommercial-fields": {
+            "$ref": "non-commercial-fields"
+        }
+    },
+    "required": ["region", "forest", "district", "applicant-info", "type", "noncommercial-fields"]
+
+};
+
+var applicant_info_non_commercial = {
+
+    "id": "/applicant-info-non-commercial",
+    "type": "object",
+    "properties": {
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "dayPhone": { "$ref": "phone-number" },
+        "eveningPhone": { "$ref": "phone-number" },
+        "emailAddress": { "type": "string" },
+        "mailingAddress": { "type": "string" },
+        "mailingAddress2": { "type": "string" },
+        "mailingCity": { "type": "string" },
+        "mailingState": { "type": "string" },
+        "mailingZIP": { "type": "integer" },
+        "organizationName": { "type": "string"},
+        "website":{"type": "string"},
+        "orgType":{
+            "type":"string",
+            "description":"Organization Type",
+            "enum":[
+                "Individual",
+                "Corporation",
+                "Limited Liability Company",
+                "Partnership or Association",
+                "State Government or Agency",
+                "Local Government or Agency",
+                "Nonprofit"
+            ]
+        }            
+    },
+    "required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState"]
+
+};
+
+var non_commercial_fields = {
+
+    "id": "/non-commercial-fields",
+    "type": "object",
+    "properties": {
+        "activityDescription": { "type": "string"},
+        "locationDescription": {  "type": "string"},
+        "startDateTime": { "type": "string"},
+        "endDateTime": { "type": "string"}
+    },
+    "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime", "numberParticipants"]
+
+};
+
+
+var phone_number = {
+
+    "id": "/phone-number",
+    "type": "object",
+    "properties": {
+        "areaCode": { "type": "integer"},
+        "number": { "type": "integer"},
+        "extension": { "type": "integer"},
+        "type": {"type": "string"}
+    },
+    "required": ["areaCode", "number", "type"]
+
+};
 
 //*******************************************************************
 
-var validate_applicant_info = function(req){
+function remove_instance(prop){
 
-    var output = {
-        'fields_valid': true,
-        'error_array':[],
-        'object_missing_message': undefined
-    };
+    var fixed_prop;
+    if (prop.indexOf(".") !== -1){
 
-    if(!req.body['applicant-info'].firstName){
-
-        util.invalid_field(output, 'firstName');
-    
-    }
-    if(!req.body['applicant-info'].lastName){
-    
-        util.invalid_field(output, 'lastName');
-    
-    }
-    if(!req.body['applicant-info'].dayPhone){
-    
-        util.invalid_field(output, 'dayPhone');
-    
-    }
-    else{
-    
-        var phone_res = validate_day_phone(req);
-        output.fields_valid = output.fields_valid && phone_res.fields_valid;
-        output.error_array =  output.error_array.concat(phone_res.error_array);
-    
-    }
-    if(!req.body['applicant-info'].emailAddress){
-    
-        util.invalid_field(output, 'emailAddress');
-    
-    }
-    var mailing_info_res = validate_mailing_info(req);
-    
-    output.fields_valid = output.fields_valid && mailing_info_res.fields_valid;
-    output.error_array =  output.error_array.concat(mailing_info_res.error_array);
-
-    return output;
-
-};
-
-function validate_day_phone(req){
-
-    var output = {
-        'fields_valid': true,
-        'error_array':[]
-    };
-    if(!req.body['applicant-info'].dayPhone.areaCode){
-
-        util.invalid_field(output, 'dayPhone/areaCode');
+        fixed_prop = prop.substring((prop.indexOf(".") + 1), (prop.length));
 
     }
-    if(!req.body['applicant-info'].dayPhone.number){
+    else {
 
-        util.invalid_field(output, 'dayPhone/number');
-
-    }
-    if(!req.body['applicant-info'].dayPhone.type){
-
-        util.invalid_field(output, 'dayPhone/type');
+        fixed_prop = "";
 
     }
-    return output;
+
+    return fixed_prop;
 
 }
-
-function validate_mailing_info(req){
-
-    var output = {
-        'fields_valid': true,
-        'error_array': []
-    };
-
-    if(!req.body['applicant-info'].mailingAddress){
-
-        util.invalid_field(output, 'mailingAddress');
-
-    }
-    if(!req.body['applicant-info'].mailingCity){
-
-        util.invalid_field(output, 'mailingCity');
-
-    }
-    if(!req.body['applicant-info'].mailingState){
-
-        util.invalid_field(output, 'mailingState');
-
-    }
-    if(!req.body['applicant-info'].mailingZIP){
-
-        util.invalid_field(output, 'mailingZIP');
-
-    }
-
-    return output;
-
-}
-
-var validate_input = function (req){
-
-    var route = get_route(req);
-
-    var output = {
-    
-        'fields_valid': true,
-        'error_message': undefined,
-        'error_array': []
-
-    };
-    var permit_specific;
-    var applicant_info;
-
-    if(_.isEmpty(req.body)){
-    
-        util.invalid_field(output, 'Body');
-    
-    }
-    else if(_.isEmpty(req.body['applicant-info'])){
-        
-        util.invalid_field(output, 'applicant-info');
-
-    }
-    else{
-
-        applicant_info = validate_applicant_info(req);
-        output.fields_valid  = output.fields_valid  && applicant_info.fields_valid;
-        output.error_array = output.error_array.concat(applicant_info.error_array);
-
-        if(!applicant_info.fields_valid){
-
-            output.error_message = applicant_info.object_missing_message;
-            
-        }
-        if(route === 'noncommercial'){
-
-            permit_specific = validate_noncommercial.noncommercial(req);
-            
-
-        }
-        else if(route === 'outfitters'){
-
-            permit_specific = validate_outfitters.outfitters(req);
-
-        }
-
-        output.fields_valid  = output.fields_valid  && permit_specific.fields_valid;
-        output.error_array = output.error_array.concat(permit_specific.error_array);
-
-    }
-
-    output.error_message = util.build_error_message(output.error_array);
-    return output;
-
-};
 
 function get_route(req){
 
     var path = req.originalUrl;
-    var parts = path.split('/');
+    var parts = path.split("/");
     var route;
-    if(path.charAt(path.length-1) === '/'){
+    if (path.charAt(path.length - 1) === "/"){
 
-        route = parts[parts.length-2];
+        route = parts[parts.length - 2];
 
     }
-    else{
+    else {
 
-        route = parts[parts.length-1];
+        route = parts[parts.length - 1];
 
     }
 
     return route;
 
 }
+
+function handle_missing_error(output, property, field, result, counter){
+
+    property = remove_instance(result[counter].property);
+    if (property.length > 0){
+
+        field = property + "." + result[counter].argument;
+
+    }
+    else {
+
+        field = result[counter].argument;
+
+    }
+    util.invalid_field(output, field);
+
+}
+
+var validate_input = function (req){
+
+    var route = get_route(req);
+    var output = {
+    
+        "fields_valid": true,
+        "error_message": undefined,
+        "error_array": []
+
+    };
+    var result, length, type_arr = [], property, field, counter;
+    v.addSchema(phone_number, "phone-number");
+    if (route === "noncommercial"){
+
+        v.addSchema(applicant_info_non_commercial, "applicant-info-non-commercial");
+        v.addSchema(non_commercial_fields, "non-commercial-fields");
+        result = v.validate(req.body, noncommercial_schema).errors;
+                   
+
+    }
+    else if (route === "outfitters"){
+
+        v.addSchema(applicant_info_temp_outfitter, "applicant-info-temp-outfitter");
+        v.addSchema(temp_outfitter_fields, "temp-outfitter-fields");
+        result = v.validate(req.body, outfitter_schema).errors;
+        
+
+    }
+
+    type_arr = [];
+    length = result.length;
+    for (counter = 0; counter < length; counter++){
+
+        if (result[counter].name === "required"){
+
+            handle_missing_error(output, property, field, result, counter);
+
+        }
+        else if (result[counter].name === "type"){
+
+            type_arr.push(remove_instance(result[counter].property));
+
+        }
+
+    }
+
+
+    output.error_message = util.build_error_message(output.error_array);
+    return output;
+
+};
 
 
 //*******************************************************************
