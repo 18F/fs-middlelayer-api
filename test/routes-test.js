@@ -55,13 +55,13 @@ describe('API Routes: permits/special-uses/non-commercial', function() {
     it('should return valid json for non commercial POST request', function(done) {
 
         request(server)
-            .post('/permits/special-uses/noncommercial')
+            .post('/permits/special-uses/noncommercial/')
             .send({
                 "region": 3,
                 "forest": 50552,
                 "district": 50552,
                 "authorizingOfficerName": "WILLIAM L.NOXON",
-                "authorizingOfficerTitle": null,
+                "authorizingOfficerTitle": "null",
                 "applicant-info": {
                     "firstName": "John",
                     "lastName": "Doe",
@@ -131,7 +131,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
                 "forest": 50552,
                 "district": 50552,
                 "authorizingOfficerName": "WILLIAM L.NOXON",
-                "authorizingOfficerTitle": null,
+                "authorizingOfficerTitle": "null",
                 "applicant-info": {
                     "firstName": "John",
                     "lastName": "Doe",
