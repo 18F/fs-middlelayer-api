@@ -9,26 +9,27 @@
 
 //*******************************************************************
 
-'use strict';
+"use strict";
 
 //*******************************************************************
 // required modules
 
-var _ = require('lodash');
+var _ = require("lodash");
 
 //*******************************************************************
 
 function build_error_message(error_array){
 
-    var error_message = _.join(error_array,' and ');
+    var error_message = _.join(error_array, " and ");
 
-    if(error_array.length>1){
+    if (error_array.length > 1){
 
-        error_message += ' are required fields!';
+        error_message += " are required fields!";
 
-    }else{
+    }
+    else {
 
-        error_message += ' is a required field!';
+        error_message += " is a required field!";
 
     }
 
@@ -36,7 +37,17 @@ function build_error_message(error_array){
 
 }
 
+var invalid_field = function invalid_field(output, field){
+    
+    output.fields_valid = false;
+    output.error_array.push(field);
+
+    return output;
+
+};
+
 //*******************************************************************
 // exports
 
 module.exports.build_error_message = build_error_message;
+module.exports.invalid_field = invalid_field;

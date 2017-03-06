@@ -9,19 +9,19 @@
 
 //*******************************************************************
 
-'use strict';
+"use strict";
 
 //*******************************************************************
 // required modules
 
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 
-var permits = require('./permits');
+var permits = require("./permits");
 
 //*******************************************************************
 // router
 
-router.use('/permits', permits);
+router.use("/permits", permits);
 
 module.exports = router;

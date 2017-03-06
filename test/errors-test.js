@@ -26,10 +26,12 @@ var should = chai.should;
 describe('Error function: sendError', function() {
     
     it('should return valid json and a status code of 400', function(done) {
+
         request(server)
             .get('/permits/special-uses/noncommercial/errorTest')
             .expect('Content-Type', /json/)
             .expect(400, done);
+
     });
 
 });
