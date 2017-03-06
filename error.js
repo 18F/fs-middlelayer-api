@@ -9,10 +9,25 @@
 
 //*******************************************************************
 
-'use strict';
+"use strict";
 
 //*******************************************************************
 
+function logging(req, message){
+
+    var attemptedRoute = req.originalUrl;
+    var browser = req.get("user-agent");
+    var referer = req.get("referer");
+
+    var errorLog = {};
+    errorLog.route = attemptedRoute;
+    errorLog.browser = browser;
+    errorLog.referer = referer;
+    errorLog.errorMessage = message;
+
+    console.error(errorLog);
+
+}
 
 var sendError = function(req, res, code, message){
 
@@ -29,22 +44,6 @@ var sendError = function(req, res, code, message){
     res.status(code).json(output);
 
 };
-
-function logging(req, message){
-
-    var attemptedRoute = req.originalUrl;
-    var browser = req.get('user-agent');
-    var referer = req.get('referer');
-
-    var errorLog = {};
-    errorLog.route = attemptedRoute;
-    errorLog.browser = browser;
-    errorLog.referer = referer;
-    errorLog.errorMessage = message;
-
-    console.error(errorLog);
-
-}
 
 //*******************************************************************
 // exports
