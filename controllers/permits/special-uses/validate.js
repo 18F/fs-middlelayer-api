@@ -20,190 +20,19 @@ var Validator = require("jsonschema").Validator;
 //*******************************************************************
 
 var util = include("controllers/permits/special-uses/utility.js");
+var schema = require("./validation_schema.json");
 var v = new Validator();
 
 //*******************************************************************
 // schemas
 
-var outfitter_schema = {
-
-    "id":"temp-outfitter-permit",
-    "type":"object",
-    "properties":{
-        "region": { "type" : "integer" },
-        "forest": { "type" : "integer" },
-        "district": { "type" : "integer" },
-        "authorizingOfficerName": { "type" : "string"},
-        "authorizingOfficerTitle": { "type" : "string"},
-        "applicant-info": {
-            "$ref": "applicant-info-temp-outfitter"
-        },
-        "type": {
-            "type": "string", 
-            "default": "temp-outfitter-guide",
-            "enum":[
-                "noncommercial",
-                "temp-outfitter-guide"
-            ]
-        },
-        "temp-outfitter-fields": {
-            "$ref": "temp-outfitter-fields"
-        }
-    },
-    "required": ["region", "forest", "district", "applicant-info", "type", "temp-outfitter-fields"]
-
-};
-
-var applicant_info_temp_outfitter = {
-
-    "id": "/applicant-info-temp-outfitter",
-    "type": "object",
-    "properties": {
-        "firstName": { "type": "string" },
-        "lastName": { "type": "string" },
-        "dayPhone": { "$ref": "phone-number" },
-        "eveningPhone": { "$ref": "phone-number" },
-        "emailAddress": { "type": "string" },
-        "mailingAddress": { "type": "string" },
-        "mailingAddress2": { "type": "string" },
-        "mailingCity": { "type": "string" },
-        "mailingState": { "type": "string" },
-        "mailingZIP": { "type": "integer" },
-        "organizationName": { "type": "string"},
-        "website":{"type": "string"},
-        "orgType":{
-            "type":"string",
-            "description":"Organization Type",
-            "enum":[
-                "Individual",
-                "Corporation",
-                "Limited Liability Company",
-                "Partnership or Association",
-                "State Government or Agency",
-                "Local Government or Agency",
-                "Nonprofit"
-            ]
-        }            
-    },
-    "required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState", "orgType"]
-
-};
-
-var temp_outfitter_fields = {
-
-    "id": "/temp-outfitter-fields",
-    "type": "object",
-    "properties": {
-        "activityDescription": { "type": "string"},
-        "locationDescription": {  "type": "string"},
-        "startDateTime": { "type": "string"},
-        "endDateTime": { "type": "string"},
-        "insuranceCertificate": { "type": "string"},
-        "goodStandingEvidence": {
-            "description": "Certificate of good standing, operating agreement, or other evidence the business is in good standing",
-            "type": "string"
-        },
-        "operatingPlan": {
-            "description": "A completed Word or RTF operating plan template.",
-            "type": "string"
-        }
-    },
-    "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime", "insuranceCertificate", "goodStandingEvidence", "operatingPlan"]
-
-};
-
-var noncommercial_schema = {
-
-    "id":"temp-outfitter-permit",
-    "type":"object",
-    "properties":{
-        "region": { "type" : "integer" },
-        "forest": { "type" : "integer" },
-        "district": { "type" : "integer" },
-        "authorizingOfficerName": { "type" : "string"},
-        "authorizingOfficerTitle": { "type" : "string"},
-        "applicant-info": {
-            "$ref": "applicant-info-non-commercial"
-        },
-        "type": {
-            "type": "string", 
-            "default": "noncommercial",
-            "enum":[
-                "noncommercial",
-                "temp-outfitter-guide"
-            ]
-        },
-        "noncommercial-fields": {
-            "$ref": "non-commercial-fields"
-        }
-    },
-    "required": ["region", "forest", "district", "applicant-info", "type", "noncommercial-fields"]
-
-};
-
-var applicant_info_non_commercial = {
-
-    "id": "/applicant-info-non-commercial",
-    "type": "object",
-    "properties": {
-        "firstName": { "type": "string" },
-        "lastName": { "type": "string" },
-        "dayPhone": { "$ref": "phone-number" },
-        "eveningPhone": { "$ref": "phone-number" },
-        "emailAddress": { "type": "string" },
-        "mailingAddress": { "type": "string" },
-        "mailingAddress2": { "type": "string" },
-        "mailingCity": { "type": "string" },
-        "mailingState": { "type": "string" },
-        "mailingZIP": { "type": "integer" },
-        "organizationName": { "type": "string"},
-        "website":{"type": "string"},
-        "orgType":{
-            "type":"string",
-            "description":"Organization Type",
-            "enum":[
-                "Individual",
-                "Corporation",
-                "Limited Liability Company",
-                "Partnership or Association",
-                "State Government or Agency",
-                "Local Government or Agency",
-                "Nonprofit"
-            ]
-        }            
-    },
-    "required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState"]
-
-};
-
-var non_commercial_fields = {
-
-    "id": "/non-commercial-fields",
-    "type": "object",
-    "properties": {
-        "activityDescription": { "type": "string"},
-        "locationDescription": {  "type": "string"},
-        "startDateTime": { "type": "string"},
-        "endDateTime": { "type": "string"}
-    },
-    "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime", "numberParticipants"]
-
-};
-
-
-var phone_number = {
-
-    "id": "/phone-number",
-    "type": "object",
-    "properties": {
-        "areaCode": { "type": "integer"},
-        "number": { "type": "integer"},
-        "extension": { "type": "integer"},
-        "type": {"type": "string"}
-    },
-    "required": ["areaCode", "number", "type"]
-
-};
+var outfitter_schema = schema.outfitter;
+var applicant_info_temp_outfitter = schema.outfitter_applicant_info;
+var temp_outfitter_fields = schema.temp_outfitter_fields;
+var noncommercial_schema = schema.noncommercial;
+var applicant_info_non_commercial = schema.noncommercial_applicant_info;
+var non_commercial_fields = schema.noncommercial_fields;
+var phone_number = schema.phone_number;
 
 //*******************************************************************
 
@@ -274,20 +103,18 @@ var validate_input = function (req){
     };
     var result, length, type_arr = [], property, field, counter;
     v.addSchema(phone_number, "phone-number");
+    v.addSchema(applicant_info_non_commercial, "applicant-info-non-commercial");
+    v.addSchema(non_commercial_fields, "non-commercial-fields");
+    v.addSchema(applicant_info_temp_outfitter, "applicant-info-temp-outfitter");
+    v.addSchema(temp_outfitter_fields, "temp-outfitter-fields");
     if (route === "noncommercial"){
 
-        v.addSchema(applicant_info_non_commercial, "applicant-info-non-commercial");
-        v.addSchema(non_commercial_fields, "non-commercial-fields");
-        result = v.validate(req.body, noncommercial_schema).errors;
-                   
+        result = v.validate(req.body, noncommercial_schema).errors;                   
 
     }
     else { 
 
-        v.addSchema(applicant_info_temp_outfitter, "applicant-info-temp-outfitter");
-        v.addSchema(temp_outfitter_fields, "temp-outfitter-fields");
-        result = v.validate(req.body, outfitter_schema).errors;
-        
+        result = v.validate(req.body, outfitter_schema).errors;        
 
     }
 
