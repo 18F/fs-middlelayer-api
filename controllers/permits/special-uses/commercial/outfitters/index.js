@@ -9,18 +9,18 @@
 
 //*******************************************************************
 
-'use strict';
+"use strict";
 
 //*******************************************************************
 // required modules
 
-var include = require('include')(__dirname);
+var include = require("include")(__dirname);
 
 //*******************************************************************
 // validation
 
-var validate_special_use = include('controllers/permits/special-uses/validate.js');
-var error = include('error.js');
+var validate_special_use = include("controllers/permits/special-uses/validate.js");
+var error = include("error.js");
 
 //*******************************************************************
 // controller
@@ -31,9 +31,9 @@ var post;
 
 // get all
 
-get.all = function(req){
+get.all = function(){
 
-    return include('test/data/outfitters.get.all.json');
+    return include("test/data/outfitters.get.all.json");
 
 };
 
@@ -41,7 +41,7 @@ get.all = function(req){
 
 get.id = function(req, res){
     
-    res.json(include('test/data/outfitters.get.id.json'));
+    res.json(include("test/data/outfitters.get.id.json"));
     
 };
 
@@ -49,7 +49,7 @@ get.id = function(req, res){
 
 put.id = function(req, res){
 
-    res.json(include('test/data/outfitters.put.id.json'));
+    res.json(include("test/data/outfitters.put.id.json"));
 
 };
 
@@ -59,12 +59,12 @@ post = function(req, res){
 
     var validate_res = validate_special_use.validate_input(req);
     
-    if(validate_res.fields_valid){
+    if (validate_res.fields_valid){
     
-        res.json(include('test/data/outfitters.post.json'));
+        res.json(include("test/data/outfitters.post.json"));
     
     }
-    else{
+    else {
     
         error.sendError(req, res, 400, validate_res.error_message);
     

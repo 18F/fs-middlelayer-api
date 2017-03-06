@@ -268,7 +268,7 @@ var validate_input = function (req){
     var output = {
     
         "fields_valid": true,
-        "error_message": undefined,
+        "error_message": "",
         "error_array": []
 
     };

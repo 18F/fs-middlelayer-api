@@ -9,15 +9,13 @@
 
 //*******************************************************************
 
-'use strict';
+"use strict";
 
 //*******************************************************************
 // required modules
 
-var include = require('include')(__dirname);
-
-var commercial = require('./commercial/');
-var noncommercial = require('./non-commercial/');
+var commercial = require("./commercial/");
+var noncommercial = require("./non-commercial/");
 
 //*******************************************************************
 // controller
@@ -26,10 +24,10 @@ var get = {};
 
 // get all
 
-get.all = function(req,res){
+get.all = function(req){
 
-    var commercial_res = commercial.get.all(req)['commercial'];
-    var noncommercial_res = noncommercial.get.all(req)['non-commercial'];
+    var commercial_res = commercial.get.all(req)["commercial"];
+    var noncommercial_res = noncommercial.get.all(req)["non-commercial"];
 
     var special_uses = {
         "response":{
