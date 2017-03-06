@@ -282,7 +282,7 @@ var validate_input = function (req){
                    
 
     }
-    else if (route === "outfitters"){
+    else { 
 
         v.addSchema(applicant_info_temp_outfitter, "applicant-info-temp-outfitter");
         v.addSchema(temp_outfitter_fields, "temp-outfitter-fields");
