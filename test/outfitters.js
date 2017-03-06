@@ -794,40 +794,4 @@ describe("outfitters POST required applicant-info fields",function(){
 
     });
 
-    it("should return valid json with a 400 status code for outfitters POST request without an orgType", function(done) {
-
-        request(server)
-            .post("/permits/special-uses/commercial/outfitters")
-            .send(
-                util.update_input_data(
-                    post_input,
-                    {
-                        "applicant-info": {
-                            "firstName": "John",
-                            "lastName": "Doe",
-                            "dayPhone": {
-                                "areaCode": 541,
-                                "number": 8156141,
-                                "extension": 0,
-                                "type": "BUSINESS"
-                            },
-                            "emailAddress": "test@email.org",
-                            "mailingAddress": "ON ANW 0953",
-                            "mailingCity": "ALBANY",
-                            "mailingState": "OR",
-                            "mailingZIP": 97321
-                        }
-                    }
-                )
-            )
-            .expect("Content-Type", /json/)
-            .expect(function(res){
-
-                expect(res.body.response.message).to.equal("applicant-info.orgType is a required field!");
-
-            })
-            .expect(400, done);
-
-    });
-
 });
