@@ -17,7 +17,7 @@
 var include = require('include')(__dirname);
 
 var commercial = require('./commercial/');
-var noncommercial = require('./noncommercial/');
+var noncommercial = require('./non-commercial/');
 
 //*******************************************************************
 // controller
