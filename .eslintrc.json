@@ -125,7 +125,7 @@
         "no-inline-comments": "off",
         "no-lonely-if": "off",
         "no-mixed-spaces-and-tabs": "error",
-        "no-multiple-empty-lines": { "max": 1},
+        "no-multiple-empty-lines": ["error", { "max":1 }],
         "no-negated-condition": "off",
         "no-nested-ternary": "off",
         "no-new-object": "off",
