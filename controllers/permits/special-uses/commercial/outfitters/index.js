@@ -15,7 +15,7 @@
 // required modules
 
 var include = require("include")(__dirname);
-var outfitters_data = require('../../../../../test/data/basicGET.json');
+var outfitters_data = include('test/data/basicGET.json');
 
 //*******************************************************************
 // validation
