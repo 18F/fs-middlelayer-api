@@ -15,11 +15,13 @@
 // required modules
 
 var include = require("include")(__dirname);
+var outfitters_data = require('../../../../../test/data/basicGET.json');
 
 //*******************************************************************
 // validation
 
 var validate_special_use = include("controllers/permits/special-uses/validate.js");
+var util = include('controllers/permits/special-uses/utility.js');
 var error = include("error.js");
 
 //*******************************************************************
@@ -41,7 +43,43 @@ get.all = function(){
 
 get.id = function(req, res){
     
-    res.json(include("test/data/outfitters.get.id.json"));
+    var jsonData = {};
+
+    var jsonResponse = {};
+    jsonResponse['success'] = false;
+    jsonResponse['api'] = 'FS ePermit API';
+    jsonResponse['type'] = 'controller';
+    jsonResponse['verb'] = 'get';
+    jsonResponse['src'] = 'json';
+    jsonResponse['route'] = 'permits/special-uses/commercial/outfitters/{controlNumber}';
+    
+    jsonData.response = jsonResponse;
+
+    var cnData = outfitters_data[1095010356];
+
+    console.log('outfitters cnData='+cnData);
+
+    if(cnData){
+
+        console.log('data of accinstCn='+cnData.accinstCn);
+        
+        var outfittersFields = {};
+        
+        outfittersFields.activityDescription = cnData.purpose;
+        outfittersFields.locationDescription = null;
+        outfittersFields.startDateTime = '2017-04-12 09:00:00';
+        outfittersFields.endDateTime = '2017-04-15 20:00:00';
+        outfittersFields.insuranceCertificate = 'insuranceCertificate.pdf';
+        outfittersFields.goodStandingEvidence = 'goodStandingEvidence.pdf';
+        outfittersFields.operatingPlan = 'operatingPlan.pdf';
+
+        util.copyGenericInfo(cnData, jsonData);
+        jsonData['temp-outfitter-fields'] = outfittersFields;    
+
+        jsonResponse['success'] = true;
+    }
+    
+    res.json(jsonData);
     
 };
 
