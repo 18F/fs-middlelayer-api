@@ -15,7 +15,7 @@
 // required modules
 
 var include = require('include')(__dirname);
-var outfitters_data = include('test/data/basicGET.json');
+var noncommercial_data = require('../../../../test/data/basicGET.json');
 
 //*******************************************************************
 // validation
@@ -35,7 +35,7 @@ var post;
 
 get.all = function(){
 
-	return include('test/data/outfitters.get.all.json');
+	return include('test/data/noncommercial.get.all.json');
 
 };
 
@@ -51,39 +51,37 @@ get.id = function(req, res){
 	jsonResponse['type'] = 'controller';
 	jsonResponse['verb'] = 'get';
 	jsonResponse['src'] = 'json';
-	jsonResponse['route'] = 'permits/special-uses/commercial/outfitters/{controlNumber}';
+	jsonResponse['route'] = 'permits/special-uses/noncommercial/{controlNumber}';
     
 	jsonData.response = jsonResponse;
 
-	var cnData = outfitters_data[1095010356];
+	var cnData = noncommercial_data[1095010356];
 
 	if (cnData){
+
+		var noncommercialFields = {};
         
-		var outfittersFields = {};
-        
-		outfittersFields.activityDescription = cnData.purpose;
-		outfittersFields.locationDescription = null;
-		outfittersFields.startDateTime = '2017-04-12 09:00:00';
-		outfittersFields.endDateTime = '2017-04-15 20:00:00';
-		outfittersFields.insuranceCertificate = 'insuranceCertificate.pdf';
-		outfittersFields.goodStandingEvidence = 'goodStandingEvidence.pdf';
-		outfittersFields.operatingPlan = 'operatingPlan.pdf';
+		noncommercialFields.activityDescription = cnData.purpose;
+		noncommercialFields.locationDescription = null;
+		noncommercialFields.startDateTime = '2017-04-12 09:00:00';
+		noncommercialFields.endDateTime = '2017-04-15 20:00:00';
+		noncommercialFields.numberParticipants = 45;
 
 		util.copyGenericInfo(cnData, jsonData);
-		jsonData['temp-outfitter-fields'] = outfittersFields;    
-
+		jsonData['noncommercial-fields'] = noncommercialFields;    
 		jsonResponse['success'] = true;
+        
 	}
     
 	res.json(jsonData);
-    
+
 };
 
 // put id
 
 put.id = function(req, res){
-
-	res.json(include('test/data/outfitters.put.id.json'));
+    
+	res.json(include('test/data/noncommercial.put.id.json'));
 
 };
 
@@ -95,7 +93,7 @@ post = function(req, res){
     
 	if (validate_res.fields_valid){
     
-		res.json(include('test/data/outfitters.post.json'));
+		res.json(include('test/data/noncommercial.post.json'));
     
 	}
 	else {

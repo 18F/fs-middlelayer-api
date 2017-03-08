@@ -1,8 +1,9 @@
 [![FS ePermit API](https://img.shields.io/badge/-ePermit-006227.svg?colorA=FFC526&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAMAAAAolt3jAAACFlBMVEUAAAD%2F%2FyXsvSW8qiXLsCXjuSXyvyX7wiX2wSXqvCXUsyXBrCXvviX%2F%2FyX8yCWUmyVliSV%2FkyV7kSWIlyV0jiWZnSX9yCXNsSXRsiXWtCVWgyVYhCXZtiX%2FyCV8kiV%2BkiX%2FyiX%2FzCWIliWElSX%2FzSX2wiVniSV3kCX2wiXUtCU5eCVujCXWtCW%2FqyXDrSWtpCWwpSWmoiWypiXeuCWJlyWPmSXiuiX%2F1CXsvSXFriW4qSWrpCWElCVdhiWSmiW3qCXCrSXQsiXyvyX%2F1CX%2F%2FyP%2F5yX%2F0iX%2FxCXrvCX%2FxiX%2F0iX%2F5yUcbCU6eCVAeiUfbiVEfCVEfCVZhCVEfCUzdSUtcyVAeyVNfyVZhCVGfSVEfCUqciUSaSUIZCUYayWPmSUUaiUCYiUVaiU1diVjiCUjcCVNfyVFfCXnuyU%2FeiUqciVliSVPgCWQmSUlcCVQgSV7kSX%2FxiWHliVPgCWPmSUtcyWLlyUibyVXgyWzpyX%2FxyXJryUXayVahCWIliWOmCU4eCV2jyXBrCXcuCXMsSVbhSUYaiV1jyU4eCVOgCVujCU6eCUudCWAkyUlcCVEfCVehiVYhCU%2FeiVvjSUSaSUAYiUAYiU1diWAlCUxdSUAYSUBYiUTaSVvjSVqiyVGfSUcbCUQaCUPaCUNZyULZiURaSUYayU6eCVehiVehiV1jyVmiSVOgCVRgSVSgSV2jyVxjSVvjSVMulUvAAAATHRSTlMAAGrao3NYUFdvndVtADfb%2Ffn2%2BP3cOMHAl%2F39lT7v7jsx6eozTPT2UoT%2B%2F4%2FGz%2FL46ut68%2FJ4B1Kau9Pu%2F%2BzQt5NMBgAKGUikQxYIJokgEwAAAFtJREFUCNdjZGBEBiwMvIy2jIcZGRkZrRiPMTIyiFsiJPcxMkgyOsJ4OxhZGFgYOeE6SeMyMuhGI0yew8LAxI3gMqFxGRmMGUthvBZGRgZzFEczMDC4QJlbGRgA3KAIv74V5FUAAAAASUVORK5CYII%3D)](README.md)
+[![TravisCI](https://travis-ci.org/nci-ats/fs-middlelayer-api.svg?branch=dev)](https://travis-ci.org/nci-ats/fs-middlelayer-api)
 [![Code Climate](https://codeclimate.com/github/nci-ats/fs-middlelayer-api/badges/gpa.svg)](https://codeclimate.com/github/nci-ats/fs-middlelayer-api)
 [![Code Climate Coverage](https://codeclimate.com/github/nci-ats/fs-middlelayer-api/badges/coverage.svg)](https://codeclimate.com/github/nci-ats/fs-middlelayer-api/coverage)
 [![Codecov](https://codecov.io/gh/nci-ats/fs-middlelayer-api/branch/master/graph/badge.svg)](https://codecov.io/gh/nci-ats/fs-middlelayer-api)
-[![TravisCI](https://travis-ci.org/nci-ats/fs-middlelayer-api.svg?branch=dev)](https://travis-ci.org/nci-ats/fs-middlelayer-api)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/a9f9ba4bc12a44d4bcf5f40084f72b9d)](https://www.codacy.com/app/nci-ats/fs-middlelayer-api)
 [![bitHound Overall Score](https://www.bithound.io/github/nci-ats/fs-middlelayer-api/badges/score.svg)](https://www.bithound.io/github/nci-ats/fs-middlelayer-api)
 [![bitHound Dependencies](https://www.bithound.io/github/nci-ats/fs-middlelayer-api/badges/dependencies.svg)](https://www.bithound.io/github/nci-ats/fs-middlelayer-api/feat%2Fswagger-ui/dependencies/npm)
 [![Gemnasium Dependency Status](https://gemnasium.com/badges/github.com/nci-ats/fs-middlelayer-api.svg)](https://gemnasium.com/github.com/nci-ats/fs-middlelayer-api)
@@ -31,6 +32,8 @@ This repository is being development under a task order of the Agile Blanket Pur
 
 - Use `npm test` to run Mocha unit tests.
 - Use `npm run coverage` for Istanbul code coverage.
+- Use `npm run quality` for ESLint static code analysis.
+- Use `npm run build` to run tests, coverage, and quality including fix.
 
 ## Configuration
 

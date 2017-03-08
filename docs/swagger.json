@@ -378,7 +378,7 @@
       }
    },
    "definitions": {
-        "applicant-info-non-commercial": {
+        "applicant-info-noncommercial": {
          "type": "object",
          "properties": {
             "firstName": { "type": "string" },
@@ -409,7 +409,7 @@
          },
          "required": ["firstName","lastName","dayPhone","emailAddress","mailingAddress","mailingCity","mailingZIP","mailingState"],
          "xml": {
-            "name": "applicant-info-non-commercial"
+            "name": "applicant-info-noncommercial"
          }
       },
       "applicant-info-temp-outfitter": {
@@ -459,7 +459,7 @@
             "name": "phone-number"
          }  
       },
-      "non-commercial-fields": {
+      "noncommercial-fields": {
         "type": "object",
         "properties": {
           "activityDescription": { "type": "string"},
@@ -470,7 +470,7 @@
         },
         "required": ["activityDescription","locationDescription","startDateTime","endDateTime","numberParticipants"],
         "xml": {
-            "name": "non-commercial-fields"
+            "name": "noncommercial-fields"
          } 
       },
       "temp-outfitter-fields": {
@@ -504,7 +504,7 @@
             "authorizingOfficerName": { "type" : "string"},
             "authorizingOfficerTitle": { "type" : "string"},
             "applicant-info": {
-               "$ref": "#/definitions/applicant-info-non-commercial"
+               "$ref": "#/definitions/applicant-info-noncommercial"
             },
             "type": {
                "type": "string", 
@@ -515,7 +515,7 @@
                ]
             },
             "noncommercial-fields": {
-              "$ref": "#/definitions/non-commercial-fields"
+              "$ref": "#/definitions/noncommercial-fields"
             }
          },
          "required": ["region","forest","district","applicant-info","type","noncommercial-fields"],
@@ -533,7 +533,7 @@
             "authorizingOfficerName": { "type" : "string"},
             "authorizingOfficerTitle": { "type" : "string"},
             "applicant-info": {
-               "$ref": "#/definitions/applicant-info-non-commercial"
+               "$ref": "#/definitions/applicant-info-noncommercial"
             },
             "type": {
                "type": "string", 
@@ -543,7 +543,7 @@
                ]
             },
             "noncommercial-fields": {
-              "$ref": "#/definitions/non-commercial-fields"
+              "$ref": "#/definitions/noncommercial-fields"
             }
          },
          "required": ["controlNumber","region","forest","district","applicant-info","type","noncommercial-fields"],
