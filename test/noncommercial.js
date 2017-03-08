@@ -37,10 +37,26 @@ var post_input_noncommercial_no_applicant_info = test_input.no_applicant_info_fi
 
 describe('noncommercial POST: required noncommercial fields', function(){
 
+    var token;
+
+    before(function(done) {
+      request(server)
+        .post('/auth')
+        .set('Accept','application/json')
+        .send({ "username": "user", "password": "12345" })
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function(err, res) {
+          token = res.body.token;
+          done();
+        });
+    });
+
     it('should return valid json with a 400 status code for noncommercial POST request without a body', function(done) {
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .expect('Content-Type', /json/)
             .expect(function(res){
 
@@ -55,6 +71,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input_no_noncommercial_field,
@@ -75,6 +92,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                 post_input,
@@ -102,6 +120,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -129,6 +148,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -156,6 +176,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -183,6 +204,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -210,6 +232,7 @@ describe('noncommercial POST: required noncommercial fields', function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -236,10 +259,26 @@ describe('noncommercial POST: required noncommercial fields', function(){
 
 describe('noncommercial POST required applicant-info fields',function(){
 
+    var token;
+
+    before(function(done) {
+      request(server)
+        .post('/auth')
+        .set('Accept','application/json')
+        .send({ "username": "user", "password": "12345" })
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end(function(err, res) {
+          token = res.body.token;
+          done();
+        });
+    });
+
     it('should return valid json with a 400 status code for noncommercial POST request without an applicant-info object', function(done) {
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input_noncommercial_no_applicant_info,
@@ -260,6 +299,7 @@ describe('noncommercial POST required applicant-info fields',function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -295,6 +335,7 @@ describe('noncommercial POST required applicant-info fields',function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -330,6 +371,7 @@ describe('noncommercial POST required applicant-info fields',function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -360,6 +402,7 @@ describe('noncommercial POST required applicant-info fields',function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -395,6 +438,7 @@ describe('noncommercial POST required applicant-info fields',function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -430,6 +474,7 @@ describe('noncommercial POST required applicant-info fields',function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -465,6 +510,7 @@ describe('noncommercial POST required applicant-info fields',function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                 post_input,
@@ -500,6 +546,7 @@ describe('noncommercial POST required applicant-info fields',function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                 post_input,
@@ -535,6 +582,7 @@ describe('noncommercial POST required applicant-info fields',function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -570,6 +618,7 @@ describe('noncommercial POST required applicant-info fields',function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -605,6 +654,7 @@ describe('noncommercial POST required applicant-info fields',function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,
@@ -640,6 +690,7 @@ describe('noncommercial POST required applicant-info fields',function(){
 
         request(server)
             .post('/permits/special-uses/noncommercial')
+            .set('x-access-token', token)
             .send(
                 util.update_input_data(
                     post_input,

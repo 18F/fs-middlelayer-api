@@ -18,19 +18,21 @@ var express = require("express");
 var router = express.Router();
 var include = require("include")(__dirname);
 
-var permits = require("./permits");
-var auth = require("./auth");
-
-var token = include("controllers/auth/token.js");
+var auth = include("controllers/auth");
+var passport = auth.passport;
 
 //*******************************************************************
 // router
 
-router.use("/auth", auth);
+router.use(passport.initialize());  
 
-router.use(token);
+router.post('/', passport.authenticate(  
+    'local', {
+        session: false
+    }), 
+    auth.serialize, auth.generate, auth.respond
+);
 
-router.use("/permits", permits);
 
 //*******************************************************************
 //exports

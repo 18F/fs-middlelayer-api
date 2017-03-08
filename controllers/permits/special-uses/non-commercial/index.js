@@ -57,11 +57,7 @@ get.id = function(req, res){
 
     var cnData = noncommercial_data[1095010356];
 
-    console.log("cnData=" + cnData);
-
     if (cnData){
-
-        console.log("data of accinstCn=" + cnData.accinstCn);
 
         jsonResponse["success"] = true;
         
