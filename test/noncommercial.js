@@ -657,7 +657,7 @@ describe("noncommercial POST: validate required fields present", function(){
 
 });
 
-describe("API Routes: permits/special-uses/non-commercial", function(){
+describe("API Routes: permits/special-uses/noncommercial", function(){
     
     var token;
 

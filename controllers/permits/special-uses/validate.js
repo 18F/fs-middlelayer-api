@@ -30,8 +30,8 @@ var outfitter_schema = schema.outfitter;
 var applicant_info_temp_outfitter = schema.outfitter_applicant_info;
 var temp_outfitter_fields = schema.temp_outfitter_fields;
 var noncommercial_schema = schema.noncommercial;
-var applicant_info_non_commercial = schema.noncommercial_applicant_info;
-var non_commercial_fields = schema.noncommercial_fields;
+var applicant_info_noncommercial = schema.noncommercial_applicant_info;
+var noncommercial_fields = schema.noncommercial_fields;
 var phone_number = schema.phone_number;
 
 //*******************************************************************
@@ -118,8 +118,8 @@ var validate_input = function (req){
     };
     var result, length, counter;
     v.addSchema(phone_number, "phone-number");
-    v.addSchema(applicant_info_non_commercial, "applicant-info-non-commercial");
-    v.addSchema(non_commercial_fields, "non-commercial-fields");
+    v.addSchema(applicant_info_noncommercial, "applicant-info-noncommercial");
+    v.addSchema(noncommercial_fields, "noncommercial-fields");
     v.addSchema(applicant_info_temp_outfitter, "applicant-info-temp-outfitter");
     v.addSchema(temp_outfitter_fields, "temp-outfitter-fields");
     if (route === "noncommercial"){

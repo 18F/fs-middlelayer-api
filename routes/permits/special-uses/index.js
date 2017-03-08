@@ -19,7 +19,7 @@ var router = express.Router();
 var include = require("include")(__dirname);
 
 var commercial = require("./commercial");
-var non_commercial = require("./non-commercial");
+var noncommercial = require("./noncommercial");
 var special_uses = include("controllers/permits/special-uses");
 
 
@@ -27,7 +27,7 @@ var special_uses = include("controllers/permits/special-uses");
 // router
 
 router.use("/commercial", commercial);
-router.use("/noncommercial", non_commercial);
+router.use("/noncommercial", noncommercial);
 
 router.get("/", function(req, res){
 

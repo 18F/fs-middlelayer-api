@@ -23,7 +23,7 @@ var should = chai.should;
 
 //*******************************************************************
 
-describe("API Routes: permits/special-uses/non-commercial", function() {
+describe("API Routes: permits/special-uses/noncommercial", function() {
 
     var token;
 

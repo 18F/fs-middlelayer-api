@@ -36,7 +36,7 @@ var post;
 
 get.all = function(){
 
-    return include("test/data/non-commercial.get.all.json");
+    return include("test/data/noncommercial.get.all.json");
 
 };
 
@@ -83,7 +83,7 @@ get.id = function(req, res){
 
 put.id = function(req, res){
     
-    res.json(include("test/data/non-commercial.put.id.json"));
+    res.json(include("test/data/noncommercial.put.id.json"));
 
 };
 
@@ -95,7 +95,7 @@ post = function(req, res){
     
     if (validate_res.fields_valid){
     
-        res.json(include("test/data/non-commercial.post.json"));
+        res.json(include("test/data/noncommercial.post.json"));
     
     }
     else {

@@ -15,7 +15,7 @@
 // required modules
 
 var commercial = require("./commercial/");
-var noncommercial = require("./non-commercial/");
+var noncommercial = require("./noncommercial/");
 
 //*******************************************************************
 // controller
@@ -27,7 +27,7 @@ var get = {};
 get.all = function(req){
 
     var commercial_res = commercial.get.all(req)["commercial"];
-    var noncommercial_res = noncommercial.get.all(req)["non-commercial"];
+    var noncommercial_res = noncommercial.get.all(req)["noncommercial"];
 
     var special_uses = {
         "response":{
@@ -40,7 +40,7 @@ get.all = function(req){
         },
         "special-uses":{
             "commercial" : commercial_res,
-            "non-commercial" : noncommercial_res
+            "noncommercial" : noncommercial_res
         }
     };
 

@@ -81,7 +81,7 @@
 
     },
     "noncommercial": {
-        "id":"temp-outfitter-permit",
+        "id":"noncommercial-permit",
         "type":"object",
         "properties":{
             "region": { "type" : "integer" },
@@ -90,7 +90,7 @@
             "authorizingOfficerName": { "type" : "string"},
             "authorizingOfficerTitle": { "type" : "string"},
             "applicant-info": {
-                "$ref": "applicant-info-non-commercial"
+                "$ref": "applicant-info-noncommercial"
             },
             "type": {
                 "type": "string", 
@@ -101,14 +101,14 @@
                 ]
             },
             "noncommercial-fields": {
-                "$ref": "non-commercial-fields"
+                "$ref": "noncommercial-fields"
             }
         },
         "required": ["region", "forest", "district", "applicant-info", "type", "noncommercial-fields"]
 
     },
     "noncommercial_applicant_info": {
-        "id": "/applicant-info-non-commercial",
+        "id": "/applicant-info-noncommercial",
         "type": "object",
         "properties": {
             "firstName": { "type": "string" },
@@ -141,7 +141,7 @@
 
     },
     "noncommercial_fields": {
-        "id": "/non-commercial-fields",
+        "id": "/noncommercial-fields",
         "type": "object",
         "properties": {
             "activityDescription": { "type": "string"},
