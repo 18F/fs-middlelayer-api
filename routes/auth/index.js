@@ -9,16 +9,16 @@
 
 //*******************************************************************
 
-"use strict";
+'use strict';
 
 //*******************************************************************
 // required modules
 
-var express = require("express");
+var express = require('express');
 var router = express.Router();
-var include = require("include")(__dirname);
+var include = require('include')(__dirname);
 
-var auth = include("controllers/auth");
+var auth = include('controllers/auth');
 var passport = auth.passport;
 
 //*******************************************************************
@@ -28,11 +28,10 @@ router.use(passport.initialize());
 
 router.post('/', passport.authenticate(  
     'local', {
-        session: false
-    }), 
+	session: false
+}), 
     auth.serialize, auth.generate, auth.respond
 );
-
 
 //*******************************************************************
 //exports

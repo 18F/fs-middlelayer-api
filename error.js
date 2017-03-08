@@ -9,39 +9,39 @@
 
 //*******************************************************************
 
-"use strict";
+'use strict';
 
 //*******************************************************************
 
 function logging(req, message){
 
-    var attemptedRoute = req.originalUrl;
-    var browser = req.get("user-agent");
-    var referer = req.get("referer");
+	var attemptedRoute = req.originalUrl;
+	var browser = req.get('user-agent');
+	var referer = req.get('referer');
 
-    var errorLog = {};
-    errorLog.route = attemptedRoute;
-    errorLog.browser = browser;
-    errorLog.referer = referer;
-    errorLog.errorMessage = message;
+	var errorLog = {};
+	errorLog.route = attemptedRoute;
+	errorLog.browser = browser;
+	errorLog.referer = referer;
+	errorLog.errorMessage = message;
 
-    console.error(errorLog);
+	console.error(errorLog);
 
 }
 
 var sendError = function(req, res, code, message){
 
-    var output = {
-        "response": {
-            "success" : false,
-            "api": "FS ePermit API",
-            "message" : message
-        }
-    };
+	var output = {
+		'response': {
+			'success' : false,
+			'api': 'FS ePermit API',
+			'message' : message
+		}
+	};
 
-    logging(req, message);
+	logging(req, message);
 
-    res.status(code).json(output);
+	res.status(code).json(output);
 
 };
 

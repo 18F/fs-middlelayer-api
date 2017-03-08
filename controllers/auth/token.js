@@ -9,7 +9,7 @@
 
 //*******************************************************************
 
-"use strict";
+'use strict';
 
 //*******************************************************************
 // required modules
@@ -32,15 +32,15 @@ var token = function(req, res, next){
 		jwt.verify(token, 'superSecret', function(err, decoded) {      
 			if (err) {
 				error.sendError(req, res, 401, 'Failed to authenticate token.');
-		  	} 
-		  	else {
-			    req.decoded = decoded;    
-			    next();
-		  	}
+			} 
+			else {
+				req.decoded = decoded;    
+				return next();
+			}
 		});
 
 	} 
-    else {
+	else {
 		error.sendError(req, res, 403, 'No token provided.');
 	}
     

@@ -9,19 +9,15 @@
 
 //*******************************************************************
 
-"use strict";
+'use strict';
 
 //*******************************************************************
 // required modules
-
-var include = require('include')(__dirname);
 
 var passport = require('passport');  
 var Strategy = require('passport-local');
 
 var jwt = require('jsonwebtoken');
-
-var error = include('error.js');
 
 //*******************************************************************
 // passport 
@@ -29,46 +25,46 @@ var error = include('error.js');
 passport.use(new Strategy(  
     function(username, password, done) {
 
-        if (username === 'user' && password === '12345'){
-            done(null, {
-                id: username,
-                firstname: 'first',
-                lastname: 'last',
-                email: 'name@email.com',
-                verified: true
-            });
-        }
-        else {
-            done(null, false);
-        }
-    }
+	if (username === 'user' && password === '12345'){
+		done(null, {
+			id: username,
+			firstname: 'first',
+			lastname: 'last',
+			email: 'name@email.com',
+			verified: true
+		});
+	}
+	else {
+		done(null, false);
+	}
+}
 ));
 
 //*******************************************************************
 
 var serialize = function(req, res, next) {  
 
-    req.user = {
-      id: req.user.id
-    };
-    next();
-}
+	req.user = {
+		id: req.user.id
+	};
+	next();
+};
 
 var generate = function(req, res, next) {   
     
 	req.token = jwt.sign({
-		id: req.user.id,
-	}, 'superSecret', { expiresIn: 120*60 });
-    next();
-}
+		id: req.user.id
+	}, 'superSecret', { expiresIn: 120 * 60 });
+	next();
+};
 
-var respond = function(req, res, next) { 
+var respond = function(req, res) { 
 
-    res.status(200).json({
-        user: req.user,
-        token: req.token
-    });
-}
+	res.status(200).json({
+		user: req.user,
+		token: req.token
+	});
+};
 
 //*******************************************************************=
 //exports
