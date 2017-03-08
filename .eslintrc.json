@@ -18,7 +18,7 @@
         "no-unused-expressions": "off",
         "accessor-pairs": "error",
         "block-scoped-var": "off",
-        "complexity": [2, 6],
+        "complexity": [2, 10],
         "consistent-return": "off",
         "curly": "off",
         "default-case": "off",
