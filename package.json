@@ -1,6 +1,6 @@
 {
   "name": "fs-middlelayer-api",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "US Forest Service ePermit Middlelayer API",
   "main": "index.js",
   "scripts": {
@@ -51,8 +51,11 @@
     "helmet": "^3.4.0",
     "include": "^1.1.0",
     "jsonschema": "^1.1.1",
+    "jsonwebtoken": "^7.3.0",
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
-    "morgan": "^1.8.1"
+    "morgan": "^1.8.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
   }
 }
