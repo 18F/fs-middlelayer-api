@@ -1,0 +1,25 @@
+
+
+# DotEnv
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Coverage & quality directories
+coverage
+quality
+
+# Dependency directories
+node_modules
+
+# Third party lib/lang
+/docs/lang/**
+/docs/lib/**
