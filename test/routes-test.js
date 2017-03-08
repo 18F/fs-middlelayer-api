@@ -9,71 +9,75 @@
 
 //*******************************************************************
 
-'use strict';
+"use strict";
 
 //*******************************************************************
 
-var request = require('supertest');
-var server = require('../index.js');
+var request = require("supertest");
+var server = require("../index.js");
 
-var chai = require('chai');
+var chai = require("chai");
 var expect = chai.expect;
 var assert = chai.assert;
 var should = chai.should;
 
 //*******************************************************************
 
-describe('API Routes: permits/special-uses/non-commercial', function() {
+describe("API Routes: permits/special-uses/non-commercial", function() {
 
     var token;
 
     before(function(done) {
-      request(server)
-        .post('/auth')
-        .set('Accept','application/json')
-        .send({ "username": "user", "password": "12345" })
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end(function(err, res) {
-          token = res.body.token;
-          done();
-        });
-    });
-    
-    it('should return valid json for non commercial GET request for all', function(done) {
 
         request(server)
-            .get('/permits/special-uses/noncommercial')
-            .set('x-access-token', token)
-            .expect('Content-Type', /json/)
+        .post("/auth")
+        .set("Accept", "application/json")
+        .send({ "username": "user", "password": "12345" })
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end(function(err, res) {
+
+            token = res.body.token;
+            done();
+        
+        });
+    
+    });
+    
+    it("should return valid json for non commercial GET request for all", function(done) {
+
+        request(server)
+            .get("/permits/special-uses/noncommercial")
+            .set("x-access-token", token)
+            .expect("Content-Type", /json/)
             .expect(200, done);
 
     });
     
-    it('should return valid json for non commercial GET request for id', function(done) {
+    it("should return valid json for non commercial GET request for id", function(done) {
 
         request(server)
-            .get('/permits/special-uses/noncommercial/1234567890')
-            .set('x-access-token', token)
-            .expect('Content-Type', /json/)
+            .get("/permits/special-uses/noncommercial/1234567890")
+            .set("x-access-token", token)
+            .expect("Content-Type", /json/)
             .expect(200, done);
 
     });
  
-    it('should return valid json for non commercial PUT request for id', function(done) {
+    it("should return valid json for non commercial PUT request for id", function(done) {
 
         request(server)
-            .put('/permits/special-uses/noncommercial/1234')
-            .set('x-access-token', token)
-            .expect('Content-Type', /json/)
+            .put("/permits/special-uses/noncommercial/1234")
+            .set("x-access-token", token)
+            .expect("Content-Type", /json/)
             .expect(200, done);
 
     });
     
-    it('should return valid json for non commercial POST request', function(done) {
+    it("should return valid json for non commercial POST request", function(done) {
 
         request(server)
-            .post('/permits/special-uses/noncommercial/')
+            .post("/permits/special-uses/noncommercial/")
             .send({
                 "region": 3,
                 "forest": 50552,
@@ -93,7 +97,7 @@ describe('API Routes: permits/special-uses/non-commercial', function() {
                     "mailingAddress": "ON ANW 0953",
                     "mailingCity": "ALBANY",
                     "mailingState": "OR",
-                    "mailingZIP": 97321,
+                    "mailingZIP": 97321
                 },
                 "type": "noncommercial",
                 "noncommercial-fields": {
@@ -104,65 +108,69 @@ describe('API Routes: permits/special-uses/non-commercial', function() {
                     "numberParticipants": 45
                 }
             })
-            .set('x-access-token', token)
-            .expect('Content-Type', /json/)
+            .set("x-access-token", token)
+            .expect("Content-Type", /json/)
             .expect(200, done);
 
     });
 
 });
 
-describe('API Routes: permits/special-uses/commercial/outfitters', function() {
+describe("API Routes: permits/special-uses/commercial/outfitters", function() {
 
     var token;
 
     before(function(done) {
-      request(server)
-        .post('/auth')
-        .set('Accept','application/json')
+
+        request(server)
+        .post("/auth")
+        .set("Accept", "application/json")
         .send({ "username": "user", "password": "12345" })
-        .expect('Content-Type', /json/)
+        .expect("Content-Type", /json/)
         .expect(200)
         .end(function(err, res) {
-          token = res.body.token;
-          done();
+
+            token = res.body.token;
+            done();
+        
         });
+    
     });
     
-    it('should return valid json for outfitters GET request for all', function(done) {
+    it("should return valid json for outfitters GET request for all", function(done) {
 
         request(server)
-            .get('/permits/special-uses/commercial/outfitters')
-            .set('x-access-token', token)
-            .expect('Content-Type', /json/)
+            .get("/permits/special-uses/commercial/outfitters")
+            .set("x-access-token", token)
+            .expect("Content-Type", /json/)
             .expect(200, done);
 
     });
     
-    it('should return valid json for outfitters GET request for id', function(done) {
+    it("should return valid json for outfitters GET request for id", function(done) {
 
         request(server)
-            .get('/permits/special-uses/commercial/outfitters/1234567890')
-            .set('x-access-token', token)
-            .expect('Content-Type', /json/)
+            .get("/permits/special-uses/commercial/outfitters/1234567890")
+            .set("x-access-token", token)
+            .expect("Content-Type", /json/)
             .expect(200, done);
 
     });
 
-    it('should return valid json for outfitters PUT request for id', function(done) {
+    it("should return valid json for outfitters PUT request for id", function(done) {
 
         request(server)
-            .put('/permits/special-uses/commercial/outfitters/1234')
-            .set('x-access-token', token)
-            .expect('Content-Type', /json/)
+            .put("/permits/special-uses/commercial/outfitters/1234")
+            .set("x-access-token", token)
+            .expect("Content-Type", /json/)
             .expect(200, done);
 
     });
     
-    it('should return valid json for outfitters POST request', function(done) {
+    it("should return valid json for outfitters POST request", function(done) {
 
         request(server)
-            .post('/permits/special-uses/commercial/outfitters')
+            .post("/permits/special-uses/commercial/outfitters")
             .send({
                 "region": 3,
                 "forest": 50552,
@@ -196,66 +204,74 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
                     "operatingPlan":"File on S3"
                 }
             })
-            .set('x-access-token', token)
-            .expect('Content-Type', /json/)
+            .set("x-access-token", token)
+            .expect("Content-Type", /json/)
             .expect(200, done);
 
     });
 
 });
 
-describe('API Routes: permits/special-uses/commercial', function() {
+describe("API Routes: permits/special-uses/commercial", function() {
 
     var token;
 
     before(function(done) {
-      request(server)
-        .post('/auth')
-        .set('Accept','application/json')
-        .send({ "username": "user", "password": "12345" })
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end(function(err, res) {
-          token = res.body.token;
-          done();
-        });
-    });
-    
-    it('should return valid json for commercial GET request for all', function(done) {
 
         request(server)
-            .get('/permits/special-uses/commercial')
-            .set('x-access-token', token)
-            .expect('Content-Type', /json/)
+        .post("/auth")
+        .set("Accept", "application/json")
+        .send({ "username": "user", "password": "12345" })
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end(function(err, res) {
+
+            token = res.body.token;
+            done();
+        
+        });
+    
+    });
+    
+    it("should return valid json for commercial GET request for all", function(done) {
+
+        request(server)
+            .get("/permits/special-uses/commercial")
+            .set("x-access-token", token)
+            .expect("Content-Type", /json/)
             .expect(200, done);
 
     });
 
 });
 
-describe('API Routes: permits/special-uses', function() {
+describe("API Routes: permits/special-uses", function() {
 
     var token;
 
     before(function(done) {
-      request(server)
-        .post('/auth')
-        .set('Accept','application/json')
-        .send({ "username": "user", "password": "12345" })
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .end(function(err, res) {
-          token = res.body.token;
-          done();
-        });
-    });
-    
-    it('should return valid json for special-uses GET request for all', function(done) {
 
         request(server)
-            .get('/permits/special-uses')
-            .set('x-access-token', token)
-            .expect('Content-Type', /json/)
+        .post("/auth")
+        .set("Accept", "application/json")
+        .send({ "username": "user", "password": "12345" })
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end(function(err, res) {
+
+            token = res.body.token;
+            done();
+        
+        });
+    
+    });
+    
+    it("should return valid json for special-uses GET request for all", function(done) {
+
+        request(server)
+            .get("/permits/special-uses")
+            .set("x-access-token", token)
+            .expect("Content-Type", /json/)
             .expect(200, done);
 
     });
