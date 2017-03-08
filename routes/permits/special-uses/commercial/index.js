@@ -9,25 +9,27 @@
 
 //*******************************************************************
 
-'use strict';
+"use strict";
 
 //*******************************************************************
 // required modules
 
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-var include = require('include')(__dirname);
+var include = require("include")(__dirname);
 
-var outfitters = require('./outfitters');
-var commercial = include('controllers/permits/special-uses/commercial');
+var outfitters = require("./outfitters");
+var commercial = include("controllers/permits/special-uses/commercial");
 
 //*******************************************************************
 // router
 
-router.use('/outfitters', outfitters);
+router.use("/outfitters", outfitters);
 
-router.get('/',function(req,res){
-	res.json(commercial.get.all(req));
+router.get("/", function(req, res){
+
+    res.json(commercial.get.all(req));
+
 });
 
 module.exports = router;

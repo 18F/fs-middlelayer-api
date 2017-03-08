@@ -9,31 +9,32 @@
 
 //*******************************************************************
 
-'use strict';
+"use strict";
 
 //*******************************************************************
+// required modules
 
-var request = require('supertest');
-var server = require('../index.js');
+var express = require("express");
+var router = express.Router();
+var include = require("include")(__dirname);
 
-var chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
-var should = chai.should;
+var auth = include("controllers/auth");
+var passport = auth.passport;
 
 //*******************************************************************
+// router
 
-describe('Error function: sendError', function() {
-    
-    it('should return valid json and a status code of 400', function(done) {
-        request(server)
-            .get('/permits/special-uses/noncommercial/errorTest')
-            .expect('Content-Type', /json/)
-            .expect(400, done);
-    });
+router.use(passport.initialize());  
 
-});
-
+router.post('/', passport.authenticate(  
+    'local', {
+        session: false
+    }), 
+    auth.serialize, auth.generate, auth.respond
+);
 
 
 //*******************************************************************
+//exports
+
+module.exports = router;

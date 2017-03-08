@@ -9,19 +9,30 @@
 
 //*******************************************************************
 
-'use strict';
+"use strict";
 
 //*******************************************************************
 // required modules
 
-var express = require('express');
+var express = require("express");
 var router = express.Router();
+var include = require("include")(__dirname);
 
-var permits = require('./permits');
+var permits = require("./permits");
+var auth = require("./auth");
+
+var token = include("controllers/auth/token.js");
 
 //*******************************************************************
 // router
 
-router.use('/permits', permits);
+router.use("/auth", auth);
+
+router.use(token);
+
+router.use("/permits", permits);
+
+//*******************************************************************
+//exports
 
 module.exports = router;

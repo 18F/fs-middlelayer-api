@@ -9,111 +9,153 @@
 
 //*******************************************************************
 
-'use strict';
+"use strict";
+
+//*******************************************************************
+// required modules
+
+var include = require("include")(__dirname);
+var Validator = require("jsonschema").Validator;
 
 //*******************************************************************
 
-/*
-var permit_id = function(id){
-    
-    var valid = true;
-    
-    var id_str = ''+ id;
-    
-    if (id_str.length !== 10) {   
-        valid = false;
-    }
-    
-    return valid;
+var util = include("controllers/permits/special-uses/utility.js");
+var schema = require("./validation_schema.json");
+var v = new Validator();
 
-};
-*/
+//*******************************************************************
+// schemas
 
-var applicant_info = function(req){
+var outfitter_schema = schema.outfitter;
+var applicant_info_temp_outfitter = schema.outfitter_applicant_info;
+var temp_outfitter_fields = schema.temp_outfitter_fields;
+var noncommercial_schema = schema.noncommercial;
+var applicant_info_non_commercial = schema.noncommercial_applicant_info;
+var non_commercial_fields = schema.noncommercial_fields;
+var phone_number = schema.phone_number;
 
-	var output = {
-		'fields_valid': true,
-		'error_array':[],
-		'object_missing_message': undefined
-	};
+//*******************************************************************
 
-	if(!req.body['applicant-info'].firstName){
-        output.fields_valid = false;
-        output.error_array.push('firstName');
-    }
-    if(!req.body['applicant-info'].lastName){
-        output.fields_valid = false;
-        output.error_array.push('lastName');
-    }
-    if(!req.body['applicant-info'].dayPhone){
-        output.fields_valid = false;
-        output.object_missing_message = 'dayPhone cannot be empty.';
-    }else{
-        var phone_res = validate_day_phone(req);
-        output.fields_valid = output.fields_valid && phone_res.fields_valid;
-        output.error_array =  output.error_array.concat(phone_res.error_array);
-    }
-    if(!req.body['applicant-info'].emailAddress){
-        output.fields_valid = false;
-        output.error_array.push('emailAddress');
-    }
-    var mailing_info_res = validate_mailing_info(req);
-    
-    output.fields_valid = output.fields_valid && mailing_info_res.fields_valid;
-    output.error_array =  output.error_array.concat(mailing_info_res.error_array);
+function remove_instance(prop){
 
-    return output;
-};
+    var fixed_prop = "";
+    if (prop.indexOf(".") !== -1){
 
-function validate_day_phone(req){
+        fixed_prop = prop.substring((prop.indexOf(".") + 1), (prop.length));
 
-    var output = {
-        'fields_valid': true,
-        'error_array':[]
-    };
-    if(!req.body['applicant-info'].dayPhone.areaCode){
-        output.fields_valid = false;
-        output.error_array.push('dayPhone/areaCode');
     }
-    if(!req.body['applicant-info'].dayPhone.number){
-        output.fields_valid = false;
-        output.error_array.push('dayPhone/number');
-    }
-    if(!req.body['applicant-info'].dayPhone.type){
-        output.fields_valid = false;
-        output.error_array.push('dayPhone/type');
-    }
-    return output;
+
+    return fixed_prop;
+
 }
 
-function validate_mailing_info(req){
-    var output = {
-        'fields_valid': true,
-        'error_array': []
-    };
+function get_route(req){
 
-    if(!req.body['applicant-info'].mailingAddress){
-        output.fields_valid = false;
-        output.error_array.push('mailingAddress');
+    var path = req.originalUrl;
+    var parts = path.split("/");
+    var route;
+    if (path.charAt(path.length - 1) === "/"){
+
+        route = parts[parts.length - 2];
+
     }
-    if(!req.body['applicant-info'].mailingCity){
-        output.fields_valid = false;
-        output.error_array.push('mailingCity');
-    }
-    if(!req.body['applicant-info'].mailingState){
-        output.fields_valid = false;
-        output.error_array.push('mailingState');
-    }
-    if(!req.body['applicant-info'].mailingZIP){
-        output.fields_valid = false;
-        output.error_array.push('mailingZIP');
+    else {
+
+        route = parts[parts.length - 1];
+
     }
 
-    return output;
+    return route;
+
 }
+
+function combine_prop_argument(property, argument){
+
+    var field;
+    if (property.length > 0){
+
+        field = property + "." + argument;
+
+    }
+    else {
+
+        field = argument;
+
+    }
+
+    return field;
+
+}
+
+function handle_missing_error(output, result, counter){
+
+    var field;
+    var property = remove_instance(result[counter].property);
+    field = combine_prop_argument(property, result[counter].argument);
+    util.invalid_field(output, field);
+
+}
+
+function handle_type_error(output, result, counter){
+
+    var property;
+    var expected_type = result[counter].argument[0];
+    property = remove_instance(result[counter].property);
+    util.field_type(output, property, expected_type);
+
+}
+
+var validate_input = function (req){
+
+    var route = get_route(req);
+    var output = {
+    
+        "fields_valid": true,
+        "error_message": "",
+        "missing_array": [],
+        "type_array": []
+
+    };
+    var result, length, counter;
+    v.addSchema(phone_number, "phone-number");
+    v.addSchema(applicant_info_non_commercial, "applicant-info-non-commercial");
+    v.addSchema(non_commercial_fields, "non-commercial-fields");
+    v.addSchema(applicant_info_temp_outfitter, "applicant-info-temp-outfitter");
+    v.addSchema(temp_outfitter_fields, "temp-outfitter-fields");
+    if (route === "noncommercial"){
+
+        result = v.validate(req.body, noncommercial_schema).errors;                   
+
+    }
+    else { 
+
+        result = v.validate(req.body, outfitter_schema).errors;        
+
+    }
+
+    length = result.length;
+    for (counter = 0; counter < length; counter++){
+
+        if (result[counter].name === "required"){
+
+            handle_missing_error(output, result, counter);
+
+        }
+        else {
+
+            handle_type_error(output, result, counter);
+
+        }
+
+    }
+
+    output.error_message = util.build_error_message(output);
+    return output;
+
+};
+
 
 //*******************************************************************
 // exports
 
-//module.exports.permit_id = permit_id;
-module.exports.applicant_info = applicant_info;
+module.exports.validate_input = validate_input;
