@@ -147,7 +147,8 @@
             "activityDescription": { "type": "string"},
             "locationDescription": {  "type": "string"},
             "startDateTime": { "type": "string"},
-            "endDateTime": { "type": "string"}
+            "endDateTime": { "type": "string"},
+            "numberParticipants": { "type": "integer"}
         },
         "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime", "numberParticipants"]
 

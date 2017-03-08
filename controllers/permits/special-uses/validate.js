@@ -38,15 +38,10 @@ var phone_number = schema.phone_number;
 
 function remove_instance(prop){
 
-    var fixed_prop;
+    var fixed_prop = "";
     if (prop.indexOf(".") !== -1){
 
         fixed_prop = prop.substring((prop.indexOf(".") + 1), (prop.length));
-
-    }
-    else {
-
-        fixed_prop = "";
 
     }
 
@@ -74,20 +69,39 @@ function get_route(req){
 
 }
 
-function handle_missing_error(output, property, field, result, counter){
+function combine_prop_argument(property, argument){
 
-    property = remove_instance(result[counter].property);
+    var field;
     if (property.length > 0){
 
-        field = property + "." + result[counter].argument;
+        field = property + "." + argument;
 
     }
     else {
 
-        field = result[counter].argument;
+        field = argument;
 
     }
+
+    return field;
+
+}
+
+function handle_missing_error(output, result, counter){
+
+    var field;
+    var property = remove_instance(result[counter].property);
+    field = combine_prop_argument(property, result[counter].argument);
     util.invalid_field(output, field);
+
+}
+
+function handle_type_error(output, result, counter){
+
+    var property;
+    var expected_type = result[counter].argument[0];
+    property = remove_instance(result[counter].property);
+    util.field_type(output, property, expected_type);
 
 }
 
@@ -98,10 +112,11 @@ var validate_input = function (req){
     
         "fields_valid": true,
         "error_message": "",
-        "error_array": []
+        "missing_array": [],
+        "type_array": []
 
     };
-    var result, length, type_arr = [], property, field, counter;
+    var result, length, counter;
     v.addSchema(phone_number, "phone-number");
     v.addSchema(applicant_info_non_commercial, "applicant-info-non-commercial");
     v.addSchema(non_commercial_fields, "non-commercial-fields");
@@ -118,25 +133,23 @@ var validate_input = function (req){
 
     }
 
-    type_arr = [];
     length = result.length;
     for (counter = 0; counter < length; counter++){
 
         if (result[counter].name === "required"){
 
-            handle_missing_error(output, property, field, result, counter);
+            handle_missing_error(output, result, counter);
 
         }
-        else if (result[counter].name === "type"){
+        else {
 
-            type_arr.push(remove_instance(result[counter].property));
+            handle_type_error(output, result, counter);
 
         }
 
     }
 
-
-    output.error_message = util.build_error_message(output.error_array);
+    output.error_message = util.build_error_message(output);
     return output;
 
 };
