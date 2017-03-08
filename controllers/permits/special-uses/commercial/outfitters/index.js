@@ -57,11 +57,7 @@ get.id = function(req, res){
 
     var cnData = outfitters_data[1095010356];
 
-    console.log('outfitters cnData='+cnData);
-
     if(cnData){
-
-        console.log('data of accinstCn='+cnData.accinstCn);
         
         var outfittersFields = {};
         
