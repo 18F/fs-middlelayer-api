@@ -23,13 +23,6 @@ var outfitters = include('controllers/permits/special-uses/commercial/outfitters
 //*******************************************************************
 // router
 
-// get all
-router.get('/', function(req, res){
-    
-	res.json(outfitters.get.all(req));
-    
-});
-
 // get id
 router.get('/:id(\\d+)', function(req, res){
     

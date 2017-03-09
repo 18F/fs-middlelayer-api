@@ -22,13 +22,6 @@ var noncommercial = include('controllers/permits/special-uses/noncommercial');
 //*******************************************************************
 // router
 
-// get all
-router.get('/', function(req, res){
-
-	res.json(noncommercial.get.all(req, res));
-
-});
-
 // get id
 router.get('/:id(\\d+)', function(req, res){
 

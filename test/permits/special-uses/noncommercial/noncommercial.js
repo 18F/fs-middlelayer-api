@@ -684,16 +684,6 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 		});
 	
 	});
-
-	it('should return valid json for non commercial GET request for all', function(done) {
-
-		request(server)
-			.get('/permits/special-uses/noncommercial')
-			.set('x-access-token', token)
-			.expect('Content-Type', /json/)
-			.expect(200, done);
-
-	});
 	
 	it('should return valid json for non commercial GET request for id', function(done) {
 

@@ -899,16 +899,6 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		});
 	
 	});
-
-	it('should return valid json for outfitters GET request for all', function(done) {
-
-		request(server)
-			.get('/permits/special-uses/commercial/outfitters')
-			.set('x-access-token', token)
-			.expect('Content-Type', /json/)
-			.expect(200, done);
-
-	});
 	
 	it('should return valid json for outfitters GET request for id', function(done) {
 
