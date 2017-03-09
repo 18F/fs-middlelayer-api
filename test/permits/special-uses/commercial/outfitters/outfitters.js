@@ -13,11 +13,15 @@
 
 //*******************************************************************
 
-var request = require('supertest');
-var server = require('../index.js');
-var util = require('./utility.js');
+var include = require('include')(__dirname);
 
-var test_input = require('./data/test_input_outfitters.json');
+//*******************************************************************
+
+var request = require('supertest');
+var server = include('index.js');
+var util = include('test/utility.js');
+
+var test_input = include('test/data/test_input_outfitters.json');
 
 var chai = require('chai');
 var expect = chai.expect;
@@ -37,20 +41,11 @@ describe('outfitters POST: validate required fields present', function(){
 
 	before(function(done) {
 
-		request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': 'user', 'password': '12345' })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
+		util.get_token(function(t){
 
-			if (err){
-				console.error(err);
-			}
-			token = res.body.token;
-			done();
-				
+			token = t;
+			return done();
+
 		});
 	
 	});
@@ -781,20 +776,11 @@ describe('outfitters POST: required outfitters fields', function(){
 
 	before(function(done) {
 
-		request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': 'user', 'password': '12345' })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
+		util.get_token(function(t){
 
-			if (err){
-				console.error(err);
-			}
-			token = res.body.token;
-			done();
-		
+			token = t;
+			return done();
+
 		});
 	
 	});
@@ -878,32 +864,13 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	before(function(done) {
 
-		request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': 'user', 'password': '12345' })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
+		util.get_token(function(t){
 
-			if (err){
-				console.error(err);
-			}
-			token = res.body.token;
-			done();
-		
+			token = t;
+			return done();
+
 		});
 	
-	});
-
-	it('should return valid json for outfitters GET request for all', function(done) {
-
-		request(server)
-			.get('/permits/special-uses/commercial/outfitters')
-			.set('x-access-token', token)
-			.expect('Content-Type', /json/)
-			.expect(200, done);
-
 	});
 	
 	it('should return valid json for outfitters GET request for id', function(done) {

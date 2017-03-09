@@ -16,6 +16,8 @@
 var request = require('supertest');
 var server = require('../index.js');
 
+var util = require('./utility.js');
+
 var chai = require('chai');
 var expect = chai.expect;
 
@@ -27,21 +29,11 @@ describe('FS ePermit API', function() {
 
 	before(function(done) {
 
-		request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': 'user', 'password': '12345' })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
+		util.get_token(function(t){
 
-			if (err){
-				console.error(err);
-			}
+			token = t;
+			return done();
 
-			token = res.body.token;
-			done();
-		
 		});
 	
 	});
@@ -87,6 +79,48 @@ describe('FS ePermit API', function() {
 			.expect(function(res) {
 
 				expect(res.headers['access-control-allow-origin']).to.equal('*');
+			
+			})
+			.expect(200, done);
+	
+	});
+
+	it('should have cache-control set', function(done) {
+
+		request(server)
+			.get('/permits/special-uses/noncommercial/1234567890')
+			.set('x-access-token', token)
+			.expect(function(res) {
+
+				expect(res.headers['cache-control']).to.equal('no-store, no-cache, must-revalidate, proxy-revalidate');
+			
+			})
+			.expect(200, done);
+	
+	});
+
+	it('should have pragma set', function(done) {
+
+		request(server)
+			.get('/permits/special-uses/noncommercial/1234567890')
+			.set('x-access-token', token)
+			.expect(function(res) {
+
+				expect(res.headers['pragma']).to.equal('no-cache');
+			
+			})
+			.expect(200, done);
+	
+	});
+
+	it('should have x-xss-protection set', function(done) {
+
+		request(server)
+			.get('/permits/special-uses/noncommercial/1234567890')
+			.set('x-access-token', token)
+			.expect(function(res) {
+
+				expect(res.headers['x-xss-protection']).to.equal('1; mode=block');
 			
 			})
 			.expect(200, done);

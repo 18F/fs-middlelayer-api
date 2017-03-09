@@ -31,14 +31,6 @@ var get = {};
 var put = {};
 var post;
 
-// get all
-
-get.all = function(){
-
-	return include('test/data/noncommercial.get.all.json');
-
-};
-
 // get id
 
 get.id = function(req, res){
