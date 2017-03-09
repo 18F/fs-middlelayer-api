@@ -15,7 +15,7 @@ before_script:
 - npm install -g codecov
 - npm install -g codeclimate-test-reporter
 script:
-- istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec
+- istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive
 - codecov
 - npm run quality
 after_script:
