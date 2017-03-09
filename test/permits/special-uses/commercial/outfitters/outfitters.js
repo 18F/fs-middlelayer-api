@@ -41,20 +41,11 @@ describe('outfitters POST: validate required fields present', function(){
 
 	before(function(done) {
 
-		request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': 'user', 'password': '12345' })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
+		util.get_token(function(t){
 
-			if (err){
-				console.error(err);
-			}
-			token = res.body.token;
-			done();
-				
+			token = t;
+			return done();
+
 		});
 	
 	});
@@ -785,20 +776,11 @@ describe('outfitters POST: required outfitters fields', function(){
 
 	before(function(done) {
 
-		request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': 'user', 'password': '12345' })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
+		util.get_token(function(t){
 
-			if (err){
-				console.error(err);
-			}
-			token = res.body.token;
-			done();
-		
+			token = t;
+			return done();
+
 		});
 	
 	});
@@ -882,20 +864,11 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	before(function(done) {
 
-		request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': 'user', 'password': '12345' })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
+		util.get_token(function(t){
 
-			if (err){
-				console.error(err);
-			}
-			token = res.body.token;
-			done();
-		
+			token = t;
+			return done();
+
 		});
 	
 	});

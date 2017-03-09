@@ -41,21 +41,11 @@ describe('noncommercial POST: validate required fields present', function(){
 
 	before(function(done) {
 
-		request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': 'user', 'password': '12345' })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
+		util.get_token(function(t){
 
-			if (err){
-				console.error(err);
-			}
+			token = t;
+			return done();
 
-			token = res.body.token;
-			done();
-		
 		});
 	
 	});
@@ -667,20 +657,11 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 
 	before(function(done) {
 
-		request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': 'user', 'password': '12345' })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
+		util.get_token(function(t){
 
-			if (err){
-				console.error(err);
-			}
-			token = res.body.token;
-			done();
-				
+			token = t;
+			return done();
+
 		});
 	
 	});
@@ -724,20 +705,11 @@ describe('noncommercial POST: field type validated', function(){
 
 	before(function(done) {
 
-		request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': 'user', 'password': '12345' })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
+		util.get_token(function(t){
 
-			if (err){
-				console.error(err);
-			}
-			token = res.body.token;
-			done();
-		
+			token = t;
+			return done();
+
 		});
 	
 	});

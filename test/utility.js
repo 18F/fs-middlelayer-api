@@ -13,6 +13,13 @@
 
 //*******************************************************************
 
+var include = require('include')(__dirname);
+
+var request = require('supertest');
+var server = include('index.js');
+
+//*******************************************************************
+
 function update_input_data(base_data, update){
 
 	var updated_input = Object.assign(
@@ -25,7 +32,30 @@ function update_input_data(base_data, update){
     
 }
 
+function get_token(callback){
+
+	var token; 
+
+	request(server)
+		.post('/auth')
+		.set('Accept', 'application/json')
+		.send({ 'username': 'user', 'password': '12345' })
+		.expect('Content-Type', /json/)
+		.expect(200)
+		.end(function(err, res) {
+
+			if (err){
+				console.error(err);
+			}
+			token = res.body.token;
+			return callback(token);
+				
+		});
+
+}
+
 //*******************************************************************
 // exports
 
 module.exports.update_input_data = update_input_data;
+module.exports.get_token = get_token;

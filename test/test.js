@@ -16,6 +16,8 @@
 var request = require('supertest');
 var server = require('../index.js');
 
+var util = require('./utility.js');
+
 var chai = require('chai');
 var expect = chai.expect;
 
@@ -27,21 +29,11 @@ describe('FS ePermit API', function() {
 
 	before(function(done) {
 
-		request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': 'user', 'password': '12345' })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
+		util.get_token(function(t){
 
-			if (err){
-				console.error(err);
-			}
+			token = t;
+			return done();
 
-			token = res.body.token;
-			done();
-		
 		});
 	
 	});
