@@ -13,11 +13,15 @@
 
 //*******************************************************************
 
-var request = require('supertest');
-var server = require('../index.js');
-var util = require('./utility.js');
+var include = require('include')(__dirname);
 
-var test_input = require('./data/test_input_noncommercial.json');
+//*******************************************************************
+
+var request = require('supertest');
+var server = include('index.js');
+var util = include('test/utility.js');
+
+var test_input = include('test/data/test_input_noncommercial.json');
 
 var chai = require('chai');
 var expect = chai.expect;
