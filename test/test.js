@@ -93,6 +93,48 @@ describe('FS ePermit API', function() {
 	
 	});
 
+	it('should have cache-control set', function(done) {
+
+		request(server)
+			.get('/permits/special-uses/noncommercial/1234567890')
+			.set('x-access-token', token)
+			.expect(function(res) {
+
+				expect(res.headers['cache-control']).to.equal('no-store, no-cache, must-revalidate, proxy-revalidate');
+			
+			})
+			.expect(200, done);
+	
+	});
+
+	it('should have pragma set', function(done) {
+
+		request(server)
+			.get('/permits/special-uses/noncommercial/1234567890')
+			.set('x-access-token', token)
+			.expect(function(res) {
+
+				expect(res.headers['pragma']).to.equal('no-cache');
+			
+			})
+			.expect(200, done);
+	
+	});
+
+	it('should have x-xss-protection set', function(done) {
+
+		request(server)
+			.get('/permits/special-uses/noncommercial/1234567890')
+			.set('x-access-token', token)
+			.expect(function(res) {
+
+				expect(res.headers['x-xss-protection']).to.equal('1; mode=block');
+			
+			})
+			.expect(200, done);
+	
+	});
+
 });
 
 //*******************************************************************
