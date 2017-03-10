@@ -43,4 +43,4 @@ deploy:
     skip_cleanup: true
     on:
       repo: 18F/fs-middlelayer-api
-      condition: ${TRAVIS_BRANCH:0:7} = "Sprint-"
+      condition: ${TRAVIS_BRANCH:0:7} = "sprint-"
