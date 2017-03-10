@@ -13,10 +13,10 @@
 
 //*******************************************************************
 
-var chai = require('chai');
-var expect = chai.expect;
+const chai = require('chai');
+const expect = chai.expect;
 
-var special_uses = {};
+const special_uses = {};
 
 special_uses.validate = require('../controllers/permits/special-uses/validate.js');
 special_uses.build_error_message = require('../controllers/permits/special-uses/utility.js');
@@ -27,14 +27,14 @@ describe('API Controllers: build error message', function(){
 
 	it('should return \'firstName is a required field!\'', function(){
     
-		var errors = {'missing_array': ['firstName']};
+		let errors = {'missing_array': ['firstName']};
 		expect( special_uses.build_error_message.build_error_message(errors) ).to.be.equal('firstName is a required field!');
     
 	});
 
 	it('should return \'firstName and lastName are required fields!\'', function(){
     
-		var errors = {'missing_array': ['firstName', 'lastName']};
+		let errors = {'missing_array': ['firstName', 'lastName']};
 		expect( special_uses.build_error_message.build_error_message(errors) ).to.be.equal('firstName and lastName are required fields!');
     
 	});

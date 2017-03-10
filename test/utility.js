@@ -13,16 +13,16 @@
 
 //*******************************************************************
 
-var include = require('include')(__dirname);
+const include = require('include')(__dirname);
 
-var request = require('supertest');
-var server = include('index.js');
+const request = require('supertest');
+const server = include('index.js');
 
 //*******************************************************************
 
 function update_input_data(base_data, update){
 
-	var updated_input = Object.assign(
+	let updated_input = Object.assign(
         {},
         base_data,
         update
@@ -34,7 +34,7 @@ function update_input_data(base_data, update){
 
 function get_token(callback){
 
-	var token; 
+	let token; 
 
 	request(server)
 		.post('/auth')

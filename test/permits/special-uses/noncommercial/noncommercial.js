@@ -13,31 +13,31 @@
 
 //*******************************************************************
 
-var include = require('include')(__dirname);
+const include = require('include')(__dirname);
 
 //*******************************************************************
 
-var request = require('supertest');
-var server = include('index.js');
-var util = include('test/utility.js');
+const request = require('supertest');
+const server = include('index.js');
+const util = include('test/utility.js');
 
-var test_input = include('test/data/test_input_noncommercial.json');
+const test_input = include('test/data/test_input_noncommercial.json');
 
-var chai = require('chai');
-var expect = chai.expect;
+const chai = require('chai');
+const expect = chai.expect;
 
 //*******************************************************************
 //Mock Input
 
-var post_input = test_input.post_input;
-var post_input_no_noncommercial_field = test_input.no_noncommercial_field;
-var post_input_noncommercial_no_applicant_info = test_input.no_applicant_info_field;
+const post_input = test_input.post_input;
+const post_input_no_noncommercial_field = test_input.no_noncommercial_field;
+const post_input_noncommercial_no_applicant_info = test_input.no_applicant_info_field;
 
 //*******************************************************************
 
 describe('noncommercial POST: validate required fields present', function(){
 
-	var token;
+	let token;
 
 	before(function(done) {
 
@@ -653,7 +653,7 @@ describe('noncommercial POST: validate required fields present', function(){
 
 describe('API Routes: permits/special-uses/noncommercial', function(){
 	
-	var token;
+	let token;
 
 	before(function(done) {
 
@@ -715,7 +715,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 
 describe('noncommercial POST: field type validated', function(){
 
-	var token;
+	let token;
 
 	before(function(done) {
 

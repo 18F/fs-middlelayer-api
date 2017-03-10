@@ -13,19 +13,19 @@
 
 //*******************************************************************
 
-var request = require('supertest');
-var server = require('../index.js');
+const request = require('supertest');
+const server = require('../index.js');
 
-var util = require('./utility.js');
+const util = require('./utility.js');
 
-var chai = require('chai');
-var expect = chai.expect;
+const chai = require('chai');
+const expect = chai.expect;
 
 //*******************************************************************
 
 describe('FS ePermit API', function() {
 
-	var token;
+	let token;
 
 	before(function(done) {
 
