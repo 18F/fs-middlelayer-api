@@ -666,7 +666,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 	
 	});
 	
-	it('should return valid json for non commercial GET request for id', function(done) {
+	it('should return valid json for noncommercial GET request for id', function(done) {
 
 		request(server)
 			.get('/permits/special-uses/noncommercial/1234567890')
@@ -676,7 +676,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 
 	});
  
-	it('should return valid json for non commercial PUT request for id', function(done) {
+	it('should return valid json for noncommercial PUT request for id', function(done) {
 
 		request(server)
 			.put('/permits/special-uses/noncommercial/1234')
@@ -686,13 +686,27 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 
 	});
 	
-	it('should return valid json for non commercial POST request', function(done) {
+	it('should return valid json for noncommercial POST request', function(done) {
 
 		request(server)
 			.post('/permits/special-uses/noncommercial/')
 			.set('x-access-token', token)
 			.send(post_input)
 			.expect('Content-Type', /json/)
+			.expect(200, done);
+
+	});
+
+	it('should return valid json for noncommercial POST request with apiRequest', function(done) {
+
+		request(server)
+			.post('/permits/special-uses/noncommercial/')
+			.set('x-access-token', token)
+			.send(post_input)
+			.expect('Content-Type', /json/)
+			.expect(function(res){
+				expect(res.body).to.have.property('apiRequest');
+			})	
 			.expect(200, done);
 
 	});

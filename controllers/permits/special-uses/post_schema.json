@@ -1,0 +1,64 @@
+{
+  "generic-fields": {
+    "region": 0,
+    "forest": 0,
+    "district": 0,
+    "authorizingOfficerName": null,
+    "authorizingOfficerTitle": null,
+    "type": null,
+    "securityId": null,
+    "managingOrg": null,
+    "adminOrg": null,
+    "sudsId": null,
+    "effectiveDate": null,
+    "status": "ACCEPTED"
+  },
+  "applicant-info": {
+    "firstName": null,
+    "lastName": null,
+    "dayPhone": {
+      "areaCode": 0,
+      "number": 0,
+      "extension": 0,
+      "type": null
+    },
+    "eveningPhone": {
+      "areaCode": 0,
+      "number": 0,
+      "extension": 0,
+      "type": null
+    },
+    "emailAddress": null,
+    "mailingAddress": null,
+    "mailingAddress2": null,
+    "mailingCity": null,
+    "mailingState": null,
+    "mailingZIP": 0,
+    "organizationName": null,
+    "website": null,
+    "orgType": null,
+    "countryName": "United States of America",
+    "contName": null,
+    "contactType": null,
+    "addressType": "Main" 
+  },
+  "noncommercial-fields": {
+    "activityDescription": null,
+    "locationDescription": null,
+    "startDateTime": null,
+    "endDateTime": null,
+    "numberParticipants": 0,
+    "purpose": null,
+    "crExempt": "Y",
+    "formName": "FS-2700-3b"
+  },
+  "temp-outfitter-fields": {
+    "activityDescription": null,
+    "locationDescription": null,
+    "startDateTime": null,
+    "endDateTime": null,
+    "purpose": null,
+    "crExempt": "N",
+    "formName": "FS-2700-3f"
+  }
+}

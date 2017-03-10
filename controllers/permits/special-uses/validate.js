@@ -150,6 +150,7 @@ var validate_input = function (req){
 	}
 
 	output.error_message = util.build_error_message(output);
+	//console.log('validate_input output='+output);
 	return output;
 
 };

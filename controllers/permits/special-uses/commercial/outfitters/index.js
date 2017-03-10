@@ -87,7 +87,15 @@ post = function(req, res){
     
 	if (validate_res.fields_valid){
     
-		res.json(include('test/data/outfitters.post.json'));
+		//console.log('req body='+JSON.stringify(req.body));
+
+		var postData = util.create_post('outfitters', req.body);
+
+		var response = include('test/data/outfitters.post.json');
+
+		response['apiRequest'] = postData;
+    
+		res.json(response);
     
 	}
 	else {

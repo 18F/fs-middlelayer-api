@@ -904,4 +904,18 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	});
 
+	it('should return valid json for outfitters POST request with apiRequest', function(done) {
+
+		request(server)
+			.post('/permits/special-uses/commercial/outfitters')
+			.set('x-access-token', token)
+			.send(post_input)
+			.expect('Content-Type', /json/)
+			.expect(function(res){
+				expect(res.body).to.have.property('apiRequest');
+			})	
+			.expect(200, done);
+
+	});
+
 });
