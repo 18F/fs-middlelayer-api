@@ -14,11 +14,11 @@
 //*******************************************************************
 // required modules
 
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var commercial = require('./commercial');
-var noncommercial = require('./noncommercial');
+const commercial = require('./commercial');
+const noncommercial = require('./noncommercial');
 
 //*******************************************************************
 // router

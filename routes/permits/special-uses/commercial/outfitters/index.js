@@ -14,11 +14,11 @@
 //*******************************************************************
 // required modules
 
-var express = require('express');
-var router = express.Router();
-var include = require('include')(__dirname);
+const express = require('express');
+const router = express.Router();
+const include = require('include')(__dirname);
 
-var outfitters = include('controllers/permits/special-uses/commercial/outfitters');
+const outfitters = include('controllers/permits/special-uses/commercial/outfitters');
 
 //*******************************************************************
 // router

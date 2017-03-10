@@ -14,10 +14,10 @@
 //*******************************************************************
 // required modules
 
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var special_uses = require('./special-uses');
+const special_uses = require('./special-uses');
 
 //*******************************************************************
 // router
