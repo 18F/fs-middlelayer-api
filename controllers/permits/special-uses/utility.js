@@ -14,14 +14,14 @@
 //*******************************************************************
 // required modules
 
-var _ = require('lodash');
-var include = require('include')(__dirname);
+const _ = require('lodash');
+const include = require('include')(__dirname);
 
 //*******************************************************************
 
 function build_missing_error_message(error_array){
 
-	var error_message = _.join(error_array, ' and ');
+	let error_message = _.join(error_array, ' and ');
 
 	if (error_array.length > 1){
 
@@ -40,14 +40,14 @@ function build_missing_error_message(error_array){
 
 function build_type_error_message(type_obj){
 
-	var error_message = type_obj.field + ' is expected to be type \'' + type_obj.expected_type + '\'.';
+	let error_message = type_obj.field + ' is expected to be type \'' + type_obj.expected_type + '\'.';
 	return error_message;
 
 }
 
 function build_error_message(output){
 
-	var missing_message = '', type_message = '', error_message = '';
+	let missing_message = '', type_message = '', error_message = '';
 
 	if (!_.isEmpty(output.missing_array)){
 
@@ -70,7 +70,7 @@ function build_error_message(output){
 
 }
 
-var invalid_field = function (output, field){
+const invalid_field = function (output, field){
     
 	output.fields_valid = false;
 	output.missing_array.push(field);
@@ -79,7 +79,7 @@ var invalid_field = function (output, field){
 
 };
 
-var field_type = function (output, field, expected_type){
+const field_type = function (output, field, expected_type){
     
 	output.fields_valid = false;
 	output.type_array.push({
@@ -93,13 +93,13 @@ var field_type = function (output, field, expected_type){
 
 };
 
-var pad = function (n) {
+const pad = function (n) {
 	return  ('0' + n).slice(-2);
 };
 
-var generatePurpose = function (activityDescription, locationDescription, startDateTime, endDateTime){
+const generatePurpose = function (activityDescription, locationDescription, startDateTime, endDateTime){
 
-	var purpose = '';
+	let purpose = '';
 
 	if (activityDescription){
 		purpose = purpose + activityDescription + ' ' ;
@@ -122,7 +122,7 @@ var generatePurpose = function (activityDescription, locationDescription, startD
 
 function copyGenericInfo(cnData, jsonData){
 
-	var adminOrg = cnData.adminOrg;
+	let adminOrg = cnData.adminOrg;
 	jsonData.controlNumber = cnData.accinstCn;
 	jsonData.region = adminOrg.slice(0, 2);
 	jsonData.forest = adminOrg.slice(2, 4);
@@ -130,12 +130,12 @@ function copyGenericInfo(cnData, jsonData){
 	jsonData.authorizingOfficerName = cnData.authOfficerName;
 	jsonData.authorizingOfficerTitle = cnData.authOfficerTitle;
 
-	var addressData = cnData.addresses[0];
-	var phoneData = cnData.phones[0];
-	var holderData = cnData.holders[0];
+	let addressData = cnData.addresses[0];
+	let phoneData = cnData.phones[0];
+	let holderData = cnData.holders[0];
 
-	var applicantInfo = {};
-	var phoneNumber = {};
+	let applicantInfo = {};
+	let phoneNumber = {};
     
 	applicantInfo.contactControlNumber = addressData.contCn;
 	applicantInfo.firstName = holderData.firstName;
@@ -169,14 +169,14 @@ function copyGenericInfo(cnData, jsonData){
 
 function create_post(formType, inputPost){
 	
-	var postSchema = include('controllers/permits/special-uses/post_schema.json');
+	let postSchema = include('controllers/permits/special-uses/post_schema.json');
 
-	var postData = {};
-	var combId = '';
-	var key;
-	var purpose;
+	let postData = {};
+	let combId = '';
+	let key;
+	let purpose;
 
-	var genericFields = postSchema['generic-fields'];
+	let genericFields = postSchema['generic-fields'];
 	
 	if (genericFields){
 		for (key in genericFields) {
@@ -204,7 +204,7 @@ function create_post(formType, inputPost){
 	postData.managingOrg = combId;
 	postData.adminOrg = combId;
 
-	var todayDate = new Date().toISOString().slice(0, 10);
+	let todayDate = new Date().toISOString().slice(0, 10);
 	postData.effectiveDate = todayDate;
 
 	//console.log('pre postData='+JSON.stringify(postData));
