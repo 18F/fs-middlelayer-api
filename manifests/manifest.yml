@@ -1,0 +1,5 @@
+---
+applications:
+- name: fs-middlelayer-api
+  memory: 56M
+  instances: 1
