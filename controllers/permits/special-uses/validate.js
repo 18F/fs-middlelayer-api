@@ -20,19 +20,19 @@ const Validator = require('jsonschema').Validator;
 //*******************************************************************
 
 const util = include('controllers/permits/special-uses/utility.js');
-const schema = require('./validation_schema.json');
+const schema = require('./validationSchema.json');
 const v = new Validator();
 
 //*******************************************************************
 // schemas
 
 const outfitterSchema = schema.outfitter;
-const applicantInfoTempOutfitter = schema.outfitter_applicant_info;
-const tempOutfitterFields = schema.temp_outfitter_fields;
+const applicantInfoTempOutfitter = schema.outfitterApplicantInfo;
+const tempOutfitterFields = schema.tempOutfitterFields;
 const noncommercialSchema = schema.noncommercial;
-const applicantInfoNoncommercial = schema.noncommercial_applicant_info;
-const noncommercialFields = schema.noncommercial_fields;
-const phoneNumber = schema.phone_number;
+const applicantInfoNoncommercial = schema.noncommercialApplicantInfo;
+const noncommercialFields = schema.noncommercialFields;
+const phoneNumber = schema.phoneNumber;
 
 //*******************************************************************
 
@@ -97,6 +97,7 @@ function handleMissingError(output, result, counter){
 
 function handleTypeError(output, result, counter){
 
+	console.log(result);
 	const expectedType = result[counter].argument[0];
 	const property = removeInstance(result[counter].property);
 	util.fieldType(output, property, expectedType);
@@ -115,11 +116,11 @@ const validateInput = function (req){
 
 	};
 	let result, counter;
-	v.addSchema(phoneNumber, 'phone-number');
-	v.addSchema(applicantInfoNoncommercial, 'applicant-info-noncommercial');
-	v.addSchema(noncommercialFields, 'noncommercial-fields');
-	v.addSchema(applicantInfoTempOutfitter, 'applicant-info-temp-outfitter');
-	v.addSchema(tempOutfitterFields, 'temp-outfitter-fields');
+	v.addSchema(phoneNumber, 'phoneNumber');
+	v.addSchema(applicantInfoNoncommercial, 'applicantInfoNoncommercial');
+	v.addSchema(noncommercialFields, 'noncommercialFields');
+	v.addSchema(applicantInfoTempOutfitter, 'applicantInfoTempOutfitter');
+	v.addSchema(tempOutfitterFields, 'tempOutfitterFields');
 	if (route === 'noncommercial'){
 
 		result = v.validate(req.body, noncommercialSchema).errors;

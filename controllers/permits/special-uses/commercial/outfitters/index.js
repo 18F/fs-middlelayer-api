@@ -61,7 +61,7 @@ get.id = function(req, res){
 		outfittersFields.operatingPlan = 'operatingPlan.pdf';
 
 		util.copyGenericInfo(cnData, jsonData);
-		jsonData['temp-outfitter-fields'] = outfittersFields;    
+		jsonData.tempOutfitterFields = outfittersFields;    
 
 		jsonResponse.success = true;
 	}

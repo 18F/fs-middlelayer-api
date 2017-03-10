@@ -21,7 +21,7 @@ const request = require('supertest');
 const server = include('index.js');
 const util = include('test/utility.js');
 
-const testInput = include('test/data/test_input_outfitters.json');
+const testInput = include('test/data/testInputOutfitters.json');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -29,9 +29,9 @@ const expect = chai.expect;
 //*******************************************************************
 //Mock Input
 
-const postInput = testInput.post_input;
-const postInputNoOutfittersField = testInput.no_outfitters_field;
-const postInputNoApplicantInfo = testInput.no_applicant_info_field;
+const postInput = testInput.postInput;
+const postInputNoOutfittersField = testInput.noOutfittersField;
+const postInputNoApplicantInfo = testInput.noApplicantInfoField;
 
 //*******************************************************************
 
@@ -60,14 +60,14 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('region and forest and district and applicant-info and type and temp-outfitter-fields are required fields!');
+					expect(res.body.response.message).to.equal('region and forest and district and applicantInfo and type and tempOutfitterFields are required fields!');
 
 				})
 				.expect(400, done);
 
 		});
 
-		it('should return valid json with a 400 status code for outfitters POST request without an applicant-info object', function(done) {
+		it('should return valid json with a 400 status code for outfitters POST request without an applicantInfo object', function(done) {
 
 			request(server)
 				.post('/permits/special-uses/commercial/outfitters')
@@ -81,14 +81,14 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicant-info is a required field!');
+					expect(res.body.response.message).to.equal('applicantInfo is a required field!');
 
 				})
 				.expect(400, done);
 
 		});
 
-		it('should return valid json with a 400 status code for outfitters POST request without a temp-outfitter-fields object', function(done) {
+		it('should return valid json with a 400 status code for outfitters POST request without a tempOutfitterFields object', function(done) {
 
 			request(server)
 				.post('/permits/special-uses/commercial/outfitters')
@@ -102,7 +102,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('temp-outfitter-fields is a required field!');
+					expect(res.body.response.message).to.equal('tempOutfitterFields is a required field!');
 
 				})
 				.expect(400, done);
@@ -111,7 +111,7 @@ describe('outfitters POST: validate required fields present', function(){
 
 	});
 
-	describe('validate required fields present: applicant-info fields', function(){
+	describe('validate required fields present: applicantInfo fields', function(){
 
 		it('should return valid json with a 400 status code for outfitters POST request without a firstName', function(done) {
 
@@ -122,7 +122,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'applicant-info': {
+							'applicantInfo': {
 								'lastName': 'Doe',
 								'dayPhone': {
 									'areaCode': 541,
@@ -143,7 +143,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicant-info.firstName is a required field!');
+					expect(res.body.response.message).to.equal('applicantInfo.firstName is a required field!');
 
 				})
 				.expect(400, done);
@@ -159,7 +159,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'applicant-info': {
+							'applicantInfo': {
 								'firstName': 'John',
 								'dayPhone': {
 									'areaCode': 541,
@@ -180,7 +180,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicant-info.lastName is a required field!');
+					expect(res.body.response.message).to.equal('applicantInfo.lastName is a required field!');
 
 				})
 				.expect(400, done);
@@ -196,7 +196,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'applicant-info': {
+							'applicantInfo': {
 								'firstName': 'John',
 								'lastName': 'Doe',
 								'emailAddress': 'test@email.org',
@@ -212,7 +212,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicant-info.dayPhone is a required field!');
+					expect(res.body.response.message).to.equal('applicantInfo.dayPhone is a required field!');
 
 				})
 				.expect(400, done);
@@ -228,7 +228,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'applicant-info': {
+							'applicantInfo': {
 								'firstName': 'John',
 								'lastName': 'Doe',
 								'dayPhone': {
@@ -249,7 +249,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicant-info.dayPhone.areaCode is a required field!');
+					expect(res.body.response.message).to.equal('applicantInfo.dayPhone.areaCode is a required field!');
 
 				})
 				.expect(400, done);
@@ -265,7 +265,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'applicant-info': {
+							'applicantInfo': {
 								'firstName': 'John',
 								'lastName': 'Doe',
 								'dayPhone': {
@@ -286,7 +286,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicant-info.dayPhone.number is a required field!');
+					expect(res.body.response.message).to.equal('applicantInfo.dayPhone.number is a required field!');
 
 				})
 				.expect(400, done);
@@ -302,7 +302,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'applicant-info': {
+							'applicantInfo': {
 								'firstName': 'John',
 								'lastName': 'Doe',
 								'dayPhone': {
@@ -323,7 +323,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicant-info.dayPhone.type is a required field!');
+					expect(res.body.response.message).to.equal('applicantInfo.dayPhone.type is a required field!');
 
 				})
 				.expect(400, done);
@@ -339,7 +339,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'applicant-info': {
+							'applicantInfo': {
 								'firstName': 'John',
 								'lastName': 'Doe',
 								'dayPhone': {
@@ -360,7 +360,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicant-info.emailAddress is a required field!');
+					expect(res.body.response.message).to.equal('applicantInfo.emailAddress is a required field!');
 
 				})
 				.expect(400, done);
@@ -376,7 +376,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'applicant-info': {
+							'applicantInfo': {
 								'firstName': 'John',
 								'lastName': 'Doe',
 								'dayPhone': {
@@ -397,7 +397,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicant-info.mailingAddress is a required field!');
+					expect(res.body.response.message).to.equal('applicantInfo.mailingAddress is a required field!');
 
 				})
 				.expect(400, done);
@@ -413,7 +413,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'applicant-info': {
+							'applicantInfo': {
 								'firstName': 'John',
 								'lastName': 'Doe',
 								'dayPhone': {
@@ -434,7 +434,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicant-info.mailingCity is a required field!');
+					expect(res.body.response.message).to.equal('applicantInfo.mailingCity is a required field!');
 
 				})
 				.expect(400, done);
@@ -450,7 +450,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'applicant-info': {
+							'applicantInfo': {
 								'firstName': 'John',
 								'lastName': 'Doe',
 								'dayPhone': {
@@ -471,7 +471,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicant-info.mailingState is a required field!');
+					expect(res.body.response.message).to.equal('applicantInfo.mailingState is a required field!');
 
 				})
 				.expect(400, done);
@@ -487,7 +487,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'applicant-info': {
+							'applicantInfo': {
 								'firstName': 'John',
 								'lastName': 'Doe',
 								'dayPhone': {
@@ -508,7 +508,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicant-info.mailingZIP is a required field!');
+					expect(res.body.response.message).to.equal('applicantInfo.mailingZIP is a required field!');
 
 				})
 				.expect(400, done);
@@ -524,7 +524,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'applicant-info': {
+							'applicantInfo': {
 								'firstName': 'John',
 								'lastName': 'Doe',
 								'dayPhone': {
@@ -545,7 +545,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicant-info.orgType is a required field!');
+					expect(res.body.response.message).to.equal('applicantInfo.orgType is a required field!');
 
 				})
 				.expect(400, done);
@@ -565,7 +565,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'temp-outfitter-fields': {
+							'tempOutfitterFields': {
 								'locationDescription': 'string',
 								'startDateTime': '2013-01-12',
 								'endDateTime': '2013-01-19',
@@ -579,7 +579,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('temp-outfitter-fields.activityDescription is a required field!');
+					expect(res.body.response.message).to.equal('tempOutfitterFields.activityDescription is a required field!');
 
 				})
 				.expect(400, done);
@@ -595,7 +595,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'temp-outfitter-fields': {
+							'tempOutfitterFields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
 								'startDateTime': '2013-01-12',
 								'endDateTime': '2013-01-19',
@@ -609,7 +609,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('temp-outfitter-fields.locationDescription is a required field!');
+					expect(res.body.response.message).to.equal('tempOutfitterFields.locationDescription is a required field!');
 
 				})
 				.expect(400, done);
@@ -625,7 +625,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'temp-outfitter-fields': {
+							'tempOutfitterFields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
 								'locationDescription': 'string',
 								'endDateTime': '2013-01-19',
@@ -639,7 +639,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('temp-outfitter-fields.startDateTime is a required field!');
+					expect(res.body.response.message).to.equal('tempOutfitterFields.startDateTime is a required field!');
 
 				})
 				.expect(400, done);
@@ -655,7 +655,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'temp-outfitter-fields': {
+							'tempOutfitterFields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
 								'locationDescription': 'string',
 								'startDateTime': '2013-01-12',
@@ -669,7 +669,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('temp-outfitter-fields.endDateTime is a required field!');
+					expect(res.body.response.message).to.equal('tempOutfitterFields.endDateTime is a required field!');
 
 				})
 				.expect(400, done);
@@ -685,7 +685,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'temp-outfitter-fields': {
+							'tempOutfitterFields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
 								'locationDescription': 'string',
 								'startDateTime': '2013-01-12',
@@ -699,7 +699,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('temp-outfitter-fields.insuranceCertificate is a required field!');
+					expect(res.body.response.message).to.equal('tempOutfitterFields.insuranceCertificate is a required field!');
 
 				})
 				.expect(400, done);
@@ -715,7 +715,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'temp-outfitter-fields': {
+							'tempOutfitterFields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
 								'locationDescription': 'string',
 								'startDateTime': '2013-01-12',
@@ -729,7 +729,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('temp-outfitter-fields.goodStandingEvidence is a required field!');
+					expect(res.body.response.message).to.equal('tempOutfitterFields.goodStandingEvidence is a required field!');
 
 				})
 				.expect(400, done);
@@ -745,7 +745,7 @@ describe('outfitters POST: validate required fields present', function(){
 					util.updateInputData(
 						postInput,
 						{
-							'temp-outfitter-fields': {
+							'tempOutfitterFields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
 								'locationDescription': 'string',
 								'startDateTime': '2013-01-12',
@@ -759,7 +759,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('temp-outfitter-fields.operatingPlan is a required field!');
+					expect(res.body.response.message).to.equal('tempOutfitterFields.operatingPlan is a required field!');
 
 				})
 				.expect(400, done);
@@ -794,7 +794,7 @@ describe('outfitters POST: required outfitters fields', function(){
 				util.updateInputData(
 					postInput,
 					{
-						'temp-outfitter-fields': {
+						'tempOutfitterFields': {
 							'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
 							'locationDescription': 'string',
 							'startDateTime': '2013-01-12',
@@ -807,7 +807,7 @@ describe('outfitters POST: required outfitters fields', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('temp-outfitter-fields.insuranceCertificate and temp-outfitter-fields.goodStandingEvidence are required fields!');
+				expect(res.body.response.message).to.equal('tempOutfitterFields.insuranceCertificate and tempOutfitterFields.goodStandingEvidence are required fields!');
 
 			})
 			.expect(400, done);
@@ -828,7 +828,7 @@ describe('outfitters POST: required outfitters fields', function(){
 						'district': 50552,
 						'authorizingOfficerName': 'WILLIAM L.NOXON',
 						'authorizingOfficerTitle': 'null',
-						'applicant-info': {
+						'applicantInfo': {
 							'lastName': 'Doe',
 							'dayPhone': {
 								'areaCode': 541,
@@ -842,14 +842,14 @@ describe('outfitters POST: required outfitters fields', function(){
 							'mailingState': 'OR',
 							'mailingZIP': 97321
 						},
-						'type': 'temp-outfitter-guide'
+						'type': 'tempOutfitterGuide'
 					}
 				)
 			)
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('applicant-info.firstName and applicant-info.orgType and temp-outfitter-fields are required fields!');
+				expect(res.body.response.message).to.equal('applicantInfo.firstName and applicantInfo.orgType and tempOutfitterFields are required fields!');
 
 			})
 			.expect(400, done);

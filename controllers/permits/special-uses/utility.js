@@ -164,19 +164,19 @@ function copyGenericInfo(cnData, jsonData){
 	applicantInfo.website = null;
 	applicantInfo.orgType = holderData.orgType;
 
-	jsonData['applicant-info'] = applicantInfo;
+	jsonData.applicantInfo = applicantInfo;
 }
 
 function createPost(formType, inputPost){
 	
-	const postSchema = include('controllers/permits/special-uses/post_schema.json');
+	const postSchema = include('controllers/permits/special-uses/postSchema.json');
 
 	const postData = {};
 	let combId = '';
 	let key;
 	let purpose;
 
-	const genericFields = postSchema['generic-fields'];
+	const genericFields = postSchema.genericFields;
 	
 	if (genericFields){
 		for (key in genericFields) {
@@ -209,28 +209,27 @@ function createPost(formType, inputPost){
 
 	//console.log('pre postData='+JSON.stringify(postData));
 
-	postData['applicant-info'] = postSchema['applicant-info'];
+	postData.applicantInfo = postSchema.applicantInfo;
 
-	if (inputPost.hasOwnProperty('applicant-info')){
-		for (key in inputPost['applicant-info']) {
-			//console.log('applicant-info key: '+ key + " -> " + inputPost['applicant-info'][key]);
-			if (inputPost['applicant-info'].hasOwnProperty(key)) {
-				postData['applicant-info'][key] = inputPost['applicant-info'][key];	
+	if (inputPost.hasOwnProperty('applicantInfo')){
+		for (key in inputPost.applicantInfo) {
+			if (inputPost.applicantInfo.hasOwnProperty(key)) {
+				postData.applicantInfo[key] = inputPost.applicantInfo[key];	
 			}
 		}	
 
-		if (inputPost['applicant-info'].organizationName){
-			postData['applicant-info'].contactType = 'ORGANIZATION'; 
+		if (inputPost.applicantInfo.organizationName){
+			postData.applicantInfo.contactType = 'ORGANIZATION'; 
 		}
 		else {
-			postData['applicant-info'].contactType = 'PERSON'; 
+			postData.applicantInfo.contactType = 'PERSON'; 
 		}
 		
-		if (postData['applicant-info'].contactType === 'ORGANIZATION'){
-			postData['applicant-info'].contName = inputPost['applicant-info'].organizationName;
+		if (postData.applicantInfo.contactType === 'ORGANIZATION'){
+			postData.applicantInfo.contName = inputPost.applicantInfo.organizationName;
 		}
 		else {
-			postData['applicant-info'].contName = inputPost['applicant-info'].firstName + ' ' + inputPost['applicant-info'].lastName;
+			postData.applicantInfo.contName = inputPost.applicantInfo.firstName + ' ' + inputPost.applicantInfo.lastName;
 		}
 
 	}
@@ -239,46 +238,44 @@ function createPost(formType, inputPost){
 
 		postData.type = 'noncommercial'; 
 
-		postData['noncommercial-fields'] = postSchema['noncommercial-fields'];
+		postData.noncommercialFields = postSchema.noncommercialFields;
 
-		if (inputPost.hasOwnProperty('noncommercial-fields')){
-			for (key in inputPost['noncommercial-fields']) {
-				//console.log('noncommercial-fields key: '+ key + " -> " + inputPost['noncommercial-fields'][key]);
-				if (inputPost['noncommercial-fields'].hasOwnProperty(key)){
-					postData['noncommercial-fields'][key] = inputPost['noncommercial-fields'][key];		
+		if (inputPost.hasOwnProperty('noncommercialFields')){
+			for (key in inputPost.noncommercialFields) {
+				if (inputPost.noncommercialFields.hasOwnProperty(key)){
+					postData.noncommercialFields[key] = inputPost.noncommercialFields[key];		
 				}
 			}	
 		}
 
-		purpose = generatePurpose (postData['noncommercial-fields'].activityDescription,
-										postData['noncommercial-fields'].locationDescription,
-										postData['noncommercial-fields'].startDateTime,
-										postData['noncommercial-fields'].endDateTime);
+		purpose = generatePurpose (postData.noncommercialFields.activityDescription,
+										postData.noncommercialFields.locationDescription,
+										postData.noncommercialFields.startDateTime,
+										postData.noncommercialFields.endDateTime);
 
-		postData['noncommercial-fields'].purpose = purpose;
+		postData.noncommercialFields.purpose = purpose;
 
 	}
 	else if (formType === 'outfitters'){
 
-		postData.type = 'temp-outfitter-guide';
+		postData.type = 'tempOutfitterGuide';
 
-		postData['temp-outfitter-fields'] = postSchema['temp-outfitter-fields'];
+		postData.tempOutfitterFields = postSchema.tempOutfitterFields;
 
-		if (inputPost.hasOwnProperty('temp-outfitter-fields')){
-			for (key in inputPost['temp-outfitter-fields']) {
-				//console.log('temp-outfitter-fields key: '+ key + " -> " + inputPost['temp-outfitter-fields'][key]);
-				if (inputPost['temp-outfitter-fields'].hasOwnProperty(key)){
-					postData['temp-outfitter-fields'][key] = inputPost['temp-outfitter-fields'][key];
+		if (inputPost.hasOwnProperty('tempOutfitterFields')){
+			for (key in inputPost.tempOutfitterFields) {
+				if (inputPost.tempOutfitterFields.hasOwnProperty(key)){
+					postData.tempOutfitterFields[key] = inputPost.tempOutfitterFields[key];
 				}	
 			}	
 		}
 
-		purpose = generatePurpose (postData['temp-outfitter-fields'].activityDescription,
-										postData['temp-outfitter-fields'].locationDescription,
-										postData['temp-outfitter-fields'].startDateTime,
-										postData['temp-outfitter-fields'].endDateTime);
+		purpose = generatePurpose (postData.tempOutfitterFields.activityDescription,
+										postData.tempOutfitterFields.locationDescription,
+										postData.tempOutfitterFields.startDateTime,
+										postData.tempOutfitterFields.endDateTime);
 
-		postData['temp-outfitter-fields'].purpose = purpose;
+		postData.tempOutfitterFields.purpose = purpose;
 	}
 
 	//console.log('postData='+JSON.stringify(postData));

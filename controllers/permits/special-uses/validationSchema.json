@@ -1,6 +1,6 @@
 {
     "outfitter": {
-        "id":"temp-outfitter-permit",
+        "id":"tempOutfitterPermit",
         "type":"object",
         "properties":{
             "region": { "type" : "integer" },
@@ -8,32 +8,32 @@
             "district": { "type" : "integer" },
             "authorizingOfficerName": { "type" : "string"},
             "authorizingOfficerTitle": { "type" : "string"},
-            "applicant-info": {
-                "$ref": "applicant-info-temp-outfitter"
+            "applicantInfo": {
+                "$ref": "applicantInfoTempOutfitter"
             },
             "type": {
                 "type": "string", 
-                "default": "temp-outfitter-guide",
+                "default": "tempOutfitterGuide",
                 "enum":[
                     "noncommercial",
-                    "temp-outfitter-guide"
+                    "tempOutfitterGuide"
                 ]
             },
-            "temp-outfitter-fields": {
-                "$ref": "temp-outfitter-fields"
+            "tempOutfitterFields": {
+                "$ref": "tempOutfitterFields"
             }
         },
-        "required": ["region", "forest", "district", "applicant-info", "type", "temp-outfitter-fields"]
+        "required": ["region", "forest", "district", "applicantInfo", "type", "tempOutfitterFields"]
 
     },
-    "outfitter_applicant_info": {
-        "id": "/applicant-info-temp-outfitter",
+    "outfitterApplicantInfo": {
+        "id": "/applicantInfoTempOutfitter",
         "type": "object",
         "properties": {
             "firstName": { "type": "string" },
             "lastName": { "type": "string" },
-            "dayPhone": { "$ref": "phone-number" },
-            "eveningPhone": { "$ref": "phone-number" },
+            "dayPhone": { "$ref": "phoneNumber" },
+            "eveningPhone": { "$ref": "phoneNumber" },
             "emailAddress": { "type": "string" },
             "mailingAddress": { "type": "string" },
             "mailingAddress2": { "type": "string" },
@@ -59,8 +59,8 @@
         "required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState", "orgType"]
 
     },
-    "temp_outfitter_fields": {
-        "id": "/temp-outfitter-fields",
+    "tempOutfitterFields": {
+        "id": "/tempOutfitterFields",
         "type": "object",
         "properties": {
             "activityDescription": { "type": "string"},
@@ -81,7 +81,7 @@
 
     },
     "noncommercial": {
-        "id":"noncommercial-permit",
+        "id":"noncommercialPermit",
         "type":"object",
         "properties":{
             "region": { "type" : "integer" },
@@ -89,32 +89,32 @@
             "district": { "type" : "integer" },
             "authorizingOfficerName": { "type" : "string"},
             "authorizingOfficerTitle": { "type" : "string"},
-            "applicant-info": {
-                "$ref": "applicant-info-noncommercial"
+            "applicantInfo": {
+                "$ref": "applicantInfoNoncommercial"
             },
             "type": {
                 "type": "string", 
                 "default": "noncommercial",
                 "enum":[
                     "noncommercial",
-                    "temp-outfitter-guide"
+                    "tempOutfitterGuide"
                 ]
             },
-            "noncommercial-fields": {
-                "$ref": "noncommercial-fields"
+            "noncommercialFields": {
+                "$ref": "noncommercialFields"
             }
         },
-        "required": ["region", "forest", "district", "applicant-info", "type", "noncommercial-fields"]
+        "required": ["region", "forest", "district", "applicantInfo", "type", "noncommercialFields"]
 
     },
-    "noncommercial_applicant_info": {
-        "id": "/applicant-info-noncommercial",
+    "noncommercialApplicantInfo": {
+        "id": "/applicantInfoNoncommercial",
         "type": "object",
         "properties": {
             "firstName": { "type": "string" },
             "lastName": { "type": "string" },
-            "dayPhone": { "$ref": "phone-number" },
-            "eveningPhone": { "$ref": "phone-number" },
+            "dayPhone": { "$ref": "phoneNumber" },
+            "eveningPhone": { "$ref": "phoneNumber" },
             "emailAddress": { "type": "string" },
             "mailingAddress": { "type": "string" },
             "mailingAddress2": { "type": "string" },
@@ -140,8 +140,8 @@
         "required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState"]
 
     },
-    "noncommercial_fields": {
-        "id": "/noncommercial-fields",
+    "noncommercialFields": {
+        "id": "/noncommercialFields",
         "type": "object",
         "properties": {
             "activityDescription": { "type": "string"},
@@ -153,8 +153,8 @@
         "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime", "numberParticipants"]
 
     },
-    "phone_number": {
-        "id": "/phone-number",
+    "phoneNumber": {
+        "id": "/phoneNumber",
         "type": "object",
         "properties": {
             "areaCode": { "type": "integer"},

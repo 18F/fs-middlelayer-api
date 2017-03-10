@@ -1,5 +1,5 @@
 {
-  "generic-fields": {
+  "genericFields": {
     "region": 0,
     "forest": 0,
     "district": 0,
@@ -13,7 +13,7 @@
     "effectiveDate": null,
     "status": "ACCEPTED"
   },
-  "applicant-info": {
+  "applicantInfo": {
     "firstName": null,
     "lastName": null,
     "dayPhone": {
@@ -42,7 +42,7 @@
     "contactType": null,
     "addressType": "Main" 
   },
-  "noncommercial-fields": {
+  "noncommercialFields": {
     "activityDescription": null,
     "locationDescription": null,
     "startDateTime": null,
@@ -52,7 +52,7 @@
     "crExempt": "Y",
     "formName": "FS-2700-3b"
   },
-  "temp-outfitter-fields": {
+  "tempOutfitterFields": {
     "activityDescription": null,
     "locationDescription": null,
     "startDateTime": null,

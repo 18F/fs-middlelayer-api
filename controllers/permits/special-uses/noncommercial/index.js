@@ -59,7 +59,7 @@ get.id = function(req, res){
 		noncommercialFields.numberParticipants = 45;
 
 		util.copyGenericInfo(cnData, jsonData);
-		jsonData['noncommercial-fields'] = noncommercialFields;    
+		jsonData.noncommercialFields = noncommercialFields;    
 		jsonResponse.success = true;
         
 	}
