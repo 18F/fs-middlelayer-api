@@ -19,73 +19,73 @@ const include = require('include')(__dirname);
 
 //*******************************************************************
 
-function build_missing_error_message(error_array){
+function buildMissingErrorMessage(errorArray){
 
-	let error_message = _.join(error_array, ' and ');
+	let errorMessage = _.join(errorArray, ' and ');
 
-	if (error_array.length > 1){
+	if (errorArray.length > 1){
 
-		error_message += ' are required fields!';
+		errorMessage += ' are required fields!';
 
 	}
 	else {
 
-		error_message += ' is a required field!';
+		errorMessage += ' is a required field!';
 
 	}
 
-	return error_message;
+	return errorMessage;
 
 }
 
-function build_type_error_message(type_obj){
+function buildTypeErrorMessage(typeObj){
 
-	const error_message = type_obj.field + ' is expected to be type \'' + type_obj.expected_type + '\'.';
-	return error_message;
+	const errorMessage = typeObj.field + ' is expected to be type \'' + typeObj.expectedType + '\'.';
+	return errorMessage;
 
 }
 
-function build_error_message(output){
+function buildErrorMessage(output){
 
-	let missing_message = '', type_message = '', error_message = '';
+	let missingMessage = '', typeMessage = '', errorMessage = '';
 
-	if (!_.isEmpty(output.missing_array)){
+	if (!_.isEmpty(output.missingArray)){
 
-		missing_message = build_missing_error_message(output.missing_array);
-		error_message = error_message + missing_message;
+		missingMessage = buildMissingErrorMessage(output.missingArray);
+		errorMessage = errorMessage + missingMessage;
 
 	}
-	if (!_.isEmpty(output.type_array)){
+	if (!_.isEmpty(output.typeArray)){
 
-		output.type_array.forEach((element)=>{
+		output.typeArray.forEach((element)=>{
 
-			type_message = type_message + build_type_error_message(element) + ' ';
+			typeMessage = typeMessage + buildTypeErrorMessage(element) + ' ';
 
 		});
-		error_message = error_message + type_message;
+		errorMessage = errorMessage + typeMessage;
 
 	}
     
-	return error_message;
+	return errorMessage;
 
 }
 
-const invalid_field = function (output, field){
+const invalidField = function (output, field){
     
-	output.fields_valid = false;
-	output.missing_array.push(field);
+	output.fieldsValid = false;
+	output.missingArray.push(field);
 
 	return output;
 
 };
 
-const field_type = function (output, field, expected_type){
+const fieldType = function (output, field, expectedType){
     
-	output.fields_valid = false;
-	output.type_array.push({
+	output.fieldsValid = false;
+	output.typeArray.push({
 
 		'field':field,
-		'expected_type':expected_type
+		'expectedType':expectedType
 
 	});
 
@@ -167,7 +167,7 @@ function copyGenericInfo(cnData, jsonData){
 	jsonData['applicant-info'] = applicantInfo;
 }
 
-function create_post(formType, inputPost){
+function createPost(formType, inputPost){
 	
 	const postSchema = include('controllers/permits/special-uses/post_schema.json');
 
@@ -289,8 +289,8 @@ function create_post(formType, inputPost){
 //*******************************************************************
 // exports
 
-module.exports.build_error_message = build_error_message;
-module.exports.invalid_field = invalid_field;
-module.exports.field_type = field_type;
+module.exports.buildErrorMessage = buildErrorMessage;
+module.exports.invalidField = invalidField;
+module.exports.fieldType = fieldType;
 module.exports.copyGenericInfo = copyGenericInfo;
-module.exports.create_post = create_post;
+module.exports.createPost = createPost;

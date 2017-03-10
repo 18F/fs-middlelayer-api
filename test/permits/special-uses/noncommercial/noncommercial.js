@@ -21,7 +21,7 @@ const request = require('supertest');
 const server = include('index.js');
 const util = include('test/utility.js');
 
-const test_input = include('test/data/test_input_noncommercial.json');
+const testInput = include('test/data/test_input_noncommercial.json');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -29,9 +29,9 @@ const expect = chai.expect;
 //*******************************************************************
 //Mock Input
 
-const post_input = test_input.post_input;
-const post_input_no_noncommercial_field = test_input.no_noncommercial_field;
-const post_input_noncommercial_no_applicant_info = test_input.no_applicant_info_field;
+const postInput = testInput.post_input;
+const postInputNoNoncommercialField = testInput.no_noncommercial_field;
+const postInputNoncommercialNoApplicantInfo = testInput.no_applicant_info_field;
 
 //*******************************************************************
 
@@ -41,7 +41,7 @@ describe('noncommercial POST: validate required fields present', function(){
 
 	before(function(done) {
 
-		util.get_token(function(t){
+		util.getToken(function(t){
 
 			token = t;
 			return done();
@@ -73,8 +73,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input_noncommercial_no_applicant_info,
+					util.updateInputData(
+						postInputNoncommercialNoApplicantInfo,
 						{}
 					)
 				)
@@ -94,8 +94,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input_no_noncommercial_field,
+					util.updateInputData(
+						postInputNoNoncommercialField,
 						{}
 					)
 				)
@@ -119,8 +119,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'lastName': 'Doe',
@@ -155,8 +155,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -191,8 +191,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -222,8 +222,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -258,8 +258,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -294,8 +294,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -330,8 +330,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-					post_input,
+					util.updateInputData(
+					postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -366,8 +366,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-					post_input,
+					util.updateInputData(
+					postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -402,8 +402,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -438,8 +438,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -474,8 +474,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -513,8 +513,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-					post_input,
+					util.updateInputData(
+					postInput,
 						{
 							'noncommercial-fields': {
 								'locationDescription': 'string',
@@ -541,8 +541,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'noncommercial-fields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -569,8 +569,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'noncommercial-fields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -597,8 +597,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'noncommercial-fields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -625,8 +625,8 @@ describe('noncommercial POST: validate required fields present', function(){
 				.post('/permits/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'noncommercial-fields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -657,7 +657,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 
 	before(function(done) {
 
-		util.get_token(function(t){
+		util.getToken(function(t){
 
 			token = t;
 			return done();
@@ -691,7 +691,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 		request(server)
 			.post('/permits/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(post_input)
+			.send(postInput)
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
@@ -702,7 +702,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 		request(server)
 			.post('/permits/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(post_input)
+			.send(postInput)
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 				expect(res.body).to.have.property('apiRequest');
@@ -719,7 +719,7 @@ describe('noncommercial POST: field type validated', function(){
 
 	before(function(done) {
 
-		util.get_token(function(t){
+		util.getToken(function(t){
 
 			token = t;
 			return done();
@@ -736,8 +736,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'applicant-info': {
 									'firstName':123,
@@ -773,8 +773,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'applicant-info': {
 									'firstName':'John',
@@ -810,8 +810,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'applicant-info': {
 									'firstName':'John',
@@ -847,8 +847,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'applicant-info': {
 									'firstName':'John',
@@ -884,8 +884,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'applicant-info': {
 									'firstName':'John',
@@ -921,8 +921,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'applicant-info': {
 									'firstName':'John',
@@ -958,8 +958,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'applicant-info': {
 									'firstName':'John',
@@ -995,8 +995,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'applicant-info': {
 									'firstName':'John',
@@ -1032,8 +1032,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'applicant-info': {
 									'firstName':'John',
@@ -1069,8 +1069,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'applicant-info': {
 									'firstName':'John',
@@ -1106,8 +1106,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'noncommercial-fields': {
 									'activityDescription': 1,
@@ -1135,8 +1135,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'noncommercial-fields': {
 									'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -1164,8 +1164,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'noncommercial-fields': {
 									'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -1193,8 +1193,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'noncommercial-fields': {
 									'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -1222,8 +1222,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'noncommercial-fields': {
 									'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -1255,8 +1255,8 @@ describe('noncommercial POST: field type validated', function(){
 				.post('/permits/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
-						util.update_input_data(
-							post_input,
+						util.updateInputData(
+							postInput,
 							{
 								'applicant-info': {
 									'firstName':'John',

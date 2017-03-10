@@ -20,19 +20,19 @@ const server = include('index.js');
 
 //*******************************************************************
 
-function update_input_data(base_data, update){
+function updateInputData(baseData, update){
 
-	const updated_input = Object.assign(
+	const updatedInput = Object.assign(
         {},
-        base_data,
+        baseData,
         update
     );
 
-	return updated_input;
+	return updatedInput;
     
 }
 
-function get_token(callback){
+function getToken(callback){
 
 	let token; 
 
@@ -57,5 +57,5 @@ function get_token(callback){
 //*******************************************************************
 // exports
 
-module.exports.update_input_data = update_input_data;
-module.exports.get_token = get_token;
+module.exports.updateInputData = updateInputData;
+module.exports.getToken = getToken;

@@ -29,7 +29,7 @@ describe('FS ePermit API', function() {
 
 	before(function(done) {
 
-		util.get_token(function(t){
+		util.getToken(function(t){
 
 			token = t;
 			return done();
@@ -106,7 +106,7 @@ describe('FS ePermit API', function() {
 			.set('x-access-token', token)
 			.expect(function(res) {
 
-				expect(res.headers['pragma']).to.equal('no-cache');
+				expect(res.headers.pragma).to.equal('no-cache');
 			
 			})
 			.expect(200, done);

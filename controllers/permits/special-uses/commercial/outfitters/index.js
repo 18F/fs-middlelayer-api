@@ -15,12 +15,12 @@
 // required modules
 
 const include = require('include')(__dirname);
-const outfitters_data = include('test/data/basicGET.json');
+const outfittersData = include('test/data/basicGET.json');
 
 //*******************************************************************
 // validation
 
-const validate_special_use = include('controllers/permits/special-uses/validate.js');
+const validateSpecialUse = include('controllers/permits/special-uses/validate.js');
 const util = include('controllers/permits/special-uses/utility.js');
 const error = include('error.js');
 
@@ -37,16 +37,16 @@ get.id = function(req, res){
 	const jsonData = {};
 
 	const jsonResponse = {};
-	jsonResponse['success'] = false;
-	jsonResponse['api'] = 'FS ePermit API';
-	jsonResponse['type'] = 'controller';
-	jsonResponse['verb'] = 'get';
-	jsonResponse['src'] = 'json';
-	jsonResponse['route'] = 'permits/special-uses/commercial/outfitters/{controlNumber}';
+	jsonResponse.success = false;
+	jsonResponse.api = 'FS ePermit API';
+	jsonResponse.type = 'controller';
+	jsonResponse.verb = 'get';
+	jsonResponse.src = 'json';
+	jsonResponse.route = 'permits/special-uses/commercial/outfitters/{controlNumber}';
     
 	jsonData.response = jsonResponse;
 
-	const cnData = outfitters_data[1095010356];
+	const cnData = outfittersData[1095010356];
 
 	if (cnData){
         
@@ -63,7 +63,7 @@ get.id = function(req, res){
 		util.copyGenericInfo(cnData, jsonData);
 		jsonData['temp-outfitter-fields'] = outfittersFields;    
 
-		jsonResponse['success'] = true;
+		jsonResponse.success = true;
 	}
     
 	res.json(jsonData);
@@ -82,24 +82,22 @@ put.id = function(req, res){
 
 const post = function(req, res){
 
-	const validate_res = validate_special_use.validate_input(req);
+	const validateRes = validateSpecialUse.validateInput(req);
     
-	if (validate_res.fields_valid){
-    
-		//console.log('req body='+JSON.stringify(req.body));
+	if (validateRes.fieldsValid){
 
-		const postData = util.create_post('outfitters', req.body);
+		const postData = util.createPost('outfitters', req.body);
 
 		const response = include('test/data/outfitters.post.json');
 
-		response['apiRequest'] = postData;
+		response.apiRequest = postData;
     
 		res.json(response);
     
 	}
 	else {
     
-		error.sendError(req, res, 400, validate_res.error_message);
+		error.sendError(req, res, 400, validateRes.errorMessage);
     
 	}
 

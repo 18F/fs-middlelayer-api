@@ -21,7 +21,7 @@ const request = require('supertest');
 const server = include('index.js');
 const util = include('test/utility.js');
 
-const test_input = include('test/data/test_input_outfitters.json');
+const testInput = include('test/data/test_input_outfitters.json');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -29,9 +29,9 @@ const expect = chai.expect;
 //*******************************************************************
 //Mock Input
 
-const post_input = test_input.post_input;
-const post_input_no_outfitters_field = test_input.no_outfitters_field;
-const post_input_no_applicant_info = test_input.no_applicant_info_field;
+const postInput = testInput.post_input;
+const postInputNoOutfittersField = testInput.no_outfitters_field;
+const postInputNoApplicantInfo = testInput.no_applicant_info_field;
 
 //*******************************************************************
 
@@ -41,7 +41,7 @@ describe('outfitters POST: validate required fields present', function(){
 
 	before(function(done) {
 
-		util.get_token(function(t){
+		util.getToken(function(t){
 
 			token = t;
 			return done();
@@ -73,8 +73,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input_no_applicant_info,
+					util.updateInputData(
+						postInputNoApplicantInfo,
 						{}
 					)
 				)
@@ -94,8 +94,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input_no_outfitters_field,
+					util.updateInputData(
+						postInputNoOutfittersField,
 						{}
 					)
 				)
@@ -119,8 +119,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'lastName': 'Doe',
@@ -156,8 +156,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -193,8 +193,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -225,8 +225,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -262,8 +262,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -299,8 +299,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -336,8 +336,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -373,8 +373,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -410,8 +410,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -447,8 +447,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -484,8 +484,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -521,8 +521,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'applicant-info': {
 								'firstName': 'John',
@@ -562,8 +562,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'temp-outfitter-fields': {
 								'locationDescription': 'string',
@@ -592,8 +592,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'temp-outfitter-fields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -622,8 +622,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'temp-outfitter-fields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -652,8 +652,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'temp-outfitter-fields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -682,8 +682,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'temp-outfitter-fields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -712,8 +712,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'temp-outfitter-fields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -742,8 +742,8 @@ describe('outfitters POST: validate required fields present', function(){
 				.post('/permits/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
-					util.update_input_data(
-						post_input,
+					util.updateInputData(
+						postInput,
 						{
 							'temp-outfitter-fields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -776,7 +776,7 @@ describe('outfitters POST: required outfitters fields', function(){
 
 	before(function(done) {
 
-		util.get_token(function(t){
+		util.getToken(function(t){
 
 			token = t;
 			return done();
@@ -791,8 +791,8 @@ describe('outfitters POST: required outfitters fields', function(){
 			.post('/permits/special-uses/commercial/outfitters')
 			.set('x-access-token', token)
 			.send(
-				util.update_input_data(
-					post_input,
+				util.updateInputData(
+					postInput,
 					{
 						'temp-outfitter-fields': {
 							'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
@@ -820,8 +820,8 @@ describe('outfitters POST: required outfitters fields', function(){
 			.post('/permits/special-uses/commercial/outfitters')
 			.set('x-access-token', token)
 			.send(
-				util.update_input_data(
-					post_input_no_outfitters_field,
+				util.updateInputData(
+					postInputNoOutfittersField,
 					{
 						'region': 3,
 						'forest': 50552,
@@ -864,7 +864,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	before(function(done) {
 
-		util.get_token(function(t){
+		util.getToken(function(t){
 
 			token = t;
 			return done();
@@ -898,7 +898,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		request(server)
 			.post('/permits/special-uses/commercial/outfitters')
 			.set('x-access-token', token)
-			.send(post_input)
+			.send(postInput)
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
@@ -909,7 +909,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		request(server)
 			.post('/permits/special-uses/commercial/outfitters')
 			.set('x-access-token', token)
-			.send(post_input)
+			.send(postInput)
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 				expect(res.body).to.have.property('apiRequest');

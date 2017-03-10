@@ -26,30 +26,30 @@ const v = new Validator();
 //*******************************************************************
 // schemas
 
-const outfitter_schema = schema.outfitter;
-const applicant_info_temp_outfitter = schema.outfitter_applicant_info;
-const temp_outfitter_fields = schema.temp_outfitter_fields;
-const noncommercial_schema = schema.noncommercial;
-const applicant_info_noncommercial = schema.noncommercial_applicant_info;
-const noncommercial_fields = schema.noncommercial_fields;
-const phone_number = schema.phone_number;
+const outfitterSchema = schema.outfitter;
+const applicantInfoTempOutfitter = schema.outfitter_applicant_info;
+const tempOutfitterFields = schema.temp_outfitter_fields;
+const noncommercialSchema = schema.noncommercial;
+const applicantInfoNoncommercial = schema.noncommercial_applicant_info;
+const noncommercialFields = schema.noncommercial_fields;
+const phoneNumber = schema.phone_number;
 
 //*******************************************************************
 
-function remove_instance(prop){
+function removeInstance(prop){
 
-	let fixed_prop = '';
+	let fixedProp = '';
 	if (prop.indexOf('.') !== -1){
 
-		fixed_prop = prop.substring((prop.indexOf('.') + 1), (prop.length));
+		fixedProp = prop.substring((prop.indexOf('.') + 1), (prop.length));
 
 	}
 
-	return fixed_prop;
+	return fixedProp;
 
 }
 
-function get_route(req){
+function getRoute(req){
 
 	const path = req.originalUrl;
 	const parts = path.split('/');
@@ -69,7 +69,7 @@ function get_route(req){
 
 }
 
-function combine_prop_argument(property, argument){
+function combinePropArgument(property, argument){
 
 	let field;
 	if (property.length > 0){
@@ -87,47 +87,47 @@ function combine_prop_argument(property, argument){
 
 }
 
-function handle_missing_error(output, result, counter){
+function handleMissingError(output, result, counter){
 
-	const property = remove_instance(result[counter].property);
-	const field = combine_prop_argument(property, result[counter].argument);
-	util.invalid_field(output, field);
-
-}
-
-function handle_type_error(output, result, counter){
-
-	const expected_type = result[counter].argument[0];
-	const property = remove_instance(result[counter].property);
-	util.field_type(output, property, expected_type);
+	const property = removeInstance(result[counter].property);
+	const field = combinePropArgument(property, result[counter].argument);
+	util.invalidField(output, field);
 
 }
 
-const validate_input = function (req){
+function handleTypeError(output, result, counter){
 
-	const route = get_route(req);
+	const expectedType = result[counter].argument[0];
+	const property = removeInstance(result[counter].property);
+	util.fieldType(output, property, expectedType);
+
+}
+//Needs to take in route(noncom/out)
+const validateInput = function (req){
+
+	const route = getRoute(req);
 	const output = {
     
-		'fields_valid': true,
-		'error_message': '',
-		'missing_array': [],
-		'type_array': []
+		'fieldsValid': true,
+		'errorMessage': '',
+		'missingArray': [],
+		'typeArray': []
 
 	};
 	let result, counter;
-	v.addSchema(phone_number, 'phone-number');
-	v.addSchema(applicant_info_noncommercial, 'applicant-info-noncommercial');
-	v.addSchema(noncommercial_fields, 'noncommercial-fields');
-	v.addSchema(applicant_info_temp_outfitter, 'applicant-info-temp-outfitter');
-	v.addSchema(temp_outfitter_fields, 'temp-outfitter-fields');
+	v.addSchema(phoneNumber, 'phone-number');
+	v.addSchema(applicantInfoNoncommercial, 'applicant-info-noncommercial');
+	v.addSchema(noncommercialFields, 'noncommercial-fields');
+	v.addSchema(applicantInfoTempOutfitter, 'applicant-info-temp-outfitter');
+	v.addSchema(tempOutfitterFields, 'temp-outfitter-fields');
 	if (route === 'noncommercial'){
 
-		result = v.validate(req.body, noncommercial_schema).errors;                   
+		result = v.validate(req.body, noncommercialSchema).errors;
 
 	}
 	else { 
 
-		result = v.validate(req.body, outfitter_schema).errors;        
+		result = v.validate(req.body, outfitterSchema).errors;        
 
 	}
 
@@ -136,19 +136,19 @@ const validate_input = function (req){
 
 		if (result[counter].name === 'required'){
 
-			handle_missing_error(output, result, counter);
+			handleMissingError(output, result, counter);
 
 		}
 		else {
 
-			handle_type_error(output, result, counter);
+			handleTypeError(output, result, counter);
 
 		}
 
 	}
 
-	output.error_message = util.build_error_message(output);
-	//console.log('validate_input output='+output);
+	output.errorMessage = util.buildErrorMessage(output);
+
 	return output;
 
 };
@@ -156,4 +156,4 @@ const validate_input = function (req){
 //*******************************************************************
 // exports
 
-module.exports.validate_input = validate_input;
+module.exports.validateInput = validateInput;

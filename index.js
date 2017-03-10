@@ -25,7 +25,7 @@ const fsr = require('file-stream-rotator');
 const mkdirp = require('mkdirp');
 const morgan = require('morgan');
 
-const body_parser = require('body-parser');
+const bodyParser = require('body-parser');
 
 const routes = require('./routes');
 
@@ -43,8 +43,8 @@ app.use(cors());
 app.use(helmet());
 app.use(helmet.noCache());
 
-app.use(body_parser.json());
-app.use(body_parser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 // **********************************************************
 // log

@@ -17,11 +17,11 @@
 const express = require('express');
 const router = express.Router();
 
-const special_uses = require('./special-uses');
+const specialUses = require('./special-uses');
 
 //*******************************************************************
 // router
 
-router.use('/special-uses', special_uses);
+router.use('/special-uses', specialUses);
 
 module.exports = router;

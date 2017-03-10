@@ -15,12 +15,12 @@
 // required modules
 
 const include = require('include')(__dirname);
-const noncommercial_data = include('test//data/basicGET.json');
+const noncommercialData = include('test//data/basicGET.json');
 
 //*******************************************************************
 // validation
 
-const validate_special_use = include('controllers/permits/special-uses/validate.js');
+const validateSpecialUse = include('controllers/permits/special-uses/validate.js');
 const util = include('controllers/permits/special-uses/utility.js');
 const error = include('error.js');
 
@@ -37,16 +37,16 @@ get.id = function(req, res){
 	const jsonData = {};
 
 	const jsonResponse = {};
-	jsonResponse['success'] = false;
-	jsonResponse['api'] = 'FS ePermit API';
-	jsonResponse['type'] = 'controller';
-	jsonResponse['verb'] = 'get';
-	jsonResponse['src'] = 'json';
-	jsonResponse['route'] = 'permits/special-uses/noncommercial/{controlNumber}';
+	jsonResponse.success = false;
+	jsonResponse.api = 'FS ePermit API';
+	jsonResponse.type = 'controller';
+	jsonResponse.verb = 'get';
+	jsonResponse.src = 'json';
+	jsonResponse.route = 'permits/special-uses/noncommercial/{controlNumber}';
     
 	jsonData.response = jsonResponse;
 
-	const cnData = noncommercial_data[1095010356];
+	const cnData = noncommercialData[1095010356];
 
 	if (cnData){
 
@@ -60,7 +60,7 @@ get.id = function(req, res){
 
 		util.copyGenericInfo(cnData, jsonData);
 		jsonData['noncommercial-fields'] = noncommercialFields;    
-		jsonResponse['success'] = true;
+		jsonResponse.success = true;
         
 	}
     
@@ -80,24 +80,22 @@ put.id = function(req, res){
 
 const post = function(req, res){
 
-	//console.log('req body='+JSON.stringify(req.body));
-
-	const validate_res = validate_special_use.validate_input(req);
+	const validateRes = validateSpecialUse.validateInput(req);
     
-	if (validate_res.fields_valid){
+	if (validateRes.fieldsValid){
 
-		const postData = util.create_post('noncommercial', req.body);
+		const postData = util.createPost('noncommercial', req.body);
 
 		const response = include('test/data/noncommercial.post.json');
 
-		response['apiRequest'] = postData;
+		response.apiRequest = postData;
     
 		res.json(response);
     
 	}
 	else {
     
-		error.sendError(req, res, 400, validate_res.error_message);
+		error.sendError(req, res, 400, validateRes.errorMessage);
     
 	}
 };
