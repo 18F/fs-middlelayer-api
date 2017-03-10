@@ -15,7 +15,7 @@
 // required modules
 
 var include = require('include')(__dirname);
-var noncommercial_data = require('../../../../test/data/basicGET.json');
+var noncommercial_data = include('test//data/basicGET.json');
 
 //*******************************************************************
 // validation
@@ -81,11 +81,19 @@ put.id = function(req, res){
 
 post = function(req, res){
 
+	//console.log('req body='+JSON.stringify(req.body));
+
 	var validate_res = validate_special_use.validate_input(req);
     
 	if (validate_res.fields_valid){
+
+		var postData = util.create_post('noncommercial', req.body);
+
+		var response = include('test/data/noncommercial.post.json');
+
+		response['apiRequest'] = postData;
     
-		res.json(include('test/data/noncommercial.post.json'));
+		res.json(response);
     
 	}
 	else {
@@ -93,7 +101,6 @@ post = function(req, res){
 		error.sendError(req, res, 400, validate_res.error_message);
     
 	}
-
 };
 
 //*******************************************************************
