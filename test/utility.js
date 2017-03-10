@@ -22,7 +22,7 @@ const server = include('index.js');
 
 function update_input_data(base_data, update){
 
-	let updated_input = Object.assign(
+	const updated_input = Object.assign(
         {},
         base_data,
         update

@@ -25,7 +25,7 @@ const error = include('error.js');
 
 const token = function(req, res, next){
     
-	let token = req.body.token || req.query.token || req.headers['x-access-token'];
+	const token = req.body.token || req.query.token || req.headers['x-access-token'];
 	
 	if (token) {
 

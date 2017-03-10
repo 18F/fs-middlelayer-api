@@ -27,17 +27,16 @@ const error = include('error.js');
 //*******************************************************************
 // controller
 
-let get = {};
-let put = {};
-let post;
+const get = {};
+const put = {};
 
 // get id
 
 get.id = function(req, res){
     
-	let jsonData = {};
+	const jsonData = {};
 
-	let jsonResponse = {};
+	const jsonResponse = {};
 	jsonResponse['success'] = false;
 	jsonResponse['api'] = 'FS ePermit API';
 	jsonResponse['type'] = 'controller';
@@ -47,11 +46,11 @@ get.id = function(req, res){
     
 	jsonData.response = jsonResponse;
 
-	let cnData = noncommercial_data[1095010356];
+	const cnData = noncommercial_data[1095010356];
 
 	if (cnData){
 
-		let noncommercialFields = {};
+		const noncommercialFields = {};
         
 		noncommercialFields.activityDescription = cnData.purpose;
 		noncommercialFields.locationDescription = null;
@@ -79,17 +78,17 @@ put.id = function(req, res){
 
 // post
 
-post = function(req, res){
+const post = function(req, res){
 
 	//console.log('req body='+JSON.stringify(req.body));
 
-	let validate_res = validate_special_use.validate_input(req);
+	const validate_res = validate_special_use.validate_input(req);
     
 	if (validate_res.fields_valid){
 
-		let postData = util.create_post('noncommercial', req.body);
+		const postData = util.create_post('noncommercial', req.body);
 
-		let response = include('test/data/noncommercial.post.json');
+		const response = include('test/data/noncommercial.post.json');
 
 		response['apiRequest'] = postData;
     

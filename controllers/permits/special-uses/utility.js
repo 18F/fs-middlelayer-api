@@ -40,7 +40,7 @@ function build_missing_error_message(error_array){
 
 function build_type_error_message(type_obj){
 
-	let error_message = type_obj.field + ' is expected to be type \'' + type_obj.expected_type + '\'.';
+	const error_message = type_obj.field + ' is expected to be type \'' + type_obj.expected_type + '\'.';
 	return error_message;
 
 }
@@ -122,7 +122,7 @@ const generatePurpose = function (activityDescription, locationDescription, star
 
 function copyGenericInfo(cnData, jsonData){
 
-	let adminOrg = cnData.adminOrg;
+	const adminOrg = cnData.adminOrg;
 	jsonData.controlNumber = cnData.accinstCn;
 	jsonData.region = adminOrg.slice(0, 2);
 	jsonData.forest = adminOrg.slice(2, 4);
@@ -130,12 +130,12 @@ function copyGenericInfo(cnData, jsonData){
 	jsonData.authorizingOfficerName = cnData.authOfficerName;
 	jsonData.authorizingOfficerTitle = cnData.authOfficerTitle;
 
-	let addressData = cnData.addresses[0];
-	let phoneData = cnData.phones[0];
-	let holderData = cnData.holders[0];
+	const addressData = cnData.addresses[0];
+	const phoneData = cnData.phones[0];
+	const holderData = cnData.holders[0];
 
-	let applicantInfo = {};
-	let phoneNumber = {};
+	const applicantInfo = {};
+	const phoneNumber = {};
     
 	applicantInfo.contactControlNumber = addressData.contCn;
 	applicantInfo.firstName = holderData.firstName;
@@ -169,14 +169,14 @@ function copyGenericInfo(cnData, jsonData){
 
 function create_post(formType, inputPost){
 	
-	let postSchema = include('controllers/permits/special-uses/post_schema.json');
+	const postSchema = include('controllers/permits/special-uses/post_schema.json');
 
-	let postData = {};
+	const postData = {};
 	let combId = '';
 	let key;
 	let purpose;
 
-	let genericFields = postSchema['generic-fields'];
+	const genericFields = postSchema['generic-fields'];
 	
 	if (genericFields){
 		for (key in genericFields) {
@@ -204,7 +204,7 @@ function create_post(formType, inputPost){
 	postData.managingOrg = combId;
 	postData.adminOrg = combId;
 
-	let todayDate = new Date().toISOString().slice(0, 10);
+	const todayDate = new Date().toISOString().slice(0, 10);
 	postData.effectiveDate = todayDate;
 
 	//console.log('pre postData='+JSON.stringify(postData));

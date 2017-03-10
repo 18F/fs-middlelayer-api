@@ -27,14 +27,14 @@ describe('API Controllers: build error message', function(){
 
 	it('should return \'firstName is a required field!\'', function(){
     
-		let errors = {'missing_array': ['firstName']};
+		const errors = {'missing_array': ['firstName']};
 		expect( special_uses.build_error_message.build_error_message(errors) ).to.be.equal('firstName is a required field!');
     
 	});
 
 	it('should return \'firstName and lastName are required fields!\'', function(){
     
-		let errors = {'missing_array': ['firstName', 'lastName']};
+		const errors = {'missing_array': ['firstName', 'lastName']};
 		expect( special_uses.build_error_message.build_error_message(errors) ).to.be.equal('firstName and lastName are required fields!');
     
 	});

@@ -27,17 +27,16 @@ const error = include('error.js');
 //*******************************************************************
 // controller
 
-let get = {};
-let put = {};
-let post;
+const get = {};
+const put = {};
 
 // get id
 
 get.id = function(req, res){
     
-	let jsonData = {};
+	const jsonData = {};
 
-	let jsonResponse = {};
+	const jsonResponse = {};
 	jsonResponse['success'] = false;
 	jsonResponse['api'] = 'FS ePermit API';
 	jsonResponse['type'] = 'controller';
@@ -47,11 +46,11 @@ get.id = function(req, res){
     
 	jsonData.response = jsonResponse;
 
-	let cnData = outfitters_data[1095010356];
+	const cnData = outfitters_data[1095010356];
 
 	if (cnData){
         
-		let outfittersFields = {};
+		const outfittersFields = {};
         
 		outfittersFields.activityDescription = cnData.purpose;
 		outfittersFields.locationDescription = null;
@@ -81,17 +80,17 @@ put.id = function(req, res){
 
 // post
 
-post = function(req, res){
+const post = function(req, res){
 
-	let validate_res = validate_special_use.validate_input(req);
+	const validate_res = validate_special_use.validate_input(req);
     
 	if (validate_res.fields_valid){
     
 		//console.log('req body='+JSON.stringify(req.body));
 
-		let postData = util.create_post('outfitters', req.body);
+		const postData = util.create_post('outfitters', req.body);
 
-		let response = include('test/data/outfitters.post.json');
+		const response = include('test/data/outfitters.post.json');
 
 		response['apiRequest'] = postData;
     

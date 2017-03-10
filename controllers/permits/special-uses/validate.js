@@ -51,8 +51,8 @@ function remove_instance(prop){
 
 function get_route(req){
 
-	let path = req.originalUrl;
-	let parts = path.split('/');
+	const path = req.originalUrl;
+	const parts = path.split('/');
 	let route;
 	if (path.charAt(path.length - 1) === '/'){
 
@@ -89,26 +89,24 @@ function combine_prop_argument(property, argument){
 
 function handle_missing_error(output, result, counter){
 
-	let field;
-	let property = remove_instance(result[counter].property);
-	field = combine_prop_argument(property, result[counter].argument);
+	const property = remove_instance(result[counter].property);
+	const field = combine_prop_argument(property, result[counter].argument);
 	util.invalid_field(output, field);
 
 }
 
 function handle_type_error(output, result, counter){
 
-	let property;
-	let expected_type = result[counter].argument[0];
-	property = remove_instance(result[counter].property);
+	const expected_type = result[counter].argument[0];
+	const property = remove_instance(result[counter].property);
 	util.field_type(output, property, expected_type);
 
 }
 
 const validate_input = function (req){
 
-	let route = get_route(req);
-	let output = {
+	const route = get_route(req);
+	const output = {
     
 		'fields_valid': true,
 		'error_message': '',
@@ -116,7 +114,7 @@ const validate_input = function (req){
 		'type_array': []
 
 	};
-	let result, length, counter;
+	let result, counter;
 	v.addSchema(phone_number, 'phone-number');
 	v.addSchema(applicant_info_noncommercial, 'applicant-info-noncommercial');
 	v.addSchema(noncommercial_fields, 'noncommercial-fields');
@@ -133,7 +131,7 @@ const validate_input = function (req){
 
 	}
 
-	length = result.length;
+	const length = result.length;
 	for (counter = 0; counter < length; counter++){
 
 		if (result[counter].name === 'required'){
