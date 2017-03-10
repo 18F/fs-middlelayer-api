@@ -145,13 +145,13 @@ function create_post(formType, inputPost){
 	var postSchema = include('controllers/permits/special-uses/post_schema.json');
 
 	var postData = {};
-	delete postData['applicant-info'];
-	delete postData['noncommercial-fields'];
-	delete postData['temp-outfitter-fields'];
+
+	var genericFields = postSchema['generic-fields'];
 	
-	postData = postSchema['generic-fields'];
-	postData['applicant-info'] = postSchema['applicant-info'];
-	
+	for (var key in genericFields) {
+		postData[key] = genericFields[key];	
+	}
+
 	postData.region = inputPost.region;
 	postData.forest = inputPost.forest;
 	postData.district = inputPost.district;
@@ -175,11 +175,13 @@ function create_post(formType, inputPost){
 	var todayDate = new Date().toISOString().slice(0,10);
 	postData.effectiveDate = todayDate;
 
-	console.log('pre postData='+JSON.stringify(postData));
+	//console.log('pre postData='+JSON.stringify(postData));
+
+	postData['applicant-info'] = postSchema['applicant-info'];
 
 	if(inputPost.hasOwnProperty('applicant-info')){
 		for (var key in inputPost['applicant-info']) {
-			console.log('applicant-info key: '+ key + " -> " + inputPost['applicant-info'][key]);
+			//console.log('applicant-info key: '+ key + " -> " + inputPost['applicant-info'][key]);
 			postData['applicant-info'][key] = inputPost['applicant-info'][key];	
 		}	
 
@@ -207,7 +209,7 @@ function create_post(formType, inputPost){
 
 		if(inputPost.hasOwnProperty('noncommercial-fields')){
 			for (var key in inputPost['noncommercial-fields']) {
-				console.log('noncommercial-fields key: '+ key + " -> " + inputPost['noncommercial-fields'][key]);
+				//console.log('noncommercial-fields key: '+ key + " -> " + inputPost['noncommercial-fields'][key]);
 				postData['noncommercial-fields'][key] = inputPost['noncommercial-fields'][key];	
 			}	
 		}
@@ -240,7 +242,7 @@ function create_post(formType, inputPost){
 
 		if(inputPost.hasOwnProperty('temp-outfitter-fields')){
 			for (var key in inputPost['temp-outfitter-fields']) {
-				console.log('temp-outfitter-fields key: '+ key + " -> " + inputPost['temp-outfitter-fields'][key]);
+				//console.log('temp-outfitter-fields key: '+ key + " -> " + inputPost['temp-outfitter-fields'][key]);
 				postData['temp-outfitter-fields'][key] = inputPost['temp-outfitter-fields'][key];	
 			}	
 		}
@@ -265,7 +267,7 @@ function create_post(formType, inputPost){
 		postData['temp-outfitter-fields'].purpose = purpose;
 	}
 
-	console.log('postData='+JSON.stringify(postData));
+	//console.log('postData='+JSON.stringify(postData));
 
 	return postData;
 }
