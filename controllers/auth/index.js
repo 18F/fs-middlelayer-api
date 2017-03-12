@@ -14,10 +14,10 @@
 //*******************************************************************
 // required modules
 
-var passport = require('passport');  
-var Strategy = require('passport-local');
+const passport = require('passport');  
+const Strategy = require('passport-local');
 
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 //*******************************************************************
 // passport 
@@ -42,7 +42,7 @@ passport.use(new Strategy(
 
 //*******************************************************************
 
-var serialize = function(req, res, next) {  
+const serialize = function(req, res, next) {  
 
 	req.user = {
 		id: req.user.id
@@ -50,7 +50,7 @@ var serialize = function(req, res, next) {
 	next();
 };
 
-var generate = function(req, res, next) {   
+const generate = function(req, res, next) {   
     
 	req.token = jwt.sign({
 		id: req.user.id
@@ -58,7 +58,7 @@ var generate = function(req, res, next) {
 	next();
 };
 
-var respond = function(req, res) { 
+const respond = function(req, res) { 
 
 	res.status(200).json({
 		user: req.user,

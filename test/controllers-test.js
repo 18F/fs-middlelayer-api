@@ -13,13 +13,13 @@
 
 //*******************************************************************
 
-var chai = require('chai');
-var expect = chai.expect;
+const chai = require('chai');
+const expect = chai.expect;
 
-var special_uses = {};
+const specialUses = {};
 
-special_uses.validate = require('../controllers/permits/special-uses/validate.js');
-special_uses.build_error_message = require('../controllers/permits/special-uses/utility.js');
+specialUses.validate = require('../controllers/permits/special-uses/validate.js');
+specialUses.buildErrorMessage = require('../controllers/permits/special-uses/utility.js');
 
 //*******************************************************************
 
@@ -27,15 +27,15 @@ describe('API Controllers: build error message', function(){
 
 	it('should return \'firstName is a required field!\'', function(){
     
-		var errors = {'missing_array': ['firstName']};
-		expect( special_uses.build_error_message.build_error_message(errors) ).to.be.equal('firstName is a required field!');
+		const errors = {'missingArray': ['firstName']};
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('firstName is a required field!');
     
 	});
 
 	it('should return \'firstName and lastName are required fields!\'', function(){
     
-		var errors = {'missing_array': ['firstName', 'lastName']};
-		expect( special_uses.build_error_message.build_error_message(errors) ).to.be.equal('firstName and lastName are required fields!');
+		const errors = {'missingArray': ['firstName', 'lastName']};
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('firstName and lastName are required fields!');
     
 	});
     

@@ -14,12 +14,12 @@
 //*******************************************************************
 // required modules
 
-var express = require('express');
-var router = express.Router();
-var include = require('include')(__dirname);
+const express = require('express');
+const router = express.Router();
+const include = require('include')(__dirname);
 
-var auth = include('controllers/auth');
-var passport = auth.passport;
+const auth = include('controllers/auth');
+const passport = auth.passport;
 
 //*******************************************************************
 // router

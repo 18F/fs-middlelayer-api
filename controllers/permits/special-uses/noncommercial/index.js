@@ -14,44 +14,43 @@
 //*******************************************************************
 // required modules
 
-var include = require('include')(__dirname);
-var noncommercial_data = include('test//data/basicGET.json');
+const include = require('include')(__dirname);
+const noncommercialData = include('test//data/basicGET.json');
 
 //*******************************************************************
 // validation
 
-var validate_special_use = include('controllers/permits/special-uses/validate.js');
-var util = include('controllers/permits/special-uses/utility.js');
-var error = include('error.js');
+const validateSpecialUse = include('controllers/permits/special-uses/validate.js');
+const util = include('controllers/permits/special-uses/utility.js');
+const error = include('error.js');
 
 //*******************************************************************
 // controller
 
-var get = {};
-var put = {};
-var post;
+const get = {};
+const put = {};
 
 // get id
 
 get.id = function(req, res){
     
-	var jsonData = {};
+	const jsonData = {};
 
-	var jsonResponse = {};
-	jsonResponse['success'] = false;
-	jsonResponse['api'] = 'FS ePermit API';
-	jsonResponse['type'] = 'controller';
-	jsonResponse['verb'] = 'get';
-	jsonResponse['src'] = 'json';
-	jsonResponse['route'] = 'permits/special-uses/noncommercial/{controlNumber}';
+	const jsonResponse = {};
+	jsonResponse.success = false;
+	jsonResponse.api = 'FS ePermit API';
+	jsonResponse.type = 'controller';
+	jsonResponse.verb = 'get';
+	jsonResponse.src = 'json';
+	jsonResponse.route = 'permits/special-uses/noncommercial/{controlNumber}';
     
 	jsonData.response = jsonResponse;
 
-	var cnData = noncommercial_data[1095010356];
+	const cnData = noncommercialData[1095010356];
 
 	if (cnData){
 
-		var noncommercialFields = {};
+		const noncommercialFields = {};
         
 		noncommercialFields.activityDescription = cnData.purpose;
 		noncommercialFields.locationDescription = null;
@@ -60,8 +59,8 @@ get.id = function(req, res){
 		noncommercialFields.numberParticipants = 45;
 
 		util.copyGenericInfo(cnData, jsonData);
-		jsonData['noncommercial-fields'] = noncommercialFields;    
-		jsonResponse['success'] = true;
+		jsonData.noncommercialFields = noncommercialFields;    
+		jsonResponse.success = true;
         
 	}
     
@@ -79,26 +78,24 @@ put.id = function(req, res){
 
 // post
 
-post = function(req, res){
+const post = function(req, res){
 
-	//console.log('req body='+JSON.stringify(req.body));
-
-	var validate_res = validate_special_use.validate_input(req);
+	const validateRes = validateSpecialUse.validateInput(req);
     
-	if (validate_res.fields_valid){
+	if (validateRes.fieldsValid){
 
-		var postData = util.create_post('noncommercial', req.body);
+		const postData = util.createPost('noncommercial', req.body);
 
-		var response = include('test/data/noncommercial.post.json');
+		const response = include('test/data/noncommercial.post.json');
 
-		response['apiRequest'] = postData;
+		response.apiRequest = postData;
     
 		res.json(response);
     
 	}
 	else {
     
-		error.sendError(req, res, 400, validate_res.error_message);
+		error.sendError(req, res, 400, validateRes.errorMessage);
     
 	}
 };

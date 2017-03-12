@@ -14,78 +14,78 @@
 //*******************************************************************
 // required modules
 
-var _ = require('lodash');
-var include = require('include')(__dirname);
+const _ = require('lodash');
+const include = require('include')(__dirname);
 
 //*******************************************************************
 
-function build_missing_error_message(error_array){
+function buildMissingErrorMessage(errorArray){
 
-	var error_message = _.join(error_array, ' and ');
+	let errorMessage = _.join(errorArray, ' and ');
 
-	if (error_array.length > 1){
+	if (errorArray.length > 1){
 
-		error_message += ' are required fields!';
+		errorMessage += ' are required fields!';
 
 	}
 	else {
 
-		error_message += ' is a required field!';
+		errorMessage += ' is a required field!';
 
 	}
 
-	return error_message;
+	return errorMessage;
 
 }
 
-function build_type_error_message(type_obj){
+function buildTypeErrorMessage(typeObj){
 
-	var error_message = type_obj.field + ' is expected to be type \'' + type_obj.expected_type + '\'.';
-	return error_message;
+	const errorMessage = typeObj.field + ' is expected to be type \'' + typeObj.expectedType + '\'.';
+	return errorMessage;
 
 }
 
-function build_error_message(output){
+function buildErrorMessage(output){
 
-	var missing_message = '', type_message = '', error_message = '';
+	let missingMessage = '', typeMessage = '', errorMessage = '';
 
-	if (!_.isEmpty(output.missing_array)){
+	if (!_.isEmpty(output.missingArray)){
 
-		missing_message = build_missing_error_message(output.missing_array);
-		error_message = error_message + missing_message;
+		missingMessage = buildMissingErrorMessage(output.missingArray);
+		errorMessage = errorMessage + missingMessage;
 
 	}
-	if (!_.isEmpty(output.type_array)){
+	if (!_.isEmpty(output.typeArray)){
 
-		output.type_array.forEach((element)=>{
+		output.typeArray.forEach((element)=>{
 
-			type_message = type_message + build_type_error_message(element) + ' ';
+			typeMessage = typeMessage + buildTypeErrorMessage(element) + ' ';
 
 		});
-		error_message = error_message + type_message;
+		errorMessage = errorMessage + typeMessage;
 
 	}
     
-	return error_message;
+	return errorMessage;
 
 }
 
-var invalid_field = function (output, field){
+const invalidField = function (output, field){
     
-	output.fields_valid = false;
-	output.missing_array.push(field);
+	output.fieldsValid = false;
+	output.missingArray.push(field);
 
 	return output;
 
 };
 
-var field_type = function (output, field, expected_type){
+const fieldType = function (output, field, expectedType){
     
-	output.fields_valid = false;
-	output.type_array.push({
+	output.fieldsValid = false;
+	output.typeArray.push({
 
 		'field':field,
-		'expected_type':expected_type
+		'expectedType':expectedType
 
 	});
 
@@ -93,13 +93,13 @@ var field_type = function (output, field, expected_type){
 
 };
 
-var pad = function (n) {
+const pad = function (n) {
 	return  ('0' + n).slice(-2);
 };
 
-var generatePurpose = function (activityDescription, locationDescription, startDateTime, endDateTime){
+const generatePurpose = function (activityDescription, locationDescription, startDateTime, endDateTime){
 
-	var purpose = '';
+	let purpose = '';
 
 	if (activityDescription){
 		purpose = purpose + activityDescription + ' ' ;
@@ -122,7 +122,7 @@ var generatePurpose = function (activityDescription, locationDescription, startD
 
 function copyGenericInfo(cnData, jsonData){
 
-	var adminOrg = cnData.adminOrg;
+	const adminOrg = cnData.adminOrg;
 	jsonData.controlNumber = cnData.accinstCn;
 	jsonData.region = adminOrg.slice(0, 2);
 	jsonData.forest = adminOrg.slice(2, 4);
@@ -130,12 +130,12 @@ function copyGenericInfo(cnData, jsonData){
 	jsonData.authorizingOfficerName = cnData.authOfficerName;
 	jsonData.authorizingOfficerTitle = cnData.authOfficerTitle;
 
-	var addressData = cnData.addresses[0];
-	var phoneData = cnData.phones[0];
-	var holderData = cnData.holders[0];
+	const addressData = cnData.addresses[0];
+	const phoneData = cnData.phones[0];
+	const holderData = cnData.holders[0];
 
-	var applicantInfo = {};
-	var phoneNumber = {};
+	const applicantInfo = {};
+	const phoneNumber = {};
     
 	applicantInfo.contactControlNumber = addressData.contCn;
 	applicantInfo.firstName = holderData.firstName;
@@ -164,19 +164,19 @@ function copyGenericInfo(cnData, jsonData){
 	applicantInfo.website = null;
 	applicantInfo.orgType = holderData.orgType;
 
-	jsonData['applicant-info'] = applicantInfo;
+	jsonData.applicantInfo = applicantInfo;
 }
 
-function create_post(formType, inputPost){
+function createPost(formType, inputPost){
 	
-	var postSchema = include('controllers/permits/special-uses/post_schema.json');
+	const postSchema = include('controllers/permits/special-uses/postSchema.json');
 
-	var postData = {};
-	var combId = '';
-	var key;
-	var purpose;
+	const postData = {};
+	let combId = '';
+	let key;
+	let purpose;
 
-	var genericFields = postSchema['generic-fields'];
+	const genericFields = postSchema.genericFields;
 	
 	if (genericFields){
 		for (key in genericFields) {
@@ -204,33 +204,32 @@ function create_post(formType, inputPost){
 	postData.managingOrg = combId;
 	postData.adminOrg = combId;
 
-	var todayDate = new Date().toISOString().slice(0, 10);
+	const todayDate = new Date().toISOString().slice(0, 10);
 	postData.effectiveDate = todayDate;
 
 	//console.log('pre postData='+JSON.stringify(postData));
 
-	postData['applicant-info'] = postSchema['applicant-info'];
+	postData.applicantInfo = postSchema.applicantInfo;
 
-	if (inputPost.hasOwnProperty('applicant-info')){
-		for (key in inputPost['applicant-info']) {
-			//console.log('applicant-info key: '+ key + " -> " + inputPost['applicant-info'][key]);
-			if (inputPost['applicant-info'].hasOwnProperty(key)) {
-				postData['applicant-info'][key] = inputPost['applicant-info'][key];	
+	if (inputPost.hasOwnProperty('applicantInfo')){
+		for (key in inputPost.applicantInfo) {
+			if (inputPost.applicantInfo.hasOwnProperty(key)) {
+				postData.applicantInfo[key] = inputPost.applicantInfo[key];	
 			}
 		}	
 
-		if (inputPost['applicant-info'].organizationName){
-			postData['applicant-info'].contactType = 'ORGANIZATION'; 
+		if (inputPost.applicantInfo.organizationName){
+			postData.applicantInfo.contactType = 'ORGANIZATION'; 
 		}
 		else {
-			postData['applicant-info'].contactType = 'PERSON'; 
+			postData.applicantInfo.contactType = 'PERSON'; 
 		}
 		
-		if (postData['applicant-info'].contactType === 'ORGANIZATION'){
-			postData['applicant-info'].contName = inputPost['applicant-info'].organizationName;
+		if (postData.applicantInfo.contactType === 'ORGANIZATION'){
+			postData.applicantInfo.contName = inputPost.applicantInfo.organizationName;
 		}
 		else {
-			postData['applicant-info'].contName = inputPost['applicant-info'].firstName + ' ' + inputPost['applicant-info'].lastName;
+			postData.applicantInfo.contName = inputPost.applicantInfo.firstName + ' ' + inputPost.applicantInfo.lastName;
 		}
 
 	}
@@ -239,46 +238,44 @@ function create_post(formType, inputPost){
 
 		postData.type = 'noncommercial'; 
 
-		postData['noncommercial-fields'] = postSchema['noncommercial-fields'];
+		postData.noncommercialFields = postSchema.noncommercialFields;
 
-		if (inputPost.hasOwnProperty('noncommercial-fields')){
-			for (key in inputPost['noncommercial-fields']) {
-				//console.log('noncommercial-fields key: '+ key + " -> " + inputPost['noncommercial-fields'][key]);
-				if (inputPost['noncommercial-fields'].hasOwnProperty(key)){
-					postData['noncommercial-fields'][key] = inputPost['noncommercial-fields'][key];		
+		if (inputPost.hasOwnProperty('noncommercialFields')){
+			for (key in inputPost.noncommercialFields) {
+				if (inputPost.noncommercialFields.hasOwnProperty(key)){
+					postData.noncommercialFields[key] = inputPost.noncommercialFields[key];		
 				}
 			}	
 		}
 
-		purpose = generatePurpose (postData['noncommercial-fields'].activityDescription,
-										postData['noncommercial-fields'].locationDescription,
-										postData['noncommercial-fields'].startDateTime,
-										postData['noncommercial-fields'].endDateTime);
+		purpose = generatePurpose (postData.noncommercialFields.activityDescription,
+										postData.noncommercialFields.locationDescription,
+										postData.noncommercialFields.startDateTime,
+										postData.noncommercialFields.endDateTime);
 
-		postData['noncommercial-fields'].purpose = purpose;
+		postData.noncommercialFields.purpose = purpose;
 
 	}
 	else if (formType === 'outfitters'){
 
-		postData.type = 'temp-outfitter-guide';
+		postData.type = 'tempOutfitterGuide';
 
-		postData['temp-outfitter-fields'] = postSchema['temp-outfitter-fields'];
+		postData.tempOutfitterFields = postSchema.tempOutfitterFields;
 
-		if (inputPost.hasOwnProperty('temp-outfitter-fields')){
-			for (key in inputPost['temp-outfitter-fields']) {
-				//console.log('temp-outfitter-fields key: '+ key + " -> " + inputPost['temp-outfitter-fields'][key]);
-				if (inputPost['temp-outfitter-fields'].hasOwnProperty(key)){
-					postData['temp-outfitter-fields'][key] = inputPost['temp-outfitter-fields'][key];
+		if (inputPost.hasOwnProperty('tempOutfitterFields')){
+			for (key in inputPost.tempOutfitterFields) {
+				if (inputPost.tempOutfitterFields.hasOwnProperty(key)){
+					postData.tempOutfitterFields[key] = inputPost.tempOutfitterFields[key];
 				}	
 			}	
 		}
 
-		purpose = generatePurpose (postData['temp-outfitter-fields'].activityDescription,
-										postData['temp-outfitter-fields'].locationDescription,
-										postData['temp-outfitter-fields'].startDateTime,
-										postData['temp-outfitter-fields'].endDateTime);
+		purpose = generatePurpose (postData.tempOutfitterFields.activityDescription,
+										postData.tempOutfitterFields.locationDescription,
+										postData.tempOutfitterFields.startDateTime,
+										postData.tempOutfitterFields.endDateTime);
 
-		postData['temp-outfitter-fields'].purpose = purpose;
+		postData.tempOutfitterFields.purpose = purpose;
 	}
 
 	//console.log('postData='+JSON.stringify(postData));
@@ -289,8 +286,8 @@ function create_post(formType, inputPost){
 //*******************************************************************
 // exports
 
-module.exports.build_error_message = build_error_message;
-module.exports.invalid_field = invalid_field;
-module.exports.field_type = field_type;
+module.exports.buildErrorMessage = buildErrorMessage;
+module.exports.invalidField = invalidField;
+module.exports.fieldType = fieldType;
 module.exports.copyGenericInfo = copyGenericInfo;
-module.exports.create_post = create_post;
+module.exports.createPost = createPost;

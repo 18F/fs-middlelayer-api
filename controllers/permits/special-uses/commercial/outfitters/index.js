@@ -14,44 +14,43 @@
 //*******************************************************************
 // required modules
 
-var include = require('include')(__dirname);
-var outfitters_data = include('test/data/basicGET.json');
+const include = require('include')(__dirname);
+const outfittersData = include('test/data/basicGET.json');
 
 //*******************************************************************
 // validation
 
-var validate_special_use = include('controllers/permits/special-uses/validate.js');
-var util = include('controllers/permits/special-uses/utility.js');
-var error = include('error.js');
+const validateSpecialUse = include('controllers/permits/special-uses/validate.js');
+const util = include('controllers/permits/special-uses/utility.js');
+const error = include('error.js');
 
 //*******************************************************************
 // controller
 
-var get = {};
-var put = {};
-var post;
+const get = {};
+const put = {};
 
 // get id
 
 get.id = function(req, res){
     
-	var jsonData = {};
+	const jsonData = {};
 
-	var jsonResponse = {};
-	jsonResponse['success'] = false;
-	jsonResponse['api'] = 'FS ePermit API';
-	jsonResponse['type'] = 'controller';
-	jsonResponse['verb'] = 'get';
-	jsonResponse['src'] = 'json';
-	jsonResponse['route'] = 'permits/special-uses/commercial/outfitters/{controlNumber}';
+	const jsonResponse = {};
+	jsonResponse.success = false;
+	jsonResponse.api = 'FS ePermit API';
+	jsonResponse.type = 'controller';
+	jsonResponse.verb = 'get';
+	jsonResponse.src = 'json';
+	jsonResponse.route = 'permits/special-uses/commercial/outfitters/{controlNumber}';
     
 	jsonData.response = jsonResponse;
 
-	var cnData = outfitters_data[1095010356];
+	const cnData = outfittersData[1095010356];
 
 	if (cnData){
         
-		var outfittersFields = {};
+		const outfittersFields = {};
         
 		outfittersFields.activityDescription = cnData.purpose;
 		outfittersFields.locationDescription = null;
@@ -62,9 +61,9 @@ get.id = function(req, res){
 		outfittersFields.operatingPlan = 'operatingPlan.pdf';
 
 		util.copyGenericInfo(cnData, jsonData);
-		jsonData['temp-outfitter-fields'] = outfittersFields;    
+		jsonData.tempOutfitterFields = outfittersFields;    
 
-		jsonResponse['success'] = true;
+		jsonResponse.success = true;
 	}
     
 	res.json(jsonData);
@@ -81,26 +80,24 @@ put.id = function(req, res){
 
 // post
 
-post = function(req, res){
+const post = function(req, res){
 
-	var validate_res = validate_special_use.validate_input(req);
+	const validateRes = validateSpecialUse.validateInput(req);
     
-	if (validate_res.fields_valid){
-    
-		//console.log('req body='+JSON.stringify(req.body));
+	if (validateRes.fieldsValid){
 
-		var postData = util.create_post('outfitters', req.body);
+		const postData = util.createPost('outfitters', req.body);
 
-		var response = include('test/data/outfitters.post.json');
+		const response = include('test/data/outfitters.post.json');
 
-		response['apiRequest'] = postData;
+		response.apiRequest = postData;
     
 		res.json(response);
     
 	}
 	else {
     
-		error.sendError(req, res, 400, validate_res.error_message);
+		error.sendError(req, res, 400, validateRes.errorMessage);
     
 	}
 

@@ -13,28 +13,28 @@
 
 //*******************************************************************
 
-var include = require('include')(__dirname);
+const include = require('include')(__dirname);
 
-var request = require('supertest');
-var server = include('index.js');
+const request = require('supertest');
+const server = include('index.js');
 
 //*******************************************************************
 
-function update_input_data(base_data, update){
+function updateInputData(baseData, update){
 
-	var updated_input = Object.assign(
+	const updatedInput = Object.assign(
         {},
-        base_data,
+        baseData,
         update
     );
 
-	return updated_input;
+	return updatedInput;
     
 }
 
-function get_token(callback){
+function getToken(callback){
 
-	var token; 
+	let token; 
 
 	request(server)
 		.post('/auth')
@@ -57,5 +57,5 @@ function get_token(callback){
 //*******************************************************************
 // exports
 
-module.exports.update_input_data = update_input_data;
-module.exports.get_token = get_token;
+module.exports.updateInputData = updateInputData;
+module.exports.getToken = getToken;

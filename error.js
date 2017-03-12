@@ -15,11 +15,11 @@
 
 function logging(req, message){
 
-	var attemptedRoute = req.originalUrl;
-	var browser = req.get('user-agent');
-	var referer = req.get('referer');
+	const attemptedRoute = req.originalUrl;
+	const browser = req.get('user-agent');
+	const referer = req.get('referer');
 
-	var errorLog = {};
+	const errorLog = {};
 	errorLog.route = attemptedRoute;
 	errorLog.browser = browser;
 	errorLog.referer = referer;
@@ -29,9 +29,9 @@ function logging(req, message){
 
 }
 
-var sendError = function(req, res, code, message){
+const sendError = function(req, res, code, message){
 
-	var output = {
+	const output = {
 		'response': {
 			'success' : false,
 			'api': 'FS ePermit API',

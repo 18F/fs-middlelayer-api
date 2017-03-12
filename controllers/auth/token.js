@@ -14,18 +14,18 @@
 //*******************************************************************
 // required modules
 
-var include = require('include')(__dirname);
+const include = require('include')(__dirname);
 
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
-var error = include('error.js');
+const error = include('error.js');
 
 //*******************************************************************
 // token
 
-var token = function(req, res, next){
+const token = function(req, res, next){
     
-	var token = req.body.token || req.query.token || req.headers['x-access-token'];
+	const token = req.body.token || req.query.token || req.headers['x-access-token'];
 	
 	if (token) {
 

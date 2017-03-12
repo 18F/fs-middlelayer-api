@@ -13,23 +13,23 @@
 
 //*******************************************************************
 
-var request = require('supertest');
-var server = require('../index.js');
+const request = require('supertest');
+const server = require('../index.js');
 
-var util = require('./utility.js');
+const util = require('./utility.js');
 
-var chai = require('chai');
-var expect = chai.expect;
+const chai = require('chai');
+const expect = chai.expect;
 
 //*******************************************************************
 
 describe('FS ePermit API', function() {
 
-	var token;
+	let token;
 
 	before(function(done) {
 
-		util.get_token(function(t){
+		util.getToken(function(t){
 
 			token = t;
 			return done();
@@ -106,7 +106,7 @@ describe('FS ePermit API', function() {
 			.set('x-access-token', token)
 			.expect(function(res) {
 
-				expect(res.headers['pragma']).to.equal('no-cache');
+				expect(res.headers.pragma).to.equal('no-cache');
 			
 			})
 			.expect(200, done);

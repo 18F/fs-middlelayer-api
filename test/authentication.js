@@ -13,11 +13,11 @@
 
 //*******************************************************************
 
-var request = require('supertest');
-var server = require('../index.js');
+const request = require('supertest');
+const server = require('../index.js');
 
-var chai = require('chai');
-var expect = chai.expect;
+const chai = require('chai');
+const expect = chai.expect;
 
 //*******************************************************************
 
