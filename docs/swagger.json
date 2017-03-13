@@ -16,7 +16,7 @@
    "securityDefinitions": {
        "access_token": {
          "type": "apiKey",
-         "name": "access-token",
+         "name": "accessToken",
          "in": "header"
        }
     },
@@ -85,7 +85,7 @@
                   "description": "noncommercial permit information",
                   "required": true,
                   "schema": {
-                     "$ref": "#/definitions/noncommercial-permit"
+                     "$ref": "#/definitions/noncommercialPermit"
                   }
                },
                {
@@ -132,7 +132,7 @@
                   "description": "temp-outfitter permit information",
                   "required": true,
                   "schema": {
-                     "$ref": "#/definitions/temp-outfitter-permit"
+                     "$ref": "#/definitions/tempOutfitterPermit"
                   }
                },
                {
@@ -188,7 +188,7 @@
                   "description": "Permit object that needs to be updated",
                   "required": true,
                   "schema": {
-                     "$ref": "#/definitions/noncommercial-permit"
+                     "$ref": "#/definitions/noncommercialPermit"
                   }
                },
                {
@@ -250,7 +250,7 @@
                "200": {
                   "description": "successful operation",
                   "schema": {
-                     "$ref": "#/definitions/noncommercial-permit-get"
+                     "$ref": "#/definitions/noncommercialPermitGet"
                   }
                },
                "400": {
@@ -296,7 +296,7 @@
                   "description": "Permit object that needs to be updated",
                   "required": true,
                   "schema": {
-                     "$ref": "#/definitions/temp-outfitter-permit"
+                     "$ref": "#/definitions/tempOutfitterPermit"
                   }
                },
                {
@@ -358,7 +358,7 @@
                "200": {
                   "description": "successful operation",
                   "schema": {
-                     "$ref": "#/definitions/temp-outfitter-permit-get"
+                     "$ref": "#/definitions/tempOutfitterPermitGet"
                   }
                },
                "400": {
@@ -378,13 +378,13 @@
       }
    },
    "definitions": {
-        "applicant-info-noncommercial": {
+        "applicantInfoNoncommercial": {
          "type": "object",
          "properties": {
             "firstName": { "type": "string" },
             "lastName": { "type": "string" },
-            "dayPhone": { "$ref": "#/definitions/phone-number" },
-            "eveningPhone": { "$ref": "#/definitions/phone-number" },
+            "dayPhone": { "$ref": "#/definitions/phoneNumber" },
+            "eveningPhone": { "$ref": "#/definitions/phoneNumber" },
             "emailAddress": { "type": "string" },
             "mailingAddress": { "type": "string" },
             "mailingAddress2": { "type": "string" },
@@ -409,16 +409,16 @@
          },
          "required": ["firstName","lastName","dayPhone","emailAddress","mailingAddress","mailingCity","mailingZIP","mailingState"],
          "xml": {
-            "name": "applicant-info-noncommercial"
+            "name": "applicantInfoNoncommercial"
          }
       },
-      "applicant-info-temp-outfitter": {
+      "applicantInfoTempOutfitter": {
          "type": "object",
          "properties": {
             "firstName": { "type": "string" },
             "lastName": { "type": "string" },
-            "dayPhone": { "$ref": "#/definitions/phone-number" },
-            "eveningPhone": { "$ref": "#/definitions/phone-number" },
+            "dayPhone": { "$ref": "#/definitions/phoneNumber" },
+            "eveningPhone": { "$ref": "#/definitions/phoneNumber" },
             "emailAddress": { "type": "string" },
             "mailingAddress": { "type": "string" },
             "mailingAddress2": { "type": "string" },
@@ -443,10 +443,10 @@
          },
          "required": ["firstName","lastName","dayPhone","emailAddress","mailingAddress","mailingCity","mailingZIP","mailingState","orgType"],
          "xml": {
-            "name": "applicant-info-temp-outfitter"
+            "name": "applicantInfoTempOutfitter"
          }
       },
-      "phone-number": {
+      "phoneNumber": {
         "type": "object",
          "properties": {
             "areaCode": { "type": "integer"},
@@ -456,10 +456,10 @@
          },
          "required": ["areaCode","number","type"],
          "xml": {
-            "name": "phone-number"
+            "name": "phoneNumber"
          }  
       },
-      "noncommercial-fields": {
+      "noncommercialFields": {
         "type": "object",
         "properties": {
           "activityDescription": { "type": "string"},
@@ -470,10 +470,10 @@
         },
         "required": ["activityDescription","locationDescription","startDateTime","endDateTime","numberParticipants"],
         "xml": {
-            "name": "noncommercial-fields"
+            "name": "noncommercialFields"
          } 
       },
-      "temp-outfitter-fields": {
+      "tempOutfitterFields": {
         "type": "object",
         "properties": {
           "activityDescription": { "type": "string"},
@@ -492,10 +492,10 @@
         },
         "required": ["insuranceCertificate"],
         "xml": {
-            "name": "temp-outfitter-fields"
+            "name": "tempOutfitterFields"
          } 
       },
-      "noncommercial-permit": {
+      "noncommercialPermit": {
          "type": "object",
          "properties": {
             "region": { "type" : "integer" },
@@ -503,27 +503,27 @@
             "district": { "type" : "integer" },
             "authorizingOfficerName": { "type" : "string"},
             "authorizingOfficerTitle": { "type" : "string"},
-            "applicant-info": {
-               "$ref": "#/definitions/applicant-info-noncommercial"
+            "applicantInfo": {
+               "$ref": "#/definitions/applicantInfoNoncommercial"
             },
             "type": {
                "type": "string", 
                "default": "noncommercial",
                "enum":[
                   "noncommercial",
-                  "temp-outfitter-guide"
+                  "tempOutfitterGuide"
                ]
             },
-            "noncommercial-fields": {
-              "$ref": "#/definitions/noncommercial-fields"
+            "noncommercialFields": {
+              "$ref": "#/definitions/noncommercialFields"
             }
          },
-         "required": ["region","forest","district","applicant-info","type","noncommercial-fields"],
+         "required": ["region","forest","district","applicantInfo","type","noncommercialFields"],
          "xml": {
-            "name": "noncommercial-permit"
+            "name": "noncommercialPermit"
          }
       },
-      "noncommercial-permit-get": {
+      "noncommercialPermitGet": {
          "type": "object",
          "properties": {
             "controlNumber": {"type": "integer"},
@@ -532,8 +532,8 @@
             "district": { "type" : "integer" },
             "authorizingOfficerName": { "type" : "string"},
             "authorizingOfficerTitle": { "type" : "string"},
-            "applicant-info": {
-               "$ref": "#/definitions/applicant-info-noncommercial"
+            "applicantInfo": {
+               "$ref": "#/definitions/applicantInfoNoncommercial"
             },
             "type": {
                "type": "string", 
@@ -542,16 +542,16 @@
                   "noncommercial"
                ]
             },
-            "noncommercial-fields": {
-              "$ref": "#/definitions/noncommercial-fields"
+            "noncommercialFields": {
+              "$ref": "#/definitions/noncommercialFields"
             }
          },
-         "required": ["controlNumber","region","forest","district","applicant-info","type","noncommercial-fields"],
+         "required": ["controlNumber","region","forest","district","applicantInfo","type","noncommercialFields"],
          "xml": {
-            "name": "noncommercial-permit-get"
+            "name": "noncommercialPermitGet"
          }
       },
-      "temp-outfitter-permit": {
+      "tempOutfitterPermit": {
          "type": "object",
           "properties": {
             "region": { "type" : "integer" },
@@ -559,27 +559,27 @@
             "district": { "type" : "integer" },
             "authorizingOfficerName": { "type" : "string"},
             "authorizingOfficerTitle": { "type" : "string"},
-            "applicant-info": {
-               "$ref": "#/definitions/applicant-info-temp-outfitter"
+            "applicantInfo": {
+               "$ref": "#/definitions/applicantInfoTempOutfitter"
             },
             "type": {
                "type": "string", 
-               "default": "temp-outfitter-guide",
+               "default": "tempOutfitterGuide",
                "enum":[
-                  "noncommercial",
-                  "temp-outfitter-guide"
+                  "tempOutfitterGuide",
+                  "noncommercial"
                ]
             },
-            "temp-outfitter-fields": {
-              "$ref": "#/definitions/temp-outfitter-fields"
+            "tempOutfitterFields": {
+              "$ref": "#/definitions/tempOutfitterFields"
             }
           },
-          "required": ["region","forest","district","applicant-info","type","temp-outfitter-fields"],
+          "required": ["region","forest","district","applicantInfo","type","tempOutfitterFields"],
          "xml": {
-            "name": "temp-outfitter-permit"
+            "name": "tempOutfitterPermit"
          }
       },
-      "temp-outfitter-permit-get": {
+      "tempOutfitterPermitGet": {
          "type": "object",
           "properties": {
             "controlNumber": { "type": "integer"},
@@ -588,23 +588,23 @@
             "district": { "type" : "integer" },
             "authorizingOfficerName": { "type" : "string"},
             "authorizingOfficerTitle": { "type" : "string"},
-            "applicant-info": {
-               "$ref": "#/definitions/applicant-info-temp-outfitter"
+            "applicantInfo": {
+               "$ref": "#/definitions/applicantInfoTempOutfitter"
             },
             "type": {
                "type": "string", 
-               "default": "temp-outfitter-guide",
+               "default": "tempOutfitterGuide",
                "enum":[                  
-                  "temp-outfitter-guide"
+                  "tempOutfitterGuide"
                ]
             },
-            "temp-outfitter-fields": {
-              "$ref": "#/definitions/temp-outfitter-fields"
+            "tempOutfitterFields": {
+              "$ref": "#/definitions/tempOutfitterFields"
             }
           },
-          "required": ["controlNumber","region","forest","district","applicant-info","type","temp-outfitter-fields"],
+          "required": ["controlNumber","region","forest","district","applicantInfo","type","tempOutfitterFields"],
          "xml": {
-            "name": "temp-outfitter-permit-get"
+            "name": "tempOutfitterPermitGet"
          }
       }
    }
