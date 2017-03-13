@@ -507,12 +507,12 @@
                "$ref": "#/definitions/applicantInfoNoncommercial"
             },
             "type": {
-               "type": "string", 
-               "default": "noncommercial",
+               "type": "string",
                "enum":[
                   "noncommercial",
                   "tempOutfitterGuide"
-               ]
+               ],
+               "default": "noncommercial"
             },
             "noncommercialFields": {
               "$ref": "#/definitions/noncommercialFields"
@@ -564,11 +564,11 @@
             },
             "type": {
                "type": "string", 
-               "default": "tempOutfitterGuide",
                "enum":[
                   "tempOutfitterGuide",
                   "noncommercial"
-               ]
+               ],
+               "default": "tempOutfitterGuide"
             },
             "tempOutfitterFields": {
               "$ref": "#/definitions/tempOutfitterFields"
