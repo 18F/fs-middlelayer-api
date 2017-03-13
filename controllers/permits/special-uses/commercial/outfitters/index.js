@@ -74,7 +74,7 @@ get.id = function(req, res){
 
 put.id = function(req, res){
 
-	var controlNumber = req.params.id;
+	const controlNumber = req.params.id;
 
 	const validateRes = validateSpecialUse.validateInput('outfitters', req);
     

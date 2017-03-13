@@ -72,9 +72,7 @@ get.id = function(req, res){
 
 put.id = function(req, res){
 	
-	var controlNumber = req.params.id;
-
-	console.log('controlNumber='+controlNumber);
+	const controlNumber = req.params.id;
 
 	const validateRes = validateSpecialUse.validateInput('noncommercial', req);
     
