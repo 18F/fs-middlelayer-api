@@ -888,6 +888,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		request(server)
 			.put('/permits/special-uses/commercial/outfitters/1234')
 			.set('x-access-token', token)
+			.send(postInput)
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 

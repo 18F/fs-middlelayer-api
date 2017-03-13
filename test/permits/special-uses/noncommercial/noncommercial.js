@@ -681,6 +681,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 		request(server)
 			.put('/permits/special-uses/noncommercial/1234')
 			.set('x-access-token', token)
+			.send(postInput)
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
