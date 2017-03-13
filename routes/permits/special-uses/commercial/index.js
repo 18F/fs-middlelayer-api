@@ -9,27 +9,19 @@
 
 //*******************************************************************
 
-"use strict";
+'use strict';
 
 //*******************************************************************
 // required modules
 
-var express = require("express");
-var router = express.Router();
-var include = require("include")(__dirname);
+const express = require('express');
+const router = express.Router();
 
-var outfitters = require("./outfitters");
-var commercial = include("controllers/permits/special-uses/commercial");
+const outfitters = require('./outfitters');
 
 //*******************************************************************
 // router
 
-router.use("/outfitters", outfitters);
-
-router.get("/", function(req, res){
-
-    res.json(commercial.get.all(req));
-
-});
+router.use('/outfitters', outfitters);
 
 module.exports = router;

@@ -9,38 +9,38 @@
 
 //*******************************************************************
 
-"use strict";
+'use strict';
 
 //*******************************************************************
 // required modules
 
-var include = require('include')(__dirname);
+const include = require('include')(__dirname);
 
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
-var error = include('error.js');
+const error = include('error.js');
 
 //*******************************************************************
 // token
 
-var token = function(req, res, next){
+const token = function(req, res, next){
     
-	var token = req.body.token || req.query.token || req.headers['x-access-token'];
+	const token = req.body.token || req.query.token || req.headers['x-access-token'];
 	
 	if (token) {
 
 		jwt.verify(token, 'superSecret', function(err, decoded) {      
 			if (err) {
 				error.sendError(req, res, 401, 'Failed to authenticate token.');
-		  	} 
-		  	else {
-			    req.decoded = decoded;    
-			    next();
-		  	}
+			} 
+			else {
+				req.decoded = decoded;    
+				return next();
+			}
 		});
 
 	} 
-    else {
+	else {
 		error.sendError(req, res, 403, 'No token provided.');
 	}
     

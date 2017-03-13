@@ -13,19 +13,49 @@
 
 //*******************************************************************
 
-function update_input_data(base_data, update){
+const include = require('include')(__dirname);
 
-    var updated_input = Object.assign(
+const request = require('supertest');
+const server = include('index.js');
+
+//*******************************************************************
+
+function updateInputData(baseData, update){
+
+	const updatedInput = Object.assign(
         {},
-        base_data,
+        baseData,
         update
     );
 
-    return updated_input;
+	return updatedInput;
     
+}
+
+function getToken(callback){
+
+	let token; 
+
+	request(server)
+		.post('/auth')
+		.set('Accept', 'application/json')
+		.send({ 'username': 'user', 'password': '12345' })
+		.expect('Content-Type', /json/)
+		.expect(200)
+		.end(function(err, res) {
+
+			if (err){
+				console.error(err);
+			}
+			token = res.body.token;
+			return callback(token);
+				
+		});
+
 }
 
 //*******************************************************************
 // exports
 
-module.exports.update_input_data = update_input_data;
+module.exports.updateInputData = updateInputData;
+module.exports.getToken = getToken;

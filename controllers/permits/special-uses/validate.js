@@ -9,153 +9,152 @@
 
 //*******************************************************************
 
-"use strict";
+'use strict';
 
 //*******************************************************************
 // required modules
 
-var include = require("include")(__dirname);
-var Validator = require("jsonschema").Validator;
+const include = require('include')(__dirname);
+const Validator = require('jsonschema').Validator;
 
 //*******************************************************************
 
-var util = include("controllers/permits/special-uses/utility.js");
-var schema = require("./validation_schema.json");
-var v = new Validator();
+const util = include('controllers/permits/special-uses/utility.js');
+const schema = require('./validationSchema.json');
+const v = new Validator();
 
 //*******************************************************************
 // schemas
 
-var outfitter_schema = schema.outfitter;
-var applicant_info_temp_outfitter = schema.outfitter_applicant_info;
-var temp_outfitter_fields = schema.temp_outfitter_fields;
-var noncommercial_schema = schema.noncommercial;
-var applicant_info_non_commercial = schema.noncommercial_applicant_info;
-var non_commercial_fields = schema.noncommercial_fields;
-var phone_number = schema.phone_number;
+const outfitterSchema = schema.outfitter;
+const applicantInfoTempOutfitter = schema.outfitterApplicantInfo;
+const tempOutfitterFields = schema.tempOutfitterFields;
+const noncommercialSchema = schema.noncommercial;
+const applicantInfoNoncommercial = schema.noncommercialApplicantInfo;
+const noncommercialFields = schema.noncommercialFields;
+const phoneNumber = schema.phoneNumber;
 
 //*******************************************************************
 
-function remove_instance(prop){
+function removeInstance(prop){
 
-    var fixed_prop = "";
-    if (prop.indexOf(".") !== -1){
+	let fixedProp = '';
+	if (prop.indexOf('.') !== -1){
 
-        fixed_prop = prop.substring((prop.indexOf(".") + 1), (prop.length));
+		fixedProp = prop.substring((prop.indexOf('.') + 1), (prop.length));
 
-    }
+	}
 
-    return fixed_prop;
-
-}
-
-function get_route(req){
-
-    var path = req.originalUrl;
-    var parts = path.split("/");
-    var route;
-    if (path.charAt(path.length - 1) === "/"){
-
-        route = parts[parts.length - 2];
-
-    }
-    else {
-
-        route = parts[parts.length - 1];
-
-    }
-
-    return route;
+	return fixedProp;
 
 }
 
-function combine_prop_argument(property, argument){
+function getRoute(req){
 
-    var field;
-    if (property.length > 0){
+	const path = req.originalUrl;
+	const parts = path.split('/');
+	let route;
+	if (path.charAt(path.length - 1) === '/'){
 
-        field = property + "." + argument;
+		route = parts[parts.length - 2];
 
-    }
-    else {
+	}
+	else {
 
-        field = argument;
+		route = parts[parts.length - 1];
 
-    }
+	}
 
-    return field;
-
-}
-
-function handle_missing_error(output, result, counter){
-
-    var field;
-    var property = remove_instance(result[counter].property);
-    field = combine_prop_argument(property, result[counter].argument);
-    util.invalid_field(output, field);
+	return route;
 
 }
 
-function handle_type_error(output, result, counter){
+function combinePropArgument(property, argument){
 
-    var property;
-    var expected_type = result[counter].argument[0];
-    property = remove_instance(result[counter].property);
-    util.field_type(output, property, expected_type);
+	let field;
+	if (property.length > 0){
+
+		field = property + '.' + argument;
+
+	}
+	else {
+
+		field = argument;
+
+	}
+
+	return field;
 
 }
 
-var validate_input = function (req){
+function handleMissingError(output, result, counter){
 
-    var route = get_route(req);
-    var output = {
+	const property = removeInstance(result[counter].property);
+	const field = combinePropArgument(property, result[counter].argument);
+	util.invalidField(output, field);
+
+}
+
+function handleTypeError(output, result, counter){
+
+	console.log(result);
+	const expectedType = result[counter].argument[0];
+	const property = removeInstance(result[counter].property);
+	util.fieldType(output, property, expectedType);
+
+}
+//Needs to take in route(noncom/out)
+const validateInput = function (req){
+
+	const route = getRoute(req);
+	const output = {
     
-        "fields_valid": true,
-        "error_message": "",
-        "missing_array": [],
-        "type_array": []
+		'fieldsValid': true,
+		'errorMessage': '',
+		'missingArray': [],
+		'typeArray': []
 
-    };
-    var result, length, counter;
-    v.addSchema(phone_number, "phone-number");
-    v.addSchema(applicant_info_non_commercial, "applicant-info-non-commercial");
-    v.addSchema(non_commercial_fields, "non-commercial-fields");
-    v.addSchema(applicant_info_temp_outfitter, "applicant-info-temp-outfitter");
-    v.addSchema(temp_outfitter_fields, "temp-outfitter-fields");
-    if (route === "noncommercial"){
+	};
+	let result, counter;
+	v.addSchema(phoneNumber, 'phoneNumber');
+	v.addSchema(applicantInfoNoncommercial, 'applicantInfoNoncommercial');
+	v.addSchema(noncommercialFields, 'noncommercialFields');
+	v.addSchema(applicantInfoTempOutfitter, 'applicantInfoTempOutfitter');
+	v.addSchema(tempOutfitterFields, 'tempOutfitterFields');
+	if (route === 'noncommercial'){
 
-        result = v.validate(req.body, noncommercial_schema).errors;                   
+		result = v.validate(req.body, noncommercialSchema).errors;
 
-    }
-    else { 
+	}
+	else { 
 
-        result = v.validate(req.body, outfitter_schema).errors;        
+		result = v.validate(req.body, outfitterSchema).errors;        
 
-    }
+	}
 
-    length = result.length;
-    for (counter = 0; counter < length; counter++){
+	const length = result.length;
+	for (counter = 0; counter < length; counter++){
 
-        if (result[counter].name === "required"){
+		if (result[counter].name === 'required'){
 
-            handle_missing_error(output, result, counter);
+			handleMissingError(output, result, counter);
 
-        }
-        else {
+		}
+		else {
 
-            handle_type_error(output, result, counter);
+			handleTypeError(output, result, counter);
 
-        }
+		}
 
-    }
+	}
 
-    output.error_message = util.build_error_message(output);
-    return output;
+	output.errorMessage = util.buildErrorMessage(output);
+
+	return output;
 
 };
-
 
 //*******************************************************************
 // exports
 
-module.exports.validate_input = validate_input;
+module.exports.validateInput = validateInput;
