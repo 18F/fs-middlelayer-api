@@ -49,26 +49,6 @@ function removeInstance(prop){
 
 }
 
-function getRoute(req){
-
-	const path = req.originalUrl;
-	const parts = path.split('/');
-	let route;
-	if (path.charAt(path.length - 1) === '/'){
-
-		route = parts[parts.length - 2];
-
-	}
-	else {
-
-		route = parts[parts.length - 1];
-
-	}
-
-	return route;
-
-}
-
 function combinePropArgument(property, argument){
 
 	let field;
@@ -104,9 +84,8 @@ function handleTypeError(output, result, counter){
 
 }
 //Needs to take in route(noncom/out)
-const validateInput = function (req){
+const validateInput = function (route, req){
 
-	const route = getRoute(req);
 	const output = {
     
 		'fieldsValid': true,
