@@ -1,8 +1,8 @@
 {
     "postInput": {
-        "region": 3,
-        "forest": 50552,
-        "district": 50552,
+        "region": 31,
+        "forest": 50,
+        "district": 50,
         "authorizingOfficerName": "WILLIAM L.NOXON",
         "authorizingOfficerTitle": "null",
         "applicantInfo": {
@@ -30,9 +30,9 @@
         }
     },
     "noNoncommercialField": {
-        "region": 3,
-        "forest": 50552,
-        "district": 50552,
+        "region": 31,
+        "forest": 50,
+        "district": 52,
         "authorizingOfficerName": "WILLIAM L.NOXON",
         "authorizingOfficerTitle": "null",
         "applicantInfo": {
@@ -53,9 +53,9 @@
         "type": "noncommercial"
     },
     "noApplicantInfoField": {
-        "region": 3,
-        "forest": 50552,
-        "district": 50552,
+        "region": 33,
+        "forest": 52,
+        "district": 12,
         "authorizingOfficerName": "WILLIAM L.NOXON",
         "authorizingOfficerTitle": "null",
         "type": "noncommercial",

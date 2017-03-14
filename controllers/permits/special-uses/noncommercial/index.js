@@ -71,8 +71,27 @@ get.id = function(req, res){
 // put id
 
 put.id = function(req, res){
+	
+	const controlNumber = req.params.id;
+
+	const validateRes = validateSpecialUse.validateInput('noncommercial', req);
     
-	res.json(include('test/data/noncommercial.put.id.json'));
+	if (validateRes.success){
+
+		const postData = util.createPost('noncommercial', controlNumber, req.body);
+
+		const response = include('test/data/noncommercial.put.id.json');
+
+		response.apiRequest = postData;
+    
+		res.json(response);
+    
+	}
+	else {
+    
+		error.sendError(req, res, 400, validateRes.errorMessage);
+    
+	}
 
 };
 
@@ -80,11 +99,11 @@ put.id = function(req, res){
 
 const post = function(req, res){
 
-	const validateRes = validateSpecialUse.validateInput(req);
-    
-	if (validateRes.fieldsValid){
+	const validateRes = validateSpecialUse.validateInput('noncommercial', req);
 
-		const postData = util.createPost('noncommercial', req.body);
+	if (validateRes.success){
+
+		const postData = util.createPost('noncommercial', null, req.body);
 
 		const response = include('test/data/noncommercial.post.json');
 
@@ -95,7 +114,7 @@ const post = function(req, res){
 	}
 	else {
     
-		error.sendError(req, res, 400, validateRes.errorMessage);
+		error.sendError(req, res, 400, validateRes.errorMessage, validateRes.errors);
     
 	}
 };

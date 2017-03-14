@@ -3,9 +3,18 @@
         "id":"tempOutfitterPermit",
         "type":"object",
         "properties":{
-            "region": { "type" : "integer" },
-            "forest": { "type" : "integer" },
-            "district": { "type" : "integer" },
+            "region": { 
+                "type" : "integer",
+                "format": "regionFormat"
+            },
+            "forest": {
+                "type" : "integer",
+                "format": "forestFormat"
+            },
+            "district": {
+                "type" : "integer",
+                "format": "districtFormat"
+            },
             "authorizingOfficerName": { "type" : "string"},
             "authorizingOfficerTitle": { "type" : "string"},
             "applicantInfo": {
@@ -38,8 +47,14 @@
             "mailingAddress": { "type": "string" },
             "mailingAddress2": { "type": "string" },
             "mailingCity": { "type": "string" },
-            "mailingState": { "type": "string" },
-            "mailingZIP": { "type": "integer" },
+            "mailingState": {
+                "type": "string",
+                "format":"stateFormat"
+            },
+            "mailingZIP": { 
+                "type": "integer",
+                "format":"zipFormat"
+            },
             "organizationName": { "type": "string"},
             "website":{"type": "string"},
             "orgType":{
@@ -64,9 +79,15 @@
         "type": "object",
         "properties": {
             "activityDescription": { "type": "string"},
-            "locationDescription": {  "type": "string"},
-            "startDateTime": { "type": "string"},
-            "endDateTime": { "type": "string"},
+            "locationDescription": { "type": "string"},
+            "startDateTime": {
+                "type": "string",
+                "format":"dateTimeFormat"
+            },
+            "endDateTime": {
+                "type": "string",
+                "format":"dateTimeFormat"
+            },
             "insuranceCertificate": { "type": "string"},
             "goodStandingEvidence": {
                 "description": "Certificate of good standing, operating agreement, or other evidence the business is in good standing",
@@ -84,9 +105,18 @@
         "id":"noncommercialPermit",
         "type":"object",
         "properties":{
-            "region": { "type" : "integer" },
-            "forest": { "type" : "integer" },
-            "district": { "type" : "integer" },
+            "region": {
+                "type" : "integer",
+                "format": "regionFormat"
+            },
+            "forest": {
+                "type" : "integer",
+                "format": "forestFormat"
+            },
+            "district": {
+                "type" : "integer",
+                "format": "districtFormat"
+            },
             "authorizingOfficerName": { "type" : "string"},
             "authorizingOfficerTitle": { "type" : "string"},
             "applicantInfo": {
@@ -119,8 +149,14 @@
             "mailingAddress": { "type": "string" },
             "mailingAddress2": { "type": "string" },
             "mailingCity": { "type": "string" },
-            "mailingState": { "type": "string" },
-            "mailingZIP": { "type": "integer" },
+            "mailingState": {
+                "type": "string",
+                "format": "stateFormat"
+            },
+            "mailingZIP": {
+                "type": "integer",
+                "format": "zipFormat"
+            },
             "organizationName": { "type": "string"},
             "website":{"type": "string"},
             "orgType":{
@@ -146,8 +182,14 @@
         "properties": {
             "activityDescription": { "type": "string"},
             "locationDescription": {  "type": "string"},
-            "startDateTime": { "type": "string"},
-            "endDateTime": { "type": "string"},
+            "startDateTime": {
+                "type": "string",
+                "format":"dateTimeFormat"
+            },
+            "endDateTime": {
+                "type": "string",
+                "format":"dateTimeFormat"
+            },
             "numberParticipants": { "type": "integer"}
         },
         "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime", "numberParticipants"]
@@ -157,8 +199,14 @@
         "id": "/phoneNumber",
         "type": "object",
         "properties": {
-            "areaCode": { "type": "integer"},
-            "number": { "type": "integer"},
+            "areaCode": { 
+                "type": "integer",
+                "format": "areaCodeFormat"
+            },
+            "number": {
+                "type": "integer",
+                "format": "phoneNumberFormat"
+            },
             "extension": { "type": "integer"},
             "type": {"type": "string"}
         },

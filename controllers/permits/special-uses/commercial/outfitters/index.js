@@ -74,7 +74,26 @@ get.id = function(req, res){
 
 put.id = function(req, res){
 
-	res.json(include('test/data/outfitters.put.id.json'));
+	const controlNumber = req.params.id;
+
+	const validateRes = validateSpecialUse.validateInput('outfitters', req);
+    
+	if (validateRes.success){
+
+		const postData = util.createPost('outfitters', controlNumber, req.body);
+
+		const response = include('test/data/outfitters.put.id.json');
+
+		response.apiRequest = postData;
+    
+		res.json(response);
+    
+	}
+	else {
+    
+		error.sendError(req, res, 400, validateRes.errorMessage);
+    
+	}
 
 };
 
@@ -82,11 +101,11 @@ put.id = function(req, res){
 
 const post = function(req, res){
 
-	const validateRes = validateSpecialUse.validateInput(req);
+	const validateRes = validateSpecialUse.validateInput('outfitters', req);
     
-	if (validateRes.fieldsValid){
+	if (validateRes.success){
 
-		const postData = util.createPost('outfitters', req.body);
+		const postData = util.createPost('outfitters', null, req.body);
 
 		const response = include('test/data/outfitters.post.json');
 
@@ -97,7 +116,7 @@ const post = function(req, res){
 	}
 	else {
     
-		error.sendError(req, res, 400, validateRes.errorMessage);
+		error.sendError(req, res, 400, validateRes.errorMessage, validateRes.errors);
     
 	}
 
