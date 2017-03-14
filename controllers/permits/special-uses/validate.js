@@ -211,7 +211,7 @@ function missingSuperFields(output, field, route){
 		applicantInfo.push('applicantInfo.orgType');
 
 	}
-	const phone = ['applicantInfo.dayPhone.areaCode', 'applicantInfo.dayPhone.number', 'applicantInfodayPhone.type'];
+	const phone = ['applicantInfo.dayPhone.areaCode', 'applicantInfo.dayPhone.number', 'applicantInfo.dayPhone.type'];
 	const noncommercial = ['noncommercialFields.activityDescription', 'noncommercialFields.locationDescription', 'noncommercialFields.startDateTime', 'noncommercialFields.endDateTime', 'noncommercialFields.numberParticipants'];
 	const tempOutfitter = ['tempOutfitterFields.activityDescription', 'tempOutfitterFields.locationDescription', 'tempOutfitterFields.startDateTime', 'tempOutfitterFields.endDateTime', 'tempOutfitterFields.insuranceCertificate', 'tempOutfitterFields.goodStandingEvidence', 'tempOutfitterFields.operatingPlan'];
 	
