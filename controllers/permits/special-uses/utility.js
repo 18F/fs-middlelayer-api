@@ -14,84 +14,107 @@
 //*******************************************************************
 // required modules
 
-const _ = require('lodash');
 const include = require('include')(__dirname);
 
 //*******************************************************************
 
-function buildMissingErrorMessage(errorArray){
+function makeFieldReadable(input){
 
-	let errorMessage = _.join(errorArray, ' and ');
-
-	if (errorArray.length > 1){
-
-		errorMessage += ' are required fields!';
-
-	}
-	else {
-
-		errorMessage += ' is a required field!';
-
-	}
-
-	return errorMessage;
+	return input
+	.replace(/([A-Z])/g, ' $1')
+	.replace(/^./, function(str){
+		return str.toUpperCase();
+	})
+	.replace('Z I P', 'Zip');
 
 }
 
-function buildTypeErrorMessage(typeObj){
+function makePathReadable(input){
 
-	const errorMessage = typeObj.field + ' is expected to be type \'' + typeObj.expectedType + '\'.';
+	const parts = input.split('.');
+	const readableParts = [];
+	let readablePath = '';
+	parts.forEach((field)=>{
+		readableParts.push(makeFieldReadable(field));
+	});
+	readablePath = readableParts.shift();
+	readableParts.forEach((part)=>{
+		readablePath = `${readablePath}/${part}`;
+	});
+	return readablePath;
+
+}
+
+function buildFormatErrorMessage(fullPath){
+	const field = fullPath.substring(fullPath.lastIndexOf('.') + 1);
+	const readablePath = makePathReadable(fullPath);
+	let errorMessage;
+	switch (field){
+	case 'mailingZIP':
+		errorMessage = `${readablePath} must be 5 or 9 digits.`;
+		break;
+	case 'areaCode':
+		errorMessage = `${readablePath} must be 3 digits.`;
+		break;
+	case 'number':
+		errorMessage = `${readablePath} must be 7 digits.`;
+		break;
+	case 'mailingState':
+		errorMessage = `${readablePath} must be 2 letters.`;
+		break;
+	case 'forest':
+		errorMessage = `${readablePath} must be 2 digits.`;
+		break;
+	case 'district':
+		errorMessage = `${readablePath} must be 2 digits.`;
+		break;
+	case 'region':
+		errorMessage = `${readablePath} must be 2 digits.`;
+		break;
+	case 'startDateTime':
+		errorMessage = `${readablePath} must be in format 'YYYY-MM-DD'.`;
+		break;
+	case 'endDateTime':
+		errorMessage = `${readablePath} must be in format 'YYYY-MM-DD'.`;
+		break;
+	}
+
 	return errorMessage;
 
 }
 
 function buildErrorMessage(output){
 
-	let missingMessage = '', typeMessage = '', errorMessage = '';
+	let errorMessage = '';
+	const messages = [];
+	output.errorArray.forEach((error)=>{
+		const missing = `${makePathReadable(error.field)} is a required field.`;
+		const type = `${makePathReadable(error.field)} is expected to be type '${error.expectedFieldType}'.`;
+		const enumMessage = `${makePathReadable(error.field)} ${error.enumMessage}`;
 
-	if (!_.isEmpty(output.missingArray)){
+		switch (error.errorType){
+		case 'missing':
+			messages.push(missing);
+			break;
+		case 'type':
+			messages.push(type);
+			break;
+		case 'format':
+			messages.push(buildFormatErrorMessage(error.field));
+			break;
+		case 'enum':
+			messages.push(enumMessage);
+			break;
+		}
 
-		missingMessage = buildMissingErrorMessage(output.missingArray);
-		errorMessage = errorMessage + missingMessage;
-
-	}
-	if (!_.isEmpty(output.typeArray)){
-
-		output.typeArray.forEach((element)=>{
-
-			typeMessage = typeMessage + buildTypeErrorMessage(element) + ' ';
-
-		});
-		errorMessage = errorMessage + typeMessage;
-
-	}
-    
+	});
+	messages.forEach((message)=>{
+		errorMessage = `${errorMessage}${message} `;
+	});
+	errorMessage = errorMessage.trim();
 	return errorMessage;
 
 }
-
-const invalidField = function (output, field){
-    
-	output.fieldsValid = false;
-	output.missingArray.push(field);
-
-	return output;
-
-};
-
-const fieldType = function (output, field, expectedType){
-    
-	output.fieldsValid = false;
-	output.typeArray.push({
-
-		'field':field,
-		'expectedType':expectedType
-
-	});
-
-	return output;
-
-};
 
 const pad = function (n) {
 	return  ('0' + n).slice(-2);
@@ -207,8 +230,6 @@ function createPost(formType, inputPost){
 	const todayDate = new Date().toISOString().slice(0, 10);
 	postData.effectiveDate = todayDate;
 
-	//console.log('pre postData='+JSON.stringify(postData));
-
 	postData.applicantInfo = postSchema.applicantInfo;
 
 	if (inputPost.hasOwnProperty('applicantInfo')){
@@ -278,8 +299,6 @@ function createPost(formType, inputPost){
 		postData.tempOutfitterFields.purpose = purpose;
 	}
 
-	//console.log('postData='+JSON.stringify(postData));
-
 	return postData;
 }
 
@@ -287,7 +306,5 @@ function createPost(formType, inputPost){
 // exports
 
 module.exports.buildErrorMessage = buildErrorMessage;
-module.exports.invalidField = invalidField;
-module.exports.fieldType = fieldType;
 module.exports.copyGenericInfo = copyGenericInfo;
 module.exports.createPost = createPost;
