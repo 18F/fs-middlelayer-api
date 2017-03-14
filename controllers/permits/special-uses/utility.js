@@ -190,7 +190,7 @@ function copyGenericInfo(cnData, jsonData){
 	jsonData.applicantInfo = applicantInfo;
 }
 
-function createPost(formType, inputPost){
+function createPost(formType, controlNumber, inputPost){
 	
 	const postSchema = include('controllers/permits/special-uses/postSchema.json');
 
@@ -200,6 +200,10 @@ function createPost(formType, inputPost){
 	let purpose;
 
 	const genericFields = postSchema.genericFields;
+
+	if (controlNumber){
+		postData.controlNumber = controlNumber;
+	}
 	
 	if (genericFields){
 		for (key in genericFields) {
