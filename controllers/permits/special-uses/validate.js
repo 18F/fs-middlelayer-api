@@ -203,11 +203,70 @@ function makeErrorObj(field, errorType, expectedFieldType, enumMessage){
 	};
 }
 
-function handleMissingError(output, result, counter){
+function missingSuperFields(output, field, route){
+
+	const applicantInfo = ['applicantInfo.firstName', 'applicantInfo.lastName', 'applicantInfo.dayPhone.areaCode', 'applicantInfo.dayPhone.number', 'applicantInfo.dayPhone.type', 'applicantInfo.emailAddress', 'applicantInfo.mailingAddress', 'applicantInfo.mailingCity', 'applicantInfo.mailingZIP', 'applicantInfo.mailingState'];
+	if (route === 'outfitters'){
+
+		applicantInfo.push('applicantInfo.orgType');
+
+	}
+	const phone = ['dayPhone.areaCode', 'dayPhone.number', 'dayPhone.type'];
+	const noncommercial = ['noncommercialFields.activityDescription', 'noncommercialFields.locationDescription', 'noncommercialFields.startDateTime', 'noncommercialFields.endDateTime', 'noncommercialFields.numberParticipants'];
+	const tempOutfitter = ['tempOutfitterFields.activityDescription', 'tempOutfitterFields.locationDescription', 'tempOutfitterFields.startDateTime', 'tempOutfitterFields.endDateTime', 'tempOutfitterFields.insuranceCertificate', 'tempOutfitterFields.goodStandingEvidence', 'tempOutfitterFields.operatingPlan'];
+	
+	if (field === 'applicantInfo'){
+
+		applicantInfo.forEach((missingField)=>{
+
+			output.errorArray.push(makeErrorObj(missingField, 'missing'));
+
+		});
+
+	}
+	else if (field === 'dayPhone'){
+
+		phone.forEach((missingField)=>{
+
+			output.errorArray.push(makeErrorObj(missingField, 'missing'));
+
+		});
+
+	}
+	else if (field === 'noncommercialFields'){
+
+		noncommercial.forEach((missingField)=>{
+
+			output.errorArray.push(makeErrorObj(missingField, 'missing'));
+
+		});
+
+	}
+	else {
+
+		tempOutfitter.forEach((missingField)=>{
+
+			output.errorArray.push(makeErrorObj(missingField, 'missing'));
+
+		});
+	}
+}
+
+function handleMissingError(output, result, counter, route){
 
 	const property = removeInstance(result[counter].property);
 	const field = combinePropArgument(property, result[counter].argument);
-	output.errorArray.push(makeErrorObj(field, 'missing'));
+	switch (field){
+	case 'applicantInfo':
+	case 'dayPhone':
+	case 'noncommercialFields':
+	case 'tempOutfitterFields':
+		missingSuperFields(output, field, route);
+		break;
+	default:
+		output.errorArray.push(makeErrorObj(field, 'missing'));
+		break;
+	}
 }
 
 function handleTypeError(output, result, counter){
@@ -307,7 +366,7 @@ const validateInput = function (route, req){
 
 		if (result[counter].name === 'required'){
 
-			handleMissingError(errorTracking, result, counter);
+			handleMissingError(errorTracking, result, counter, route);
 
 		}
 		else  if (result[counter].name === 'type'){
