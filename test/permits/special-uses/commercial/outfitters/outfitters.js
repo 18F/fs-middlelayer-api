@@ -60,7 +60,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant info is a required field. Type is a required field. Temp outfitter fields is a required field.');
+					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info is a required field. Type is a required field. Temp Outfitter Fields is a required field.');
 
 				})
 				.expect(400, done);
@@ -81,7 +81,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant info is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info is a required field.');
 
 				})
 				.expect(400, done);
@@ -102,7 +102,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Temp outfitter fields is a required field.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields is a required field.');
 
 				})
 				.expect(400, done);
@@ -143,7 +143,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('First name is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/First Name is a required field.');
 
 				})
 				.expect(400, done);
@@ -180,7 +180,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Last name is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Last Name is a required field.');
 
 				})
 				.expect(400, done);
@@ -212,7 +212,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Day phone is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone is a required field.');
 
 				})
 				.expect(400, done);
@@ -249,7 +249,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Area code is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Area Code is a required field.');
 
 				})
 				.expect(400, done);
@@ -286,7 +286,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Number is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Number is a required field.');
 
 				})
 				.expect(400, done);
@@ -323,7 +323,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Type is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Type is a required field.');
 
 				})
 				.expect(400, done);
@@ -360,7 +360,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Email address is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Email Address is a required field.');
 
 				})
 				.expect(400, done);
@@ -397,7 +397,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Mailing address is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing Address is a required field.');
 
 				})
 				.expect(400, done);
@@ -434,7 +434,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Mailing city is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing City is a required field.');
 
 				})
 				.expect(400, done);
@@ -471,7 +471,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Mailing state is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing State is a required field.');
 
 				})
 				.expect(400, done);
@@ -508,7 +508,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Mailing zip is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip is a required field.');
 
 				})
 				.expect(400, done);
@@ -545,7 +545,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Org type is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Org Type is a required field.');
 
 				})
 				.expect(400, done);
@@ -579,7 +579,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Activity description is a required field.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Activity Description is a required field.');
 
 				})
 				.expect(400, done);
@@ -609,7 +609,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Location description is a required field.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Location Description is a required field.');
 
 				})
 				.expect(400, done);
@@ -639,7 +639,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Start date time is a required field.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Start Date Time is a required field.');
 
 				})
 				.expect(400, done);
@@ -669,7 +669,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('End date time is a required field.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/End Date Time is a required field.');
 
 				})
 				.expect(400, done);
@@ -699,7 +699,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Insurance certificate is a required field.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Insurance Certificate is a required field.');
 
 				})
 				.expect(400, done);
@@ -729,7 +729,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Good standing evidence is a required field.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Good Standing Evidence is a required field.');
 
 				})
 				.expect(400, done);
@@ -759,7 +759,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Operating plan is a required field.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Operating Plan is a required field.');
 
 				})
 				.expect(400, done);
@@ -788,7 +788,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Insurance certificate is a required field. Good standing evidence is a required field.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Insurance Certificate is a required field. Temp Outfitter Fields/Good Standing Evidence is a required field.');
 
 				})
 				.expect(400, done);
@@ -909,7 +909,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('First name is expected to be type \'string\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/First Name is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -947,7 +947,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Last name is expected to be type \'string\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Last Name is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -985,7 +985,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Area code is expected to be type \'integer\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Area Code is expected to be type \'integer\'.');
 
 				})
 				.expect(400, done);
@@ -1023,7 +1023,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Number is expected to be type \'integer\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Number is expected to be type \'integer\'.');
 
 				})
 				.expect(400, done);
@@ -1061,7 +1061,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Type is expected to be type \'string\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Type is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1099,7 +1099,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Email address is expected to be type \'string\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Email Address is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1137,7 +1137,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Mailing address is expected to be type \'string\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing Address is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1175,7 +1175,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Mailing city is expected to be type \'string\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing City is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1213,7 +1213,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Mailing state is expected to be type \'string\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing State is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1251,7 +1251,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Mailing zip is expected to be type \'integer\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip is expected to be type \'integer\'.');
 
 				})
 				.expect(400, done);
@@ -1282,7 +1282,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Activity description is expected to be type \'string\'.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Activity Description is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1313,7 +1313,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Location description is expected to be type \'string\'.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Location Description is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1344,7 +1344,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Start date time is expected to be type \'string\'.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Start Date Time is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1375,7 +1375,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('End date time is expected to be type \'string\'.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/End Date Time is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1417,7 +1417,7 @@ describe('outfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Extension is expected to be type \'integer\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Extension is expected to be type \'integer\'.');
 
 				})
 				.expect(400, done);
@@ -1476,7 +1476,7 @@ describe('outfitters POST: format validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Area code must be 3 digits.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Area Code must be 3 digits.');
 
 				})
 				.expect(400, done);
@@ -1514,7 +1514,7 @@ describe('outfitters POST: format validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Number must be 7 digits.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Number must be 7 digits.');
 
 				})
 				.expect(400, done);
@@ -1554,7 +1554,7 @@ describe('outfitters POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Mailing state must be 2 letters.');
+				expect(res.body.response.message).to.equal('Applicant Info/Mailing State must be 2 letters.');
 
 			})
 			.expect(400, done);
@@ -1592,7 +1592,7 @@ describe('outfitters POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Mailing zip must be 5 or 9 digits.');
+				expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip must be 5 or 9 digits.');
 
 			})
 			.expect(400, done);
@@ -1731,7 +1731,7 @@ describe('outfitters POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Start date time must be in format \'YYYY-MM-DD\'.');
+				expect(res.body.response.message).to.equal('Temp Outfitter Fields/Start Date Time must be in format \'YYYY-MM-DD\'.');
 
 			})
 			.expect(400, done);
@@ -1762,7 +1762,7 @@ describe('outfitters POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('End date time must be in format \'YYYY-MM-DD\'.');
+				expect(res.body.response.message).to.equal('Temp Outfitter Fields/End Date Time must be in format \'YYYY-MM-DD\'.');
 
 			})
 			.expect(400, done);
@@ -1842,7 +1842,7 @@ describe('outfitters POST: enum validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Org type is not one of enum values: Individual,Corporation,Limited Liability Company,Partnership or Association,State Government or Agency,Local Government or Agency,Nonprofit');
+					expect(res.body.response.message).to.equal('Applicant Info/Org Type is not one of enum values: Individual,Corporation,Limited Liability Company,Partnership or Association,State Government or Agency,Local Government or Agency,Nonprofit');
 
 				})
 				.expect(400, done);

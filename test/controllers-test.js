@@ -27,36 +27,36 @@ describe('API Controllers: build error message', function(){
 
 	it('should return \'First name is a required field.\'', function(){
     
-		const errors = [{'field':'firstName', 'errorType':'missing'}];
-		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('First name is a required field.');
+		const errors = {'errorArray':[{'field':'applicantInfo.firstName', 'errorType':'missing'}]};
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Applicant Info/First Name is a required field.');
     
 	});
 
-	it('should return \'First name is a required field. Last name is a required field.\'', function(){
+	it('should return \'First Name is a required field. Last Name is a required field.\'', function(){
     
-		const errors = [{'field':'firstName', 'errorType':'missing'}, {'field':'lastName', 'type':'missing'}];
-		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('First name is a required field. Last name is a required field.');
-    
-	});
-
-	it('should return \'First name is expected to be of type \'string\'.\'', function(){
-    
-		const errors = [{'field':'firstName', 'errorType':'type', 'expectedType': 'string'}];
-		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('First name is expected to be of type \'string\'');
+		const errors = {'errorArray':[{'field':'applicantInfo.firstName', 'errorType':'missing'}, {'field':'applicantInfo.lastName', 'errorType':'missing'}]};
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field.');
     
 	});
 
-	it('should return \'Mailing zip must be 5 or 9 digits.\'', function(){
+	it('should return \'First Name is expected to be of type \'string\'.\'', function(){
     
-		const errors = [{'field':'applicantInfo.mailingZIP', 'errorType':'format'}];
-		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Mailing zip must be 5 or 9 digits.');
+		const errors = {'errorArray':[{'field':'applicantInfo.firstName', 'errorType':'type', 'expectedFieldType': 'string'}]};
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Applicant Info/First Name is expected to be type \'string\'.');
     
 	});
 
-	it('should return \'First name with some enum message.\'', function(){
+	it('should return \'Mailing Zip must be 5 or 9 digits.\'', function(){
     
-		const errors = [{'field':'firstName', 'errorType':'enum', 'expectedType': null, 'enumMessage':'with some enum message.'}];
-		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Mailing zip must be 5 or 9 digits.');
+		const errors = {'errorArray':[{'field':'applicantInfo.mailingZIP', 'errorType':'format'}]};
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Applicant Info/Mailing Zip must be 5 or 9 digits.');
+    
+	});
+
+	it('should return \'First Name with some enum message.\'', function(){
+    
+		const errors = {'errorArray':[{'field':'applicantInfo.firstName', 'errorType':'enum', 'expectedType': null, 'enumMessage':'with some enum message.'}]};
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Applicant Info/First Name with some enum message.');
     
 	});
     
