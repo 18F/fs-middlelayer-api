@@ -36,36 +36,131 @@ const phoneNumber = schema.phoneNumber;
 
 //*******************************************************************
 
-function removeInstance(prop){
+function zipFormat(input){
+	
+	let valid = true;
 
-	let fixedProp = '';
-	if (prop.indexOf('.') !== -1){
+	if (typeof input === 'number'){
 
-		fixedProp = prop.substring((prop.indexOf('.') + 1), (prop.length));
+		const inputStr = input + '';
+
+		if (!inputStr.match(/^[0-9]{5}$|^[0-9]{9}$/)){
+
+			valid = false;
+
+		}
+
+	}
+	return valid;
+}
+function areaCodeFormat(input){
+
+	let valid = true;
+
+	if (typeof input === 'number'){
+
+		const inputStr = input + '';
+		if (!inputStr.match(/^[0-9]{3}$/)){
+
+			valid = false;
+
+		}
 
 	}
 
-	return fixedProp;
+	return valid;
+
+}
+function phoneNumberFormat(input){
+
+	let valid = true;
+
+	if (typeof input === 'number'){
+
+		const inputStr = input + '';
+		if (!inputStr.match(/^[0-9]{7}$/)){
+
+			valid = false;
+
+		}
+
+	}
+
+	return valid;
 
 }
 
-function getRoute(req){
+function stateFormat(input){
 
-	const path = req.originalUrl;
-	const parts = path.split('/');
-	let route;
-	if (path.charAt(path.length - 1) === '/'){
+	let valid = true;
 
-		route = parts[parts.length - 2];
+	if (typeof input === 'string'){
+
+		const inputStr = input + '';
+		if (!inputStr.match(/^[a-zA-Z]{2}$/)){
+
+			valid = false;
+
+		}
 
 	}
-	else {
 
-		route = parts[parts.length - 1];
+	return valid;
+}
+function twoDigitCheck(input){
+
+	let valid = true;
+	
+	if (typeof input === 'number'){
+
+		const inputStr = input + '';
+		
+		if (!inputStr.match(/^[0-9]{2}$/)){
+
+			valid = false;
+
+		}
 
 	}
 
-	return route;
+	return valid;
+
+}
+function forestFormat(input){
+
+	return twoDigitCheck(input);
+
+}
+function regionFormat(input){
+
+	return twoDigitCheck(input);
+
+}
+function districtFormat(input){
+
+	return twoDigitCheck(input);
+
+}
+function dateTimeFormat(input){
+	
+	let valid = true;
+	
+	if (typeof input === 'string'){
+
+		const inputStr = input + '';
+		
+		if (!inputStr.match(/^[0-9]{4}[-]{1}[0-9]{2}[-]{1}[0-9]{2}$/)){
+
+			valid = false;
+
+		}
+
+	}
+
+	return valid;
+}
+
+//*******************************************************************
 
 }
 
