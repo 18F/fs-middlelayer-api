@@ -90,7 +90,7 @@ function buildErrorMessage(output){
 	output.errorArray.forEach((error)=>{
 		const missing = `${makePathReadable(error.field)} is a required field.`;
 		const type = `${makePathReadable(error.field)} is expected to be type '${error.expectedFieldType}'.`;
-		const enumMessage = `${makePathReadable(error.field)} ${error.enumMessage}`;
+		const enumMessage = `${makePathReadable(error.field)} ${error.enumMessage}.`;
 
 		switch (error.errorType){
 		case 'missing':
