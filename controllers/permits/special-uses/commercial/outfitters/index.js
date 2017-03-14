@@ -78,7 +78,7 @@ put.id = function(req, res){
 
 	const validateRes = validateSpecialUse.validateInput('outfitters', req);
     
-	if (validateRes.fieldsValid){
+	if (validateRes.success){
 
 		const postData = util.createPost('outfitters', controlNumber, req.body);
 

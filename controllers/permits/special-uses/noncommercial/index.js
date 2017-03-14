@@ -76,7 +76,7 @@ put.id = function(req, res){
 
 	const validateRes = validateSpecialUse.validateInput('noncommercial', req);
     
-	if (validateRes.fieldsValid){
+	if (validateRes.success){
 
 		const postData = util.createPost('noncommercial', controlNumber, req.body);
 
