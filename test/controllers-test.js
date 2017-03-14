@@ -25,17 +25,38 @@ specialUses.buildErrorMessage = require('../controllers/permits/special-uses/uti
 
 describe('API Controllers: build error message', function(){
 
-	it('should return \'firstName is a required field!\'', function(){
+	it('should return \'First name is a required field.\'', function(){
     
-		const errors = {'missingArray': ['firstName']};
-		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('firstName is a required field!');
+		const errors = [{'field':'firstName', 'errorType':'missing'}];
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('First name is a required field.');
     
 	});
 
-	it('should return \'firstName and lastName are required fields!\'', function(){
+	it('should return \'First name is a required field. Last name is a required field.\'', function(){
     
-		const errors = {'missingArray': ['firstName', 'lastName']};
-		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('firstName and lastName are required fields!');
+		const errors = [{'field':'firstName', 'errorType':'missing'}, {'field':'lastName', 'type':'missing'}];
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('First name is a required field. Last name is a required field.');
+    
+	});
+
+	it('should return \'First name is expected to be of type \'string\'.\'', function(){
+    
+		const errors = [{'field':'firstName', 'errorType':'type', 'expectedType': 'string'}];
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('First name is expected to be of type \'string\'');
+    
+	});
+
+	it('should return \'Mailing zip must be 5 or 9 digits.\'', function(){
+    
+		const errors = [{'field':'applicantInfo.mailingZIP', 'errorType':'format'}];
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Mailing zip must be 5 or 9 digits.');
+    
+	});
+
+	it('should return \'First name with some enum message.\'', function(){
+    
+		const errors = [{'field':'firstName', 'errorType':'enum', 'expectedType': null, 'enumMessage':'with some enum message.'}];
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Mailing zip must be 5 or 9 digits.');
     
 	});
     
