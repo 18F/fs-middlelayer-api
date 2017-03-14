@@ -16,12 +16,12 @@
 
 const include = require('include')(__dirname);
 const Validator = require('jsonschema').Validator;
+const v = new Validator();
 
 //*******************************************************************
 
 const util = include('controllers/permits/special-uses/utility.js');
 const schema = require('./validationSchema.json');
-const v = new Validator();
 
 //*******************************************************************
 // schemas
@@ -162,6 +162,18 @@ function dateTimeFormat(input){
 
 //*******************************************************************
 
+function removeInstance(prop){
+
+	let fixedProp = '';
+
+	if (prop.indexOf('.') !== -1){
+
+		fixedProp = prop.substring((prop.indexOf('.') + 1), (prop.length));
+
+	}
+
+	return fixedProp;
+
 }
 
 function combinePropArgument(property, argument){
@@ -182,40 +194,98 @@ function combinePropArgument(property, argument){
 
 }
 
+function makeErrorObj(field, errorType, expectedFieldType, enumMessage){
+	return {
+		field,
+		errorType,
+		expectedFieldType,
+		enumMessage
+	};
+}
+
 function handleMissingError(output, result, counter){
 
 	const property = removeInstance(result[counter].property);
 	const field = combinePropArgument(property, result[counter].argument);
-	util.invalidField(output, field);
-
+	output.errorArray.push(makeErrorObj(field, 'missing'));
 }
 
 function handleTypeError(output, result, counter){
 
-	console.log(result);
 	const expectedType = result[counter].argument[0];
 	const property = removeInstance(result[counter].property);
-	util.fieldType(output, property, expectedType);
+	output.errorArray.push(makeErrorObj(property, 'type', expectedType));
 
 }
-//Needs to take in route(noncom/out)
-const validateInput = function (req){
 
-	const route = getRoute(req);
-	const output = {
+function handleFormatError(output, result, counter){
+
+	const issue = result[counter];
+	let field = '';
+	switch (issue.argument){
+	case 'zipFormat':
+		field = `${removeInstance(result[counter].property)}`;
+		break;
+	case 'areaCodeFormat':
+		field = `${removeInstance(result[counter].property)}`;
+		break;
+	case 'phoneNumberFormat':
+		field = `${removeInstance(result[counter].property)}`;
+		break;
+	case 'stateFormat':
+		field = `${removeInstance(result[counter].property)}`;
+		break;
+	case 'forestFormat':
+		field = `${removeInstance(result[counter].property)}`;
+		break;
+	case 'districtFormat':
+		field = `${removeInstance(result[counter].property)}`;
+		break;
+	case 'regionFormat':
+		field = `${removeInstance(result[counter].property)}`;
+		break;
+	case 'dateTimeFormat':
+		field = `${removeInstance(result[counter].property)}`;
+		break;
+	}
+
+	output.errorArray.push(makeErrorObj(field, 'format'));
+
+}
+
+function handleEnumError(output, result, counter){
+
+	const property = removeInstance(result[counter].property);
+	output.errorArray.push(makeErrorObj(property, 'enum', null, result[counter].message));
+
+}
+
+const validateInput = function (route, req){
+
+	const errorTracking = {
     
 		'fieldsValid': true,
 		'errorMessage': '',
-		'missingArray': [],
-		'typeArray': []
+		'errorArray':[]
 
 	};
 	let result, counter;
+
+	v.customFormats.zipFormat = zipFormat;
+	v.customFormats.areaCodeFormat = areaCodeFormat;
+	v.customFormats.phoneNumberFormat = phoneNumberFormat;
+	v.customFormats.stateFormat = stateFormat;
+	v.customFormats.forestFormat = forestFormat;
+	v.customFormats.regionFormat = regionFormat;
+	v.customFormats.districtFormat = districtFormat;
+	v.customFormats.dateTimeFormat = dateTimeFormat;
+
 	v.addSchema(phoneNumber, 'phoneNumber');
 	v.addSchema(applicantInfoNoncommercial, 'applicantInfoNoncommercial');
 	v.addSchema(noncommercialFields, 'noncommercialFields');
 	v.addSchema(applicantInfoTempOutfitter, 'applicantInfoTempOutfitter');
 	v.addSchema(tempOutfitterFields, 'tempOutfitterFields');
+
 	if (route === 'noncommercial'){
 
 		result = v.validate(req.body, noncommercialSchema).errors;
@@ -228,22 +298,42 @@ const validateInput = function (req){
 	}
 
 	const length = result.length;
+	if (length > 0){
+
+		errorTracking.fieldsValid = false;
+
+	}
 	for (counter = 0; counter < length; counter++){
 
 		if (result[counter].name === 'required'){
 
-			handleMissingError(output, result, counter);
+			handleMissingError(errorTracking, result, counter);
+
+		}
+		else  if (result[counter].name === 'type'){
+
+			handleTypeError(errorTracking, result, counter);
+
+		}
+		else if (result[counter].name === 'format'){
+
+			handleFormatError(errorTracking, result, counter);
 
 		}
 		else {
 
-			handleTypeError(output, result, counter);
+			handleEnumError(errorTracking, result, counter);
 
 		}
 
 	}
 
-	output.errorMessage = util.buildErrorMessage(output);
+	errorTracking.errorMessage = util.buildErrorMessage(errorTracking);
+	const output = {
+		'success': errorTracking.fieldsValid,
+		'errorMessage': errorTracking.errorMessage,
+		'errors': errorTracking.errorArray
+	};
 
 	return output;
 
