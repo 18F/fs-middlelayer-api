@@ -60,7 +60,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('region and forest and district and applicantInfo and type and noncommercialFields are required fields!');
+					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Type is a required field. Noncommercial Fields/Activity Description is a required field. Noncommercial Fields/Location Description is a required field. Noncommercial Fields/Start Date Time is a required field. Noncommercial Fields/End Date Time is a required field. Noncommercial Fields/Number Participants is a required field.');
 
 				})
 				.expect(400, done);
@@ -81,7 +81,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo is a required field!');
+					expect(res.body.response.message).to.equal('Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field.');
 
 				})
 				.expect(400, done);
@@ -102,7 +102,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('noncommercialFields is a required field!');
+					expect(res.body.response.message).to.equal('Noncommercial Fields/Activity Description is a required field. Noncommercial Fields/Location Description is a required field. Noncommercial Fields/Start Date Time is a required field. Noncommercial Fields/End Date Time is a required field. Noncommercial Fields/Number Participants is a required field.');
 
 				})
 				.expect(400, done);
@@ -142,7 +142,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.firstName is a required field!');
+					expect(res.body.response.message).to.equal('Applicant Info/First Name is a required field.');
 
 				})
 				.expect(400, done);
@@ -178,7 +178,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.lastName is a required field!');
+					expect(res.body.response.message).to.equal('Applicant Info/Last Name is a required field.');
 
 				})
 				.expect(400, done);
@@ -209,7 +209,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.dayPhone is a required field!');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field.');
 
 				})
 				.expect(400, done);
@@ -245,7 +245,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.dayPhone.areaCode is a required field!');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Area Code is a required field.');
 
 				})
 				.expect(400, done);
@@ -281,7 +281,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.dayPhone.number is a required field!');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Number is a required field.');
 
 				})
 				.expect(400, done);
@@ -317,7 +317,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.dayPhone.type is a required field!');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Type is a required field.');
 
 				})
 				.expect(400, done);
@@ -353,7 +353,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.emailAddress is a required field!');
+					expect(res.body.response.message).to.equal('Applicant Info/Email Address is a required field.');
 
 				})
 				.expect(400, done);
@@ -389,7 +389,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.mailingAddress is a required field!');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing Address is a required field.');
 
 				})
 				.expect(400, done);
@@ -425,7 +425,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.mailingCity is a required field!');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing City is a required field.');
 
 				})
 				.expect(400, done);
@@ -461,7 +461,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.mailingState is a required field!');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing State is a required field.');
 
 				})
 				.expect(400, done);
@@ -497,7 +497,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.mailingZIP is a required field!');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip is a required field.');
 
 				})
 				.expect(400, done);
@@ -528,7 +528,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('noncommercialFields.activityDescription is a required field!');
+					expect(res.body.response.message).to.equal('Noncommercial Fields/Activity Description is a required field.');
 
 				})
 				.expect(400, done);
@@ -556,7 +556,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('noncommercialFields.locationDescription is a required field!');
+					expect(res.body.response.message).to.equal('Noncommercial Fields/Location Description is a required field.');
 
 				})
 				.expect(400, done);
@@ -584,7 +584,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('noncommercialFields.startDateTime is a required field!');
+					expect(res.body.response.message).to.equal('Noncommercial Fields/Start Date Time is a required field.');
 
 				})
 				.expect(400, done);
@@ -612,7 +612,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('noncommercialFields.endDateTime is a required field!');
+					expect(res.body.response.message).to.equal('Noncommercial Fields/End Date Time is a required field.');
 
 				})
 				.expect(400, done);
@@ -640,7 +640,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('noncommercialFields.numberParticipants is a required field!');
+					expect(res.body.response.message).to.equal('Noncommercial Fields/Number Participants is a required field.');
 
 				})
 				.expect(400, done);
@@ -729,7 +729,7 @@ describe('noncommercial POST: field type validated', function(){
 	
 	});
 
-	describe('noncommercial POST: required fileds are type validated', function(){
+	describe('noncommercial POST: required fields are type validated', function(){
 
 		it('should return valid json for invalid type, firstName', function(done) {
 
@@ -761,7 +761,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.firstName is expected to be type \'string\'. ');
+					expect(res.body.response.message).to.equal('Applicant Info/First Name is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -798,7 +798,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.lastName is expected to be type \'string\'. ');
+					expect(res.body.response.message).to.equal('Applicant Info/Last Name is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -835,7 +835,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.dayPhone.areaCode is expected to be type \'integer\'. ');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Area Code is expected to be type \'integer\'.');
 
 				})
 				.expect(400, done);
@@ -872,7 +872,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.dayPhone.number is expected to be type \'integer\'. ');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Number is expected to be type \'integer\'.');
 
 				})
 				.expect(400, done);
@@ -909,7 +909,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.dayPhone.type is expected to be type \'string\'. ');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Type is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -946,7 +946,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.emailAddress is expected to be type \'string\'. ');
+					expect(res.body.response.message).to.equal('Applicant Info/Email Address is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -983,7 +983,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.mailingAddress is expected to be type \'string\'. ');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing Address is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1020,7 +1020,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.mailingCity is expected to be type \'string\'. ');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing City is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1057,7 +1057,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.mailingState is expected to be type \'string\'. ');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing State is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1094,7 +1094,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.mailingZIP is expected to be type \'integer\'. ');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip is expected to be type \'integer\'.');
 
 				})
 				.expect(400, done);
@@ -1123,7 +1123,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('noncommercialFields.activityDescription is expected to be type \'string\'. ');
+					expect(res.body.response.message).to.equal('Noncommercial Fields/Activity Description is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1152,7 +1152,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('noncommercialFields.locationDescription is expected to be type \'string\'. ');
+					expect(res.body.response.message).to.equal('Noncommercial Fields/Location Description is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1181,7 +1181,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('noncommercialFields.startDateTime is expected to be type \'string\'. ');
+					expect(res.body.response.message).to.equal('Noncommercial Fields/Start Date Time is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1210,7 +1210,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('noncommercialFields.endDateTime is expected to be type \'string\'. ');
+					expect(res.body.response.message).to.equal('Noncommercial Fields/End Date Time is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1239,7 +1239,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('noncommercialFields.numberParticipants is expected to be type \'integer\'. ');
+					expect(res.body.response.message).to.equal('Noncommercial Fields/Number Participants is expected to be type \'integer\'.');
 
 				})
 				.expect(400, done);
@@ -1248,7 +1248,7 @@ describe('noncommercial POST: field type validated', function(){
 
 	});
 
-	describe('noncommercial POST: non-required fileds are type validated', function(){
+	describe('noncommercial POST: non-required fields are type validated', function(){
 
 		it('should return valid json for invalid type, dayPhone.extension', function(done) {
 
@@ -1280,7 +1280,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('applicantInfo.dayPhone.extension is expected to be type \'integer\'. ');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Extension is expected to be type \'integer\'.');
 
 				})
 				.expect(400, done);
@@ -1291,3 +1291,418 @@ describe('noncommercial POST: field type validated', function(){
 
 });
 
+describe('noncommercial POST: format validated', function(){
+
+	let token;
+
+	before(function(done) {
+
+		util.getToken(function(t){
+
+			token = t;
+			return done();
+
+		});
+	
+	});
+
+	describe('noncommercial POST: fields with a specific format are validated', function(){
+
+		it('should return valid json for invalid format, areaCode', function(done) {
+
+			request(server)
+				.post('/permits/special-uses/noncommercial/')
+				.set('x-access-token', token)
+				.send(
+						util.updateInputData(
+							postInput,
+							{
+								'applicantInfo': {
+									'firstName':'John',
+									'lastName': 'Doe',
+									'dayPhone': {
+										'areaCode': 1,
+										'number': 8156141,
+										'extension': 0,
+										'type': 'BUSINESS'
+									},
+									'emailAddress': 'test@email.org',
+									'mailingAddress': 'ON ANW 0953',
+									'mailingCity': 'ALBANY',
+									'mailingState': 'OR',
+									'mailingZIP': 97321
+								}
+							}
+						)
+					)
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Area Code must be 3 digits.');
+
+				})
+				.expect(400, done);
+
+		});
+
+		it('should return valid json for invalid format, number', function(done) {
+
+			request(server)
+				.post('/permits/special-uses/noncommercial/')
+				.set('x-access-token', token)
+				.send(
+						util.updateInputData(
+							postInput,
+							{
+								'applicantInfo': {
+									'firstName':'John',
+									'lastName': 'Doe',
+									'dayPhone': {
+										'areaCode': 123,
+										'number': 816141,
+										'extension': 0,
+										'type': 'BUSINESS'
+									},
+									'emailAddress': 'test@email.org',
+									'mailingAddress': 'ON ANW 0953',
+									'mailingCity': 'ALBANY',
+									'mailingState': 'OR',
+									'mailingZIP': 97321
+								}
+							}
+						)
+					)
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Number must be 7 digits.');
+
+				})
+				.expect(400, done);
+
+		});
+
+	});
+
+	it('should return valid json for invalid format, mailingState', function(done) {
+
+		request(server)
+			.post('/permits/special-uses/noncommercial/')
+			.set('x-access-token', token)
+			.send(
+					util.updateInputData(
+						postInput,
+						{
+							'applicantInfo': {
+								'firstName':'John',
+								'lastName': 'Doe',
+								'dayPhone': {
+									'areaCode': 123,
+									'number': 8156141,
+									'extension': 0,
+									'type': 'BUSINESS'
+								},
+								'emailAddress': 'test@email.org',
+								'mailingAddress': 'ON ANW 0953',
+								'mailingCity': 'ALBANY',
+								'mailingState': 'ORE',
+								'mailingZIP': 97321
+							}
+						}
+					)
+				)
+			.expect('Content-Type', /json/)
+			.expect(function(res){
+
+				expect(res.body.response.message).to.equal('Applicant Info/Mailing State must be 2 letters.');
+
+			})
+			.expect(400, done);
+
+	});
+
+	it('should return valid json for invalid format, mailingZIP', function(done) {
+
+		request(server)
+			.post('/permits/special-uses/noncommercial/')
+			.set('x-access-token', token)
+			.send(
+					util.updateInputData(
+						postInput,
+						{
+							'applicantInfo': {
+								'firstName':'John',
+								'lastName': 'Doe',
+								'dayPhone': {
+									'areaCode': 123,
+									'number': 8156141,
+									'extension': 0,
+									'type': 'BUSINESS'
+								},
+								'emailAddress': 'test@email.org',
+								'mailingAddress': 'ON ANW 0953',
+								'mailingCity': 'ALBANY',
+								'mailingState': 'OR',
+								'mailingZIP': 3123
+							}
+						}
+					)
+				)
+			.expect('Content-Type', /json/)
+			.expect(function(res){
+
+				expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip must be 5 or 9 digits.');
+
+			})
+			.expect(400, done);
+
+	});
+
+	it('should return valid json for valid format, mailingZIP', function(done) {
+
+		request(server)
+			.post('/permits/special-uses/noncommercial/')
+			.set('x-access-token', token)
+			.send(
+					util.updateInputData(
+						postInput,
+						{
+							'applicantInfo': {
+								'firstName':'John',
+								'lastName': 'Doe',
+								'dayPhone': {
+									'areaCode': 123,
+									'number': 8156141,
+									'extension': 0,
+									'type': 'BUSINESS'
+								},
+								'emailAddress': 'test@email.org',
+								'mailingAddress': 'ON ANW 0953',
+								'mailingCity': 'ALBANY',
+								'mailingState': 'OR',
+								'mailingZIP': 312311234
+							}
+						}
+					)
+				)
+			.expect('Content-Type', /json/)
+			.expect(200, done);
+
+	});
+
+	it('should return valid json for invalid format, region', function(done) {
+
+		request(server)
+			.post('/permits/special-uses/noncommercial/')
+			.set('x-access-token', token)
+			.send(
+					util.updateInputData(
+						postInput,
+						{
+							'region': 313,
+							'forest': 50,
+							'district': 50
+						}
+					)
+				)
+			.expect('Content-Type', /json/)
+			.expect(function(res){
+
+				expect(res.body.response.message).to.equal('Region must be 2 digits.');
+
+			})
+			.expect(400, done);
+
+	});
+
+	it('should return valid json for invalid format, forest', function(done) {
+
+		request(server)
+			.post('/permits/special-uses/noncommercial/')
+			.set('x-access-token', token)
+			.send(
+					util.updateInputData(
+						postInput,
+						{
+							'region': 33,
+							'forest': 510,
+							'district': 50
+						}
+					)
+				)
+			.expect('Content-Type', /json/)
+			.expect(function(res){
+
+				expect(res.body.response.message).to.equal('Forest must be 2 digits.');
+
+			})
+			.expect(400, done);
+
+	});
+
+	it('should return valid json for invalid format, district', function(done) {
+
+		request(server)
+			.post('/permits/special-uses/noncommercial/')
+			.set('x-access-token', token)
+			.send(
+					util.updateInputData(
+						postInput,
+						{
+							'region': 31,
+							'forest': 50,
+							'district': 510
+						}
+					)
+				)
+			.expect('Content-Type', /json/)
+			.expect(function(res){
+
+				expect(res.body.response.message).to.equal('District must be 2 digits.');
+
+			})
+			.expect(400, done);
+
+	});
+
+	it('should return valid json for invalid format, startDateTime', function(done) {
+
+		request(server)
+			.post('/permits/special-uses/noncommercial/')
+			.set('x-access-token', token)
+			.send(
+					util.updateInputData(
+						postInput,
+						{
+							'noncommercialFields': {
+								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
+								'locationDescription': 'string',
+								'startDateTime': '01-12-2014',
+								'endDateTime': '2013-01-19',
+								'numberParticipants': 45
+							}
+						}
+					)
+				)
+			.expect('Content-Type', /json/)
+			.expect(function(res){
+
+				expect(res.body.response.message).to.equal('Noncommercial Fields/Start Date Time must be in format \'YYYY-MM-DD\'.');
+
+			})
+			.expect(400, done);
+
+	});
+
+	it('should return valid json for invalid format, endDateTime', function(done) {
+
+		request(server)
+			.post('/permits/special-uses/noncommercial/')
+			.set('x-access-token', token)
+			.send(
+					util.updateInputData(
+						postInput,
+						{
+							'noncommercialFields': {
+								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
+								'locationDescription': 'string',
+								'startDateTime': '2013-01-12',
+								'endDateTime': '01-19-2016',
+								'numberParticipants': 45
+							}
+						}
+					)
+				)
+			.expect('Content-Type', /json/)
+			.expect(function(res){
+
+				expect(res.body.response.message).to.equal('Noncommercial Fields/End Date Time must be in format \'YYYY-MM-DD\'.');
+
+			})
+			.expect(400, done);
+
+	});
+
+});
+
+describe('noncommercial POST: enum validated', function(){
+
+	let token;
+
+	before(function(done) {
+
+		util.getToken(function(t){
+
+			token = t;
+			return done();
+
+		});
+	
+	});
+
+	describe('noncommercial POST: fields with enumuration are validated', function(){
+
+		it('should return valid json for invalid option, type', function(done) {
+
+			request(server)
+				.post('/permits/special-uses/noncommercial/')
+				.set('x-access-token', token)
+				.send(
+						util.updateInputData(
+							postInput,
+							{
+								'type':'invalid'
+							}
+						)
+					)
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+
+					expect(res.body.response.message).to.equal('Type is not one of enum values: noncommercial,tempOutfitterGuide.');
+
+				})
+				.expect(400, done);
+
+		});
+
+		it('should return valid json for invalid option, orgType', function(done) {
+
+			request(server)
+				.post('/permits/special-uses/noncommercial/')
+				.set('x-access-token', token)
+				.send(
+						util.updateInputData(
+							postInput,
+							{
+								'applicantInfo': {
+									'firstName':'John',
+									'lastName': 'Doe',
+									'dayPhone': {
+										'areaCode': 541,
+										'number': 8156141,
+										'extension': 0,
+										'type': 'BUSINESS'
+									},
+									'emailAddress': 'test@email.org',
+									'mailingAddress': 'ON ANW 0953',
+									'mailingCity': 'ALBANY',
+									'mailingState': 'OR',
+									'mailingZIP': 97321,
+									'orgType': 'invalid'
+								}
+							}
+						)
+					)
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+
+					expect(res.body.response.message).to.equal('Applicant Info/Org Type is not one of enum values: Individual,Corporation,Limited Liability Company,Partnership or Association,State Government or Agency,Local Government or Agency,Nonprofit.');
+
+				})
+				.expect(400, done);
+
+		});
+
+	});
+
+});
