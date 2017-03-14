@@ -211,7 +211,7 @@ function missingSuperFields(output, field, route){
 		applicantInfo.push('applicantInfo.orgType');
 
 	}
-	const phone = ['dayPhone.areaCode', 'dayPhone.number', 'dayPhone.type'];
+	const phone = ['applicantInfo.dayPhone.areaCode', 'applicantInfo.dayPhone.number', 'applicantInfodayPhone.type'];
 	const noncommercial = ['noncommercialFields.activityDescription', 'noncommercialFields.locationDescription', 'noncommercialFields.startDateTime', 'noncommercialFields.endDateTime', 'noncommercialFields.numberParticipants'];
 	const tempOutfitter = ['tempOutfitterFields.activityDescription', 'tempOutfitterFields.locationDescription', 'tempOutfitterFields.startDateTime', 'tempOutfitterFields.endDateTime', 'tempOutfitterFields.insuranceCertificate', 'tempOutfitterFields.goodStandingEvidence', 'tempOutfitterFields.operatingPlan'];
 	
@@ -224,7 +224,7 @@ function missingSuperFields(output, field, route){
 		});
 
 	}
-	else if (field === 'dayPhone'){
+	else if (field === 'applicantInfo.dayPhone'){
 
 		phone.forEach((missingField)=>{
 
@@ -253,12 +253,11 @@ function missingSuperFields(output, field, route){
 }
 
 function handleMissingError(output, result, counter, route){
-
 	const property = removeInstance(result[counter].property);
 	const field = combinePropArgument(property, result[counter].argument);
 	switch (field){
 	case 'applicantInfo':
-	case 'dayPhone':
+	case 'applicantInfo.dayPhone':
 	case 'noncommercialFields':
 	case 'tempOutfitterFields':
 		missingSuperFields(output, field, route);
