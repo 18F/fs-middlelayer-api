@@ -178,7 +178,7 @@ function createPost(formType, controlNumber, inputPost){
 
 	const genericFields = postSchema.genericFields;
 
-	if(controlNumber){
+	if (controlNumber){
 		postData.controlNumber = controlNumber;
 	}
 	

@@ -20,15 +20,14 @@ const error = include('error.js');
 //*******************************************************************
 // authorize
 
-
 const authorize = function(req, res, next){
 
-	if(req.decoded.role === 'admin'){
+	if (req.decoded.role === 'admin'){
 		return next();
 	}
 	
 	error.sendError(req, res, 403, 'Forbidden.');
-}
+};
 
 //*******************************************************************=
 //exports
