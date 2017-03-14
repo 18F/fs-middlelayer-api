@@ -82,9 +82,9 @@ put.id = function(req, res){
 
 const post = function(req, res){
 
-	const validateRes = validateSpecialUse.validateInput(req);
+	const validateRes = validateSpecialUse.validateInput('outfitters', req);
     
-	if (validateRes.fieldsValid){
+	if (validateRes.success){
 
 		const postData = util.createPost('outfitters', req.body);
 
@@ -97,7 +97,7 @@ const post = function(req, res){
 	}
 	else {
     
-		error.sendError(req, res, 400, validateRes.errorMessage);
+		error.sendError(req, res, 400, validateRes.errorMessage, validateRes.errors);
     
 	}
 
