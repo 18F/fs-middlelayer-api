@@ -60,7 +60,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info is a required field. Type is a required field. Temp Outfitter Fields is a required field.');
+					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field. Type is a required field. Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Location Description is a required field. Temp Outfitter Fields/Start Date Time is a required field. Temp Outfitter Fields/End Date Time is a required field. Temp Outfitter Fields/Insurance Certificate is a required field. Temp Outfitter Fields/Good Standing Evidence is a required field. Temp Outfitter Fields/Operating Plan is a required field.');
 
 				})
 				.expect(400, done);
@@ -81,7 +81,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field.');
 
 				})
 				.expect(400, done);
@@ -102,7 +102,7 @@ describe('outfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Temp Outfitter Fields is a required field.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Location Description is a required field. Temp Outfitter Fields/Start Date Time is a required field. Temp Outfitter Fields/End Date Time is a required field. Temp Outfitter Fields/Insurance Certificate is a required field. Temp Outfitter Fields/Good Standing Evidence is a required field. Temp Outfitter Fields/Operating Plan is a required field.');
 
 				})
 				.expect(400, done);
