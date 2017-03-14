@@ -55,7 +55,7 @@ describe('API Controllers: build error message', function(){
 
 	it('should return \'First Name with some enum message.\'', function(){
     
-		const errors = {'errorArray':[{'field':'applicantInfo.firstName', 'errorType':'enum', 'expectedType': null, 'enumMessage':'with some enum message.'}]};
+		const errors = {'errorArray':[{'field':'applicantInfo.firstName', 'errorType':'enum', 'expectedType': null, 'enumMessage':'with some enum message'}]};
 		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Applicant Info/First Name with some enum message.');
     
 	});
