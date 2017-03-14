@@ -31,6 +31,17 @@ passport.use(new Strategy(
 			firstname: 'first',
 			lastname: 'last',
 			email: 'name@email.com',
+			role: 'admin',
+			verified: true
+		});
+	}
+	else if (username === 'user2' && password === '12345'){
+		done(null, {
+			id: username,
+			firstname: 'first',
+			lastname: 'last',
+			email: 'name@email.com',
+			role: 'user',
 			verified: true
 		});
 	}
@@ -45,7 +56,8 @@ passport.use(new Strategy(
 const serialize = function(req, res, next) {  
 
 	req.user = {
-		id: req.user.id
+		id: req.user.id,
+		role: req.user.role
 	};
 	next();
 };
@@ -53,7 +65,8 @@ const serialize = function(req, res, next) {
 const generate = function(req, res, next) {   
     
 	req.token = jwt.sign({
-		id: req.user.id
+		id: req.user.id,
+		role: req.user.role
 	}, 'superSecret', { expiresIn: 120 * 60 });
 	next();
 };
