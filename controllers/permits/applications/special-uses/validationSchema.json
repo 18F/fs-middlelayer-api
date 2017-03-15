@@ -194,7 +194,7 @@
             "mailingCity": { "type": "string" },
             "mailingState": {
                 "type": "string",
-                "format":"stateFormat"
+                "pattern":"^(A[EKLPRSZ]|C[AOT]|D[CE]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHVJMY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$"
             },
             "mailingZIP": { 
                 "type": "integer",
