@@ -18,8 +18,8 @@ const expect = chai.expect;
 
 const specialUses = {};
 
-specialUses.validate = require('../controllers/permits/special-uses/validate.js');
-specialUses.buildErrorMessage = require('../controllers/permits/special-uses/utility.js');
+specialUses.validate = require('../controllers/permits/applications/special-uses/validate.js');
+specialUses.buildErrorMessage = require('../controllers/permits/applications/special-uses/utility.js');
 
 //*******************************************************************
 
