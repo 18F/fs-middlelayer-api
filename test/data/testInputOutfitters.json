@@ -25,8 +25,8 @@
         "tempOutfitterFields": {
             "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
             "locationDescription": "string",
-            "startDateTime": "2013-01-12",
-            "endDateTime": "2013-01-19",
+            "startDateTime": "2013-01-12T12:00:00Z",
+            "endDateTime": "2013-01-19T12:00:00Z",
             "insuranceCertificate":"File on S3",
             "goodStandingEvidence":"File on S3",
             "operatingPlan":"File on S3"
@@ -66,8 +66,8 @@
         "tempOutfitterFields": {
             "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
             "locationDescription": "string",
-            "startDateTime": "2013-01-12",
-            "endDateTime": "2013-01-19",
+            "startDateTime": "2013-01-12T12:00:00Z",
+            "endDateTime": "2013-01-19T12:00:00Z",
             "insuranceCertificate":"File on S3",
             "goodStandingEvidence":"File on S3",
             "operatingPlan":"File on S3"
