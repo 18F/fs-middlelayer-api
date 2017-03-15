@@ -192,7 +192,7 @@ function copyGenericInfo(cnData, jsonData){
 
 function createPost(formType, controlNumber, inputPost){
 	
-	const postSchema = include('controllers/permits/special-uses/postSchema.json');
+	const postSchema = include('controllers/permits/applications/special-uses/postSchema.json');
 
 	const postData = {};
 	let combId = '';
