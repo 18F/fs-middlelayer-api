@@ -1902,7 +1902,7 @@ describe('outfitters POST: pattern validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Email Address not in format \'email@email.service\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Email Address must be in format \'email@email.service\'.');
 
 				})
 				.expect(400, done);
