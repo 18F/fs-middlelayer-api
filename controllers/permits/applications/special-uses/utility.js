@@ -15,6 +15,7 @@
 // required modules
 
 const include = require('include')(__dirname);
+const errors = require('./patternErrorMessages.json');
 
 //*******************************************************************
 
@@ -48,37 +49,7 @@ function makePathReadable(input){
 function buildFormatErrorMessage(fullPath){
 	const field = fullPath.substring(fullPath.lastIndexOf('.') + 1);
 	const readablePath = makePathReadable(fullPath);
-	let errorMessage;
-	switch (field){
-	case 'mailingZIP':
-		errorMessage = `${readablePath} must be 5 or 9 digits.`;
-		break;
-	case 'areaCode':
-		errorMessage = `${readablePath} must be 3 digits.`;
-		break;
-	case 'number':
-		errorMessage = `${readablePath} must be 7 digits.`;
-		break;
-	case 'mailingState':
-		errorMessage = `${readablePath} must be 2 letters.`;
-		break;
-	case 'forest':
-		errorMessage = `${readablePath} must be 2 digits.`;
-		break;
-	case 'district':
-		errorMessage = `${readablePath} must be 2 digits.`;
-		break;
-	case 'region':
-		errorMessage = `${readablePath} must be 2 digits.`;
-		break;
-	case 'startDateTime':
-		errorMessage = `${readablePath} must be in format 'YYYY-MM-DD'.`;
-		break;
-	case 'endDateTime':
-		errorMessage = `${readablePath} must be in format 'YYYY-MM-DD'.`;
-		break;
-	}
-
+	const errorMessage = `${readablePath}${errors[field]}`;
 	return errorMessage;
 
 }
@@ -100,6 +71,7 @@ function buildErrorMessage(output){
 			messages.push(type);
 			break;
 		case 'format':
+		case 'pattern':
 			messages.push(buildFormatErrorMessage(error.field));
 			break;
 		case 'enum':

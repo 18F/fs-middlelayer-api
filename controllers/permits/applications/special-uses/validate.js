@@ -280,35 +280,7 @@ function handleTypeError(output, result, counter){
 
 function handleFormatError(output, result, counter){
 
-	const issue = result[counter];
-	let field = '';
-	switch (issue.argument){
-	case 'zipFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'areaCodeFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'phoneNumberFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'stateFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'forestFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'districtFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'regionFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'dateTimeFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	}
-
+	const field = `${removeInstance(result[counter].property)}`;
 	output.errorArray.push(makeErrorObj(field, 'format'));
 
 }
@@ -377,17 +349,16 @@ const validateInput = function (route, req){
 			handleTypeError(errorTracking, result, counter);
 
 		}
-		else if (result[counter].name === 'format'){
+		else if (result[counter].name === 'format' || result[counter].name === 'pattern'){
 
 			handleFormatError(errorTracking, result, counter);
 
 		}
-		else {
+		else if (result[counter].name === 'enum'){
 
 			handleEnumError(errorTracking, result, counter);
 
 		}
-
 	}
 
 	errorTracking.errorMessage = util.buildErrorMessage(errorTracking);
