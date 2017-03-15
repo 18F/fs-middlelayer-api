@@ -15,13 +15,13 @@
 // required modules
 
 const include = require('include')(__dirname);
-const outfittersData = include('test/data/basicGET.json');
+const noncommercialData = include('test//data/basicGET.json');
 
 //*******************************************************************
 // validation
 
-const validateSpecialUse = include('controllers/permits/special-uses/validate.js');
-const util = include('controllers/permits/special-uses/utility.js');
+const validateSpecialUse = include('controllers/permits/applications/special-uses/validate.js');
+const util = include('controllers/permits/applications/special-uses/utility.js');
 const error = include('error.js');
 
 //*******************************************************************
@@ -42,47 +42,45 @@ get.id = function(req, res){
 	jsonResponse.type = 'controller';
 	jsonResponse.verb = 'get';
 	jsonResponse.src = 'json';
-	jsonResponse.route = 'permits/special-uses/commercial/outfitters/{controlNumber}';
+	jsonResponse.route = 'permits/special-uses/noncommercial/{controlNumber}';
     
 	jsonData.response = jsonResponse;
 
-	const cnData = outfittersData[1095010356];
+	const cnData = noncommercialData[1095010356];
 
 	if (cnData){
+
+		const noncommercialFields = {};
         
-		const outfittersFields = {};
-        
-		outfittersFields.activityDescription = cnData.purpose;
-		outfittersFields.locationDescription = null;
-		outfittersFields.startDateTime = '2017-04-12 09:00:00';
-		outfittersFields.endDateTime = '2017-04-15 20:00:00';
-		outfittersFields.insuranceCertificate = 'insuranceCertificate.pdf';
-		outfittersFields.goodStandingEvidence = 'goodStandingEvidence.pdf';
-		outfittersFields.operatingPlan = 'operatingPlan.pdf';
+		noncommercialFields.activityDescription = cnData.purpose;
+		noncommercialFields.locationDescription = null;
+		noncommercialFields.startDateTime = '2017-04-12 09:00:00';
+		noncommercialFields.endDateTime = '2017-04-15 20:00:00';
+		noncommercialFields.numberParticipants = 45;
 
 		util.copyGenericInfo(cnData, jsonData);
-		jsonData.tempOutfitterFields = outfittersFields;    
-
+		jsonData.noncommercialFields = noncommercialFields;    
 		jsonResponse.success = true;
+        
 	}
     
 	res.json(jsonData);
-    
+
 };
 
 // put id
 
 put.id = function(req, res){
-
+	
 	const controlNumber = req.params.id;
 
-	const validateRes = validateSpecialUse.validateInput('outfitters', req);
+	const validateRes = validateSpecialUse.validateInput('noncommercial', req);
     
 	if (validateRes.success){
 
-		const postData = util.createPost('outfitters', controlNumber, req.body);
+		const postData = util.createPost('noncommercial', controlNumber, req.body);
 
-		const response = include('test/data/outfitters.put.id.json');
+		const response = include('test/data/noncommercial.put.id.json');
 
 		response.apiRequest = postData;
     
@@ -101,13 +99,13 @@ put.id = function(req, res){
 
 const post = function(req, res){
 
-	const validateRes = validateSpecialUse.validateInput('outfitters', req);
-    
+	const validateRes = validateSpecialUse.validateInput('noncommercial', req);
+
 	if (validateRes.success){
 
-		const postData = util.createPost('outfitters', null, req.body);
+		const postData = util.createPost('noncommercial', null, req.body);
 
-		const response = include('test/data/outfitters.post.json');
+		const response = include('test/data/noncommercial.post.json');
 
 		response.apiRequest = postData;
     
@@ -119,7 +117,6 @@ const post = function(req, res){
 		error.sendError(req, res, 400, validateRes.errorMessage, validateRes.errors);
     
 	}
-
 };
 
 //*******************************************************************

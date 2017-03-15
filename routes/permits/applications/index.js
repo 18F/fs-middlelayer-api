@@ -16,34 +16,12 @@
 
 const express = require('express');
 const router = express.Router();
-const include = require('include')(__dirname);
 
-const noncommercial = include('controllers/permits/special-uses/noncommercial');
+const specialUses = require('./special-uses');
+
 //*******************************************************************
 // router
 
-// get id
-router.get('/:id(\\d+)', function(req, res){
-
-	noncommercial.get.id(req, res);
-
-});
-
-// put id
-router.put('/:id(\\d+)', function(req, res){
-
-	noncommercial.put.id(req, res);
-
-});
-
-// post
-router.post('/', function(req, res){
-
-	noncommercial.post(req, res);
-
-});
-
-//*******************************************************************
-// exports
+router.use('/special-uses', specialUses);
 
 module.exports = router;

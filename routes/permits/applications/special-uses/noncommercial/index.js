@@ -18,30 +18,29 @@ const express = require('express');
 const router = express.Router();
 const include = require('include')(__dirname);
 
-const outfitters = include('controllers/permits/special-uses/commercial/outfitters');
-
+const noncommercial = include('controllers/permits/applications/special-uses/noncommercial');
 //*******************************************************************
 // router
 
 // get id
 router.get('/:id(\\d+)', function(req, res){
-    
-	outfitters.get.id(req, res);
-    
+
+	noncommercial.get.id(req, res);
+
 });
 
 // put id
 router.put('/:id(\\d+)', function(req, res){
-    
-	outfitters.put.id(req, res);
-    
+
+	noncommercial.put.id(req, res);
+
 });
 
 // post
 router.post('/', function(req, res){
-    
-	outfitters.post(req, res);
-    
+
+	noncommercial.post(req, res);
+
 });
 
 //*******************************************************************

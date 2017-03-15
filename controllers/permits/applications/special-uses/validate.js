@@ -20,7 +20,7 @@ const v = new Validator();
 
 //*******************************************************************
 
-const util = include('controllers/permits/special-uses/utility.js');
+const util = include('controllers/permits/applications/special-uses/utility.js');
 const schema = require('./validationSchema.json');
 
 //*******************************************************************

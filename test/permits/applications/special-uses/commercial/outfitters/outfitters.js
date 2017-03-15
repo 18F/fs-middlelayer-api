@@ -55,7 +55,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a body', function(done) {
 		
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.expect('Content-Type', /json/)
 				.expect(function(res){
@@ -70,7 +70,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without an applicantInfo object', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -91,7 +91,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a tempOutfitterFields object', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -116,7 +116,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a firstName', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -153,7 +153,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a lastName', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -190,7 +190,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a dayPhone', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -222,7 +222,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a dayPhone/areaCode', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -259,7 +259,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a dayPhone/number', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -296,7 +296,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a dayPhone/type', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -333,7 +333,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without an emailAddress', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -370,7 +370,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a mailingAddress', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -407,7 +407,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a mailingCity', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -444,7 +444,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a mailingState', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -481,7 +481,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a mailingZIP', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -518,7 +518,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without an orgType', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -559,7 +559,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without an activityDescription', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -589,7 +589,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a locationDescription', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -619,7 +619,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without a startDateTime', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -649,7 +649,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without an endDateTime', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -679,7 +679,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without an insuranceCertificate', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -709,7 +709,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without an goodStandingEvidence', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -739,7 +739,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for outfitters POST request without an operatingPlan', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -769,7 +769,7 @@ describe('outfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for an invalid outfitters POST request', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters')
+				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -817,7 +817,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 	it('should return valid json for outfitters GET request for id', function(done) {
 
 		request(server)
-			.get('/permits/special-uses/commercial/outfitters/1234567890')
+			.get('/permits/applications/special-uses/commercial/outfitters/1234567890')
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
 			.expect(200, done);
@@ -827,7 +827,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 	it('should return valid json for outfitters PUT request for id', function(done) {
 
 		request(server)
-			.put('/permits/special-uses/commercial/outfitters/1234')
+			.put('/permits/applications/special-uses/commercial/outfitters/1234')
 			.set('x-access-token', token)
 			.send(postInput)
 			.expect('Content-Type', /json/)
@@ -838,7 +838,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 	it('should return valid json for outfitters POST request', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/commercial/outfitters')
+			.post('/permits/applications/special-uses/commercial/outfitters')
 			.set('x-access-token', token)
 			.send(postInput)
 			.expect('Content-Type', /json/)
@@ -849,7 +849,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 	it('should return valid json for outfitters POST request with apiRequest', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/commercial/outfitters')
+			.post('/permits/applications/special-uses/commercial/outfitters')
 			.set('x-access-token', token)
 			.send(postInput)
 			.expect('Content-Type', /json/)
@@ -882,7 +882,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, firstName', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -920,7 +920,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, lastName', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -958,7 +958,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, areaCode', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -996,7 +996,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, number', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1034,7 +1034,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, type', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1072,7 +1072,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, emailAddress', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1110,7 +1110,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, mailingAddress', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1148,7 +1148,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, mailingCity', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1186,7 +1186,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, mailingState', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1224,7 +1224,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, mailingState', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1262,7 +1262,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, activityDescription', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1293,7 +1293,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, locationDescription', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1324,7 +1324,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, startDateTime', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1355,7 +1355,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, endDateTime', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1390,7 +1390,7 @@ describe('outfitters POST: field type validated', function(){
 		it('should return valid json for invalid type, extension', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1449,7 +1449,7 @@ describe('outfitters POST: format validated', function(){
 		it('should return valid json for invalid format, areaCode', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1487,7 +1487,7 @@ describe('outfitters POST: format validated', function(){
 		it('should return valid json for invalid format, number', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1527,7 +1527,7 @@ describe('outfitters POST: format validated', function(){
 	it('should return valid json for invalid format, mailingState', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/commercial/outfitters/')
+			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1565,7 +1565,7 @@ describe('outfitters POST: format validated', function(){
 	it('should return valid json for invalid format, mailingZIP', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/commercial/outfitters/')
+			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1603,7 +1603,7 @@ describe('outfitters POST: format validated', function(){
 	it('should return valid json for valid format, mailingZIP', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/commercial/outfitters/')
+			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1636,7 +1636,7 @@ describe('outfitters POST: format validated', function(){
 	it('should return valid json for invalid format, region', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/commercial/outfitters/')
+			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1661,7 +1661,7 @@ describe('outfitters POST: format validated', function(){
 	it('should return valid json for invalid format, forest', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/commercial/outfitters/')
+			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1686,7 +1686,7 @@ describe('outfitters POST: format validated', function(){
 	it('should return valid json for invalid format, district', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/commercial/outfitters/')
+			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1711,7 +1711,7 @@ describe('outfitters POST: format validated', function(){
 	it('should return valid json for invalid format, startDateTime', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/commercial/outfitters/')
+			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1742,7 +1742,7 @@ describe('outfitters POST: format validated', function(){
 	it('should return valid json for invalid format, endDateTime', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/commercial/outfitters/')
+			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1792,7 +1792,7 @@ describe('outfitters POST: enum validated', function(){
 		it('should return valid json for invalid option, type', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1815,7 +1815,7 @@ describe('outfitters POST: enum validated', function(){
 		it('should return valid json for invalid option, orgType', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/commercial/outfitters/')
+				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(

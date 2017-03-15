@@ -55,7 +55,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a body', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.expect('Content-Type', /json/)
 				.expect(function(res){
@@ -70,7 +70,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without an applicantInfo object', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -91,7 +91,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a noncommercialFields object', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -116,7 +116,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a firstName', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -152,7 +152,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a lastName', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -188,7 +188,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a dayphone', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -219,7 +219,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a dayPhone/areaCode', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -255,7 +255,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a dayPhone/number', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -291,7 +291,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a dayPhone/type', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -327,7 +327,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without an emailAddress', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -363,7 +363,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a mailingAddress', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -399,7 +399,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a mailingCity', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -435,7 +435,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a mailingState', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -471,7 +471,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a mailingZIP', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -510,7 +510,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without an activityDescription', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -538,7 +538,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a locationDescription', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -566,7 +566,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a startDateTime', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -594,7 +594,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a endDateTime', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -622,7 +622,7 @@ describe('noncommercial POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for noncommercial POST request without a numberParticipants', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial')
+				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
 				.send(
 					util.updateInputData(
@@ -669,7 +669,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 	it('should return valid json for noncommercial GET request for id', function(done) {
 
 		request(server)
-			.get('/permits/special-uses/noncommercial/1234567890')
+			.get('/permits/applications/special-uses/noncommercial/1234567890')
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
 			.expect(200, done);
@@ -679,7 +679,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 	it('should return valid json for noncommercial PUT request for id', function(done) {
 
 		request(server)
-			.put('/permits/special-uses/noncommercial/1234')
+			.put('/permits/applications/special-uses/noncommercial/1234')
 			.set('x-access-token', token)
 			.send(postInput)
 			.expect('Content-Type', /json/)
@@ -690,7 +690,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 	it('should return valid json for noncommercial POST request', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/noncommercial/')
+			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
 			.send(postInput)
 			.expect('Content-Type', /json/)
@@ -701,7 +701,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 	it('should return valid json for noncommercial POST request with apiRequest', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/noncommercial/')
+			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
 			.send(postInput)
 			.expect('Content-Type', /json/)
@@ -734,7 +734,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, firstName', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -771,7 +771,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, lastName', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -808,7 +808,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, dayPhone.areaCode', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -845,7 +845,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, dayPhone.number', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -882,7 +882,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, dayPhone.type', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -919,7 +919,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, emailAddress', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -956,7 +956,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, mailingAddress', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -993,7 +993,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, mailingCity', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1030,7 +1030,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, mailingState', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1067,7 +1067,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, mailingState', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1104,7 +1104,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, activityDescription', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1133,7 +1133,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, locationDescription', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1162,7 +1162,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, startDateTime', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1191,7 +1191,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, endDateTime', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1220,7 +1220,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, numberParticipants', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1253,7 +1253,7 @@ describe('noncommercial POST: field type validated', function(){
 		it('should return valid json for invalid type, dayPhone.extension', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1311,7 +1311,7 @@ describe('noncommercial POST: format validated', function(){
 		it('should return valid json for invalid format, areaCode', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1348,7 +1348,7 @@ describe('noncommercial POST: format validated', function(){
 		it('should return valid json for invalid format, number', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1387,7 +1387,7 @@ describe('noncommercial POST: format validated', function(){
 	it('should return valid json for invalid format, mailingState', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/noncommercial/')
+			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1424,7 +1424,7 @@ describe('noncommercial POST: format validated', function(){
 	it('should return valid json for invalid format, mailingZIP', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/noncommercial/')
+			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1461,7 +1461,7 @@ describe('noncommercial POST: format validated', function(){
 	it('should return valid json for valid format, mailingZIP', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/noncommercial/')
+			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1493,7 +1493,7 @@ describe('noncommercial POST: format validated', function(){
 	it('should return valid json for invalid format, region', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/noncommercial/')
+			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1518,7 +1518,7 @@ describe('noncommercial POST: format validated', function(){
 	it('should return valid json for invalid format, forest', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/noncommercial/')
+			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1543,7 +1543,7 @@ describe('noncommercial POST: format validated', function(){
 	it('should return valid json for invalid format, district', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/noncommercial/')
+			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1568,7 +1568,7 @@ describe('noncommercial POST: format validated', function(){
 	it('should return valid json for invalid format, startDateTime', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/noncommercial/')
+			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1597,7 +1597,7 @@ describe('noncommercial POST: format validated', function(){
 	it('should return valid json for invalid format, endDateTime', function(done) {
 
 		request(server)
-			.post('/permits/special-uses/noncommercial/')
+			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
 			.send(
 					util.updateInputData(
@@ -1645,7 +1645,7 @@ describe('noncommercial POST: enum validated', function(){
 		it('should return valid json for invalid option, type', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
@@ -1668,7 +1668,7 @@ describe('noncommercial POST: enum validated', function(){
 		it('should return valid json for invalid option, orgType', function(done) {
 
 			request(server)
-				.post('/permits/special-uses/noncommercial/')
+				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
 				.send(
 						util.updateInputData(
