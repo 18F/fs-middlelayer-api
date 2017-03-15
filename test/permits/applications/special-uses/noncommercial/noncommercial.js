@@ -1706,3 +1706,60 @@ describe('noncommercial POST: enum validated', function(){
 	});
 
 });
+
+describe('outfitters POST: pattern validated', function(){
+
+	let token;
+
+	before(function(done) {
+
+		util.getToken(function(t){
+
+			token = t;
+			return done();
+
+		});
+	
+	});
+
+	describe('noncommercial POST: fields with a regex pattern are validated', function(){
+
+		it('should return valid json for invalid pattern, emailAddress', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/noncommercial/')
+				.set('x-access-token', token)
+				.send(
+						util.updateInputData(
+							postInput,
+							{
+								'applicantInfo': {
+									'firstName':'John',
+									'lastName': 'Doe',
+									'dayPhone': {
+										'areaCode': 123,
+										'number': 8156141,
+										'extension': 0,
+										'type': 'BUSINESS'
+									},
+									'emailAddress': 'invalid',
+									'mailingAddress': 'ON ANW 0953',
+									'mailingCity': 'ALBANY',
+									'mailingState': 'OR',
+									'mailingZIP': 97321,
+									'orgType':'Limited Liability Company'
+								}
+							}
+						)
+					)
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+
+					expect(res.body.response.message).to.equal('Applicant Info/Email Address not in format \'email@email.service\'.');
+
+				})
+				.expect(400, done);
+
+		});
+	});
+});
