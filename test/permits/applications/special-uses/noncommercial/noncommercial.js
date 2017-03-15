@@ -1587,7 +1587,7 @@ describe('noncommercial POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Noncommercial Fields/Start Date Time must be in format \'YYYY-MM-DD\'.');
+				expect(res.body.response.message).to.equal('Noncommercial Fields/Start Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
 
 			})
 			.expect(400, done);
@@ -1616,7 +1616,7 @@ describe('noncommercial POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Noncommercial Fields/End Date Time must be in format \'YYYY-MM-DD\'.');
+				expect(res.body.response.message).to.equal('Noncommercial Fields/End Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
 
 			})
 			.expect(400, done);

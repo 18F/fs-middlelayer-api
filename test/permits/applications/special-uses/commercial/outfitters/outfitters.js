@@ -1732,7 +1732,7 @@ describe('outfitters POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Temp Outfitter Fields/Start Date Time must be in format \'YYYY-MM-DD\'.');
+				expect(res.body.response.message).to.equal('Temp Outfitter Fields/Start Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
 
 			})
 			.expect(400, done);
@@ -1763,7 +1763,7 @@ describe('outfitters POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Temp Outfitter Fields/End Date Time must be in format \'YYYY-MM-DD\'.');
+				expect(res.body.response.message).to.equal('Temp Outfitter Fields/End Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
 
 			})
 			.expect(400, done);
