@@ -92,23 +92,6 @@ function phoneNumberFormat(input){
 
 }
 
-function stateFormat(input){
-
-	let valid = true;
-
-	if (typeof input === 'string'){
-
-		const inputStr = input + '';
-		if (!inputStr.match(/^[a-zA-Z]{2}$/)){
-
-			valid = false;
-
-		}
-
-	}
-
-	return valid;
-}
 function twoDigitCheck(input){
 
 	let valid = true;
@@ -142,24 +125,6 @@ function districtFormat(input){
 
 	return twoDigitCheck(input);
 
-}
-function dateTimeFormat(input){
-	
-	let valid = true;
-	
-	if (typeof input === 'string'){
-
-		const inputStr = input + '';
-		
-		if (!inputStr.match(/^[0-9]{4}[-]{1}[0-9]{2}[-]{1}[0-9]{2}$/)){
-
-			valid = false;
-
-		}
-
-	}
-
-	return valid;
 }
 
 //*******************************************************************
@@ -306,11 +271,9 @@ const validateInput = function (route, req){
 	v.customFormats.zipFormat = zipFormat;
 	v.customFormats.areaCodeFormat = areaCodeFormat;
 	v.customFormats.phoneNumberFormat = phoneNumberFormat;
-	v.customFormats.stateFormat = stateFormat;
 	v.customFormats.forestFormat = forestFormat;
 	v.customFormats.regionFormat = regionFormat;
 	v.customFormats.districtFormat = districtFormat;
-	v.customFormats.dateTimeFormat = dateTimeFormat;
 
 	v.addSchema(phoneNumber, 'phoneNumber');
 	v.addSchema(appInfo, 'appInfo');
