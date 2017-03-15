@@ -16,12 +16,35 @@
 
 const express = require('express');
 const router = express.Router();
+const include = require('include')(__dirname);
 
-const applications = require('./applications');
+const outfitters = include('controllers/permits/applications/special-uses/commercial/outfitters');
 
 //*******************************************************************
 // router
 
-router.use('/applications', applications);
+// get id
+router.get('/:id(\\d+)', function(req, res){
+    
+	outfitters.get.id(req, res);
+    
+});
+
+// put id
+router.put('/:id(\\d+)', function(req, res){
+    
+	outfitters.put.id(req, res);
+    
+});
+
+// post
+router.post('/', function(req, res){
+    
+	outfitters.post(req, res);
+    
+});
+
+//*******************************************************************
+// exports
 
 module.exports = router;
