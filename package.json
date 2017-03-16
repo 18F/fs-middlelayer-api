@@ -1,12 +1,19 @@
 {
   "name": "fs-middlelayer-api",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "US Forest Service ePermit Middlelayer API",
+  "engines": {
+    "node": ">=6.9.x",
+    "npm": ">=3.10.x"
+  },
   "main": "index.js",
   "scripts": {
-    "test": "mocha test",
+    "test": "mocha test --recursive",
     "start": "node index.js",
-    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha"
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive",
+    "quality": "eslint './' -f stylish; eslint './' -o ./quality/eslint.html -f html; exit 0",
+    "fix": "eslint './' --fix; exit 0",
+    "build": "npm run coverage && npm run fix && npm run quality"
   },
   "repository": {
     "type": "git",
@@ -36,20 +43,25 @@
     "chai": "^3.5.0",
     "codeclimate-test-reporter": "^0.4.0",
     "codecov": "^1.0.1",
+    "eslint": "^3.16.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "supertest": "^3.0.0"
   },
   "dependencies": {
-    "body-parser": "^1.16.1",
+    "body-parser": "^1.17.1",
     "cors": "^2.8.1",
     "dotenv": "^4.0.0",
-    "express": "^4.14.1",
-    "file-stream-rotator": "0.0.7",
-    "helmet": "^3.4.0",
+    "express": "^4.15.2",
+    "file-stream-rotator": "^0.1.0",
+    "helmet": "^3.4.1",
     "include": "^1.1.0",
+    "jsonschema": "^1.1.1",
+    "jsonwebtoken": "^7.3.0",
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
-    "morgan": "^1.8.1"
+    "morgan": "^1.8.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0"
   }
 }

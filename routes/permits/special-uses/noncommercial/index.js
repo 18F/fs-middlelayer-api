@@ -12,28 +12,38 @@
 'use strict';
 
 //*******************************************************************
+// required modules
 
-var request = require('supertest');
-var server = require('../index.js');
+const express = require('express');
+const router = express.Router();
+const include = require('include')(__dirname);
 
-var chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
-var should = chai.should;
-
+const noncommercial = include('controllers/permits/special-uses/noncommercial');
 //*******************************************************************
+// router
 
-describe('Error function: sendError', function() {
-    
-    it('should return valid json and a status code of 400', function(done) {
-        request(server)
-            .get('/permits/special-uses/noncommercial/errorTest')
-            .expect('Content-Type', /json/)
-            .expect(400, done);
-    });
+// get id
+router.get('/:id(\\d+)', function(req, res){
+
+	noncommercial.get.id(req, res);
 
 });
 
+// put id
+router.put('/:id(\\d+)', function(req, res){
 
+	noncommercial.put.id(req, res);
+
+});
+
+// post
+router.post('/', function(req, res){
+
+	noncommercial.post(req, res);
+
+});
 
 //*******************************************************************
+// exports
+
+module.exports = router;

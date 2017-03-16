@@ -16,46 +16,47 @@
 
 require('dotenv').config();
 
-var express = require('express');
-var helmet = require('helmet');
-var cors = require('cors');
+const express = require('express');
+const helmet = require('helmet');
+const cors = require('cors');
 
-var path = require('path');
-var fsr = require('file-stream-rotator');
-var mkdirp = require('mkdirp');
-var morgan = require('morgan');
+const path = require('path');
+const fsr = require('file-stream-rotator');
+const mkdirp = require('mkdirp');
+const morgan = require('morgan');
 
-var body_parser = require('body-parser');
+const bodyParser = require('body-parser');
 
-var routes = require('./routes');
+const routes = require('./routes');
 
 //*******************************************************************
 // environment variables
 
-var PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8000;
 
 //*******************************************************************
 // express
 
-var app = express();
+const app = express();
 
 app.use(cors());
 app.use(helmet());
+app.use(helmet.noCache());
 
-app.use(body_parser.json());
-app.use(body_parser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 // **********************************************************
 // log
 
-var logDirectory = path.join(__dirname,'/log');
+const logDirectory = path.join(__dirname, '/log');
     
 mkdirp(logDirectory);
 
-var accessLogStream = fsr.getStream({
-    filename: logDirectory + '/fs-epermit-api-%DATE%.log',
-    frequency: 'daily',
-    verbose: false
+const accessLogStream = fsr.getStream({
+	filename: logDirectory + '/fs-epermit-api-%DATE%.log',
+	frequency: 'daily',
+	verbose: false
 });
 
 app.use(morgan('combined', {stream: accessLogStream}));
@@ -74,12 +75,12 @@ app.use('/', routes);
 //*******************************************************************
 // listen
 
-var server = app.listen(PORT, function () {
+const server = app.listen(PORT, function () {
 
-  var host = server.address().address;
-  var port = server.address().port;
+	const host = server.address().address;
+	const port = server.address().port;
 
-  console.log('\n  listening at http://%s:%s', host, port);
+	console.log('\n  listening at http://%s:%s', host, port);
 
 });
 

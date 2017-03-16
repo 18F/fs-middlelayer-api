@@ -1,0 +1,216 @@
+{
+    "outfitter": {
+        "id":"tempOutfitterPermit",
+        "type":"object",
+        "properties":{
+            "region": { 
+                "type" : "integer",
+                "format": "regionFormat"
+            },
+            "forest": {
+                "type" : "integer",
+                "format": "forestFormat"
+            },
+            "district": {
+                "type" : "integer",
+                "format": "districtFormat"
+            },
+            "authorizingOfficerName": { "type" : "string"},
+            "authorizingOfficerTitle": { "type" : "string"},
+            "applicantInfo": {
+                "$ref": "applicantInfoTempOutfitter"
+            },
+            "type": {
+                "type": "string", 
+                "default": "tempOutfitterGuide",
+                "enum":[
+                    "noncommercial",
+                    "tempOutfitterGuide"
+                ]
+            },
+            "tempOutfitterFields": {
+                "$ref": "tempOutfitterFields"
+            }
+        },
+        "required": ["region", "forest", "district", "applicantInfo", "type", "tempOutfitterFields"]
+
+    },
+    "outfitterApplicantInfo": {
+        "id": "/applicantInfoTempOutfitter",
+        "type": "object",
+        "properties": {
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "dayPhone": { "$ref": "phoneNumber" },
+            "eveningPhone": { "$ref": "phoneNumber" },
+            "emailAddress": { "type": "string" },
+            "mailingAddress": { "type": "string" },
+            "mailingAddress2": { "type": "string" },
+            "mailingCity": { "type": "string" },
+            "mailingState": {
+                "type": "string",
+                "format":"stateFormat"
+            },
+            "mailingZIP": { 
+                "type": "integer",
+                "format":"zipFormat"
+            },
+            "organizationName": { "type": "string"},
+            "website":{"type": "string"},
+            "orgType":{
+                "type":"string",
+                "description":"Organization Type",
+                "enum":[
+                    "Individual",
+                    "Corporation",
+                    "Limited Liability Company",
+                    "Partnership or Association",
+                    "State Government or Agency",
+                    "Local Government or Agency",
+                    "Nonprofit"
+                ]
+            }            
+        },
+        "required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState", "orgType"]
+
+    },
+    "tempOutfitterFields": {
+        "id": "/tempOutfitterFields",
+        "type": "object",
+        "properties": {
+            "activityDescription": { "type": "string"},
+            "locationDescription": { "type": "string"},
+            "startDateTime": {
+                "type": "string",
+                "format":"dateTimeFormat"
+            },
+            "endDateTime": {
+                "type": "string",
+                "format":"dateTimeFormat"
+            },
+            "insuranceCertificate": { "type": "string"},
+            "goodStandingEvidence": {
+                "description": "Certificate of good standing, operating agreement, or other evidence the business is in good standing",
+                "type": "string"
+            },
+            "operatingPlan": {
+                "description": "A completed Word or RTF operating plan template.",
+                "type": "string"
+            }
+        },
+        "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime", "insuranceCertificate", "goodStandingEvidence", "operatingPlan"]
+
+    },
+    "noncommercial": {
+        "id":"noncommercialPermit",
+        "type":"object",
+        "properties":{
+            "region": {
+                "type" : "integer",
+                "format": "regionFormat"
+            },
+            "forest": {
+                "type" : "integer",
+                "format": "forestFormat"
+            },
+            "district": {
+                "type" : "integer",
+                "format": "districtFormat"
+            },
+            "authorizingOfficerName": { "type" : "string"},
+            "authorizingOfficerTitle": { "type" : "string"},
+            "applicantInfo": {
+                "$ref": "applicantInfoNoncommercial"
+            },
+            "type": {
+                "type": "string", 
+                "default": "noncommercial",
+                "enum":[
+                    "noncommercial",
+                    "tempOutfitterGuide"
+                ]
+            },
+            "noncommercialFields": {
+                "$ref": "noncommercialFields"
+            }
+        },
+        "required": ["region", "forest", "district", "applicantInfo", "type", "noncommercialFields"]
+
+    },
+    "noncommercialApplicantInfo": {
+        "id": "/applicantInfoNoncommercial",
+        "type": "object",
+        "properties": {
+            "firstName": { "type": "string" },
+            "lastName": { "type": "string" },
+            "dayPhone": { "$ref": "phoneNumber" },
+            "eveningPhone": { "$ref": "phoneNumber" },
+            "emailAddress": { "type": "string" },
+            "mailingAddress": { "type": "string" },
+            "mailingAddress2": { "type": "string" },
+            "mailingCity": { "type": "string" },
+            "mailingState": {
+                "type": "string",
+                "format": "stateFormat"
+            },
+            "mailingZIP": {
+                "type": "integer",
+                "format": "zipFormat"
+            },
+            "organizationName": { "type": "string"},
+            "website":{"type": "string"},
+            "orgType":{
+                "type":"string",
+                "description":"Organization Type",
+                "enum":[
+                    "Individual",
+                    "Corporation",
+                    "Limited Liability Company",
+                    "Partnership or Association",
+                    "State Government or Agency",
+                    "Local Government or Agency",
+                    "Nonprofit"
+                ]
+            }            
+        },
+        "required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState"]
+
+    },
+    "noncommercialFields": {
+        "id": "/noncommercialFields",
+        "type": "object",
+        "properties": {
+            "activityDescription": { "type": "string"},
+            "locationDescription": {  "type": "string"},
+            "startDateTime": {
+                "type": "string",
+                "format":"dateTimeFormat"
+            },
+            "endDateTime": {
+                "type": "string",
+                "format":"dateTimeFormat"
+            },
+            "numberParticipants": { "type": "integer"}
+        },
+        "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime", "numberParticipants"]
+
+    },
+    "phoneNumber": {
+        "id": "/phoneNumber",
+        "type": "object",
+        "properties": {
+            "areaCode": { 
+                "type": "integer",
+                "format": "areaCodeFormat"
+            },
+            "number": {
+                "type": "integer",
+                "format": "phoneNumberFormat"
+            },
+            "extension": { "type": "integer"},
+            "type": {"type": "string"}
+        },
+        "required": ["areaCode", "number", "type"]
+
+    }
+}

@@ -16,12 +16,24 @@
 
 const express = require('express');
 const router = express.Router();
+const include = require('include')(__dirname);
 
-const specialUses = require('./special-uses');
+const auth = include('controllers/auth');
+const passport = auth.passport;
 
 //*******************************************************************
 // router
 
-router.use('/special-uses', specialUses);
+router.use(passport.initialize());  
+
+router.post('/', passport.authenticate(  
+    'local', {
+	session: false
+}), 
+    auth.serialize, auth.generate, auth.respond
+);
+
+//*******************************************************************
+//exports
 
 module.exports = router;

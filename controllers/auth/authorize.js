@@ -13,15 +13,22 @@
 
 //*******************************************************************
 // required modules
+const include = require('include')(__dirname);
 
-const express = require('express');
-const router = express.Router();
-
-const specialUses = require('./special-uses');
+const error = include('error.js');
 
 //*******************************************************************
-// router
+// authorize
 
-router.use('/special-uses', specialUses);
+const authorize = function(req, res, next){
 
-module.exports = router;
+	if (req.decoded.role === 'admin'){
+		return next();
+	}
+	
+	error.sendError(req, res, 403, 'Forbidden.');
+};
+
+//*******************************************************************=
+//exports
+module.exports = authorize;

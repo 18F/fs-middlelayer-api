@@ -13,35 +13,38 @@
 
 //*******************************************************************
 
-
-var sendError = function(req, res, code, message){
-
-	var output = {
-		"response": {
-			"success" : false,
-			"api": "FS ePermit API",
-			"message" : message
-		}
-	};
-
-	logging(req, message);
-
-	res.status(code).json(output);
-};
-
 function logging(req, message){
-	var attemptedRoute = req.originalUrl;
-	var browser = req.get('user-agent');
-	var referer = req.get('referer');
 
-	var errorLog = {};
+	const attemptedRoute = req.originalUrl;
+	const browser = req.get('user-agent');
+	const referer = req.get('referer');
+
+	const errorLog = {};
 	errorLog.route = attemptedRoute;
 	errorLog.browser = browser;
 	errorLog.referer = referer;
 	errorLog.errorMessage = message;
 
 	console.error(errorLog);
+
 }
+
+const sendError = function(req, res, code, message, errors){
+
+	const output = {
+		'response': {
+			'success' : false,
+			'api': 'FS ePermit API',
+			message,
+			errors
+		}
+	};
+
+	logging(req, message);
+
+	res.status(code).json(output);
+
+};
 
 //*******************************************************************
 // exports
