@@ -1707,7 +1707,7 @@ describe('noncommercial POST: enum validated', function(){
 
 });
 
-describe('outfitters POST: pattern validated', function(){
+describe('noncommercial POST: pattern validated', function(){
 
 	let token;
 
@@ -1756,6 +1756,63 @@ describe('outfitters POST: pattern validated', function(){
 				.expect(function(res){
 
 					expect(res.body.response.message).to.equal('Applicant Info/Email Address must be in format \'email@email.service\'.');
+
+				})
+				.expect(400, done);
+
+		});
+	});
+});
+
+describe('noncommercial POST: dependency validated', function(){
+
+	let token;
+
+	before(function(done) {
+
+		util.getToken(function(t){
+
+			token = t;
+			return done();
+
+		});
+	
+	});
+
+	describe('noncommercial POST: fields with a dependency are validated', function(){
+
+		it('should return valid json for a thing', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/noncommercial/')
+				.set('x-access-token', token)
+				.send(
+						util.updateInputData(
+							postInput,
+							{
+								'applicantInfo': {
+									'firstName':'John',
+									'lastName': 'Doe',
+									'dayPhone': {
+										'areaCode': 123,
+										'number': 8156141,
+										'extension': 0,
+										'type': 'BUSINESS'
+									},
+									'emailAddress': 'test@test.com',
+									'mailingAddress': 'ON ANW 0953',
+									'mailingCity': 'ALBANY',
+									'mailingState': 'OR',
+									'mailingZIP': 97321,
+									'organizationName':'theOrg'
+								}
+							}
+						)
+					)
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+
+					expect(res.body.response.message).to.equal('Having Applicant Info/Organization Name requires that Applicant Info/Org Type be provided.');
 
 				})
 				.expect(400, done);
