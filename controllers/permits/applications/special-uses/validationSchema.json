@@ -45,6 +45,7 @@
             {"$ref":"appInfoBase"},
             {
                 "properties": {
+                    "organizationName": { "type": "string"},
                     "orgType":{
                         "type":"string",
                         "description":"Organization Type",
@@ -129,6 +130,7 @@
             {"$ref":"appInfoBase"},
             { 
                 "properties": {
+                    "organizationName": { "type": "string"},
                     "orgType":{
                         "type":"string",
                         "description":"Organization Type",
@@ -142,6 +144,9 @@
                             "Nonprofit"
                         ]
                     }
+                },
+                "dependencies":{
+                    "organizationName":["orgType"]
                 }
             }
         ]
@@ -200,7 +205,6 @@
                 "type": "integer",
                 "format":"zipFormat"
             },
-            "organizationName": { "type": "string"},
             "website":{"type": "string"}
         },
         "required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState"]
