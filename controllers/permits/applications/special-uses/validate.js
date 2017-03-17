@@ -161,12 +161,13 @@ function combinePropArgument(property, argument){
 
 }
 
-function makeErrorObj(field, errorType, expectedFieldType, enumMessage){
+function makeErrorObj(field, errorType, expectedFieldType, enumMessage, dependency){
 	return {
 		field,
 		errorType,
 		expectedFieldType,
-		enumMessage
+		enumMessage,
+		dependency
 	};
 }
 
@@ -257,6 +258,24 @@ function handleEnumError(output, result, counter){
 
 }
 
+function getDependency(result, counter){
+
+	const stackMessage = result[counter].stack;
+	const dependency = stackMessage.split(' property ')[1].split(' not ')[0];
+	return dependency;
+
+}
+
+function handleDependencyError(output, result, counter){
+
+	const error = result[counter];
+	const dependentField = removeInstance(error.argument);
+	const schemaPath = removeInstance(error.property);
+	const dependency = `${schemaPath}.${getDependency(result, counter)}`;
+	output.errorArray.push(makeErrorObj(dependentField, 'dependencies', null, null, dependency));
+
+}
+
 const validateInput = function (route, req){
 
 	const errorTracking = {
@@ -320,6 +339,11 @@ const validateInput = function (route, req){
 		else if (result[counter].name === 'enum'){
 
 			handleEnumError(errorTracking, result, counter);
+
+		}
+		else if (result[counter].name === 'dependencies'){
+
+			handleDependencyError(errorTracking, result, counter);
 
 		}
 	}
