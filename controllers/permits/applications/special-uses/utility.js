@@ -62,6 +62,7 @@ function buildErrorMessage(output){
 		const missing = `${makePathReadable(error.field)} is a required field.`;
 		const type = `${makePathReadable(error.field)} is expected to be type '${error.expectedFieldType}'.`;
 		const enumMessage = `${makePathReadable(error.field)} ${error.enumMessage}.`;
+		const dependencies = `Having ${makePathReadable(error.field)} requires that ${makePathReadable(error.dependency)} be provided.`;
 
 		switch (error.errorType){
 		case 'missing':
@@ -76,6 +77,9 @@ function buildErrorMessage(output){
 			break;
 		case 'enum':
 			messages.push(enumMessage);
+			break;
+		case 'dependencies':
+			messages.push(dependencies);
 			break;
 		}
 
