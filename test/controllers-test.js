@@ -13,47 +13,52 @@
 
 //*******************************************************************
 
-var chai = require('chai');
-var expect = chai.expect;
-var assert = chai.assert;
-var should = chai.should;
+const chai = require('chai');
+const expect = chai.expect;
 
-var special_uses = {};
+const specialUses = {};
 
-special_uses.validate = require('../controllers/permits/special-uses/validate.js');
-special_uses.build_error_message = require('../controllers/permits/special-uses/utility.js');
+specialUses.validate = require('../controllers/permits/special-uses/validate.js');
+specialUses.buildErrorMessage = require('../controllers/permits/special-uses/utility.js');
 
 //*******************************************************************
 
-/*
-describe('API Controllers: validate GET permitId', function() {
+describe('API Controllers: build error message', function(){
+
+	it('should return \'First name is a required field.\'', function(){
     
-    it('should return valid false if id length < 10', function() {
-        expect( special_uses.validate.permit_id(123456789) ).to.be.equal(false);
-    });
-
-    it('should return valid false if id length > 10', function() {
-        expect( special_uses.validate.permit_id(12345678901) ).to.be.equal(false);
-    });
+		const errors = {'errorArray':[{'field':'applicantInfo.firstName', 'errorType':'missing'}]};
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Applicant Info/First Name is a required field.');
     
-    it('should return valid true if id is valid', function() {
-        expect( special_uses.validate.permit_id(1234567890) ).to.be.equal(true);
-    });
+	});
 
-});
-*/
+	it('should return \'First Name is a required field. Last Name is a required field.\'', function(){
+    
+		const errors = {'errorArray':[{'field':'applicantInfo.firstName', 'errorType':'missing'}, {'field':'applicantInfo.lastName', 'errorType':'missing'}]};
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field.');
+    
+	});
 
-describe('API Controllers: build error message',function(){
+	it('should return \'First Name is expected to be of type \'string\'.\'', function(){
+    
+		const errors = {'errorArray':[{'field':'applicantInfo.firstName', 'errorType':'type', 'expectedFieldType': 'string'}]};
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Applicant Info/First Name is expected to be type \'string\'.');
+    
+	});
 
-    it('should return "firstName is a required field!"',function(){
-        var errors = ['firstName'];
-        expect( special_uses.build_error_message.build_error_message(errors) ).to.be.equal('firstName is a required field!');
-    });
+	it('should return \'Mailing Zip must be 5 or 9 digits.\'', function(){
+    
+		const errors = {'errorArray':[{'field':'applicantInfo.mailingZIP', 'errorType':'format'}]};
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Applicant Info/Mailing Zip must be 5 or 9 digits.');
+    
+	});
 
-    it('should return "firstName and lastName are required fields!"',function(){
-        var errors = ['firstName', 'lastName'];
-        expect( special_uses.build_error_message.build_error_message(errors) ).to.be.equal('firstName and lastName are required fields!');
-    });
+	it('should return \'First Name with some enum message.\'', function(){
+    
+		const errors = {'errorArray':[{'field':'applicantInfo.firstName', 'errorType':'enum', 'expectedType': null, 'enumMessage':'with some enum message'}]};
+		expect( specialUses.buildErrorMessage.buildErrorMessage(errors) ).to.be.equal('Applicant Info/First Name with some enum message.');
+    
+	});
     
 });
 

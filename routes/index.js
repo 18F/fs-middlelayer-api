@@ -14,14 +14,28 @@
 //*******************************************************************
 // required modules
 
-var express = require('express');
-var router = express.Router();
+const  express = require('express');
+const  router = express.Router();
+const  include = require('include')(__dirname);
 
-var permits = require('./permits');
+const  permits = require('./permits');
+const  auth = require('./auth');
+
+const  token = include('controllers/auth/token.js');
+const  authorize = include('controllers/auth/authorize.js');
 
 //*******************************************************************
 // router
 
+router.use('/auth', auth);
+
+router.use(token);
+
+router.use(authorize);
+
 router.use('/permits', permits);
+
+//*******************************************************************
+//exports
 
 module.exports = router;
