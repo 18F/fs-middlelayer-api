@@ -22,38 +22,8 @@ const server = include('index.js');
 const util = include('test/utility.js');
 
 const factory = require('unionized');
-const noncommercialFactory = factory.factory({
-	region: 31,
-	forest: 50,
-	district: 50,
-	authorizingOfficerName: 'WILLIAM L.NOXON',
-	authorizingOfficerTitle: 'null',
-	applicantInfo: {
-		firstName: 'John',
-		lastName: 'Doe',
-		dayPhone: {
-			areaCode: 541,
-			number: 8156141,
-			extension: 0,
-			type: 'BUSINESS'
-		},
-		emailAddress: 'test@email.org',
-		mailingAddress: 'ON ANW 0953',
-		mailingCity: 'ALBANY',
-		mailingState: 'OR',
-		mailingZIP: 97321
-	},
-	type: 'noncommercial',
-	noncommercialFields: {
-		activityDescription: 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-		locationDescription: 'string',
-		startDateTime: '2013-01-12',
-		endDateTime: '2013-01-19',
-		numberParticipants: 45
-	}
-});
 
-const testInput = include('test/data/testInputNoncommercial.json');
+const noncommercialInput = include('test/data/testInputNoncommercial.json');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -61,9 +31,7 @@ const expect = chai.expect;
 //*******************************************************************
 //Mock Input
 
-const postInput = testInput.postInput;
-const postInputNoNoncommercialField = testInput.noNoncommercialField;
-const postInputNoncommercialNoApplicantInfo = testInput.noApplicantInfoField;
+const noncommercialFactory = factory.factory(noncommercialInput);
 
 //*******************************************************************
 
