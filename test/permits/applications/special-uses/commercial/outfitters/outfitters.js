@@ -21,7 +21,8 @@ const request = require('supertest');
 const server = include('index.js');
 const util = include('test/utility.js');
 
-const testInput = include('test/data/testInputOutfitters.json');
+const factory = require('unionized');
+const tempOutfittersInput = include('test/data/testInputOutfitters.json');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -29,9 +30,7 @@ const expect = chai.expect;
 //*******************************************************************
 //Mock Input
 
-const postInput = testInput.postInput;
-const postInputNoOutfittersField = testInput.noOutfittersField;
-const postInputNoApplicantInfo = testInput.noApplicantInfoField;
+const tempOutfittersFactory = factory.factory(tempOutfittersInput);
 
 //*******************************************************************
 
@@ -72,12 +71,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInputNoApplicantInfo,
-						{}
-					)
-				)
+				.send(tempOutfittersFactory.create({applicantInfo : undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -93,12 +87,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInputNoOutfittersField,
-						{}
-					)
-				)
+				.send(tempOutfittersFactory.create({tempOutfitterFields : undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -118,28 +107,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321,
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'applicantInfo.firstName':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -155,28 +123,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321,
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'applicantInfo.lastName':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -192,23 +139,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321,
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'applicantInfo.dayPhone':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -224,28 +155,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321,
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'applicantInfo.dayPhone.areaCode':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -261,28 +171,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321,
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'applicantInfo.dayPhone.number':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -298,28 +187,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321,
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'applicantInfo.dayPhone.type':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -335,28 +203,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321,
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'applicantInfo.emailAddress':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -372,28 +219,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321,
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'applicantInfo.mailingAddress':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -409,28 +235,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingState': 'OR',
-								'mailingZIP': 97321,
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'applicantInfo.mailingCity':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -446,28 +251,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingZIP': 97321,
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'applicantInfo.mailingState':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -483,28 +267,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'applicantInfo.mailingZIP':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -520,28 +283,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'applicantInfo.orgType':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -561,21 +303,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'tempOutfitterFields': {
-								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '2013-01-19',
-								'insuranceCertificate':'File on S3',
-								'goodStandingEvidence':'File on S3',
-								'operatingPlan':'File on S3'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'tempOutfitterFields.activityDescription':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -591,21 +319,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'tempOutfitterFields': {
-								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '2013-01-19',
-								'insuranceCertificate':'File on S3',
-								'goodStandingEvidence':'File on S3',
-								'operatingPlan':'File on S3'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'tempOutfitterFields.locationDescription':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -621,21 +335,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'tempOutfitterFields': {
-								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'locationDescription': 'string',
-								'endDateTime': '2013-01-19',
-								'insuranceCertificate':'File on S3',
-								'goodStandingEvidence':'File on S3',
-								'operatingPlan':'File on S3'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'tempOutfitterFields.startDateTime':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -651,21 +351,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'tempOutfitterFields': {
-								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
-								'insuranceCertificate':'File on S3',
-								'goodStandingEvidence':'File on S3',
-								'operatingPlan':'File on S3'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'tempOutfitterFields.endDateTime':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -681,21 +367,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'tempOutfitterFields': {
-								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '2013-01-19',
-								'goodStandingEvidence':'File on S3',
-								'operatingPlan':'File on S3'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'tempOutfitterFields.insuranceCertificate':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -711,21 +383,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'tempOutfitterFields': {
-								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '2013-01-19',
-								'insuranceCertificate':'File on S3',
-								'operatingPlan':'File on S3'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'tempOutfitterFields.goodStandingEvidence':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -741,21 +399,7 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'tempOutfitterFields': {
-								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '2013-01-19',
-								'insuranceCertificate':'File on S3',
-								'goodStandingEvidence':'File on S3'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({'tempOutfitterFields.operatingPlan':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -771,20 +415,10 @@ describe('outfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'tempOutfitterFields': {
-								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '2013-01-19',
-								'operatingPlan':'File on S3'
-							}
-						}
-					)
-				)
+				.send(tempOutfittersFactory.create({
+					'tempOutfitterFields.insuranceCertificate':undefined,
+					'tempOutfitterFields.goodStandingEvidence':undefined
+				}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -829,7 +463,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		request(server)
 			.put('/permits/applications/special-uses/commercial/outfitters/1234')
 			.set('x-access-token', token)
-			.send(postInput)
+			.send(tempOutfittersFactory.create())
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
@@ -840,7 +474,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		request(server)
 			.post('/permits/applications/special-uses/commercial/outfitters')
 			.set('x-access-token', token)
-			.send(postInput)
+			.send(tempOutfittersFactory.create())
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
@@ -851,7 +485,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		request(server)
 			.post('/permits/applications/special-uses/commercial/outfitters')
 			.set('x-access-token', token)
-			.send(postInput)
+			.send(tempOutfittersFactory.create())
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 				expect(res.body).to.have.property('apiRequest');
@@ -884,29 +518,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':123,
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.firstName':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -922,29 +534,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 123,
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.lastName':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -960,29 +550,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': '541',
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.dayPhone.areaCode':'123'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -998,29 +566,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': '8156141',
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.dayPhone.number':'123'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1036,29 +582,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 1
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.dayPhone.type':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1074,29 +598,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 1,
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.emailAddress':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1112,29 +614,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 1,
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.mailingAddress':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1150,29 +630,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 1,
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.mailingCity':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1188,29 +646,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 1,
-									'mailingZIP': 97321,
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.mailingState':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1221,34 +657,12 @@ describe('outfitters POST: field type validated', function(){
 
 		});
 
-		it('should return valid json for invalid type, mailingState', function(done) {
+		it('should return valid json for invalid type, mailingZIP', function(done) {
 
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': '97321',
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.mailingZIP':'12345'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1264,22 +678,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'tempOutfitterFields': {
-									'activityDescription': 1,
-									'locationDescription': 'string',
-									'startDateTime': '2013-01-12',
-									'endDateTime': '2013-01-19',
-									'insuranceCertificate': 'insurance',
-									'goodStandingEvidence': 'standing',
-									'operatingPlan': 'operating'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'tempOutfitterFields.activityDescription':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1295,22 +694,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'tempOutfitterFields': {
-									'activityDescription': 'string',
-									'locationDescription': 1,
-									'startDateTime': '2013-01-12',
-									'endDateTime': '2013-01-19',
-									'insuranceCertificate': 'insurance',
-									'goodStandingEvidence': 'standing',
-									'operatingPlan': 'operating'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'tempOutfitterFields.locationDescription':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1326,22 +710,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'tempOutfitterFields': {
-									'activityDescription': 'string',
-									'locationDescription': 'string',
-									'startDateTime': 1,
-									'endDateTime': '2013-01-19',
-									'insuranceCertificate': 'insurance',
-									'goodStandingEvidence': 'standing',
-									'operatingPlan': 'operating'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'tempOutfitterFields.startDateTime':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1357,22 +726,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'tempOutfitterFields': {
-									'activityDescription': 'string',
-									'locationDescription': 'string',
-									'startDateTime': '2013-01-12',
-									'endDateTime': 1,
-									'insuranceCertificate': 'insurance',
-									'goodStandingEvidence': 'standing',
-									'operatingPlan': 'operating'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'tempOutfitterFields.endDateTime':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1392,29 +746,7 @@ describe('outfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': '0',
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.dayPhone.extension':'1'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1451,29 +783,7 @@ describe('outfitters POST: format validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 1,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.dayPhone.areaCode':1234}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1489,29 +799,7 @@ describe('outfitters POST: format validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 123,
-										'number': 816141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.dayPhone.number':45678901}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1529,29 +817,7 @@ describe('outfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName':'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 123,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'ORE',
-								'mailingZIP': 97321,
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+			.send(tempOutfittersFactory.create({'applicantInfo.mailingState':'ORE'}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1567,29 +833,7 @@ describe('outfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName':'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 123,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 3123,
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+			.send(tempOutfittersFactory.create({'applicantInfo.mailingZIP':1234}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1605,29 +849,7 @@ describe('outfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName':'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 123,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 312311234,
-								'orgType':'Limited Liability Company'
-							}
-						}
-					)
-				)
+			.send(tempOutfittersFactory.create({'applicantInfo.mailingZIP':123456789}))
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
@@ -1638,16 +860,7 @@ describe('outfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'region': 313,
-							'forest': 50,
-							'district': 50
-						}
-					)
-				)
+			.send(tempOutfittersFactory.create({'region':123}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1663,16 +876,7 @@ describe('outfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'region': 33,
-							'forest': 510,
-							'district': 50
-						}
-					)
-				)
+			.send(tempOutfittersFactory.create({'forest':123}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1688,16 +892,7 @@ describe('outfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'region': 31,
-							'forest': 50,
-							'district': 510
-						}
-					)
-				)
+			.send(tempOutfittersFactory.create({'district':123}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1713,22 +908,7 @@ describe('outfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'tempOutfitterFields': {
-								'activityDescription': 'string',
-								'locationDescription': 'string',
-								'startDateTime': '01-12-2013',
-								'endDateTime': '2013-01-19',
-								'insuranceCertificate': 'insurance',
-								'goodStandingEvidence': 'standing',
-								'operatingPlan': 'operating'
-							}
-						}
-					)
-				)
+			.send(tempOutfittersFactory.create({'tempOutfitterFields.startDateTime':'01-02-2012'}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1744,22 +924,7 @@ describe('outfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/outfitters/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'tempOutfitterFields': {
-								'activityDescription': 'string',
-								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '01-19-2013',
-								'insuranceCertificate': 'insurance',
-								'goodStandingEvidence': 'standing',
-								'operatingPlan': 'operating'
-							}
-						}
-					)
-				)
+			.send(tempOutfittersFactory.create({'tempOutfitterFields.endDateTime':'01-02-2012'}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1794,14 +959,7 @@ describe('outfitters POST: enum validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'type':'invalid'
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'type':'invalid'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1817,29 +975,7 @@ describe('outfitters POST: enum validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType': 'invalid'
-								}
-							}
-						)
-					)
+				.send(tempOutfittersFactory.create({'applicantInfo.orgType':'invalid'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
