@@ -32,17 +32,22 @@ function makeFieldReadable(input){
 
 function makePathReadable(input){
 
-	const parts = input.split('.');
-	const readableParts = [];
-	let readablePath = '';
-	parts.forEach((field)=>{
-		readableParts.push(makeFieldReadable(field));
-	});
-	readablePath = readableParts.shift();
-	readableParts.forEach((part)=>{
-		readablePath = `${readablePath}/${part}`;
-	});
-	return readablePath;
+	if (typeof input === 'string'){
+		const parts = input.split('.');
+		const readableParts = [];
+		let readablePath = '';
+		parts.forEach((field)=>{
+			readableParts.push(makeFieldReadable(field));
+		});
+		readablePath = readableParts.shift();
+		readableParts.forEach((part)=>{
+			readablePath = `${readablePath}/${part}`;
+		});
+		return readablePath;
+	}
+	else {
+		return false;
+	}
 
 }
 
@@ -59,6 +64,7 @@ function buildErrorMessage(output){
 	let errorMessage = '';
 	const messages = [];
 	output.errorArray.forEach((error)=>{
+
 		const missing = `${makePathReadable(error.field)} is a required field.`;
 		const type = `${makePathReadable(error.field)} is expected to be type '${error.expectedFieldType}'.`;
 		const enumMessage = `${makePathReadable(error.field)} ${error.enumMessage}.`;
