@@ -39,92 +39,58 @@ const topLevelFieldsBase = schema.topLevelFieldsBase;
 
 //*******************************************************************
 
+function digitCheck(input, num){
+
+	let valid = true;
+	
+	if (typeof input === 'number'){
+
+		const inputStr = input + '';
+		const re = new RegExp(`^[0-9]{${num}}$`);
+
+		if (!inputStr.match(re)){
+
+			valid = false;
+
+		}
+
+	}
+
+	return valid;
+
+}
+
 function zipFormat(input){
 	
-	let valid = true;
-
-	if (typeof input === 'number'){
-
-		const inputStr = input + '';
-
-		if (!inputStr.match(/^[0-9]{5}$|^[0-9]{9}$/)){
-
-			valid = false;
-
-		}
-
-	}
-	return valid;
+	return digitCheck(input, 5) | digitCheck(input, 9);
 }
+
 function areaCodeFormat(input){
 
-	let valid = true;
-
-	if (typeof input === 'number'){
-
-		const inputStr = input + '';
-		if (!inputStr.match(/^[0-9]{3}$/)){
-
-			valid = false;
-
-		}
-
-	}
-
-	return valid;
+	return digitCheck(input, 3);
 
 }
 function phoneNumberFormat(input){
 
-	let valid = true;
-
-	if (typeof input === 'number'){
-
-		const inputStr = input + '';
-		if (!inputStr.match(/^[0-9]{7}$/)){
-
-			valid = false;
-
-		}
-
-	}
-
-	return valid;
+	return digitCheck(input, 7);
 
 }
 
-function twoDigitCheck(input){
-
-	let valid = true;
-	
-	if (typeof input === 'number'){
-
-		const inputStr = input + '';
-		
-		if (!inputStr.match(/^[0-9]{2}$/)){
-
-			valid = false;
-
-		}
-
-	}
-
-	return valid;
-
-}
 function forestFormat(input){
 
-	return twoDigitCheck(input);
+	return digitCheck(input, 2);
 
 }
+
 function regionFormat(input){
 
-	return twoDigitCheck(input);
+	return digitCheck(input, 2);
 
 }
+
 function districtFormat(input){
 
-	return twoDigitCheck(input);
+	return digitCheck(input, 2);
 
 }
 
