@@ -46,9 +46,8 @@ function digitCheck(input, num){
 	if (typeof input === 'number'){
 
 		const inputStr = input + '';
-		const re = new RegExp(`^[0-9]{${num}}$`);
 
-		if (!inputStr.match(re)){
+		if (!inputStr.match(new RegExp(`^[0-9]{${num}}$`))){
 
 			valid = false;
 
