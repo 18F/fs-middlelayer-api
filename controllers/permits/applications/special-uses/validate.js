@@ -26,7 +26,7 @@ const schema = require('./validationSchema.json');
 //*******************************************************************
 // schemas
 
-const outfitterSchema = schema.tempOutfitterPermit;
+const tempOutfitterSchema = schema.tempOutfitterPermit;
 const tempOutfitterApplicantInfo = schema.tempOutfitterApplicantInfo;
 const tempOutfitterFields = schema.tempOutfitterFields;
 const noncommercialSchema = schema.noncommercial;
@@ -277,7 +277,7 @@ const validateInput = function (route, req){
 	}
 	else { 
 
-		result = v.validate(req.body, outfitterSchema).errors;        
+		result = v.validate(req.body, tempOutfitterSchema).errors;        
 
 	}
 
