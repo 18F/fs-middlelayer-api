@@ -26,138 +26,71 @@ const schema = require('./validationSchema.json');
 //*******************************************************************
 // schemas
 
-const outfitterSchema = schema.outfitter;
-const applicantInfoTempOutfitter = schema.outfitterApplicantInfo;
+const tempOutfitterSchema = schema.tempOutfitterPermit;
+const tempOutfitterApplicantInfo = schema.tempOutfitterApplicantInfo;
 const tempOutfitterFields = schema.tempOutfitterFields;
 const noncommercialSchema = schema.noncommercial;
 const applicantInfoNoncommercial = schema.noncommercialApplicantInfo;
 const noncommercialFields = schema.noncommercialFields;
 const phoneNumber = schema.phoneNumber;
+const applicantInfoBase = schema.applicantInfoBase;
+const extraFieldsBase = schema.extraFieldsBase;
+const topLevelFieldsBase = schema.topLevelFieldsBase;
 
 //*******************************************************************
 
+function digitCheck(input, num){
+
+	let valid = true;
+	
+	if (typeof input === 'number'){
+
+		const inputStr = input + '';
+
+		if (!inputStr.match(new RegExp(`^[0-9]{${num}}$`))){
+
+			valid = false;
+
+		}
+
+	}
+
+	return valid;
+
+}
+
 function zipFormat(input){
 	
-	let valid = true;
-
-	if (typeof input === 'number'){
-
-		const inputStr = input + '';
-
-		if (!inputStr.match(/^[0-9]{5}$|^[0-9]{9}$/)){
-
-			valid = false;
-
-		}
-
-	}
-	return valid;
+	return digitCheck(input, 5) | digitCheck(input, 9);
 }
+
 function areaCodeFormat(input){
 
-	let valid = true;
-
-	if (typeof input === 'number'){
-
-		const inputStr = input + '';
-		if (!inputStr.match(/^[0-9]{3}$/)){
-
-			valid = false;
-
-		}
-
-	}
-
-	return valid;
+	return digitCheck(input, 3);
 
 }
 function phoneNumberFormat(input){
 
-	let valid = true;
-
-	if (typeof input === 'number'){
-
-		const inputStr = input + '';
-		if (!inputStr.match(/^[0-9]{7}$/)){
-
-			valid = false;
-
-		}
-
-	}
-
-	return valid;
+	return digitCheck(input, 7);
 
 }
 
-function stateFormat(input){
-
-	let valid = true;
-
-	if (typeof input === 'string'){
-
-		const inputStr = input + '';
-		if (!inputStr.match(/^[a-zA-Z]{2}$/)){
-
-			valid = false;
-
-		}
-
-	}
-
-	return valid;
-}
-function twoDigitCheck(input){
-
-	let valid = true;
-	
-	if (typeof input === 'number'){
-
-		const inputStr = input + '';
-		
-		if (!inputStr.match(/^[0-9]{2}$/)){
-
-			valid = false;
-
-		}
-
-	}
-
-	return valid;
-
-}
 function forestFormat(input){
 
-	return twoDigitCheck(input);
+	return digitCheck(input, 2);
 
 }
+
 function regionFormat(input){
 
-	return twoDigitCheck(input);
+	return digitCheck(input, 2);
 
 }
+
 function districtFormat(input){
 
-	return twoDigitCheck(input);
+	return digitCheck(input, 2);
 
-}
-function dateTimeFormat(input){
-	
-	let valid = true;
-	
-	if (typeof input === 'string'){
-
-		const inputStr = input + '';
-		
-		if (!inputStr.match(/^[0-9]{4}[-]{1}[0-9]{2}[-]{1}[0-9]{2}$/)){
-
-			valid = false;
-
-		}
-
-	}
-
-	return valid;
 }
 
 //*******************************************************************
@@ -194,12 +127,13 @@ function combinePropArgument(property, argument){
 
 }
 
-function makeErrorObj(field, errorType, expectedFieldType, enumMessage){
+function makeErrorObj(field, errorType, expectedFieldType, enumMessage, dependency){
 	return {
 		field,
 		errorType,
 		expectedFieldType,
-		enumMessage
+		enumMessage,
+		dependency
 	};
 }
 
@@ -278,35 +212,7 @@ function handleTypeError(output, result, counter){
 
 function handleFormatError(output, result, counter){
 
-	const issue = result[counter];
-	let field = '';
-	switch (issue.argument){
-	case 'zipFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'areaCodeFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'phoneNumberFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'stateFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'forestFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'districtFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'regionFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	case 'dateTimeFormat':
-		field = `${removeInstance(result[counter].property)}`;
-		break;
-	}
-
+	const field = `${removeInstance(result[counter].property)}`;
 	output.errorArray.push(makeErrorObj(field, 'format'));
 
 }
@@ -315,6 +221,24 @@ function handleEnumError(output, result, counter){
 
 	const property = removeInstance(result[counter].property);
 	output.errorArray.push(makeErrorObj(property, 'enum', null, result[counter].message));
+
+}
+
+function getDependency(result, counter){
+
+	const stackMessage = result[counter].stack;
+	const dependency = stackMessage.split(' property ')[1].split(' not ')[0];
+	return dependency;
+
+}
+
+function handleDependencyError(output, result, counter){
+
+	const error = result[counter];
+	const dependentField = removeInstance(error.argument);
+	const schemaPath = removeInstance(error.property);
+	const dependency = `${schemaPath}.${getDependency(result, counter)}`;
+	output.errorArray.push(makeErrorObj(dependentField, 'dependencies', null, null, dependency));
 
 }
 
@@ -332,17 +256,18 @@ const validateInput = function (route, req){
 	v.customFormats.zipFormat = zipFormat;
 	v.customFormats.areaCodeFormat = areaCodeFormat;
 	v.customFormats.phoneNumberFormat = phoneNumberFormat;
-	v.customFormats.stateFormat = stateFormat;
 	v.customFormats.forestFormat = forestFormat;
 	v.customFormats.regionFormat = regionFormat;
 	v.customFormats.districtFormat = districtFormat;
-	v.customFormats.dateTimeFormat = dateTimeFormat;
 
 	v.addSchema(phoneNumber, 'phoneNumber');
+	v.addSchema(applicantInfoBase, 'applicantInfoBase');
 	v.addSchema(applicantInfoNoncommercial, 'applicantInfoNoncommercial');
 	v.addSchema(noncommercialFields, 'noncommercialFields');
-	v.addSchema(applicantInfoTempOutfitter, 'applicantInfoTempOutfitter');
+	v.addSchema(tempOutfitterApplicantInfo, 'tempOutfitterApplicantInfo');
 	v.addSchema(tempOutfitterFields, 'tempOutfitterFields');
+	v.addSchema(extraFieldsBase, 'extraFieldsBase');
+	v.addSchema(topLevelFieldsBase, 'topLevelFieldsBase');
 
 	if (route === 'noncommercial'){
 
@@ -351,7 +276,7 @@ const validateInput = function (route, req){
 	}
 	else { 
 
-		result = v.validate(req.body, outfitterSchema).errors;        
+		result = v.validate(req.body, tempOutfitterSchema).errors;        
 
 	}
 
@@ -373,17 +298,21 @@ const validateInput = function (route, req){
 			handleTypeError(errorTracking, result, counter);
 
 		}
-		else if (result[counter].name === 'format'){
+		else if (result[counter].name === 'format' || result[counter].name === 'pattern'){
 
 			handleFormatError(errorTracking, result, counter);
 
 		}
-		else {
+		else if (result[counter].name === 'enum'){
 
 			handleEnumError(errorTracking, result, counter);
 
 		}
+		else if (result[counter].name === 'dependencies'){
 
+			handleDependencyError(errorTracking, result, counter);
+
+		}
 	}
 
 	errorTracking.errorMessage = util.buildErrorMessage(errorTracking);

@@ -861,7 +861,7 @@ describe('noncommercial POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Noncommercial Fields/Start Date Time must be in format \'YYYY-MM-DD\'.');
+				expect(res.body.response.message).to.equal('Noncommercial Fields/Start Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
 
 			})
 			.expect(400, done);
@@ -877,7 +877,7 @@ describe('noncommercial POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Noncommercial Fields/End Date Time must be in format \'YYYY-MM-DD\'.');
+				expect(res.body.response.message).to.equal('Noncommercial Fields/End Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
 
 			})
 			.expect(400, done);
@@ -937,4 +937,74 @@ describe('noncommercial POST: enum validated', function(){
 
 	});
 
+});
+
+describe('noncommercial POST: pattern validated', function(){
+
+	let token;
+
+	before(function(done) {
+
+		util.getToken(function(t){
+
+			token = t;
+			return done();
+
+		});
+	
+	});
+
+	describe('noncommercial POST: fields with a regex pattern are validated', function(){
+
+		it('should return valid json for invalid pattern, emailAddress', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/noncommercial/')
+				.set('x-access-token', token)
+				.send(noncommercialFactory.create({'applicantInfo.emailAddress':'invalid'}))
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+
+					expect(res.body.response.message).to.equal('Applicant Info/Email Address must be in format \'email@email.service\'.');
+
+				})
+				.expect(400, done);
+
+		});
+	});
+});
+
+describe('noncommercial POST: dependency validated', function(){
+
+	let token;
+
+	before(function(done) {
+
+		util.getToken(function(t){
+
+			token = t;
+			return done();
+
+		});
+	
+	});
+
+	describe('noncommercial POST: fields with a dependency are validated', function(){
+
+		it('should return valid json for a thing', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/noncommercial/')
+				.set('x-access-token', token)
+				.send(noncommercialFactory.create({'applicantInfo.organizationName':'theOrg'}))
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+
+					expect(res.body.response.message).to.equal('Having Applicant Info/Organization Name requires that Applicant Info/Org Type be provided.');
+
+				})
+				.expect(400, done);
+
+		});
+	});
 });

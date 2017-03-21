@@ -912,7 +912,7 @@ describe('outfitters POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Temp Outfitter Fields/Start Date Time must be in format \'YYYY-MM-DD\'.');
+				expect(res.body.response.message).to.equal('Temp Outfitter Fields/Start Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
 
 			})
 			.expect(400, done);
@@ -928,7 +928,7 @@ describe('outfitters POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Temp Outfitter Fields/End Date Time must be in format \'YYYY-MM-DD\'.');
+				expect(res.body.response.message).to.equal('Temp Outfitter Fields/End Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
 
 			})
 			.expect(400, done);
@@ -988,4 +988,39 @@ describe('outfitters POST: enum validated', function(){
 
 	});
 
+});
+
+describe('outfitters POST: pattern validated', function(){
+
+	let token;
+
+	before(function(done) {
+
+		util.getToken(function(t){
+
+			token = t;
+			return done();
+
+		});
+	
+	});
+
+	describe('outfitters POST: fields with a regex pattern are validated', function(){
+
+		it('should return valid json for invalid pattern, emailAddress', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/outfitters/')
+				.set('x-access-token', token)
+				.send(tempOutfittersFactory.create({'applicantInfo.emailAddress':'invalid'}))
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+
+					expect(res.body.response.message).to.equal('Applicant Info/Email Address must be in format \'email@email.service\'.');
+
+				})
+				.expect(400, done);
+
+		});
+	});
 });
