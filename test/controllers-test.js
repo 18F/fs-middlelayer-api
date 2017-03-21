@@ -22,7 +22,7 @@ specialUses.validate = require('../controllers/permits/applications/special-uses
 specialUses.buildErrorMessage = require('../controllers/permits/applications/special-uses/utility.js');
 
 const factory = require('unionized');
-const errorMessageFactory = factory.factory({'field': null, 'errorType': null, 'expectedFieldType': null, 'enumMessage': null, 'dependency':null})
+const errorMessageFactory = factory.factory({'field': null, 'errorType': null, 'expectedFieldType': null, 'enumMessage': null, 'dependency':null});
 const errorFactory = factory.factory({'errorArray':factory.array(errorMessageFactory)});
 
 //*******************************************************************
