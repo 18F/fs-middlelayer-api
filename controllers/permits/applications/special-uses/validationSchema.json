@@ -3,24 +3,11 @@
         "id":"tempOutfitterPermit",
         "type":"object",
         "allOf":[
+            { "$ref": "topLevelFieldsBase"},
             {
                 "properties":{
-                    "region": { 
-                        "type" : "integer",
-                        "format": "regionFormat"
-                    },
-                    "forest": {
-                        "type" : "integer",
-                        "format": "forestFormat"
-                    },
-                    "district": {
-                        "type" : "integer",
-                        "format": "districtFormat"
-                    },
-                    "authorizingOfficerName": { "type" : "string"},
-                    "authorizingOfficerTitle": { "type" : "string"},
                     "applicantInfo": {
-                        "$ref": "applicantInfoTempOutfitter"
+                        "$ref": "tempOutfitterApplicantInfo"
                     },
                     "type": {
                         "type": "string", 
@@ -34,15 +21,15 @@
                         "$ref": "tempOutfitterFields"
                     }
                 },
-                "required": ["region", "forest", "district", "applicantInfo", "type", "tempOutfitterFields"]
+                "required": ["applicantInfo", "type", "tempOutfitterFields"]
             }
         ]
     },
-    "outfitterApplicantInfo": {
-        "id": "/applicantInfoTempOutfitter",
+    "tempOutfitterApplicantInfo": {
+        "id": "/tempOutfitterApplicantInfo",
         "type": "object",
         "allOf":[
-            {"$ref":"appInfoBase"},
+            {"$ref":"applicantInfoBase"},
             {
                 "properties": {
                     "organizationName": { "type": "string"},
@@ -90,44 +77,34 @@
     "noncommercial": {
         "id":"noncommercialPermit",
         "type":"object",
-        "properties":{
-            "region": {
-                "type" : "integer",
-                "format": "regionFormat"
-            },
-            "forest": {
-                "type" : "integer",
-                "format": "forestFormat"
-            },
-            "district": {
-                "type" : "integer",
-                "format": "districtFormat"
-            },
-            "authorizingOfficerName": { "type" : "string"},
-            "authorizingOfficerTitle": { "type" : "string"},
-            "applicantInfo": {
-                "$ref": "applicantInfoNoncommercial"
-            },
-            "type": {
-                "type": "string", 
-                "default": "noncommercial",
-                "enum":[
-                    "noncommercial",
-                    "tempOutfitterGuide"
-                ]
-            },
-            "noncommercialFields": {
-                "$ref": "noncommercialFields"
+        "allOf":[
+            { "$ref": "topLevelFieldsBase"},
+            {
+                "properties":{
+                    "applicantInfo": {
+                        "$ref": "applicantInfoNoncommercial"
+                    },
+                    "type": {
+                        "type": "string", 
+                        "default": "noncommercial",
+                        "enum":[
+                            "noncommercial",
+                            "tempOutfitterGuide"
+                        ]
+                    },
+                    "noncommercialFields": {
+                        "$ref": "noncommercialFields"
+                    }
+                },
+                "required": ["applicantInfo", "type", "noncommercialFields"]
             }
-        },
-        "required": ["region", "forest", "district", "applicantInfo", "type", "noncommercialFields"]
-
+        ]
     },
     "noncommercialApplicantInfo": {
         "id": "/applicantInfoNoncommercial",
         "type": "object",
         "allOf":[
-            {"$ref":"appInfoBase"},
+            {"$ref":"applicantInfoBase"},
             { 
                 "properties": {
                     "organizationName": { "type": "string"},
@@ -184,7 +161,7 @@
 
     },
     "applicantInfoBase":{
-        "id":"/appInfoBase",
+        "id":"/applicantInfoBase",
         "type":"object",
         "properties":{
             "firstName": { "type": "string" },
@@ -225,6 +202,27 @@
             }
         },
         "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime"]
+    },
+    "topLevelFieldsBase":{
+        "id":"/topLevelFieldsBase",
+        "type":"object",
+        "properties":{
+            "region": { 
+                "type" : "integer",
+                "format": "regionFormat"
+            },
+            "forest": {
+                "type" : "integer",
+                "format": "forestFormat"
+            },
+            "district": {
+                "type" : "integer",
+                "format": "districtFormat"
+            },
+            "authorizingOfficerName": { "type" : "string"},
+            "authorizingOfficerTitle": { "type" : "string"}
+        },
+        "required": ["region", "forest", "district"]
     }
 
 }
