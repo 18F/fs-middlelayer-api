@@ -27,14 +27,15 @@ const schema = require('./validationSchema.json');
 // schemas
 
 const outfitterSchema = schema.tempOutfitterPermit;
-const applicantInfoTempOutfitter = schema.outfitterApplicantInfo;
+const tempOutfitterApplicantInfo = schema.tempOutfitterApplicantInfo;
 const tempOutfitterFields = schema.tempOutfitterFields;
 const noncommercialSchema = schema.noncommercial;
 const applicantInfoNoncommercial = schema.noncommercialApplicantInfo;
 const noncommercialFields = schema.noncommercialFields;
 const phoneNumber = schema.phoneNumber;
-const appInfo = schema.applicantInfoBase;
+const applicantInfoBase = schema.applicantInfoBase;
 const extraFieldsBase = schema.extraFieldsBase;
+const topLevelFieldsBase = schema.topLevelFieldsBase;
 
 //*******************************************************************
 
@@ -295,12 +296,13 @@ const validateInput = function (route, req){
 	v.customFormats.districtFormat = districtFormat;
 
 	v.addSchema(phoneNumber, 'phoneNumber');
-	v.addSchema(appInfo, 'appInfo');
+	v.addSchema(applicantInfoBase, 'applicantInfoBase');
 	v.addSchema(applicantInfoNoncommercial, 'applicantInfoNoncommercial');
 	v.addSchema(noncommercialFields, 'noncommercialFields');
-	v.addSchema(applicantInfoTempOutfitter, 'applicantInfoTempOutfitter');
+	v.addSchema(tempOutfitterApplicantInfo, 'tempOutfitterApplicantInfo');
 	v.addSchema(tempOutfitterFields, 'tempOutfitterFields');
 	v.addSchema(extraFieldsBase, 'extraFieldsBase');
+	v.addSchema(topLevelFieldsBase, 'topLevelFieldsBase');
 
 	if (route === 'noncommercial'){
 
