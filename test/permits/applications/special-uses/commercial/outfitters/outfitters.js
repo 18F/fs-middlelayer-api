@@ -567,8 +567,8 @@ describe('outfitters POST: validate required fields present', function(){
 						{
 							'tempOutfitterFields': {
 								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '2013-01-19',
+								'startDateTime': '2013-01-12T12:00:00Z',
+								'endDateTime': '2013-01-19T12:00:00Z',
 								'insuranceCertificate':'File on S3',
 								'goodStandingEvidence':'File on S3',
 								'operatingPlan':'File on S3'
@@ -597,8 +597,8 @@ describe('outfitters POST: validate required fields present', function(){
 						{
 							'tempOutfitterFields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '2013-01-19',
+								'startDateTime': '2013-01-12T10:00:00Z',
+								'endDateTime': '2013-01-19T10:00:00Z',
 								'insuranceCertificate':'File on S3',
 								'goodStandingEvidence':'File on S3',
 								'operatingPlan':'File on S3'
@@ -628,7 +628,7 @@ describe('outfitters POST: validate required fields present', function(){
 							'tempOutfitterFields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
 								'locationDescription': 'string',
-								'endDateTime': '2013-01-19',
+								'endDateTime': '2013-01-19T10:00:00Z',
 								'insuranceCertificate':'File on S3',
 								'goodStandingEvidence':'File on S3',
 								'operatingPlan':'File on S3'
@@ -658,7 +658,7 @@ describe('outfitters POST: validate required fields present', function(){
 							'tempOutfitterFields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
 								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
+								'startDateTime': '2013-01-12T10:00:00Z',
 								'insuranceCertificate':'File on S3',
 								'goodStandingEvidence':'File on S3',
 								'operatingPlan':'File on S3'
@@ -688,8 +688,8 @@ describe('outfitters POST: validate required fields present', function(){
 							'tempOutfitterFields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
 								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '2013-01-19',
+								'startDateTime': '2013-01-12T10:00:00Z',
+								'endDateTime': '2013-01-19T10:00:00Z',
 								'goodStandingEvidence':'File on S3',
 								'operatingPlan':'File on S3'
 							}
@@ -718,8 +718,8 @@ describe('outfitters POST: validate required fields present', function(){
 							'tempOutfitterFields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
 								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '2013-01-19',
+								'startDateTime': '2013-01-12T10:00:00Z',
+								'endDateTime': '2013-01-19T10:00:00Z',
 								'insuranceCertificate':'File on S3',
 								'operatingPlan':'File on S3'
 							}
@@ -748,8 +748,8 @@ describe('outfitters POST: validate required fields present', function(){
 							'tempOutfitterFields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
 								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '2013-01-19',
+								'startDateTime': '2013-01-12T10:00:00Z',
+								'endDateTime': '2013-01-19T10:00:00Z',
 								'insuranceCertificate':'File on S3',
 								'goodStandingEvidence':'File on S3'
 							}
@@ -778,8 +778,8 @@ describe('outfitters POST: validate required fields present', function(){
 							'tempOutfitterFields': {
 								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
 								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '2013-01-19',
+								'startDateTime': '2013-01-12T10:00:00Z',
+								'endDateTime': '2013-01-19T10:00:00Z',
 								'operatingPlan':'File on S3'
 							}
 						}
@@ -1271,8 +1271,8 @@ describe('outfitters POST: field type validated', function(){
 								'tempOutfitterFields': {
 									'activityDescription': 1,
 									'locationDescription': 'string',
-									'startDateTime': '2013-01-12',
-									'endDateTime': '2013-01-19',
+									'startDateTime': '2013-01-12T10:00:00Z',
+									'endDateTime': '2013-01-19T10:00:00Z',
 									'insuranceCertificate': 'insurance',
 									'goodStandingEvidence': 'standing',
 									'operatingPlan': 'operating'
@@ -1302,8 +1302,8 @@ describe('outfitters POST: field type validated', function(){
 								'tempOutfitterFields': {
 									'activityDescription': 'string',
 									'locationDescription': 1,
-									'startDateTime': '2013-01-12',
-									'endDateTime': '2013-01-19',
+									'startDateTime': '2013-01-12T10:00:00Z',
+									'endDateTime': '2013-01-19T10:00:00Z',
 									'insuranceCertificate': 'insurance',
 									'goodStandingEvidence': 'standing',
 									'operatingPlan': 'operating'
@@ -1334,7 +1334,7 @@ describe('outfitters POST: field type validated', function(){
 									'activityDescription': 'string',
 									'locationDescription': 'string',
 									'startDateTime': 1,
-									'endDateTime': '2013-01-19',
+									'endDateTime': '2013-01-19T10:00:00Z',
 									'insuranceCertificate': 'insurance',
 									'goodStandingEvidence': 'standing',
 									'operatingPlan': 'operating'
@@ -1364,7 +1364,7 @@ describe('outfitters POST: field type validated', function(){
 								'tempOutfitterFields': {
 									'activityDescription': 'string',
 									'locationDescription': 'string',
-									'startDateTime': '2013-01-12',
+									'startDateTime': '2013-01-12T10:00:00Z',
 									'endDateTime': 1,
 									'insuranceCertificate': 'insurance',
 									'goodStandingEvidence': 'standing',
@@ -1720,8 +1720,8 @@ describe('outfitters POST: format validated', function(){
 							'tempOutfitterFields': {
 								'activityDescription': 'string',
 								'locationDescription': 'string',
-								'startDateTime': '01-12-2013',
-								'endDateTime': '2013-01-19',
+								'startDateTime': '01-12-2013T10:00:00Z',
+								'endDateTime': '2013-01-19T10:00:00Z',
 								'insuranceCertificate': 'insurance',
 								'goodStandingEvidence': 'standing',
 								'operatingPlan': 'operating'
@@ -1732,7 +1732,7 @@ describe('outfitters POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Temp Outfitter Fields/Start Date Time must be in format \'YYYY-MM-DD\'.');
+				expect(res.body.response.message).to.equal('Temp Outfitter Fields/Start Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
 
 			})
 			.expect(400, done);
@@ -1751,8 +1751,8 @@ describe('outfitters POST: format validated', function(){
 							'tempOutfitterFields': {
 								'activityDescription': 'string',
 								'locationDescription': 'string',
-								'startDateTime': '2013-01-12',
-								'endDateTime': '01-19-2013',
+								'startDateTime': '2013-01-12T10:00:00Z',
+								'endDateTime': '01-19-2013T10:00:00Z',
 								'insuranceCertificate': 'insurance',
 								'goodStandingEvidence': 'standing',
 								'operatingPlan': 'operating'
@@ -1763,7 +1763,7 @@ describe('outfitters POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Temp Outfitter Fields/End Date Time must be in format \'YYYY-MM-DD\'.');
+				expect(res.body.response.message).to.equal('Temp Outfitter Fields/End Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
 
 			})
 			.expect(400, done);
@@ -1852,4 +1852,61 @@ describe('outfitters POST: enum validated', function(){
 
 	});
 
+});
+
+describe('outfitters POST: pattern validated', function(){
+
+	let token;
+
+	before(function(done) {
+
+		util.getToken(function(t){
+
+			token = t;
+			return done();
+
+		});
+	
+	});
+
+	describe('outfitters POST: fields with a regex pattern are validated', function(){
+
+		it('should return valid json for invalid pattern, emailAddress', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/outfitters/')
+				.set('x-access-token', token)
+				.send(
+						util.updateInputData(
+							postInput,
+							{
+								'applicantInfo': {
+									'firstName':'John',
+									'lastName': 'Doe',
+									'dayPhone': {
+										'areaCode': 123,
+										'number': 8156141,
+										'extension': 0,
+										'type': 'BUSINESS'
+									},
+									'emailAddress': 'invalid',
+									'mailingAddress': 'ON ANW 0953',
+									'mailingCity': 'ALBANY',
+									'mailingState': 'OR',
+									'mailingZIP': 97321,
+									'orgType':'Limited Liability Company'
+								}
+							}
+						)
+					)
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+
+					expect(res.body.response.message).to.equal('Applicant Info/Email Address must be in format \'email@email.service\'.');
+
+				})
+				.expect(400, done);
+
+		});
+	});
 });

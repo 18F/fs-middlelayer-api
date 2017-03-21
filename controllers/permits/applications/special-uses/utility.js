@@ -15,6 +15,7 @@
 // required modules
 
 const include = require('include')(__dirname);
+const errors = require('./patternErrorMessages.json');
 
 //*******************************************************************
 
@@ -31,54 +32,29 @@ function makeFieldReadable(input){
 
 function makePathReadable(input){
 
-	const parts = input.split('.');
-	const readableParts = [];
-	let readablePath = '';
-	parts.forEach((field)=>{
-		readableParts.push(makeFieldReadable(field));
-	});
-	readablePath = readableParts.shift();
-	readableParts.forEach((part)=>{
-		readablePath = `${readablePath}/${part}`;
-	});
-	return readablePath;
+	if (typeof input === 'string'){
+		const parts = input.split('.');
+		const readableParts = [];
+		let readablePath = '';
+		parts.forEach((field)=>{
+			readableParts.push(makeFieldReadable(field));
+		});
+		readablePath = readableParts.shift();
+		readableParts.forEach((part)=>{
+			readablePath = `${readablePath}/${part}`;
+		});
+		return readablePath;
+	}
+	else {
+		return false;
+	}
 
 }
 
 function buildFormatErrorMessage(fullPath){
 	const field = fullPath.substring(fullPath.lastIndexOf('.') + 1);
 	const readablePath = makePathReadable(fullPath);
-	let errorMessage;
-	switch (field){
-	case 'mailingZIP':
-		errorMessage = `${readablePath} must be 5 or 9 digits.`;
-		break;
-	case 'areaCode':
-		errorMessage = `${readablePath} must be 3 digits.`;
-		break;
-	case 'number':
-		errorMessage = `${readablePath} must be 7 digits.`;
-		break;
-	case 'mailingState':
-		errorMessage = `${readablePath} must be 2 letters.`;
-		break;
-	case 'forest':
-		errorMessage = `${readablePath} must be 2 digits.`;
-		break;
-	case 'district':
-		errorMessage = `${readablePath} must be 2 digits.`;
-		break;
-	case 'region':
-		errorMessage = `${readablePath} must be 2 digits.`;
-		break;
-	case 'startDateTime':
-		errorMessage = `${readablePath} must be in format 'YYYY-MM-DD'.`;
-		break;
-	case 'endDateTime':
-		errorMessage = `${readablePath} must be in format 'YYYY-MM-DD'.`;
-		break;
-	}
-
+	const errorMessage = `${readablePath}${errors[field]}`;
 	return errorMessage;
 
 }
@@ -88,9 +64,11 @@ function buildErrorMessage(output){
 	let errorMessage = '';
 	const messages = [];
 	output.errorArray.forEach((error)=>{
+
 		const missing = `${makePathReadable(error.field)} is a required field.`;
 		const type = `${makePathReadable(error.field)} is expected to be type '${error.expectedFieldType}'.`;
 		const enumMessage = `${makePathReadable(error.field)} ${error.enumMessage}.`;
+		const dependencies = `Having ${makePathReadable(error.field)} requires that ${makePathReadable(error.dependency)} be provided.`;
 
 		switch (error.errorType){
 		case 'missing':
@@ -100,10 +78,14 @@ function buildErrorMessage(output){
 			messages.push(type);
 			break;
 		case 'format':
+		case 'pattern':
 			messages.push(buildFormatErrorMessage(error.field));
 			break;
 		case 'enum':
 			messages.push(enumMessage);
+			break;
+		case 'dependencies':
+			messages.push(dependencies);
 			break;
 		}
 
