@@ -991,7 +991,7 @@ describe('noncommercial POST: dependency validated', function(){
 
 	describe('noncommercial POST: fields with a dependency are validated', function(){
 
-		it('should return valid json for a thing', function(done) {
+		it('should return valid json for organizationName being provided but not orgType', function(done) {
 
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
