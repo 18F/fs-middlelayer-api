@@ -22,6 +22,9 @@ const util = include('test/utility.js');
 const chai = require('chai');
 const expect = chai.expect;
 
+const factory = require('unionized');
+const loginFactory = factory.factory({'username': null, 'password': null});
+
 //*******************************************************************
 
 describe('authentication validation', function() {
@@ -30,7 +33,7 @@ describe('authentication validation', function() {
 		request(server)
 			.post('/auth')
 			.set('Accept', 'application/json')
-			.send({ 'username': 'apiuser', 'password': 'apipwd' })
+			.send(loginFactory.create({username:'apiuser', password:'apipwd'}))
 			.expect(401, done);
 	});
 
@@ -38,7 +41,7 @@ describe('authentication validation', function() {
 		request(server)
 			.post('/auth')
 			.set('Accept', 'application/json')
-			.send({ 'username': 'user', 'password': '12345' })
+			.send(loginFactory.create({username:'user', password:'12345'}))
 			.expect(function(res){
 				expect(res.body).to.have.property('token'); 
 			})
@@ -91,7 +94,7 @@ describe('autherization with a token with user (unauthorized) role', function() 
 		request(server)
 			.post('/auth')
 			.set('Accept', 'application/json')
-			.send({ 'username': 'user2', 'password': '12345' })
+			.send(loginFactory.create({username:'user2', password:'12345'}))
 			.expect('Content-Type', /json/)
 			.expect(200)
 			.end(function(err, res) {

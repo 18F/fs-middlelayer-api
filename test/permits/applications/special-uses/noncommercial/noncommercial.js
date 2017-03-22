@@ -21,7 +21,9 @@ const request = require('supertest');
 const server = include('index.js');
 const util = include('test/utility.js');
 
-const testInput = include('test/data/testInputNoncommercial.json');
+const factory = require('unionized');
+
+const noncommercialInput = include('test/data/testInputNoncommercial.json');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -29,9 +31,7 @@ const expect = chai.expect;
 //*******************************************************************
 //Mock Input
 
-const postInput = testInput.postInput;
-const postInputNoNoncommercialField = testInput.noNoncommercialField;
-const postInputNoncommercialNoApplicantInfo = testInput.noApplicantInfoField;
+const noncommercialFactory = factory.factory(noncommercialInput);
 
 //*******************************************************************
 
@@ -72,12 +72,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInputNoncommercialNoApplicantInfo,
-						{}
-					)
-				)
+				.send(noncommercialFactory.create({applicantInfo : undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -93,12 +88,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInputNoNoncommercialField,
-						{}
-					)
-				)
+				.send(noncommercialFactory.create({noncommercialFields : undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -118,27 +108,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'applicantInfo.firstName':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -154,27 +124,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'applicantInfo.lastName':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -190,22 +140,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'applicantInfo.dayPhone':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -221,27 +156,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -257,27 +172,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'applicantInfo.dayPhone.number':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -293,27 +188,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'applicantInfo.dayPhone.type':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -329,27 +204,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-					postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'applicantInfo.emailAddress':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -365,27 +220,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-					postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 97321
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'applicantInfo.mailingAddress':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -401,27 +236,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingState': 'OR',
-								'mailingZIP': 97321
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'applicantInfo.mailingCity':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -437,27 +252,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingZIP': 97321
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'applicantInfo.mailingState':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -473,27 +268,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName': 'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 541,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR'
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'applicantInfo.mailingZIP':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -512,19 +287,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-					postInput,
-						{
-							'noncommercialFields': {
-								'locationDescription': 'string',
-								'startDateTime': '2013-01-12T12:00:00Z',
-								'endDateTime': '2013-01-19T12:00:00Z',
-								'numberParticipants': 45
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'noncommercialFields.activityDescription':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -540,19 +303,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'noncommercialFields': {
-								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'startDateTime': '2013-01-12T12:00:00Z',
-								'endDateTime': '2013-01-19T12:00:00Z',
-								'numberParticipants': 45
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'noncommercialFields.locationDescription':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -568,19 +319,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'noncommercialFields': {
-								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'locationDescription': 'string',
-								'endDateTime': '2013-01-19T12:00:00Z',
-								'numberParticipants': 45
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'noncommercialFields.startDateTime':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -596,19 +335,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'noncommercialFields': {
-								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'locationDescription': 'string',
-								'startDateTime': '2013-01-12T12:00:00Z',
-								'numberParticipants': 45
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'noncommercialFields.endDateTime':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -624,19 +351,7 @@ describe('noncommercial POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial')
 				.set('x-access-token', token)
-				.send(
-					util.updateInputData(
-						postInput,
-						{
-							'noncommercialFields': {
-								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'locationDescription': 'string',
-								'startDateTime': '2013-01-12T12:00:00Z',
-								'endDateTime': '2013-01-19T12:00:00Z'
-							}
-						}
-					)
-				)
+				.send(noncommercialFactory.create({'noncommercialFields.numberParticipants':undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -681,7 +396,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 		request(server)
 			.put('/permits/applications/special-uses/noncommercial/1234')
 			.set('x-access-token', token)
-			.send(postInput)
+			.send(noncommercialFactory.create())
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
@@ -692,7 +407,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(postInput)
+			.send(noncommercialFactory.create())
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
@@ -703,7 +418,7 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(postInput)
+			.send(noncommercialFactory.create())
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 				expect(res.body).to.have.property('apiRequest');
@@ -736,28 +451,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':123,
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.firstName':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -773,28 +467,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 123,
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.lastName':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -810,28 +483,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': '541',
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode':'123'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -847,28 +499,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': '8156141',
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.dayPhone.number':'456789'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -884,28 +515,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 1
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.dayPhone.type':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -921,28 +531,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 1,
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.emailAddress':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -958,28 +547,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 1,
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.mailingAddress':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -995,28 +563,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 1,
-									'mailingState': 'OR',
-									'mailingZIP': 97321
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.mailingCity':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1032,28 +579,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 1,
-									'mailingZIP': 97321
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.mailingState':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1064,33 +590,12 @@ describe('noncommercial POST: field type validated', function(){
 
 		});
 
-		it('should return valid json for invalid type, mailingState', function(done) {
+		it('should return valid json for invalid type, mailingZIP', function(done) {
 
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': '97321'
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.mailingZIP':'12345'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1106,20 +611,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'noncommercialFields': {
-									'activityDescription': 1,
-									'locationDescription': 'string',
-									'startDateTime': '2013-01-12T12:00:00Z',
-									'endDateTime': '2013-01-19T12:00:00Z',
-									'numberParticipants': 45
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'noncommercialFields.activityDescription':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1135,20 +627,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'noncommercialFields': {
-									'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-									'locationDescription': 1,
-									'startDateTime': '2013-01-12T12:00:00Z',
-									'endDateTime': '2013-01-19T12:00:00Z',
-									'numberParticipants': 45
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'noncommercialFields.locationDescription':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1164,20 +643,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'noncommercialFields': {
-									'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-									'locationDescription': 'string',
-									'startDateTime': 1,
-									'endDateTime': '2013-01-19T12:00:00Z',
-									'numberParticipants': 45
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'noncommercialFields.startDateTime':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1193,20 +659,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'noncommercialFields': {
-									'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-									'locationDescription': 'string',
-									'startDateTime': '2013-01-12T12:00:00Z',
-									'endDateTime': 123,
-									'numberParticipants': 45
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'noncommercialFields.endDateTime':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1222,20 +675,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'noncommercialFields': {
-									'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-									'locationDescription': 'string',
-									'startDateTime': '2013-01-12T12:00:00Z',
-									'endDateTime': '2013-01-19T12:00:00Z',
-									'numberParticipants': '45'
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'noncommercialFields.numberParticipants':'15'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1255,28 +695,7 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': '0',
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.dayPhone.extension':'12'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1313,28 +732,7 @@ describe('noncommercial POST: format validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 1,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1350,28 +748,7 @@ describe('noncommercial POST: format validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 123,
-										'number': 816141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.dayPhone.number':456789}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1389,28 +766,7 @@ describe('noncommercial POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName':'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 123,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'ORE',
-								'mailingZIP': 97321
-							}
-						}
-					)
-				)
+			.send(noncommercialFactory.create({'applicantInfo.mailingState':'ORE'}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1426,28 +782,7 @@ describe('noncommercial POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName':'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 123,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 3123
-							}
-						}
-					)
-				)
+			.send(noncommercialFactory.create({'applicantInfo.mailingZIP':123456}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1463,28 +798,7 @@ describe('noncommercial POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'applicantInfo': {
-								'firstName':'John',
-								'lastName': 'Doe',
-								'dayPhone': {
-									'areaCode': 123,
-									'number': 8156141,
-									'extension': 0,
-									'type': 'BUSINESS'
-								},
-								'emailAddress': 'test@email.org',
-								'mailingAddress': 'ON ANW 0953',
-								'mailingCity': 'ALBANY',
-								'mailingState': 'OR',
-								'mailingZIP': 312311234
-							}
-						}
-					)
-				)
+			.send(noncommercialFactory.create({'applicantInfo.mailingZIP':123456789}))
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
@@ -1495,16 +809,7 @@ describe('noncommercial POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'region': 313,
-							'forest': 50,
-							'district': 50
-						}
-					)
-				)
+			.send(noncommercialFactory.create({'region':156}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1520,16 +825,7 @@ describe('noncommercial POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'region': 33,
-							'forest': 510,
-							'district': 50
-						}
-					)
-				)
+			.send(noncommercialFactory.create({'forest':156}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1545,16 +841,7 @@ describe('noncommercial POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'region': 31,
-							'forest': 50,
-							'district': 510
-						}
-					)
-				)
+			.send(noncommercialFactory.create({'district':156}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1570,20 +857,7 @@ describe('noncommercial POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'noncommercialFields': {
-								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'locationDescription': 'string',
-								'startDateTime': '01-12-2014T12:00:00Z',
-								'endDateTime': '2013-01-19T12:00:00Z',
-								'numberParticipants': 45
-							}
-						}
-					)
-				)
+			.send(noncommercialFactory.create({'noncommercialFields.startDateTime':'01-12-2012'}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1599,20 +873,7 @@ describe('noncommercial POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(
-					util.updateInputData(
-						postInput,
-						{
-							'noncommercialFields': {
-								'activityDescription': 'PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS',
-								'locationDescription': 'string',
-								'startDateTime': '2013-01-12T12:00:00Z',
-								'endDateTime': '01-19-2016T12:00:00Z',
-								'numberParticipants': 45
-							}
-						}
-					)
-				)
+			.send(noncommercialFactory.create({'noncommercialFields.endDateTime':'01-12-2012'}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1647,14 +908,7 @@ describe('noncommercial POST: enum validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'type':'invalid'
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'type':'invalid'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1670,29 +924,7 @@ describe('noncommercial POST: enum validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 541,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@email.org',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType': 'invalid'
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.orgType':'invalid'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1729,29 +961,7 @@ describe('noncommercial POST: pattern validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 123,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'invalid',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'orgType':'Limited Liability Company'
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.emailAddress':'invalid'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1781,34 +991,12 @@ describe('noncommercial POST: dependency validated', function(){
 
 	describe('noncommercial POST: fields with a dependency are validated', function(){
 
-		it('should return valid json for a thing', function(done) {
+		it('should return valid json for organizationName being provided but not orgType', function(done) {
 
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(
-						util.updateInputData(
-							postInput,
-							{
-								'applicantInfo': {
-									'firstName':'John',
-									'lastName': 'Doe',
-									'dayPhone': {
-										'areaCode': 123,
-										'number': 8156141,
-										'extension': 0,
-										'type': 'BUSINESS'
-									},
-									'emailAddress': 'test@test.com',
-									'mailingAddress': 'ON ANW 0953',
-									'mailingCity': 'ALBANY',
-									'mailingState': 'OR',
-									'mailingZIP': 97321,
-									'organizationName':'theOrg'
-								}
-							}
-						)
-					)
+				.send(noncommercialFactory.create({'applicantInfo.organizationName':'theOrg'}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 

@@ -46,7 +46,8 @@
     "eslint": "^3.16.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "unionized": "^4.11.0"
   },
   "dependencies": {
     "body-parser": "^1.17.1",
