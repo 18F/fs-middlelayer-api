@@ -7,7 +7,7 @@ module.exports = {
 				defaultValue: Sequelize.UUIDV4,
 				primaryKey: true
 			},
-			file_type: { //eslint-disable-line camelcase
+			file_type: {
 				type: Sequelize.STRING,
 				allowNull: false,
 				references: {
@@ -15,14 +15,14 @@ module.exports = {
 					key:   'file_type'
 				}
 			},
-			file_name: { //eslint-disable-line camelcase
+			file_name: {
 				type: Sequelize.STRING,
 				allowNull: false
 			},
-			file_path: { //eslint-disable-line camelcase
+			file_path: {
 				type: Sequelize.STRING
 			},
-			application_id: { //eslint-disable-line camelcase
+			application_id: {
 				allowNull: false,
 				references: {
 					model: 'applications',
@@ -43,7 +43,7 @@ module.exports = {
 			}
 		});
 	},
-	down: function(queryInterface, Sequelize) { //eslint-disable-line no-unused-vars
+	down: function(queryInterface, Sequelize) {
 		return queryInterface.dropTable('files');
 	}
 };

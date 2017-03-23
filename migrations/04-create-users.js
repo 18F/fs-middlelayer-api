@@ -8,14 +8,14 @@ module.exports = {
 				primaryKey: true,
 				type: Sequelize.INTEGER
 			},
-			user_name: { //eslint-disable-line camelcase
+			user_name: {
 				type: Sequelize.STRING,
 				unique: true
 			},
-			pass_hash: { //eslint-disable-line camelcase
+			pass_hash: {
 				type: Sequelize.STRING
 			},
-			user_role: { //eslint-disable-line camelcase
+			user_role: {
 				type: Sequelize.STRING
 			},
 			created: {
@@ -28,7 +28,7 @@ module.exports = {
 			}
 		});
 	},
-	down: function(queryInterface, Sequelize) { //eslint-disable-line no-unused-vars
+	down: function(queryInterface, Sequelize) {
 		return queryInterface.dropTable('users');
 	}
 };

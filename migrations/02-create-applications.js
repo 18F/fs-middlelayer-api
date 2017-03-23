@@ -7,16 +7,16 @@ module.exports = {
 				defaultValue: Sequelize.UUIDV4,
 				primaryKey: true
 			},
-			control_number: { //eslint-disable-line camelcase
+			control_number: {
 				allowNull: false,
 				type: Sequelize.BIGINT,
 				unique: true
 			},
-			form_type: { //eslint-disable-line camelcase
+			form_type: {
 				type: Sequelize.STRING,
 				allowNull: false
 			},
-			website_addr: { //eslint-disable-line camelcase
+			website_addr: {
 				type: Sequelize.STRING,
 				allowNull: true
 			},
@@ -30,7 +30,7 @@ module.exports = {
 			}
 		});
 	},
-	down: function(queryInterface, Sequelize) { //eslint-disable-line no-unused-vars
+	down: function(queryInterface, Sequelize) {
 		return queryInterface.dropTable('applications');
 	}
 };
