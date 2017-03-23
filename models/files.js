@@ -2,7 +2,7 @@
 /* eslint-disable camelcase, quotes */
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var files = sequelize.define('files', {
+  let files = sequelize.define('files', {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,

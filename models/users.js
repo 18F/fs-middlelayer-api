@@ -2,7 +2,7 @@
 /* eslint-disable camelcase, quotes */
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var users = sequelize.define('users', {
+  let users = sequelize.define('users', {
     user_name: DataTypes.STRING,
     pass_hash: DataTypes.STRING,
     user_role: DataTypes.STRING,
