@@ -1,5 +1,3 @@
-/* Disabling eslint rules because this code is interacting with DB*/
-/* eslint-disable camelcase, no-unused-vars */
 'use strict';
 module.exports = {
 	up: function(queryInterface, Sequelize) {
@@ -9,16 +7,16 @@ module.exports = {
 				defaultValue: Sequelize.UUIDV4,
 				primaryKey: true
 			},
-			control_number: {
+			control_number: { //eslint-disable-line camelcase
 				allowNull: false,
 				type: Sequelize.BIGINT,
 				unique: true
 			},
-			form_type: {
+			form_type: { //eslint-disable-line camelcase
 				type: Sequelize.STRING,
 				allowNull: false
 			},
-			website_addr: {
+			website_addr: { //eslint-disable-line camelcase
 				type: Sequelize.STRING,
 				allowNull: true
 			},
@@ -32,8 +30,7 @@ module.exports = {
 			}
 		});
 	},
-	down: function(queryInterface, Sequelize) {
+	down: function(queryInterface, Sequelize) { //eslint-disable-line no-unused-vars
 		return queryInterface.dropTable('applications');
 	}
 };
-/* eslint-enable camelcase, no-unused-vars */

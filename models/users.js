@@ -1,11 +1,9 @@
-/* Disabling eslint rules because this code is interacting with DB*/
-/* eslint-disable camelcase, quotes */
 'use strict';
 module.exports = function(sequelize, DataTypes) {
 	const users = sequelize.define('users', {
-		user_name: DataTypes.STRING,
-		pass_hash: DataTypes.STRING,
-		user_role: DataTypes.STRING,
+		user_name: DataTypes.STRING, //eslint-disable-line camelcase
+		pass_hash: DataTypes.STRING, //eslint-disable-line camelcase
+		user_role: DataTypes.STRING, //eslint-disable-line camelcase
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'created' },
 		updatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'updated' }
 	}, {
@@ -13,4 +11,3 @@ module.exports = function(sequelize, DataTypes) {
 	});
 	return users;
 };
-/* eslint-enable camelcase, quotes */

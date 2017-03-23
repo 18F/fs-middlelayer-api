@@ -1,22 +1,19 @@
-/* Disabling eslint rules because this code is interacting with DB*/
-/* eslint-disable camelcase, no-unused-vars */
 'use strict';
 module.exports = {
 	up: function(queryInterface, Sequelize) {
 		return queryInterface.createTable('file_types', {
-			file_type: {
+			file_type: { //eslint-disable-line camelcase
 				allowNull: false,
 				primaryKey: true,
 				type: Sequelize.STRING
 			},
-			file_type_desc: {
+			file_type_desc: { //eslint-disable-line camelcase
 				type: Sequelize.STRING,
 				allowNull: false
 			}
 		});
 	},
-	down: function(queryInterface, Sequelize) {
+	down: function(queryInterface, Sequelize) { //eslint-disable-line no-unused-vars
 		return queryInterface.dropTable('file_types');
 	}
 };
-/* eslint-enable camelcase, no-unused-vars */

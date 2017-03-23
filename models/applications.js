@@ -1,5 +1,3 @@
-/* Disabling eslint rules because this code is interacting with DB*/
-/* eslint-disable camelcase, quotes */
 'use strict';
 module.exports = function(sequelize, DataTypes) {
 	const applications = sequelize.define('applications', {
@@ -8,9 +6,9 @@ module.exports = function(sequelize, DataTypes) {
 			primaryKey: true,
 			defaultValue: DataTypes.UUIDV4
 		},
-		control_number: DataTypes.INTEGER,
-		form_type: DataTypes.STRING,
-		website_addr: DataTypes.STRING,
+		control_number: DataTypes.INTEGER, //eslint-disable-line camelcase
+		form_type: DataTypes.STRING, //eslint-disable-line camelcase
+		website_addr: DataTypes.STRING, //eslint-disable-line camelcase
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'created' },
 		updatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'updated' }
 	}, {
@@ -27,4 +25,3 @@ module.exports = function(sequelize, DataTypes) {
 	});
 	return applications;
 };
-/* eslint-enable camelcase, quotes */

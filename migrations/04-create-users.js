@@ -1,5 +1,3 @@
-/* Disabling eslint rules because this code is interacting with DB*/
-/* eslint-disable camelcase, no-unused-vars */
 'use strict';
 module.exports = {
 	up: function(queryInterface, Sequelize) {
@@ -10,14 +8,14 @@ module.exports = {
 				primaryKey: true,
 				type: Sequelize.INTEGER
 			},
-			user_name: {
+			user_name: { //eslint-disable-line camelcase
 				type: Sequelize.STRING,
 				unique: true
 			},
-			pass_hash: {
+			pass_hash: { //eslint-disable-line camelcase
 				type: Sequelize.STRING
 			},
-			user_role: {
+			user_role: { //eslint-disable-line camelcase
 				type: Sequelize.STRING
 			},
 			created: {
@@ -30,8 +28,7 @@ module.exports = {
 			}
 		});
 	},
-	down: function(queryInterface, Sequelize) {
+	down: function(queryInterface, Sequelize) { //eslint-disable-line no-unused-vars
 		return queryInterface.dropTable('users');
 	}
 };
-/* eslint-enable camelcase, no-unused-vars */
