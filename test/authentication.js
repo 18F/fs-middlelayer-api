@@ -41,7 +41,7 @@ describe('authentication validation', function() {
 		request(server)
 			.post('/auth')
 			.set('Accept', 'application/json')
-			.send(loginFactory.create({username:'user', password:'12345'}))
+			.send(loginFactory.create({username: process.env.ADMINROLE_USER, password: process.env.ADMINROLE_PWD}))
 			.expect(function(res){
 				expect(res.body).to.have.property('token'); 
 			})
@@ -94,7 +94,7 @@ describe('autherization with a token with user (unauthorized) role', function() 
 		request(server)
 			.post('/auth')
 			.set('Accept', 'application/json')
-			.send(loginFactory.create({username:'user2', password:'12345'}))
+			.send(loginFactory.create({username: process.env.USERROLE_USER, password: process.env.USERROLE_PWD}))
 			.expect('Content-Type', /json/)
 			.expect(200)
 			.end(function(err, res) {
