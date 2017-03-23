@@ -1,3 +1,5 @@
+/* Disabling eslint rules because this code is interacting with DB*/
+/* eslint-disable camelcase, quotes */
 'use strict';
 
 var fs        = require('fs');
@@ -29,3 +31,5 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 module.exports = db;
+
+/* eslint-enable camelcase, quotes */

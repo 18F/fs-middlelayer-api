@@ -1,3 +1,5 @@
+/* Disabling eslint rules because this code is interacting with DB*/
+/* eslint-disable camelcase, quotes */
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var users = sequelize.define('users', {
@@ -17,3 +19,4 @@ module.exports = function(sequelize, DataTypes) {
   });
   return users;
 };
+/* eslint-enable camelcase, quotes */

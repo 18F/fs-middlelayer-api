@@ -30,6 +30,8 @@ passport.use(new Strategy(
 
     function(username, password, done) {
     	
+    	/* Disabling eslint rules because models is interacting with DB*/
+		/* eslint-disable camelcase */
     	models.users.findOne({
 		    where: {user_name: username}
 		}).then(function(user) {
@@ -51,7 +53,7 @@ passport.use(new Strategy(
 		}).catch(function (err) {
 			done(null, false);
 		});
-
+		/* eslint-enable camelcase */
 	}
 ));
 

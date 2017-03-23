@@ -1,3 +1,5 @@
+/* Disabling eslint rules because this code is interacting with DB*/
+/* eslint-disable camelcase, quotes */
 'use strict';
 
 module.exports = {
@@ -14,3 +16,4 @@ module.exports = {
     return queryInterface.bulkDelete({tableName: 'file_types'}, null, {});
   }
 };
+/* eslint-enable camelcase, quotes */

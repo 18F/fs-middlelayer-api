@@ -1,3 +1,5 @@
+/* Disabling eslint rules because this code is interacting with DB*/
+/* eslint-disable camelcase, quotes */
 'use strict';
 module.exports = function(sequelize, DataTypes) {
   var fileTypes = sequelize.define('file_types', {
@@ -6,3 +8,4 @@ module.exports = function(sequelize, DataTypes) {
   });
   return fileTypes;
 };
+/* eslint-enable camelcase, quotes */
