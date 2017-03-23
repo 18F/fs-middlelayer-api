@@ -28,15 +28,13 @@ const jwt = require('jsonwebtoken');
 
 passport.use(new Strategy(  
 
-    function(username, password, done) {
-    	
-    	/* Disabling eslint rules because models is interacting with DB*/
-		/* eslint-disable camelcase */
-    	models.users.findOne({
-		    where: {user_name: username}
+	function(username, password, done) {
+		
+		models.users.findOne({
+			where: {user_name: username} //eslint-disable-line camelcase
 		}).then(function(user) {
-			if(user){
-				if(bcrypt.compareSync(password, user.pass_hash)){
+			if (user){
+				if (bcrypt.compareSync(password, user.pass_hash)){
 					done(null, {
 						id: user.user_name,
 						role: user.user_role,
@@ -53,7 +51,6 @@ passport.use(new Strategy(
 		}).catch(function (err) {
 			done(null, false);
 		});
-		/* eslint-enable camelcase */
 	}
 ));
 
@@ -69,7 +66,7 @@ const serialize = function(req, res, next) {
 };
 
 const generate = function(req, res, next) {   
-    
+	
 	req.token = jwt.sign({
 		id: req.user.id,
 		role: req.user.role
