@@ -14,41 +14,45 @@
 //*******************************************************************
 // required modules
 
+const include = require('include')(__dirname);
 const passport = require('passport');  
 const Strategy = require('passport-local');
+const bcrypt = require('bcrypt-nodejs');
+const saltRounds = 10;
 
+const models = include('models');
 const jwt = require('jsonwebtoken');
 
 //*******************************************************************
 // passport 
 
 passport.use(new Strategy(  
-    function(username, password, done) {
 
-	if (username === 'user' && password === '12345'){
-		done(null, {
-			id: username,
-			firstname: 'first',
-			lastname: 'last',
-			email: 'name@email.com',
-			role: 'admin',
-			verified: true
+    function(username, password, done) {
+    	
+    	models.users.findOne({
+		    where: {user_name: username}
+		}).then(function(user) {
+			if(user){
+				if(bcrypt.compareSync(password, user.pass_hash)){
+					done(null, {
+						id: user.user_name,
+						role: user.user_role,
+						verified: true
+					});	
+				}
+				else {
+					done(null, false);
+				}
+			}
+			else {
+				done(null, false);
+			}
+		}).catch(function (err) {
+			done(null, false);
 		});
+
 	}
-	else if (username === 'user2' && password === '12345'){
-		done(null, {
-			id: username,
-			firstname: 'first',
-			lastname: 'last',
-			email: 'name@email.com',
-			role: 'user',
-			verified: true
-		});
-	}
-	else {
-		done(null, false);
-	}
-}
 ));
 
 //*******************************************************************
