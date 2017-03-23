@@ -7,7 +7,7 @@ const path      = require('path');
 const Sequelize = require('sequelize');
 const basename  = path.basename(module.filename);
 
-const db        = {};
+let db        = {};
 
 const sequelize = new Sequelize(process.env.DATABASE_URL);
 
