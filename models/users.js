@@ -10,12 +10,6 @@ module.exports = function(sequelize, DataTypes) {
 		updatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'updated' }
 	}, {
 		timestamps  : true
-	}, {
-		classMethods: {
-			associate: function(models) {
-        // associations can be defined here
-			}
-		}
 	});
 	return users;
 };

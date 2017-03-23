@@ -1,5 +1,5 @@
 /* Disabling eslint rules because this code is interacting with DB*/
-/* eslint-disable camelcase */
+/* eslint-disable camelcase, no-unused-vars */
 'use strict';
 module.exports = {
 	up: function(queryInterface, Sequelize) {
@@ -7,8 +7,7 @@ module.exports = {
 			file_type: {
 				allowNull: false,
 				primaryKey: true,
-				type: Sequelize.STRING,
-				allowNull: false
+				type: Sequelize.STRING
 			},
 			file_type_desc: {
 				type: Sequelize.STRING,
@@ -20,4 +19,4 @@ module.exports = {
 		return queryInterface.dropTable('file_types');
 	}
 };
-/* eslint-enable camelcase */
+/* eslint-enable camelcase, no-unused-vars */

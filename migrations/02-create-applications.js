@@ -1,5 +1,5 @@
 /* Disabling eslint rules because this code is interacting with DB*/
-/* eslint-disable camelcase */
+/* eslint-disable camelcase, no-unused-vars */
 'use strict';
 module.exports = {
 	up: function(queryInterface, Sequelize) {
@@ -36,4 +36,4 @@ module.exports = {
 		return queryInterface.dropTable('applications');
 	}
 };
-/* eslint-enable camelcase */
+/* eslint-enable camelcase, no-unused-vars */

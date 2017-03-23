@@ -1,5 +1,5 @@
 /* Disabling eslint rules because this code is interacting with DB*/
-/* eslint-disable camelcase, quotes */
+/* eslint-disable camelcase, quotes, no-unused-vars */
 'use strict';
 
 module.exports = {
@@ -15,4 +15,4 @@ module.exports = {
 		return queryInterface.bulkDelete({tableName: 'users'}, null, {});
 	}
 };
-/* eslint-enable camelcase, quotes */
+/* eslint-enable camelcase, quotes, no-unused-vars */
