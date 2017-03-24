@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const url = require('url');
 
-const dbParams = url.parse(process.env.DATABASE_URL);
+const dbParams = url.parse(process.env.DATABASE_URL, true);
 const dbAuth = dbParams.auth.split(':');
 
 const dbConfig = {
@@ -12,7 +12,7 @@ const dbConfig = {
 	host: dbParams.hostname,
 	port: dbParams.port,
 	dialect: dbParams.protocol.split(':')[0],
-	ssl: true
+	ssl: dbParams.query.ssl
 };
 
 module.exports = {
@@ -21,5 +21,6 @@ module.exports = {
 	password: dbConfig.password,
 	host: dbConfig.host,
 	port: dbConfig.port,
-	dialect: dbConfig.dialect
+	dialect: dbConfig.dialect,
+	ssl: dbConfig.ssl
 };
