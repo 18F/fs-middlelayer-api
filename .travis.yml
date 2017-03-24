@@ -19,8 +19,9 @@ before_script:
 - npm install -g codeclimate-test-reporter
 - npm install -g sequelize-cli
 script:
-- sequelize db:migrate --config ./config/config.js
-- sequelize db:seed:all --config ./config/config.js
+- sequelize db:migrate
+- sequelize db:seed:undo:all
+- sequelize db:seed:all
 - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive
 - codecov
 - npm run lint
