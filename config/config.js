@@ -11,8 +11,8 @@ const dbConfig = {
 	password: dbAuth[1],
 	host: dbParams.hostname,
 	port: dbParams.port,
-	dialect: dbParams.protocol.split(':')[0],
-	ssl: dbParams.query.ssl
+	ssl: dbParams.query.ssl,
+	dialect: dbParams.protocol.split(':')[0]	
 };
 
 module.exports = {
@@ -21,6 +21,11 @@ module.exports = {
 	password: dbConfig.password,
 	host: dbConfig.host,
 	port: dbConfig.port,
+	ssl: dbConfig.ssl,
 	dialect: dbConfig.dialect,
-	ssl: dbConfig.ssl
+	dialectOptions:{
+		ssl:{
+			require:dbConfig.ssl
+		}
+	}
 };
