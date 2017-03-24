@@ -1,4 +1,4 @@
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 
 const url = require('url');
 
@@ -16,10 +16,10 @@ const dbConfig = {
 };
 
 module.exports = {
-  database: dbConfig.database,
-  username: dbConfig.username,
-  password: dbConfig.password,
-  host: dbConfig.host,
-  port: dbConfig.port,
-  dialect: dbConfig.dialect
-}
+	database: dbConfig.database,
+	username: dbConfig.username,
+	password: dbConfig.password,
+	host: dbConfig.host,
+	port: dbConfig.port,
+	dialect: dbConfig.dialect
+};
