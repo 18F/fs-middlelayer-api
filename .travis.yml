@@ -17,10 +17,14 @@ before_script:
 - npm install -g eslint
 - npm install -g codecov
 - npm install -g codeclimate-test-reporter
+- npm install -g sequelize-cli
 script:
+- sequelize db:migrate
+- sequelize db:seed:undo:all
+- sequelize db:seed:all
 - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive
 - codecov
-- npm run quality
+- npm run lint
 after_script:
 - codeclimate-test-reporter < ./coverage/lcov.info
 after_success:

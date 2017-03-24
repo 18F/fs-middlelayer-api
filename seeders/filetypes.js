@@ -1,16 +1,17 @@
 'use strict';
 
 module.exports = {
-	up: function (queryInterface, Sequelize) { //eslint-disable-line no-unused-vars
+	up: function (queryInterface, Sequelize) { 
 		return queryInterface.bulkInsert('file_types', [
-        {file_type: "INC", file_type_desc: "Insurance Certificate" }, //eslint-disable-line camelcase, quotes
-        {file_type: "GSE", file_type_desc: "Good Standing Evidence" }, //eslint-disable-line camelcase, quotes
-        {file_type: "OPP", file_type_desc: "Operating Plan" } //eslint-disable-line camelcase, quotes
-		], {}
-    );
+	        {file_type: "inc", file_type_desc: "Insurance Certificate" }, 
+	        {file_type: "gse", file_type_desc: "Good Standing Evidence" }, 
+	        {file_type: "opp", file_type_desc: "Operating Plan" } 
+		]);
 	},
 
-	down: function (queryInterface, Sequelize) { //eslint-disable-line no-unused-vars
-		return queryInterface.bulkDelete({tableName: 'file_types'}, null, {});
+	down: function (queryInterface, Sequelize) {
+		return queryInterface.bulkDelete('file_types', [
+		        {file_type: ["inc","gse","opp"]} 
+		]);
 	}
 };
