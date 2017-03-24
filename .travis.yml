@@ -20,7 +20,7 @@ before_script:
 - npm install -g sequelize-cli
 script:
 - sequelize db:migrate --config ./config/config.js
-- sequelize db:seed:all
+- sequelize db:seed:all --config ./config/config.js
 - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive
 - codecov
 - npm run lint
