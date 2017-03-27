@@ -17,8 +17,15 @@
 const express = require('express');
 const router = express.Router();
 const include = require('include')(__dirname);
+const multer = require('multer');
 
 const outfitters = include('controllers/permits/applications/special-uses/commercial/outfitters');
+
+//*******************************************************************
+// storage
+
+let storage = multer.memoryStorage();
+let upload = multer({ storage: storage });
 
 //*******************************************************************
 // router
@@ -38,7 +45,13 @@ router.put('/:id(\\d+)', function(req, res){
 });
 
 // post
-router.post('/', function(req, res){
+
+let postUpload = upload.fields([
+	{ name: 'guideDocumentation', maxCount: 1 },
+	{ name: 'acknowledgementOfRiskForm', maxCount: 1 }
+]);
+
+router.post('/', postUpload, function(req, res, next){
     
 	outfitters.post(req, res);
     
