@@ -14,6 +14,7 @@
 //*******************************************************************
 // required modules
 
+const jsf = require('json-schema-faker');
 const include = require('include')(__dirname);
 const errors = require('./patternErrorMessages.json');
 
@@ -172,38 +173,9 @@ function copyGenericInfo(cnData, jsonData){
 	jsonData.applicantInfo = applicantInfo;
 }
 
-function createPost(formType, controlNumber, inputPost){
-	
-	const postSchema = include('controllers/permits/applications/special-uses/postSchema.json');
+function autoPopulatedFields(postData, inputPost){
 
-	const postData = {};
-	let combId = '';
-	let key;
-	let purpose;
-
-	const genericFields = postSchema.genericFields;
-
-	if (controlNumber){
-		postData.controlNumber = controlNumber;
-	}
-	
-	if (genericFields){
-		for (key in genericFields) {
-			if (genericFields.hasOwnProperty(key)) {
-				postData[key] = genericFields[key];	
-			}
-		}
-	}
-
-	postData.region = inputPost.region;
-	postData.forest = inputPost.forest;
-	postData.district = inputPost.district;
-	if (inputPost.authorizingOfficerName){
-		postData.authorizingOfficerName = inputPost.authorizingOfficerName;
-	}
-	if (inputPost.authorizingOfficerTitle){
-		postData.authorizingOfficerTitle = inputPost.authorizingOfficerTitle;
-	}
+	let combId = '', purpose;
 
 	combId = pad(inputPost.region);
 	combId = combId + pad(inputPost.forest);
@@ -216,44 +188,23 @@ function createPost(formType, controlNumber, inputPost){
 	const todayDate = new Date().toISOString().slice(0, 10);
 	postData.effectiveDate = todayDate;
 
-	postData.applicantInfo = postSchema.applicantInfo;
-
-	if (inputPost.hasOwnProperty('applicantInfo')){
-		for (key in inputPost.applicantInfo) {
-			if (inputPost.applicantInfo.hasOwnProperty(key)) {
-				postData.applicantInfo[key] = inputPost.applicantInfo[key];	
-			}
-		}	
-
-		if (inputPost.applicantInfo.organizationName){
-			postData.applicantInfo.contactType = 'ORGANIZATION'; 
-		}
-		else {
-			postData.applicantInfo.contactType = 'PERSON'; 
-		}
-		
-		if (postData.applicantInfo.contactType === 'ORGANIZATION'){
-			postData.applicantInfo.contName = inputPost.applicantInfo.organizationName;
-		}
-		else {
-			postData.applicantInfo.contName = inputPost.applicantInfo.firstName + ' ' + inputPost.applicantInfo.lastName;
-		}
-
+	if (inputPost.applicantInfo.organizationName){
+		postData.applicantInfo.contactType = 'ORGANIZATION'; 
+	}
+	else {
+		postData.applicantInfo.contactType = 'PERSON'; 
+	}
+	
+	if (postData.applicantInfo.contactType === 'ORGANIZATION'){
+		postData.applicantInfo.contName = inputPost.applicantInfo.organizationName;
+	}
+	else {
+		postData.applicantInfo.contName = inputPost.applicantInfo.firstName + ' ' + inputPost.applicantInfo.lastName;
 	}
 
-	if (formType === 'noncommercial'){
+	if (inputPost.type === 'noncommercial'){
 
-		postData.type = 'noncommercial'; 
-
-		postData.noncommercialFields = postSchema.noncommercialFields;
-
-		if (inputPost.hasOwnProperty('noncommercialFields')){
-			for (key in inputPost.noncommercialFields) {
-				if (inputPost.noncommercialFields.hasOwnProperty(key)){
-					postData.noncommercialFields[key] = inputPost.noncommercialFields[key];		
-				}
-			}	
-		}
+		postData.type = 'noncommercial';
 
 		purpose = generatePurpose (postData.noncommercialFields.activityDescription,
 										postData.noncommercialFields.locationDescription,
@@ -261,21 +212,12 @@ function createPost(formType, controlNumber, inputPost){
 										postData.noncommercialFields.endDateTime);
 
 		postData.noncommercialFields.purpose = purpose;
+		delete postData.tempOutfitterFields;
 
 	}
-	else if (formType === 'outfitters'){
+	else if (inputPost.type === 'tempOutfitters'){
 
-		postData.type = 'tempOutfitterGuide';
-
-		postData.tempOutfitterFields = postSchema.tempOutfitterFields;
-
-		if (inputPost.hasOwnProperty('tempOutfitterFields')){
-			for (key in inputPost.tempOutfitterFields) {
-				if (inputPost.tempOutfitterFields.hasOwnProperty(key)){
-					postData.tempOutfitterFields[key] = inputPost.tempOutfitterFields[key];
-				}	
-			}	
-		}
+		postData.type = 'tempOutfitters';
 
 		purpose = generatePurpose (postData.tempOutfitterFields.activityDescription,
 										postData.tempOutfitterFields.locationDescription,
@@ -283,9 +225,42 @@ function createPost(formType, controlNumber, inputPost){
 										postData.tempOutfitterFields.endDateTime);
 
 		postData.tempOutfitterFields.purpose = purpose;
+		delete postData.noncommercialFields;
 	}
 
+	delete postData.id;
+
+}
+
+function populatePostData(inputPost, postData, schemaData){
+
+	let fieldKey = '';
+	for (fieldKey in schemaData){
+		if (inputPost.hasOwnProperty(fieldKey)){
+			if (typeof inputPost[fieldKey] !== 'object'){
+				postData[fieldKey] = inputPost[fieldKey];
+			}
+			else {
+				populatePostData(inputPost[fieldKey], postData[fieldKey], schemaData[fieldKey]);
+			}
+		}
+	}
+
+}
+
+function createPost(formType, controlNumber, inputPost){
+	
+	const postSchema = include('controllers/permits/applications/special-uses/postSchema.json'); 
+	jsf.option({useDefaultValue:true});
+	const schemaData = jsf(postSchema);
+	
+	const postData = schemaData;
+
+	populatePostData(inputPost, postData, schemaData);
+	autoPopulatedFields(postData, inputPost);
+
 	return postData;
+	
 }
 
 //*******************************************************************
