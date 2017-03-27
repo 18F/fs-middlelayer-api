@@ -22,6 +22,7 @@ const outfittersData = include('test/data/basicGET.json');
 
 const validateSpecialUse = include('controllers/permits/applications/special-uses/validate.js');
 const util = include('controllers/permits/applications/special-uses/utility.js');
+const dbUtil = include('controllers/permits/applications/special-uses/dbUtil.js');
 const error = include('error.js');
 
 //*******************************************************************
@@ -49,7 +50,7 @@ get.id = function(req, res){
 	const cnData = outfittersData[1095010356];
 
 	if (cnData){
-        
+
 		const outfittersFields = {};
         
 		outfittersFields.activityDescription = cnData.purpose;
@@ -63,10 +64,19 @@ get.id = function(req, res){
 		util.copyGenericInfo(cnData, jsonData);
 		jsonData.tempOutfitterFields = outfittersFields;    
 
-		jsonResponse.success = true;
+		dbUtil.getApplication(1000000000, function(err, appl){
+			if (err){
+				console.error(err);
+				error.sendError(req, res, 400, 'error getting application from database');
+			}
+			else {
+				
+				jsonData.applicantInfo.website = appl.website_addr;
+				jsonResponse.success = true;
+				res.json(jsonData);
+			}
+		});
 	}
-    
-	res.json(jsonData);
     
 };
 
@@ -110,9 +120,48 @@ const post = function(req, res){
 		const response = include('test/data/outfitters.post.json');
 
 		response.apiRequest = postData;
-    
-		res.json(response);
-    
+
+		// api database updates
+		const controlNumber = Math.floor((Math.random() * 10000000000) + 1);
+
+		let website;
+
+		if (postData.applicantInfo.website){
+			website = postData.applicantInfo.website;
+		}
+
+		dbUtil.saveApplication(controlNumber, postData.tempOutfitterFields.formName, website, function(err, appl) {
+
+			if (err) {
+				error.sendError(req, res, 400, 'error saving application in database');
+			}
+			else {
+				dbUtil.saveFile(appl.id, 'inc', postData.tempOutfitterFields.insuranceCertificate, function(err, file) {
+
+					if (err) {
+						error.sendError(req, res, 400, 'error saving file in database');
+					}
+					else {
+						dbUtil.saveFile(appl.id, 'gse', postData.tempOutfitterFields.goodStandingEvidence, function(err, file) {
+
+							if (err) {
+								error.sendError(req, res, 400, 'error saving file in database');
+							}
+							else {
+								dbUtil.saveFile(appl.id, 'opp', postData.tempOutfitterFields.operatingPlan, function(err, file) {
+
+									if (err) {
+										error.sendError(req, res, 400, 'error saving file in database');
+									}
+
+								});
+							}
+						});
+					}
+				});
+			}
+		});
+		res.json(response);    
 	}
 	else {
     

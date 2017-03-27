@@ -22,6 +22,7 @@ const noncommercialData = include('test//data/basicGET.json');
 
 const validateSpecialUse = include('controllers/permits/applications/special-uses/validate.js');
 const util = include('controllers/permits/applications/special-uses/utility.js');
+const dbUtil = include('controllers/permits/applications/special-uses/dbUtil.js');
 const error = include('error.js');
 
 //*******************************************************************
@@ -59,13 +60,21 @@ get.id = function(req, res){
 		noncommercialFields.numberParticipants = 45;
 
 		util.copyGenericInfo(cnData, jsonData);
-		jsonData.noncommercialFields = noncommercialFields;    
-		jsonResponse.success = true;
-        
-	}
-    
-	res.json(jsonData);
+		jsonData.noncommercialFields = noncommercialFields;
 
+		dbUtil.getApplication(1000000000, function(err, appl){
+			if (err){
+				console.error(err);
+				error.sendError(req, res, 400, 'error getting application from database');
+			}
+			else {
+				
+				jsonData.applicantInfo.website = appl.website_addr;
+				jsonResponse.success = true;
+				res.json(jsonData);
+			}
+		});
+	}
 };
 
 // put id
@@ -108,6 +117,23 @@ const post = function(req, res){
 		const response = include('test/data/noncommercial.post.json');
 
 		response.apiRequest = postData;
+
+		// api database updates
+		const controlNumber = Math.floor((Math.random() * 10000000000) + 1);
+
+		let website;
+
+		if (postData.applicantInfo.website){
+			website = postData.applicantInfo.website;
+		}
+
+		dbUtil.saveApplication(controlNumber, postData.noncommercialFields.formName, website, function(err, appl) {
+
+			if (err) {
+				error.sendError(req, res, 400, 'error saving application in database', null);
+			}
+
+		});
     
 		res.json(response);
     
