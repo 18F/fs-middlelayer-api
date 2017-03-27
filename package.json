@@ -11,9 +11,9 @@
     "test": "mocha test --recursive",
     "start": "node index.js",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive",
-    "quality": "eslint './' -f stylish; eslint './' -o ./quality/eslint.html -f html; exit 0",
+    "lint": "eslint './' -f stylish; eslint './' -o ./lint/eslint.html -f html; exit 0",
     "fix": "eslint './' --fix; exit 0",
-    "build": "npm run coverage && npm run fix && npm run quality"
+    "prepare": "npm run coverage && npm run fix && npm run quality"
   },
   "repository": {
     "type": "git",
@@ -46,10 +46,12 @@
     "eslint": "^3.16.1",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
+    "sequelize-cli": "^2.6.0",
     "supertest": "^3.0.0",
     "unionized": "^4.11.0"
   },
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.1",
     "cors": "^2.8.1",
     "dotenv": "^4.0.0",
@@ -64,6 +66,9 @@
     "mkdirp": "^0.5.1",
     "morgan": "^1.8.1",
     "passport": "^0.3.2",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7",
+    "pg": "^6.1.4",
+    "sequelize": "^3.30.2"
   }
 }

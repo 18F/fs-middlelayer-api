@@ -32,8 +32,9 @@ This repository is being development under a task order of the Agile Blanket Pur
 
 - Use `npm test` to run Mocha unit tests.
 - Use `npm run coverage` for Istanbul code coverage.
-- Use `npm run quality` for ESLint static code analysis.
-- Use `npm run build` to run tests, coverage, and quality including fix.
+- Use `npm run lint` for ESLint static code analysis.
+- Use `npm run fix` for ESLint code fix.
+- Use `npm run prepare` to run tests, coverage, lint, and fix.
 
 ## Configuration
 
