@@ -126,51 +126,108 @@ const generatePurpose = function (activityDescription, locationDescription, star
 
 };
 
-function copyGenericInfo(cnData, jsonData){
+function fromAdminOrg(cnData, postSchema, jsonData, key){
 
-	const adminOrg = cnData.adminOrg;
-	jsonData.controlNumber = cnData.accinstCn;
-	jsonData.region = adminOrg.slice(0, 2);
-	jsonData.forest = adminOrg.slice(2, 4);
-	jsonData.district = adminOrg.slice(4, 6);
-	jsonData.authorizingOfficerName = cnData.authOfficerName;
-	jsonData.authorizingOfficerTitle = cnData.authOfficerTitle;
+	const adminOrg = cnData[postSchema.adminOrg.intake];
+	switch (key){
+	case 'region':
+		jsonData[key] = adminOrg.slice(0, 2);
+		break;
+	case 'forest':
+		jsonData[key] = adminOrg.slice(2, 4);
+		break;
+	case 'district':
+		jsonData[key] = adminOrg.slice(4, 6);
+		break;
+	}
+
+}
+
+function getTopLevelField(intakeField, cnData, postSchema, jsonData, key){
+
+	switch (intakeField){
+	case 'middleLayer':
+		//jsonData[key] = getFromMiddleLayer(key)
+		break;
+	case 'none':
+		break;
+	case 'fromAdminOrg':
+		fromAdminOrg(cnData, postSchema, jsonData, key);
+		break;
+	default:
+		if (cnData.hasOwnProperty(postSchema[key].intake)){
+	
+			jsonData[key] = cnData[postSchema[key].intake];
+		
+		}
+	}
+
+}
+
+function getSubLevelField(cnData, postSchema, key, jsonData){
 
 	const addressData = cnData.addresses[0];
 	const phoneData = cnData.phones[0];
 	const holderData = cnData.holders[0];
-
-	const applicantInfo = {};
-	const phoneNumber = {};
-    
-	applicantInfo.contactControlNumber = addressData.contCn;
-	applicantInfo.firstName = holderData.firstName;
-	applicantInfo.lastName = holderData.lastName;
-    
-	phoneNumber.areaCode = phoneData.areaCode;
-	phoneNumber.number = phoneData.phoneNumber;
-	phoneNumber.extension = phoneData.extension;
-	phoneNumber.type = phoneData.phoneNumberType;
-
-	applicantInfo.dayPhone = phoneNumber;
-	applicantInfo.eveningPhone = phoneNumber;
-	applicantInfo.emailAddress = addressData.email;
-	applicantInfo.mailingAddress = addressData.address1;
-	applicantInfo.mailingAddress2 = addressData.address2;
-	applicantInfo.mailingCity = addressData.cityName;
-	applicantInfo.mailingState = addressData.stateCode;
-	applicantInfo.mailingZIP = addressData.postalCode;
-
-	if (addressData.contactType === 'ORGANIZATION'){
-		applicantInfo.organizationName = addressData.contName;
+	const path = postSchema[key].intake.split('/');
+	let data;
+	switch (path[0]){
+	case 'holders':
+		data = holderData;
+		break;
+	case 'phones':
+		data = phoneData;
+		break;
+	case 'addresses':
+		data = addressData;
+		break;
 	}
-	else {
-		applicantInfo.organizationName = null;  
+	if (data.hasOwnProperty(path[1])){
+		jsonData[key] = data[path[1]];
 	}
-	applicantInfo.website = null;
-	applicantInfo.orgType = holderData.orgType;
 
-	jsonData.applicantInfo = applicantInfo;
+}
+
+function buildGetResponse(cnData, schemaData, jsonData, postSchema){
+
+	let key; 
+	for (key in schemaData){
+		
+		if (typeof jsonData[key] !== 'object'){
+			
+			const intakeField = postSchema[key].intake;
+			if (intakeField.indexOf('/') === -1){
+				
+				getTopLevelField(intakeField, cnData, postSchema, jsonData, key);
+			
+			}
+			else {
+				
+				getSubLevelField(cnData, postSchema, key, jsonData);
+			}
+		}
+		else {
+			buildGetResponse(cnData, schemaData[key], jsonData[key], postSchema[key]);
+		}
+	}
+
+}
+function copyGenericInfo(cnData, jsonData){
+
+	const postSchema = include('controllers/permits/applications/special-uses/getSchema.json');
+	jsf.option({useDefaultValue:true});
+	const schemaData = jsf(postSchema);
+	delete schemaData.id;
+
+	jsonData = schemaData;
+	buildGetResponse(cnData, schemaData, jsonData, postSchema);
+
+	/*
+		Lock down all fields expected to be returned
+	*/
+	// /console.log(jsonData)
+
+	return jsonData;
 }
 
 function autoPopulatedFields(postData, inputPost){
