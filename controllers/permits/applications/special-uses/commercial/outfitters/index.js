@@ -33,8 +33,8 @@ const put = {};
 // get id
 
 get.id = function(req, res){
-    
-	const jsonData = {};
+	
+	let jsonData = {};
 
 	const jsonResponse = {};
 	jsonResponse.success = false;
@@ -43,15 +43,13 @@ get.id = function(req, res){
 	jsonResponse.verb = 'get';
 	jsonResponse.src = 'json';
 	jsonResponse.route = 'permits/special-uses/commercial/outfitters/{controlNumber}';
-    
-	jsonData.response = jsonResponse;
 
 	const cnData = outfittersData[1095010356];
 
 	if (cnData){
-        
+		
 		const outfittersFields = {};
-        
+		
 		outfittersFields.activityDescription = cnData.purpose;
 		outfittersFields.locationDescription = null;
 		outfittersFields.startDateTime = '2017-04-12 09:00:00';
@@ -60,14 +58,20 @@ get.id = function(req, res){
 		outfittersFields.goodStandingEvidence = 'goodStandingEvidence.pdf';
 		outfittersFields.operatingPlan = 'operatingPlan.pdf';
 
-		util.copyGenericInfo(cnData, jsonData);
-		jsonData.tempOutfitterFields = outfittersFields;    
-
+		jsonData = util.copyGenericInfo(cnData, jsonData);
+		jsonData.tempOutfitterFields = outfittersFields;
 		jsonResponse.success = true;
+		
 	}
-    
-	res.json(jsonData);
-    
+
+	if (jsonData.hasOwnProperty('noncommercialFields')){
+		delete jsonData.noncommercialFields;
+	}
+
+	const toReturn = Object.assign({}, {response:jsonResponse}, jsonData); 
+
+	res.json(toReturn);
+	
 };
 
 // put id
@@ -77,7 +81,7 @@ put.id = function(req, res){
 	const controlNumber = req.params.id;
 
 	const validateRes = validateSpecialUse.validateInput('outfitters', req);
-    
+	
 	if (validateRes.success){
 
 		const postData = util.createPost('outfitters', controlNumber, req.body);
@@ -85,14 +89,14 @@ put.id = function(req, res){
 		const response = include('test/data/outfitters.put.id.json');
 
 		response.apiRequest = postData;
-    
+	
 		res.json(response);
-    
+	
 	}
 	else {
-    
+	
 		error.sendError(req, res, 400, validateRes.errorMessage);
-    
+	
 	}
 
 };
@@ -102,7 +106,7 @@ put.id = function(req, res){
 const post = function(req, res){
 
 	const validateRes = validateSpecialUse.validateInput('outfitters', req);
-    
+	
 	if (validateRes.success){
 
 		const postData = util.createPost('outfitters', null, req.body);
@@ -110,14 +114,14 @@ const post = function(req, res){
 		const response = include('test/data/outfitters.post.json');
 
 		response.apiRequest = postData;
-    
+	
 		res.json(response);
-    
+	
 	}
 	else {
-    
+	
 		error.sendError(req, res, 400, validateRes.errorMessage, validateRes.errors);
-    
+	
 	}
 
 };

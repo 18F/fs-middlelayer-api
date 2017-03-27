@@ -34,7 +34,7 @@ const put = {};
 
 get.id = function(req, res){
     
-	const jsonData = {};
+	let jsonData = {};
 
 	const jsonResponse = {};
 	jsonResponse.success = false;
@@ -43,8 +43,6 @@ get.id = function(req, res){
 	jsonResponse.verb = 'get';
 	jsonResponse.src = 'json';
 	jsonResponse.route = 'permits/special-uses/noncommercial/{controlNumber}';
-    
-	jsonData.response = jsonResponse;
 
 	const cnData = noncommercialData[1095010356];
 
@@ -58,13 +56,18 @@ get.id = function(req, res){
 		noncommercialFields.endDateTime = '2017-04-15 20:00:00';
 		noncommercialFields.numberParticipants = 45;
 
-		util.copyGenericInfo(cnData, jsonData);
+		jsonData = util.copyGenericInfo(cnData, jsonData);
 		jsonData.noncommercialFields = noncommercialFields;    
 		jsonResponse.success = true;
         
 	}
     
-	res.json(jsonData);
+	if (jsonData.hasOwnProperty('tempOutfitterFields')){
+		delete jsonData.tempOutfitterFields;
+	}
+	const toReturn = Object.assign({}, {response:jsonResponse}, jsonData); 
+
+	res.json(toReturn);
 
 };
 
