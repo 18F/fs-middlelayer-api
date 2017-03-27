@@ -50,7 +50,7 @@ get.id = function(req, res){
 	const cnData = outfittersData[1095010356];
 
 	if (cnData){
-        
+
 		const outfittersFields = {};
         
 		outfittersFields.activityDescription = cnData.purpose;
@@ -64,10 +64,19 @@ get.id = function(req, res){
 		util.copyGenericInfo(cnData, jsonData);
 		jsonData.tempOutfitterFields = outfittersFields;    
 
-		jsonResponse.success = true;
+		dbUtil.getApplication(1000000000, function(err, appl){
+			if (err){
+				console.error(err);
+				error.sendError(req, res, 400, 'error getting application from database');
+			}
+			else {
+				
+				jsonData.applicantInfo.website = appl.website_addr;
+				jsonResponse.success = true;
+				res.json(jsonData);
+			}
+		});
 	}
-    
-	res.json(jsonData);
     
 };
 
@@ -124,25 +133,25 @@ const post = function(req, res){
 		dbUtil.saveApplication(controlNumber, postData.tempOutfitterFields.formName, website, function(err, appl) {
 
 			if (err) {
-				error.sendError(req, res, 400, 'error saving application in database', null);
+				error.sendError(req, res, 400, 'error saving application in database');
 			}
 			else {
 				dbUtil.saveFile(appl.id, 'inc', postData.tempOutfitterFields.insuranceCertificate, function(err, file) {
 
 					if (err) {
-						error.sendError(req, res, 400, 'error saving file in database', null);
+						error.sendError(req, res, 400, 'error saving file in database');
 					}
-					else{
+					else {
 						dbUtil.saveFile(appl.id, 'gse', postData.tempOutfitterFields.goodStandingEvidence, function(err, file) {
 
 							if (err) {
-								error.sendError(req, res, 400, 'error saving file in database', null);
+								error.sendError(req, res, 400, 'error saving file in database');
 							}
-							else{
+							else {
 								dbUtil.saveFile(appl.id, 'opp', postData.tempOutfitterFields.operatingPlan, function(err, file) {
 
 									if (err) {
-										error.sendError(req, res, 400, 'error saving file in database', null);
+										error.sendError(req, res, 400, 'error saving file in database');
 									}
 
 								});

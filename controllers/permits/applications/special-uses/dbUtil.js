@@ -21,31 +21,61 @@ const models = include('models');
 
 const saveApplication = function(controlNumber, formType, website, callback) {
 	models.applications.create({
-        control_number: controlNumber,
-        form_type: formType,
-        website_addr: website,
-    })
-    .then(function(appl) {
-    	callback(null, appl);
-    })
-    .catch(function(error) {
-    	callback(error, null);
-    });
+		control_number: controlNumber, //eslint-disable-line camelcase
+		form_type: formType, //eslint-disable-line camelcase
+		website_addr: website //eslint-disable-line camelcase
+	})
+	.then(function(appl) {
+		return callback(null, appl);
+	})
+	.catch(function(err) {
+		return callback(err, null);
+	});
 };
 
 const saveFile = function(applicationId, fileType, fileNmae, callback){
 	models.files.create({
-        file_type: fileType,
-        file_name: fileNmae,
-        file_path: '/',
-        application_id: applicationId,
-      })
-    .then(function(file) {
-    	callback(null, file);
-    })
-    .catch(function(error) {
-    	callback(error, null);
-    });
+		file_type: fileType, //eslint-disable-line camelcase
+		file_name: fileNmae, //eslint-disable-line camelcase
+		file_path: '/', //eslint-disable-line camelcase
+		application_id: applicationId //eslint-disable-line camelcase
+	})
+	.then(function(file) {
+		return callback(null, file);
+	})
+	.catch(function(err) {
+		return callback(err, null);
+	});
+};
+
+const getApplication = function(controlNumber, callback){
+
+	models.applications.findOne({
+		where: {control_number: controlNumber} //eslint-disable-line camelcase
+	}).then(function(appl) {
+		if (appl){
+			return callback(null, appl);	
+		}
+		else {
+			// TO BE REMOVED begin -- create appl if not exist
+			models.applications.create({
+				control_number: controlNumber, //eslint-disable-line camelcase
+				form_type: 'FS-2700-3f', //eslint-disable-line camelcase
+				website_addr: 'testweb1000000000.org' //eslint-disable-line camelcase
+			})
+			.then(function(appl) {
+				return callback(null, appl);	
+			})
+			.catch(function(err) {
+				return callback(err, null);
+			});
+			// TO BE REMOVED end -- create appl if not exist
+			//return callback('no record found', null);
+		}
+	}).catch(function (err) {
+		console.error(err);
+		return callback(err, null);
+	});
 };
 
 //*******************************************************************
@@ -53,3 +83,4 @@ const saveFile = function(applicationId, fileType, fileNmae, callback){
 
 module.exports.saveApplication = saveApplication;
 module.exports.saveFile = saveFile;
+module.exports.getApplication = getApplication;

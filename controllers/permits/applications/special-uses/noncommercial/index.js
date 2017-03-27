@@ -60,13 +60,21 @@ get.id = function(req, res){
 		noncommercialFields.numberParticipants = 45;
 
 		util.copyGenericInfo(cnData, jsonData);
-		jsonData.noncommercialFields = noncommercialFields;    
-		jsonResponse.success = true;
-        
-	}
-    
-	res.json(jsonData);
+		jsonData.noncommercialFields = noncommercialFields;
 
+		dbUtil.getApplication(1000000000, function(err, appl){
+			if (err){
+				console.error(err);
+				error.sendError(req, res, 400, 'error getting application from database');
+			}
+			else {
+				
+				jsonData.applicantInfo.website = appl.website_addr;
+				jsonResponse.success = true;
+				res.json(jsonData);
+			}
+		});
+	}
 };
 
 // put id
