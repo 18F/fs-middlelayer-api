@@ -121,9 +121,6 @@ const post = function(req, res){
 		'goodStandingEvidence',
 		'operatingPlan'
 	];
-
-	//console.log('\n req.files : ' + JSON.stringify(req.files));
-	//console.log('\n req.body : ' + JSON.stringify(req.body));
 	
 	if (!req.files) {
 		error.sendError(req, res, 400, 'no files upload error');

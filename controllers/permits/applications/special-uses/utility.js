@@ -343,9 +343,6 @@ function createPost(formType, controlNumber, inputPost){
 
 function putUpload(uploadReq, uploadField, controlNumber){
 
-	//console.log('uploadReq : ' + JSON.stringify(uploadReq) );
-	//console.log('uploadField : ' + uploadField );
-
 	const uploadFile = {};
 
 	if (!uploadReq) {
@@ -369,14 +366,6 @@ function putUpload(uploadReq, uploadField, controlNumber){
 		uploadFile.mimetype = uploadFile.file.mimetype;
 		uploadFile.encoding = uploadFile.file.encoding;
 		uploadFile.buffer = uploadFile.file.buffer;
-		uploadFile.keyname = controlNumber +'/' + uploadField + '/' + uploadFile.filename +'-'+Date.now() + uploadFile.ext;
-		
-		//console.log('uploadFile.originalname : ' + uploadFile.originalname);
-		//console.log('uploadFile.filename : ' + uploadFile.filename);
-		//console.log('uploadFile.ext : ' + uploadFile.ext);
-		//console.log('uploadFile.size : ' + uploadFile.size);
-		//console.log('uploadFile.mimetype : ' + uploadFile.mimetype);
-		console.log('uploadFile.keyname : ' + uploadFile.keyname);
 		
 		const params = {
 			Bucket: AWS_BUCKET_NAME, 
@@ -387,10 +376,10 @@ function putUpload(uploadReq, uploadField, controlNumber){
 
 		s3.putObject(params, function(err, data) {
 			if (err) {
-				console.error(err, err.stack); 
+				console.error(err, err.stack);
 			}
 			else {     
-				console.log(data);   
+				console.log(data);  
 			}      
 		});			
 	}
