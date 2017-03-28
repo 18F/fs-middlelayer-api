@@ -40,13 +40,22 @@ This repository is being development under a task order of the Agile Blanket Pur
 
 - Environment variables:
   - PORT | Default: 8000
+  - DATABASE_URL | Format: postgres://user:password@host:port/database
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - AWS_BUCKET_NAME
 - Dotenv:
   - [Dotenv](https://www.npmjs.com/package/dotenv) is used which can load environment variables from a .env file into process.env
   - Example: PORT=8080
 
 ## Dependencies
 
-Refer to application package and dependency trackers for dependency information:
+Refer to application package and dependency trackers for additional dependency information:
+- Infrastructure:
+  - Runtime: Node.js >= 6.9.x
+  - Engine: NPM >= 3.10.x
+  - Database: PostgreSQL >= 9.6.x
+  - Storage: S3
 - Application package:
   - [package.json](https://github.com/nci-ats/fs-middlelayer-api/blob/dev/package.json)
   - [npm-shrinkwrap.json](https://github.com/nci-ats/fs-middlelayer-api/blob/dev/npm-shrinkwrap.json)
