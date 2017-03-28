@@ -64,9 +64,7 @@ get.id = function(req, res){
 		
 	}
 
-	if (jsonData.hasOwnProperty('noncommercialFields')){
-		delete jsonData.noncommercialFields;
-	}
+	delete jsonData.noncommercialFields;
 
 	const toReturn = Object.assign({}, {response:jsonResponse}, jsonData); 
 

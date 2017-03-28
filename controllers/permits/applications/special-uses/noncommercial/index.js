@@ -62,10 +62,9 @@ get.id = function(req, res){
         
 	}
     
-	if (jsonData.hasOwnProperty('tempOutfitterFields')){
-		delete jsonData.tempOutfitterFields;
-	}
-	const toReturn = Object.assign({}, {response:jsonResponse}, jsonData); 
+	delete jsonData.tempOutfitterFields;
+	
+	const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
 
 	res.json(toReturn);
 
