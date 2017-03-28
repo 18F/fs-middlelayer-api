@@ -8,14 +8,14 @@ const basename = path.basename(module.filename);
 
 const db = {};
 
-let sequelizeOptions = {
-  dialect: url.parse(process.env.DATABASE_URL, true).protocol.split(':')[0],
+const sequelizeOptions = {
+	dialect: url.parse(process.env.DATABASE_URL, true).protocol.split(':')[0]
 };
 
 if (url.parse(process.env.DATABASE_URL, true).hostname !== 'localhost') {
-  sequelizeOptions.dialectOptions = {
-    ssl: true
-  };
+	sequelizeOptions.dialectOptions = {
+		ssl: true
+	};
 }
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, sequelizeOptions);

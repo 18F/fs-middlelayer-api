@@ -242,8 +242,13 @@ function handleDependencyError(output, result, counter){
 
 }
 
-const validateInput = function (route, req){
-
+const validateInput = function (route, inputPost){
+	
+	inputPost = inputPost.body;
+	if (inputPost.body) {
+		inputPost = JSON.parse(inputPost.body);
+	}
+		
 	const errorTracking = {
     
 		'fieldsValid': true,
@@ -271,12 +276,12 @@ const validateInput = function (route, req){
 
 	if (route === 'noncommercial'){
 
-		result = v.validate(req.body, noncommercialSchema).errors;
+		result = v.validate(inputPost, noncommercialSchema).errors;
 
 	}
 	else { 
 
-		result = v.validate(req.body, tempOutfitterSchema).errors;        
+		result = v.validate(inputPost, tempOutfitterSchema).errors;        
 
 	}
 

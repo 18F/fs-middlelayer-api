@@ -15,6 +15,7 @@
 // required modules
 
 const include = require('include')(__dirname);
+
 const outfittersData = include('test/data/basicGET.json');
 
 //*******************************************************************
@@ -22,6 +23,7 @@ const outfittersData = include('test/data/basicGET.json');
 
 const validateSpecialUse = include('controllers/permits/applications/special-uses/validate.js');
 const util = include('controllers/permits/applications/special-uses/utility.js');
+const dbUtil = include('controllers/permits/applications/special-uses/dbUtil.js');
 const error = include('error.js');
 
 //*******************************************************************
@@ -47,7 +49,7 @@ get.id = function(req, res){
 	const cnData = outfittersData[1095010356];
 
 	if (cnData){
-		
+
 		const outfittersFields = {};
 		
 		outfittersFields.activityDescription = cnData.purpose;
@@ -60,16 +62,25 @@ get.id = function(req, res){
 
 		jsonData = util.copyGenericInfo(cnData, jsonData);
 		jsonData.tempOutfitterFields = outfittersFields;
-		jsonResponse.success = true;
-		
+
+		delete jsonData.noncommercialFields;
+
+		dbUtil.getApplication(1000000000, function(err, appl){
+			if (err){
+				console.error(err);
+				error.sendError(req, res, 400, 'error getting application from database');
+			}
+			else {
+				
+				jsonData.applicantInfo.website = appl.website_addr;
+				jsonResponse.success = true;
+				const toReturn = Object.assign({}, {response:jsonResponse}, jsonData); 
+
+				res.json(toReturn);
+			}
+		});
 	}
 
-	delete jsonData.noncommercialFields;
-
-	const toReturn = Object.assign({}, {response:jsonResponse}, jsonData); 
-
-	res.json(toReturn);
-	
 };
 
 // put id
@@ -103,23 +114,92 @@ put.id = function(req, res){
 
 const post = function(req, res){
 
-	const validateRes = validateSpecialUse.validateInput('outfitters', req);
-	
-	if (validateRes.success){
+	const filesUploadList = [
+		'guideDocumentation',
+		'acknowledgementOfRiskForm',
+		'insuranceCertificate',
+		'goodStandingEvidence',
+		'operatingPlan'
+	];
 
-		const postData = util.createPost('outfitters', null, req.body);
-
-		const response = include('test/data/outfitters.post.json');
-
-		response.apiRequest = postData;
+	//console.log('\n req.files : ' + JSON.stringify(req.files));
+	//console.log('\n req.body : ' + JSON.stringify(req.body));
 	
-		res.json(response);
-	
+	if (!req.files) {
+		error.sendError(req, res, 400, 'no files upload error');
 	}
 	else {
-	
-		error.sendError(req, res, 400, validateRes.errorMessage, validateRes.errors);
-	
+		for (let i = 0; i < filesUploadList.length; i++ ) {
+
+			if (!req.files[filesUploadList[i]]) {				
+				error.sendError(req, res, 400, `${filesUploadList[i]} must be provided`);
+			}		
+			else {
+				
+				util.putUpload( req.files[filesUploadList[i]], filesUploadList[i], 'abc123');
+
+			}
+		}
+
+		const validateRes = validateSpecialUse.validateInput('outfitters', req);
+
+		if (validateRes.success){
+
+			const postData = util.createPost('outfitters', null, req.body);
+
+			const response = include('test/data/outfitters.post.json');
+
+			response.apiRequest = postData;
+
+			// api database updates
+			const controlNumber = Math.floor((Math.random() * 10000000000) + 1);
+
+			let website;
+
+			if (postData.applicantInfo.website){
+				website = postData.applicantInfo.website;
+			}
+
+			dbUtil.saveApplication(controlNumber, postData.tempOutfitterFields.formName, website, function(err, appl) {
+
+				if (err) {
+					error.sendError(req, res, 400, 'error saving application in database');
+				}
+				else {
+					dbUtil.saveFile(appl.id, 'inc', req.files.insuranceCertificate[0].fieldname, function(err, file) {
+
+						if (err) {
+							error.sendError(req, res, 400, 'error saving file in database');
+						}
+						else {
+							dbUtil.saveFile(appl.id, 'gse', req.files.goodStandingEvidence[0].fieldname, function(err, file) {
+
+								if (err) {
+									error.sendError(req, res, 400, 'error saving file in database');
+								}
+								else {
+									dbUtil.saveFile(appl.id, 'opp', req.files.operatingPlan[0].fieldname, function(err, file) {
+
+										if (err) {
+											error.sendError(req, res, 400, 'error saving file in database');
+										}
+										else {
+											res.json(response);
+										}
+
+									});
+								}
+							});
+						}
+					});
+				}
+			});
+		}
+		else {
+		
+			error.sendError(req, res, 400, validateRes.errorMessage, validateRes.errors);
+		
+		}
 	}
 
 };

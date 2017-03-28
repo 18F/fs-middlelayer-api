@@ -20,7 +20,6 @@ before_script:
 - npm install -g sequelize-cli
 script:
 - sequelize db:migrate
-- sequelize db:seed:undo:all
 - sequelize db:seed:all
 - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive
 - codecov
