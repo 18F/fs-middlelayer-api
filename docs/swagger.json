@@ -234,7 +234,7 @@
 				],
 				"parameters": [					
 					{
-						"in": "body",
+						"in": "formData",
 						"name": "body",
 						"description": "temp-outfitter permit information",
 						"required": true,
