@@ -110,6 +110,15 @@ put.id = function(req, res){
 
 };
 
+function fileErrors(missingFiles){
+
+	let output = '';
+	missingFiles.forEach((missing)=>{
+		output = `${output}${missing} must be provided. `;
+	});
+	output = output.trim();
+	return output;
+}
 // post
 
 const post = function(req, res){
@@ -122,14 +131,15 @@ const post = function(req, res){
 		'operatingPlan'
 	];
 	
-	if (!req.files) {
-		error.sendError(req, res, 400, 'no files upload error');
+	if (Object.keys(req.files).length === 0) {
+		error.sendError(req, res, 400, fileErrors(filesUploadList));
 	}
 	else {
+		const missingFiles = [];
 		for (let i = 0; i < filesUploadList.length; i++ ) {
 
-			if (!req.files[filesUploadList[i]]) {				
-				error.sendError(req, res, 400, `${filesUploadList[i]} must be provided`);
+			if (!req.files[filesUploadList[i]]) {
+				missingFiles.push(filesUploadList[i]);
 			}		
 			else {
 				
@@ -138,65 +148,75 @@ const post = function(req, res){
 			}
 		}
 
-		const validateRes = validateSpecialUse.validateInput('outfitters', req);
+		if (missingFiles.length !== 0){
 
-		if (validateRes.success){
+			error.sendError(req, res, 400, fileErrors(missingFiles));
 
-			const postData = util.createPost('outfitters', null, req.body);
-
-			const response = include('test/data/outfitters.post.json');
-
-			response.apiRequest = postData;
-
-			// api database updates
-			const controlNumber = Math.floor((Math.random() * 10000000000) + 1);
-
-			let website;
-
-			if (postData.applicantInfo.website){
-				website = postData.applicantInfo.website;
-			}
-
-			dbUtil.saveApplication(controlNumber, postData.tempOutfitterFields.formName, website, function(err, appl) {
-
-				if (err) {
-					error.sendError(req, res, 400, 'error saving application in database');
-				}
-				else {
-					dbUtil.saveFile(appl.id, 'inc', req.files.insuranceCertificate[0].fieldname, function(err, file) {
-
-						if (err) {
-							error.sendError(req, res, 400, 'error saving file in database');
-						}
-						else {
-							dbUtil.saveFile(appl.id, 'gse', req.files.goodStandingEvidence[0].fieldname, function(err, file) {
-
-								if (err) {
-									error.sendError(req, res, 400, 'error saving file in database');
-								}
-								else {
-									dbUtil.saveFile(appl.id, 'opp', req.files.operatingPlan[0].fieldname, function(err, file) {
-
-										if (err) {
-											error.sendError(req, res, 400, 'error saving file in database');
-										}
-										else {
-											res.json(response);
-										}
-
-									});
-								}
-							});
-						}
-					});
-				}
-			});
 		}
 		else {
-		
-			error.sendError(req, res, 400, validateRes.errorMessage, validateRes.errors);
-		
+
+			const validateRes = validateSpecialUse.validateInput('outfitters', req);
+
+			if (validateRes.success){
+
+				const postData = util.createPost('outfitters', null, req.body);
+
+				const response = include('test/data/outfitters.post.json');
+
+				response.apiRequest = postData;
+
+				// api database updates
+				const controlNumber = Math.floor((Math.random() * 10000000000) + 1);
+
+				let website;
+
+				if (postData.applicantInfo.website){
+					website = postData.applicantInfo.website;
+				}
+
+				dbUtil.saveApplication(controlNumber, postData.tempOutfitterFields.formName, website, function(err, appl) {
+
+					if (err) {
+						error.sendError(req, res, 400, 'error saving application in database');
+					}
+					else {
+						dbUtil.saveFile(appl.id, 'inc', req.files.insuranceCertificate[0].fieldname, function(err, file) {
+
+							if (err) {
+								error.sendError(req, res, 400, 'error saving file in database');
+							}
+							else {
+								dbUtil.saveFile(appl.id, 'gse', req.files.goodStandingEvidence[0].fieldname, function(err, file) {
+
+									if (err) {
+										error.sendError(req, res, 400, 'error saving file in database');
+									}
+									else {
+										dbUtil.saveFile(appl.id, 'opp', req.files.operatingPlan[0].fieldname, function(err, file) {
+
+											if (err) {
+												error.sendError(req, res, 400, 'error saving file in database');
+											}
+											else {
+												res.json(response);
+											}
+
+										});
+									}
+								});
+							}
+						});
+					}
+				});
+			}
+			else {
+			
+				error.sendError(req, res, 400, validateRes.errorMessage, validateRes.errors);
+			
+			}
+
 		}
+
 	}
 
 };
