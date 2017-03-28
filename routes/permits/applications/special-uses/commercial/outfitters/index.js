@@ -24,8 +24,8 @@ const outfitters = include('controllers/permits/applications/special-uses/commer
 //*******************************************************************
 // storage
 
-let storage = multer.memoryStorage();
-let upload = multer({ storage: storage });
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 //*******************************************************************
 // router
@@ -46,12 +46,15 @@ router.put('/:id(\\d+)', function(req, res){
 
 // post
 
-let postUpload = upload.fields([
+const postUpload = upload.fields([
 	{ name: 'guideDocumentation', maxCount: 1 },
-	{ name: 'acknowledgementOfRiskForm', maxCount: 1 }
+	{ name: 'acknowledgementOfRiskForm', maxCount: 1 },
+	{ name: 'insuranceCertificate', maxCount: 1 },
+	{ name: 'goodStandingEvidence', maxCount: 1 },
+	{ name: 'operatingPlan', maxCount: 1 }
 ]);
 
-router.post('/', postUpload, function(req, res, next){
+router.post('/', postUpload, function(req, res){
     
 	outfitters.post(req, res);
     
