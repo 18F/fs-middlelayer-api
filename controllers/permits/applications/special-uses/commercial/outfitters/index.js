@@ -15,6 +15,7 @@
 // required modules
 
 const include = require('include')(__dirname);
+
 const outfittersData = include('test/data/basicGET.json');
 
 //*******************************************************************
@@ -111,8 +112,35 @@ put.id = function(req, res){
 
 const post = function(req, res){
 
+	const filesUploadList = [
+		'guideDocumentation',
+		'acknowledgementOfRiskForm',
+		'insuranceCertificate',
+		'goodStandingEvidence',
+		'operatingPlan'
+	];
+
+	//console.log('\n req.files : ' + JSON.stringify(req.files));
+	//console.log('\n req.body : ' + JSON.stringify(req.body));
+	
+	if (!req.files) {
+		console.log('no files upload error');
+	}
+	else {
+		for (let i = 0; i < filesUploadList.length; i++ ) {
+
+			if (!req.files[filesUploadList[i]]) {				
+				console.log('missing files error');
+			}		
+			else {
+				
+				util.putUpload( req.files[filesUploadList[i]], filesUploadList[i], 'abc123');
+			}
+		}
+	}
+	
 	const validateRes = validateSpecialUse.validateInput('outfitters', req);
-    
+
 	if (validateRes.success){
 
 		const postData = util.createPost('outfitters', null, req.body);

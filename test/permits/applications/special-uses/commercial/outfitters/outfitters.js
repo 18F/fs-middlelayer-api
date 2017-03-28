@@ -951,8 +951,29 @@ describe('outfitters POST: enum validated', function(){
 		});
 	
 	});
-
+	
 	describe('outfitters POST: fields with enumuration are validated', function(){
+
+		it('should return valid json for invalid option, orgType', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/outfitters/')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.orgType':'invalid'})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
+				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+					
+					expect(res.body.response.message).to.equal('Applicant Info/Org Type is not one of enum values: Individual,Corporation,Limited Liability Company,Partnership or Association,State Government or Agency,Local Government or Agency,Nonprofit.');
+
+				})
+				.expect(400, done);
+
+		});
 
 		it('should return valid json for invalid option, type', function(done) {
 
@@ -964,22 +985,6 @@ describe('outfitters POST: enum validated', function(){
 				.expect(function(res){
 
 					expect(res.body.response.message).to.equal('Type is not one of enum values: noncommercial,tempOutfitterGuide.');
-
-				})
-				.expect(400, done);
-
-		});
-
-		it('should return valid json for invalid option, orgType', function(done) {
-
-			request(server)
-				.post('/permits/applications/special-uses/commercial/outfitters/')
-				.set('x-access-token', token)
-				.send(tempOutfittersFactory.create({'applicantInfo.orgType':'invalid'}))
-				.expect('Content-Type', /json/)
-				.expect(function(res){
-
-					expect(res.body.response.message).to.equal('Applicant Info/Org Type is not one of enum values: Individual,Corporation,Limited Liability Company,Partnership or Association,State Government or Agency,Local Government or Agency,Nonprofit.');
 
 				})
 				.expect(400, done);

@@ -15,7 +15,25 @@
 // required modules
 
 const include = require('include')(__dirname);
+const path = require('path');
+const AWS = require('aws-sdk');
 const errors = require('./patternErrorMessages.json');
+
+//*************************************************************
+// AWS
+
+const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
+const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
+const AWS_REGION = process.env.AWS_REGION;
+const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME;
+
+AWS.config.update({
+	accessKeyId: AWS_ACCESS_KEY_ID,
+	secretAccessKey: AWS_SECRET_ACCESS_KEY,
+	region: AWS_REGION
+});
+
+const s3 = new AWS.S3();
 
 //*******************************************************************
 
@@ -194,6 +212,10 @@ function createPost(formType, controlNumber, inputPost){
 			}
 		}
 	}
+	
+	if (inputPost.body) {
+		inputPost = JSON.parse(inputPost.body);
+	}
 
 	postData.region = inputPost.region;
 	postData.forest = inputPost.forest;
@@ -288,9 +310,66 @@ function createPost(formType, controlNumber, inputPost){
 	return postData;
 }
 
+function putUpload(uploadReq, uploadField, controlNumber){
+
+	//console.log('uploadReq : ' + JSON.stringify(uploadReq) );
+	//console.log('uploadField : ' + uploadField );
+
+	const uploadFile = {};
+
+	if (!uploadReq) {
+		console.log('uploadFile invalid error');
+	}
+	else if (uploadReq.length <= 0) {
+		console.log('uploadFile missing error');
+	}
+	else {
+		uploadFile.file = uploadReq[0];
+	}
+
+	if (uploadFile.file === undefined) {		
+		console.log('uploadFile undefined error');
+	}
+	else {
+		uploadFile.originalname = uploadFile.file.originalname;
+		uploadFile.filename = path.parse(uploadFile.file.originalname).name;
+		uploadFile.ext = path.parse(uploadFile.file.originalname).ext;
+		uploadFile.size = uploadFile.file.size;
+		uploadFile.mimetype = uploadFile.file.mimetype;
+		uploadFile.encoding = uploadFile.file.encoding;
+		uploadFile.buffer = uploadFile.file.buffer;
+		uploadFile.keyname = controlNumber +'/' + uploadField + '/' + uploadFile.filename +'-'+Date.now() + uploadFile.ext;
+		
+		//console.log('uploadFile.originalname : ' + uploadFile.originalname);
+		//console.log('uploadFile.filename : ' + uploadFile.filename);
+		//console.log('uploadFile.ext : ' + uploadFile.ext);
+		//console.log('uploadFile.size : ' + uploadFile.size);
+		//console.log('uploadFile.mimetype : ' + uploadFile.mimetype);
+		console.log('uploadFile.keyname : ' + uploadFile.keyname);
+		
+		const params = {
+			Bucket: AWS_BUCKET_NAME, 
+			Key: uploadFile.keyname,
+			Body: uploadFile.buffer,
+			ACL: 'private' 
+		};
+
+		s3.putObject(params, function(err, data) {
+			if (err) {
+				console.error(err, err.stack); 
+			}
+			else {     
+				console.log(data);   
+			}      
+		});			
+	}
+
+}
+
 //*******************************************************************
 // exports
 
 module.exports.buildErrorMessage = buildErrorMessage;
 module.exports.copyGenericInfo = copyGenericInfo;
 module.exports.createPost = createPost;
+module.exports.putUpload = putUpload;
