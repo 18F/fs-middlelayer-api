@@ -14,7 +14,7 @@
                         "default": "tempOutfitterGuide",
                         "enum":[
                             "noncommercial",
-                            "tempOutfitterGuide"
+                            "tempOutfitters"
                         ]
                     },
                     "tempOutfitterFields": {
@@ -89,7 +89,7 @@
                         "default": "noncommercial",
                         "enum":[
                             "noncommercial",
-                            "tempOutfitterGuide"
+                            "tempOutfitters"
                         ]
                     },
                     "noncommercialFields": {
