@@ -1340,7 +1340,7 @@ describe('outfitters POST: file validated', function(){
 	
 	describe('outfitters POST: required files checks', function(){
 
-		it('should return valid json missing files', function(done) {
+		it('should return valid json missing single file', function(done) {
 
 			request(server)
 				.post('/permits/applications/special-uses/commercial/outfitters/')
@@ -1353,7 +1353,42 @@ describe('outfitters POST: file validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 					
-					expect(res.body.response.message).to.equal('operatingPlan must be provided');
+					expect(res.body.response.message).to.equal('operatingPlan must be provided.');
+
+				})
+				.expect(400, done);
+
+		});
+
+		it('should return valid json missing multiple files', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/outfitters/')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfittersFactory.create()))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+					
+					expect(res.body.response.message).to.equal('goodStandingEvidence must be provided. operatingPlan must be provided.');
+
+				})
+				.expect(400, done);
+
+		});
+
+		it('should return valid json missing all files', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/outfitters/')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfittersFactory.create()))
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+					
+					expect(res.body.response.message).to.equal('guideDocumentation must be provided. acknowledgementOfRiskForm must be provided. insuranceCertificate must be provided. goodStandingEvidence must be provided. operatingPlan must be provided.');
 
 				})
 				.expect(400, done);
