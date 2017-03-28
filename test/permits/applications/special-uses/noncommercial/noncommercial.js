@@ -429,6 +429,40 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 
 });
 
+describe('noncommercial PUT: field type validated', function(){
+
+	let token;
+
+	before(function(done) {
+
+		util.getToken(function(t){
+
+			token = t;
+			return done();
+
+		});
+	
+	});
+
+	describe('noncommercial PUT: required fields are type validated', function(){
+
+		it('should return valid json with error if no updated provided', function(done) {
+
+			request(server)
+				.put('/permits/applications/special-uses/noncommercial/123')
+				.set('x-access-token', token)
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+
+					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Type is a required field. Noncommercial Fields/Activity Description is a required field. Noncommercial Fields/Location Description is a required field. Noncommercial Fields/Start Date Time is a required field. Noncommercial Fields/End Date Time is a required field. Noncommercial Fields/Number Participants is a required field.');
+
+				})
+				.expect(400, done);
+
+		});
+	});
+});
+
 describe('noncommercial POST: field type validated', function(){
 
 	let token;
@@ -912,7 +946,7 @@ describe('noncommercial POST: enum validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Type is not one of enum values: noncommercial,tempOutfitterGuide.');
+					expect(res.body.response.message).to.equal('Type is not one of enum values: noncommercial,tempOutfitters.');
 
 				})
 				.expect(400, done);
