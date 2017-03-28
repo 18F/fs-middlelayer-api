@@ -3,14 +3,14 @@
 module.exports = {
 	up: function (queryInterface, Sequelize) { 
 		return queryInterface.bulkInsert('users', [
-		        {user_name: "admin", pass_hash: "$2a$10$IiiHB2Y5LAVI1XywEnK4qu8hXQ8FR/tybHtlEgPwSeRJba3Xf8ZzW", user_role: "admin", created: "now()", updated: "now()" }, 
-		        {user_name: "user", pass_hash: "$2a$10$TbVjcMHCBMu1W/2Rjxfx2uqtM5q0Q3q8XbNLHmYgFKOX/q41qVVse", user_role: "user", created: "now()", updated: "now()" } 
+		        {user_name: "admin@fs.fed.us", pass_hash: "$2a$10$6VvFcDU3QnOriEOD1CgzsuED7HntnP484S89tSeZwYZWJs90biyUW", user_role: "admin", created: "now()", updated: "now()" }, 
+		        {user_name: "user@fs.fed.us", pass_hash: "$2a$10$Mkhnuk8VFzwSyJ0zgSoeMuZS27K75Dzeaz6gVyjFh9GMW6dXxqBnq", user_role: "user", created: "now()", updated: "now()" } 
 		]);
 	},
 
 	down: function (queryInterface, Sequelize) { 
 		return queryInterface.bulkDelete('users', [
-		        {user_name: ["admin","user"]} 
+		        {user_name: ["admin@fs.fed.us","user@fs.fed.us"]} 
 		]);
 	}
 };
