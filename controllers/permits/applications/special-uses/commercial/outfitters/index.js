@@ -110,12 +110,23 @@ const post = function(req, res){
 		'operatingPlan'
 	];
 
-	//console.log('req.files : ' + JSON.stringify(req.files));
+	//console.log('\n req.files : ' + JSON.stringify(req.files));
+	//console.log('\n req.body : ' + JSON.stringify(req.body));
+	
+	if (!req.files) {
+		console.log('no files upload error');
+	}
+	else {
+		for (let i = 0; i < filesUploadList.length; i++ ) {
 
-	for (let i = 0; i < filesUploadList.length; i++ ) {
-
-		util.putUpload( req.files[filesUploadList[i]], filesUploadList[i], 'abc123');
-
+			if (!req.files[filesUploadList[i]]) {				
+				console.log('missing files error');
+			}		
+			else {
+				
+				util.putUpload( req.files[filesUploadList[i]], filesUploadList[i], 'abc123');
+			}
+		}
 	}
 	
 	const validateRes = validateSpecialUse.validateInput('outfitters', req);
