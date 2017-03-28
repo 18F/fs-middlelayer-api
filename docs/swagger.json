@@ -250,6 +250,34 @@
 						"type": "file"
 					},
 					{
+						"in": "formData",
+						"name": "acknowledgementOfRiskForm",
+						"description": "temp-outfitter acknowledgementOfRiskForm file upload",
+						"required": true,
+						"type": "file"
+					},
+					{
+						"in": "formData",
+						"name": "insuranceCertificate",
+						"description": "temp-outfitter insuranceCertificate file upload",
+						"required": true,
+						"type": "file"
+					},
+					{
+						"in": "formData",
+						"name": "goodStandingEvidence",
+						"description": "temp-outfitter goodStandingEvidence file upload",
+						"required": true,
+						"type": "file"
+					},
+					{
+						"in": "formData",
+						"name": "operatingPlan",
+						"description": "temp-outfitter operatingPlan file upload",
+						"required": true,
+						"type": "file"
+					},
+					{
 						"name": "x-access-token",
 						"in": "header",
 						"description": "access token",
