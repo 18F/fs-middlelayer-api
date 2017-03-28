@@ -225,7 +225,6 @@ function copyGenericInfo(cnData, jsonData){
 	/*
 		Lock down all fields expected to be returned
 	*/
-	// /console.log(jsonData)
 
 	return jsonData;
 }
