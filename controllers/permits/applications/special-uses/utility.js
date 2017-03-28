@@ -210,6 +210,10 @@ function createPost(formType, controlNumber, inputPost){
 			}
 		}
 	}
+	
+	if (inputPost.body) {
+		inputPost = JSON.parse(inputPost.body);
+	}
 
 	postData.region = inputPost.region;
 	postData.forest = inputPost.forest;
