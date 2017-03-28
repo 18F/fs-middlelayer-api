@@ -366,6 +366,7 @@ function putUpload(uploadReq, uploadField, controlNumber){
 		uploadFile.mimetype = uploadFile.file.mimetype;
 		uploadFile.encoding = uploadFile.file.encoding;
 		uploadFile.buffer = uploadFile.file.buffer;
+		uploadFile.keyname = `${controlNumber}/${uploadField}/${uploadFile.filename}-${Date.now()}${uploadFile.ext}`;
 		
 		const params = {
 			Bucket: AWS_BUCKET_NAME, 
