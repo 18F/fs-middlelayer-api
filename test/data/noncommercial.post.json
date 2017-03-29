@@ -5,7 +5,7 @@
 	    "type": "controller",
 	    "verb": "post",
 	    "src": "json",
-	    "route": "permits/special-uses/noncommercial"
+	    "route": "permits/applications/special-uses/noncommercial"
     },
     "controlNumber": "1095010356"
 }

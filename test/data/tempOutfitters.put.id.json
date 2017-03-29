@@ -5,6 +5,6 @@
     "type": "controller",
     "verb": "put",
     "src": "json",
-    "route": "permits/special-uses/commercial/temp-outfitters/id"
+    "route": "permits/applications/special-uses/commercial/temp-outfitters/id"
 	}
 }

@@ -5,7 +5,7 @@
         "type": "controller",
         "verb": "get",
         "src": "json",
-        "route": "permits/special-uses/commercial/temp-outfitters"
+        "route": "permits/applications/special-uses/commercial/temp-outfitters"
     },
     "outfitters" : [
       {
