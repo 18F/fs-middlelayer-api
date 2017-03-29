@@ -3,8 +3,8 @@
   "version": "0.0.8",
   "description": "US Forest Service ePermit Middlelayer API",
   "engines": {
-    "node": ">=6.9.x",
-    "npm": ">=3.10.x"
+    "node": "6.9.x",
+    "npm": "3.10.x"
   },
   "main": "index.js",
   "scripts": {
