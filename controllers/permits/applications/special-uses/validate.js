@@ -59,11 +59,6 @@ function digitCheck(input, num){
 
 }
 
-function zipFormat(input){
-	
-	return digitCheck(input, 5) | digitCheck(input, 9);
-}
-
 function areaCodeFormat(input){
 
 	return digitCheck(input, 3);
@@ -72,24 +67,6 @@ function areaCodeFormat(input){
 function phoneNumberFormat(input){
 
 	return digitCheck(input, 7);
-
-}
-
-function forestFormat(input){
-
-	return digitCheck(input, 2);
-
-}
-
-function regionFormat(input){
-
-	return digitCheck(input, 2);
-
-}
-
-function districtFormat(input){
-
-	return digitCheck(input, 2);
 
 }
 
@@ -258,12 +235,8 @@ const validateInput = function (route, inputPost){
 	};
 	let result, counter;
 
-	v.customFormats.zipFormat = zipFormat;
 	v.customFormats.areaCodeFormat = areaCodeFormat;
 	v.customFormats.phoneNumberFormat = phoneNumberFormat;
-	v.customFormats.forestFormat = forestFormat;
-	v.customFormats.regionFormat = regionFormat;
-	v.customFormats.districtFormat = districtFormat;
 
 	v.addSchema(phoneNumber, 'phoneNumber');
 	v.addSchema(applicantInfoBase, 'applicantInfoBase');
