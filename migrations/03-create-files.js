@@ -11,7 +11,7 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: false,
 				references: {
-					model: 'file_types', // Can be both a string representing the table name, or a reference to the model
+					model: 'file_types',
 					key:   'file_type'
 				}
 			},
