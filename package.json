@@ -8,13 +8,12 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "mocha test --recursive",
     "start": "node index.js",
+    "test": "mocha test --recursive",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive",
     "lint": "eslint './' -f stylish; eslint './' -o ./lint/eslint.html -f html; exit 0",
     "fix": "eslint './' --fix; exit 0",
-    "prepare": "npm run coverage && npm run fix && npm run lint",
-	"dba": "sequelize db:migrate && sequelize db:seed:undo --seed users.js && sequelize db:seed:all"
+    "dba": "sequelize db:migrate && sequelize db:seed:undo --seed users.js && sequelize db:seed:all"
   },
   "repository": {
     "type": "git",
