@@ -802,7 +802,7 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingZIP':'12345'})))
+				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingZIP':12345})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
 				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
 				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
@@ -811,7 +811,7 @@ describe('tempOutfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip is expected to be type \'integer\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -848,7 +848,7 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.dayPhone.extension':'1'})))
+				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.dayPhone.extension':1})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
 				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
 				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
@@ -857,7 +857,7 @@ describe('tempOutfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Extension is expected to be type \'integer\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Extension is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -955,7 +955,7 @@ describe('tempOutfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingZIP':1234})))
+			.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingZIP':'1234'})))
 			.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
 			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
 			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
@@ -976,7 +976,7 @@ describe('tempOutfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingZIP':123456789})))
+			.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingZIP':'123456789'})))
 			.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
 			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
 			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
@@ -992,7 +992,7 @@ describe('tempOutfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfittersFactory.create({'region':123})))
+			.field('body', JSON.stringify(tempOutfittersFactory.create({'region':'123'})))
 			.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
 			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
 			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
@@ -1013,7 +1013,7 @@ describe('tempOutfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfittersFactory.create({'forest':123})))
+			.field('body', JSON.stringify(tempOutfittersFactory.create({'forest':'123'})))
 			.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
 			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
 			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
@@ -1034,7 +1034,7 @@ describe('tempOutfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfittersFactory.create({'district':123})))
+			.field('body', JSON.stringify(tempOutfittersFactory.create({'district':'123'})))
 			.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
 			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
 			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
