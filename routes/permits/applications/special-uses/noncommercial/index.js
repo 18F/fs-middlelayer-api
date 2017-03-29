@@ -12,37 +12,38 @@
 'use strict';
 
 //*******************************************************************
+// required modules
 
+const express = require('express');
+const router = express.Router();
 const include = require('include')(__dirname);
 
-const request = require('supertest');
-const server = include('index.js');
-
+const noncommercial = include('controllers/permits/applications/special-uses/noncommercial');
 //*******************************************************************
+// router
 
-function getToken(callback){
+// get id
+router.get('/:id(\\d+)', function(req, res){
 
-	let token; 
+	noncommercial.get.id(req, res);
 
-	request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': process.env.ADMINROLE_USER, 'password': process.env.ADMINROLE_PWD })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
+});
 
-			if (err){
-				console.error(err);
-			}
-			token = res.body.token;
-			return callback(token);
-				
-		});
+// put id
+router.put('/:id(\\d+)', function(req, res){
 
-}
+	noncommercial.put.id(req, res);
+
+});
+
+// post
+router.post('/', function(req, res){
+
+	noncommercial.post(req, res);
+
+});
 
 //*******************************************************************
 // exports
 
-module.exports.getToken = getToken;
+module.exports = router;

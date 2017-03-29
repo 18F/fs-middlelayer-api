@@ -1,0 +1,12 @@
+{
+	"mailingZIP":" must be 5 or 9 digits.",
+	"areaCode":" must be 3 digits.",
+	"number":" must be 7 digits.",
+	"mailingState":" must be 2 letters.",
+	"forest":" must be 2 digits.",
+	"district":" must be 2 digits.",
+	"region":" must be 2 digits.",
+	"startDateTime":" must be in format 'YYYY-MM-DDThh:mm:ssZ'.",
+	"endDateTime":" must be in format 'YYYY-MM-DDThh:mm:ssZ'.",
+	"emailAddress":" must be in format 'email@email.service'."
+}
