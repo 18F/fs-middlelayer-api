@@ -219,7 +219,7 @@
 				}
 			}
 		},
-		"/permits/applications/special-uses/commercial/outfitters/": {
+		"/permits/applications/special-uses/commercial/temp-outfitters/": {
 			"post": {
 				"tags": [
 					"Outfitter and Guide Permit"
@@ -301,7 +301,7 @@
 				}
 			}
 		},
-		"/permits/applications/special-uses/commercial/outfitters/{controlNumber}": {
+		"/permits/applications/special-uses/commercial/temp-outfitters/{controlNumber}": {
 			"put": {
 				"tags": [
 					"Outfitter and Guide Permit"

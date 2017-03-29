@@ -16,7 +16,7 @@
 
 const include = require('include')(__dirname);
 
-const outfittersData = include('test/data/basicGET.json');
+const tempOutfittersData = include('test/data/basicGET.json');
 
 //*******************************************************************
 // validation
@@ -44,24 +44,24 @@ get.id = function(req, res){
 	jsonResponse.type = 'controller';
 	jsonResponse.verb = 'get';
 	jsonResponse.src = 'json';
-	jsonResponse.route = 'permits/special-uses/commercial/outfitters/{controlNumber}';
+	jsonResponse.route = 'permits/special-uses/commercial/temp-outfitters/{controlNumber}';
 
-	const cnData = outfittersData[1095010356];
+	const cnData = tempOutfittersData[1095010356];
 
 	if (cnData){
 
-		const outfittersFields = {};
+		const tempOutfittersFields = {};
 		
-		outfittersFields.activityDescription = cnData.purpose;
-		outfittersFields.locationDescription = null;
-		outfittersFields.startDateTime = '2017-04-12 09:00:00';
-		outfittersFields.endDateTime = '2017-04-15 20:00:00';
-		outfittersFields.insuranceCertificate = 'insuranceCertificate.pdf';
-		outfittersFields.goodStandingEvidence = 'goodStandingEvidence.pdf';
-		outfittersFields.operatingPlan = 'operatingPlan.pdf';
+		tempOutfittersFields.activityDescription = cnData.purpose;
+		tempOutfittersFields.locationDescription = null;
+		tempOutfittersFields.startDateTime = '2017-04-12 09:00:00';
+		tempOutfittersFields.endDateTime = '2017-04-15 20:00:00';
+		tempOutfittersFields.insuranceCertificate = 'insuranceCertificate.pdf';
+		tempOutfittersFields.goodStandingEvidence = 'goodStandingEvidence.pdf';
+		tempOutfittersFields.operatingPlan = 'operatingPlan.pdf';
 
 		jsonData = util.copyGenericInfo(cnData, jsonData);
-		jsonData.tempOutfitterFields = outfittersFields;
+		jsonData.tempOutfitterFields = tempOutfittersFields;
 
 		delete jsonData.noncommercialFields;
 
@@ -89,13 +89,13 @@ put.id = function(req, res){
 
 	const controlNumber = req.params.id;
 
-	const validateRes = validateSpecialUse.validateInput('outfitters', req);
+	const validateRes = validateSpecialUse.validateInput('tempOutfitters', req);
 	
 	if (validateRes.success){
 
-		const postData = util.createPost('outfitters', controlNumber, req.body);
+		const postData = util.createPost(controlNumber, req.body);
 
-		const response = include('test/data/outfitters.put.id.json');
+		const response = include('test/data/tempOutfitters.put.id.json');
 
 		response.apiRequest = postData;
 	
@@ -155,13 +155,13 @@ const post = function(req, res){
 		}
 		else {
 
-			const validateRes = validateSpecialUse.validateInput('outfitters', req);
+			const validateRes = validateSpecialUse.validateInput('tempOutfitters', req);
 
 			if (validateRes.success){
 
-				const postData = util.createPost('outfitters', null, req.body);
+				const postData = util.createPost(null, req.body);
 
-				const response = include('test/data/outfitters.post.json');
+				const response = include('test/data/tempOutfitters.post.json');
 
 				response.apiRequest = postData;
 

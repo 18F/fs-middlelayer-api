@@ -629,11 +629,11 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(noncommercialFactory.create({'applicantInfo.mailingZIP':'12345'}))
+				.send(noncommercialFactory.create({'applicantInfo.mailingZIP':12345}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip is expected to be type \'integer\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -729,11 +729,11 @@ describe('noncommercial POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/noncommercial/')
 				.set('x-access-token', token)
-				.send(noncommercialFactory.create({'applicantInfo.dayPhone.extension':'12'}))
+				.send(noncommercialFactory.create({'applicantInfo.dayPhone.extension':1}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Extension is expected to be type \'integer\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Extension is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -816,7 +816,7 @@ describe('noncommercial POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(noncommercialFactory.create({'applicantInfo.mailingZIP':123456}))
+			.send(noncommercialFactory.create({'applicantInfo.mailingZIP':'123456'}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -832,7 +832,7 @@ describe('noncommercial POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(noncommercialFactory.create({'applicantInfo.mailingZIP':123456789}))
+			.send(noncommercialFactory.create({'applicantInfo.mailingZIP':'123456789'}))
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
@@ -843,7 +843,7 @@ describe('noncommercial POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(noncommercialFactory.create({'region':156}))
+			.send(noncommercialFactory.create({'region':'156'}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -859,7 +859,7 @@ describe('noncommercial POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(noncommercialFactory.create({'forest':156}))
+			.send(noncommercialFactory.create({'forest':'156'}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -875,7 +875,7 @@ describe('noncommercial POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
-			.send(noncommercialFactory.create({'district':156}))
+			.send(noncommercialFactory.create({'district':'156'}))
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 

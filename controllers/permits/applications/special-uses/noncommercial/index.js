@@ -89,7 +89,7 @@ put.id = function(req, res){
     
 	if (validateRes.success){
 
-		const postData = util.createPost('noncommercial', controlNumber, req.body);
+		const postData = util.createPost(controlNumber, req.body);
 
 		const response = include('test/data/noncommercial.put.id.json');
 
@@ -114,7 +114,7 @@ const post = function(req, res){
 
 	if (validateRes.success){
 
-		const postData = util.createPost('noncommercial', null, req.body);
+		const postData = util.createPost(null, req.body);
 
 		const response = include('test/data/noncommercial.post.json');
 

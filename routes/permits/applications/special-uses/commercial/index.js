@@ -17,11 +17,11 @@
 const express = require('express');
 const router = express.Router();
 
-const outfitters = require('./outfitters');
+const tempOutfitters = require('./temp-outfitters');
 
 //*******************************************************************
 // router
 
-router.use('/outfitters', outfitters);
+router.use('/temp-outfitters', tempOutfitters);
 
 module.exports = router;
