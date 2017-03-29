@@ -20,7 +20,7 @@
         "mailingZIP": 97321,
         "orgType": "Limited Liability Company"
     },
-    "type": "tempOutfitterGuide",
+    "type": "tempOutfitters",
     "tempOutfitterFields": {
         "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
         "locationDescription": "string",

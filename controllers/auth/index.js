@@ -49,6 +49,7 @@ passport.use(new Strategy(
 				done(null, false);
 			}
 		}).catch(function (err) {
+			console.error(err);
 			done(null, false);
 		});
 	}

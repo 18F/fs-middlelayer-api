@@ -35,8 +35,8 @@ const put = {};
 // get id
 
 get.id = function(req, res){
-    
-	const jsonData = {};
+	
+	let jsonData = {};
 
 	const jsonResponse = {};
 	jsonResponse.success = false;
@@ -45,15 +45,13 @@ get.id = function(req, res){
 	jsonResponse.verb = 'get';
 	jsonResponse.src = 'json';
 	jsonResponse.route = 'permits/special-uses/commercial/outfitters/{controlNumber}';
-    
-	jsonData.response = jsonResponse;
 
 	const cnData = outfittersData[1095010356];
 
 	if (cnData){
 
 		const outfittersFields = {};
-        
+		
 		outfittersFields.activityDescription = cnData.purpose;
 		outfittersFields.locationDescription = null;
 		outfittersFields.startDateTime = '2017-04-12 09:00:00';
@@ -62,8 +60,10 @@ get.id = function(req, res){
 		outfittersFields.goodStandingEvidence = 'goodStandingEvidence.pdf';
 		outfittersFields.operatingPlan = 'operatingPlan.pdf';
 
-		util.copyGenericInfo(cnData, jsonData);
-		jsonData.tempOutfitterFields = outfittersFields;    
+		jsonData = util.copyGenericInfo(cnData, jsonData);
+		jsonData.tempOutfitterFields = outfittersFields;
+
+		delete jsonData.noncommercialFields;
 
 		dbUtil.getApplication(1000000000, function(err, appl){
 			if (err){
@@ -74,11 +74,13 @@ get.id = function(req, res){
 				
 				jsonData.applicantInfo.website = appl.website_addr;
 				jsonResponse.success = true;
-				res.json(jsonData);
+				const toReturn = Object.assign({}, {response:jsonResponse}, jsonData); 
+
+				res.json(toReturn);
 			}
 		});
 	}
-    
+
 };
 
 // put id
@@ -88,7 +90,7 @@ put.id = function(req, res){
 	const controlNumber = req.params.id;
 
 	const validateRes = validateSpecialUse.validateInput('outfitters', req);
-    
+	
 	if (validateRes.success){
 
 		const postData = util.createPost('outfitters', controlNumber, req.body);
@@ -96,18 +98,27 @@ put.id = function(req, res){
 		const response = include('test/data/outfitters.put.id.json');
 
 		response.apiRequest = postData;
-    
+	
 		res.json(response);
-    
+	
 	}
 	else {
-    
+	
 		error.sendError(req, res, 400, validateRes.errorMessage);
-    
+	
 	}
 
 };
 
+function fileErrors(missingFiles){
+
+	let output = '';
+	missingFiles.forEach((missing)=>{
+		output = `${output}${missing} must be provided. `;
+	});
+	output = output.trim();
+	return output;
+}
 // post
 
 const post = function(req, res){
@@ -119,82 +130,93 @@ const post = function(req, res){
 		'goodStandingEvidence',
 		'operatingPlan'
 	];
-
-	//console.log('\n req.files : ' + JSON.stringify(req.files));
-	//console.log('\n req.body : ' + JSON.stringify(req.body));
 	
-	if (!req.files) {
-		console.log('no files upload error');
+	if (Object.keys(req.files).length === 0) {
+		error.sendError(req, res, 400, fileErrors(filesUploadList));
 	}
 	else {
+		const missingFiles = [];
 		for (let i = 0; i < filesUploadList.length; i++ ) {
 
-			if (!req.files[filesUploadList[i]]) {				
-				console.log('missing files error');
+			if (!req.files[filesUploadList[i]]) {
+				missingFiles.push(filesUploadList[i]);
 			}		
 			else {
 				
 				util.putUpload( req.files[filesUploadList[i]], filesUploadList[i], 'abc123');
+
 			}
 		}
-	}
-	
-	const validateRes = validateSpecialUse.validateInput('outfitters', req);
 
-	if (validateRes.success){
+		if (missingFiles.length !== 0){
 
-		const postData = util.createPost('outfitters', null, req.body);
+			error.sendError(req, res, 400, fileErrors(missingFiles));
 
-		const response = include('test/data/outfitters.post.json');
-
-		response.apiRequest = postData;
-
-		// api database updates
-		const controlNumber = Math.floor((Math.random() * 10000000000) + 1);
-
-		let website;
-
-		if (postData.applicantInfo.website){
-			website = postData.applicantInfo.website;
 		}
+		else {
 
-		dbUtil.saveApplication(controlNumber, postData.tempOutfitterFields.formName, website, function(err, appl) {
+			const validateRes = validateSpecialUse.validateInput('outfitters', req);
 
-			if (err) {
-				error.sendError(req, res, 400, 'error saving application in database');
-			}
-			else {
-				dbUtil.saveFile(appl.id, 'inc', postData.tempOutfitterFields.insuranceCertificate, function(err, file) {
+			if (validateRes.success){
+
+				const postData = util.createPost('outfitters', null, req.body);
+
+				const response = include('test/data/outfitters.post.json');
+
+				response.apiRequest = postData;
+
+				// api database updates
+				const controlNumber = Math.floor((Math.random() * 10000000000) + 1);
+
+				let website;
+
+				if (postData.applicantInfo.website){
+					website = postData.applicantInfo.website;
+				}
+
+				dbUtil.saveApplication(controlNumber, postData.tempOutfitterFields.formName, website, function(err, appl) {
 
 					if (err) {
-						error.sendError(req, res, 400, 'error saving file in database');
+						error.sendError(req, res, 400, 'error saving application in database');
 					}
 					else {
-						dbUtil.saveFile(appl.id, 'gse', postData.tempOutfitterFields.goodStandingEvidence, function(err, file) {
+						dbUtil.saveFile(appl.id, 'inc', req.files.insuranceCertificate[0].fieldname, function(err, file) {
 
 							if (err) {
 								error.sendError(req, res, 400, 'error saving file in database');
 							}
 							else {
-								dbUtil.saveFile(appl.id, 'opp', postData.tempOutfitterFields.operatingPlan, function(err, file) {
+								dbUtil.saveFile(appl.id, 'gse', req.files.goodStandingEvidence[0].fieldname, function(err, file) {
 
 									if (err) {
 										error.sendError(req, res, 400, 'error saving file in database');
 									}
+									else {
+										dbUtil.saveFile(appl.id, 'opp', req.files.operatingPlan[0].fieldname, function(err, file) {
 
+											if (err) {
+												error.sendError(req, res, 400, 'error saving file in database');
+											}
+											else {
+												res.json(response);
+											}
+
+										});
+									}
 								});
 							}
 						});
 					}
 				});
 			}
-		});
-		res.json(response);    
-	}
-	else {
-    
-		error.sendError(req, res, 400, validateRes.errorMessage, validateRes.errors);
-    
+			else {
+			
+				error.sendError(req, res, 400, validateRes.errorMessage, validateRes.errors);
+			
+			}
+
+		}
+
 	}
 
 };

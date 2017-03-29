@@ -14,6 +14,7 @@
 //*******************************************************************
 // required modules
 
+const jsf = require('json-schema-faker');
 const include = require('include')(__dirname);
 const path = require('path');
 const AWS = require('aws-sdk');
@@ -143,89 +144,112 @@ const generatePurpose = function (activityDescription, locationDescription, star
 
 };
 
-function copyGenericInfo(cnData, jsonData){
+function fromAdminOrg(cnData, postSchema, jsonData, key){
 
-	const adminOrg = cnData.adminOrg;
-	jsonData.controlNumber = cnData.accinstCn;
-	jsonData.region = adminOrg.slice(0, 2);
-	jsonData.forest = adminOrg.slice(2, 4);
-	jsonData.district = adminOrg.slice(4, 6);
-	jsonData.authorizingOfficerName = cnData.authOfficerName;
-	jsonData.authorizingOfficerTitle = cnData.authOfficerTitle;
+	const adminOrg = cnData[postSchema.adminOrg.intake];
+	switch (key){
+	case 'region':
+		jsonData[key] = adminOrg.slice(0, 2);
+		break;
+	case 'forest':
+		jsonData[key] = adminOrg.slice(2, 4);
+		break;
+	case 'district':
+		jsonData[key] = adminOrg.slice(4, 6);
+		break;
+	}
+
+}
+
+function getTopLevelField(intakeField, cnData, postSchema, jsonData, key){
+
+	switch (intakeField){
+	case 'middleLayer':
+		//jsonData[key] = getFromMiddleLayer(key)
+		break;
+	case 'none':
+		break;
+	case 'fromAdminOrg':
+		fromAdminOrg(cnData, postSchema, jsonData, key);
+		break;
+	default:
+		if (cnData.hasOwnProperty(postSchema[key].intake)){
+	
+			jsonData[key] = cnData[postSchema[key].intake];
+		
+		}
+	}
+
+}
+
+function getSubLevelField(cnData, postSchema, key, jsonData){
 
 	const addressData = cnData.addresses[0];
 	const phoneData = cnData.phones[0];
 	const holderData = cnData.holders[0];
-
-	const applicantInfo = {};
-	const phoneNumber = {};
-    
-	applicantInfo.contactControlNumber = addressData.contCn;
-	applicantInfo.firstName = holderData.firstName;
-	applicantInfo.lastName = holderData.lastName;
-    
-	phoneNumber.areaCode = phoneData.areaCode;
-	phoneNumber.number = phoneData.phoneNumber;
-	phoneNumber.extension = phoneData.extension;
-	phoneNumber.type = phoneData.phoneNumberType;
-
-	applicantInfo.dayPhone = phoneNumber;
-	applicantInfo.eveningPhone = phoneNumber;
-	applicantInfo.emailAddress = addressData.email;
-	applicantInfo.mailingAddress = addressData.address1;
-	applicantInfo.mailingAddress2 = addressData.address2;
-	applicantInfo.mailingCity = addressData.cityName;
-	applicantInfo.mailingState = addressData.stateCode;
-	applicantInfo.mailingZIP = addressData.postalCode;
-
-	if (addressData.contactType === 'ORGANIZATION'){
-		applicantInfo.organizationName = addressData.contName;
+	const path = postSchema[key].intake.split('/');
+	let data;
+	switch (path[0]){
+	case 'holders':
+		data = holderData;
+		break;
+	case 'phones':
+		data = phoneData;
+		break;
+	case 'addresses':
+		data = addressData;
+		break;
 	}
-	else {
-		applicantInfo.organizationName = null;  
+	if (data.hasOwnProperty(path[1])){
+		jsonData[key] = data[path[1]];
 	}
-	applicantInfo.website = null;
-	applicantInfo.orgType = holderData.orgType;
 
-	jsonData.applicantInfo = applicantInfo;
 }
 
-function createPost(formType, controlNumber, inputPost){
-	
-	const postSchema = include('controllers/permits/applications/special-uses/postSchema.json');
+function buildGetResponse(cnData, schemaData, jsonData, postSchema){
 
-	const postData = {};
-	let combId = '';
-	let key;
-	let purpose;
-
-	const genericFields = postSchema.genericFields;
-
-	if (controlNumber){
-		postData.controlNumber = controlNumber;
-	}
-	
-	if (genericFields){
-		for (key in genericFields) {
-			if (genericFields.hasOwnProperty(key)) {
-				postData[key] = genericFields[key];	
+	let key; 
+	for (key in schemaData){
+		
+		if (typeof jsonData[key] !== 'object'){
+			
+			const intakeField = postSchema[key].intake;
+			if (intakeField.indexOf('/') === -1){
+				
+				getTopLevelField(intakeField, cnData, postSchema, jsonData, key);
+			
+			}
+			else {
+				
+				getSubLevelField(cnData, postSchema, key, jsonData);
 			}
 		}
-	}
-	
-	if (inputPost.body) {
-		inputPost = JSON.parse(inputPost.body);
+		else {
+			buildGetResponse(cnData, schemaData[key], jsonData[key], postSchema[key]);
+		}
 	}
 
-	postData.region = inputPost.region;
-	postData.forest = inputPost.forest;
-	postData.district = inputPost.district;
-	if (inputPost.authorizingOfficerName){
-		postData.authorizingOfficerName = inputPost.authorizingOfficerName;
-	}
-	if (inputPost.authorizingOfficerTitle){
-		postData.authorizingOfficerTitle = inputPost.authorizingOfficerTitle;
-	}
+}
+function copyGenericInfo(cnData, jsonData){
+
+	const postSchema = include('controllers/permits/applications/special-uses/getSchema.json');
+	jsf.option({useDefaultValue:true});
+	const schemaData = jsf(postSchema);
+	delete schemaData.id;
+
+	jsonData = schemaData;
+	buildGetResponse(cnData, schemaData, jsonData, postSchema);
+
+	/*
+		Lock down all fields expected to be returned
+	*/
+
+	return jsonData;
+}
+
+function autoPopulatedFields(postData, inputPost){
+
+	let combId = '', purpose;
 
 	combId = pad(inputPost.region);
 	combId = combId + pad(inputPost.forest);
@@ -238,44 +262,23 @@ function createPost(formType, controlNumber, inputPost){
 	const todayDate = new Date().toISOString().slice(0, 10);
 	postData.effectiveDate = todayDate;
 
-	postData.applicantInfo = postSchema.applicantInfo;
-
-	if (inputPost.hasOwnProperty('applicantInfo')){
-		for (key in inputPost.applicantInfo) {
-			if (inputPost.applicantInfo.hasOwnProperty(key)) {
-				postData.applicantInfo[key] = inputPost.applicantInfo[key];	
-			}
-		}	
-
-		if (inputPost.applicantInfo.organizationName){
-			postData.applicantInfo.contactType = 'ORGANIZATION'; 
-		}
-		else {
-			postData.applicantInfo.contactType = 'PERSON'; 
-		}
-		
-		if (postData.applicantInfo.contactType === 'ORGANIZATION'){
-			postData.applicantInfo.contName = inputPost.applicantInfo.organizationName;
-		}
-		else {
-			postData.applicantInfo.contName = inputPost.applicantInfo.firstName + ' ' + inputPost.applicantInfo.lastName;
-		}
-
+	if (inputPost.applicantInfo.organizationName){
+		postData.applicantInfo.contactType = 'ORGANIZATION'; 
+	}
+	else {
+		postData.applicantInfo.contactType = 'PERSON'; 
+	}
+	
+	if (postData.applicantInfo.contactType === 'ORGANIZATION'){
+		postData.applicantInfo.contName = inputPost.applicantInfo.organizationName;
+	}
+	else {
+		postData.applicantInfo.contName = inputPost.applicantInfo.firstName + ' ' + inputPost.applicantInfo.lastName;
 	}
 
-	if (formType === 'noncommercial'){
+	if (inputPost.type === 'noncommercial'){
 
-		postData.type = 'noncommercial'; 
-
-		postData.noncommercialFields = postSchema.noncommercialFields;
-
-		if (inputPost.hasOwnProperty('noncommercialFields')){
-			for (key in inputPost.noncommercialFields) {
-				if (inputPost.noncommercialFields.hasOwnProperty(key)){
-					postData.noncommercialFields[key] = inputPost.noncommercialFields[key];		
-				}
-			}	
-		}
+		postData.type = 'noncommercial';
 
 		purpose = generatePurpose (postData.noncommercialFields.activityDescription,
 										postData.noncommercialFields.locationDescription,
@@ -283,21 +286,12 @@ function createPost(formType, controlNumber, inputPost){
 										postData.noncommercialFields.endDateTime);
 
 		postData.noncommercialFields.purpose = purpose;
+		delete postData.tempOutfitterFields;
 
 	}
-	else if (formType === 'outfitters'){
+	else if (inputPost.type === 'tempOutfitters'){
 
-		postData.type = 'tempOutfitterGuide';
-
-		postData.tempOutfitterFields = postSchema.tempOutfitterFields;
-
-		if (inputPost.hasOwnProperty('tempOutfitterFields')){
-			for (key in inputPost.tempOutfitterFields) {
-				if (inputPost.tempOutfitterFields.hasOwnProperty(key)){
-					postData.tempOutfitterFields[key] = inputPost.tempOutfitterFields[key];
-				}	
-			}	
-		}
+		postData.type = 'tempOutfitters';
 
 		purpose = generatePurpose (postData.tempOutfitterFields.activityDescription,
 										postData.tempOutfitterFields.locationDescription,
@@ -305,15 +299,49 @@ function createPost(formType, controlNumber, inputPost){
 										postData.tempOutfitterFields.endDateTime);
 
 		postData.tempOutfitterFields.purpose = purpose;
+		delete postData.noncommercialFields;
 	}
 
+	delete postData.id;
+
+}
+
+function populatePostData(inputPost, postData, schemaData){
+
+	let fieldKey = '';
+	for (fieldKey in schemaData){
+		if (inputPost.hasOwnProperty(fieldKey)){
+			if (typeof inputPost[fieldKey] !== 'object'){
+				postData[fieldKey] = inputPost[fieldKey];
+			}
+			else {
+				populatePostData(inputPost[fieldKey], postData[fieldKey], schemaData[fieldKey]);
+			}
+		}
+	}
+
+}
+
+function createPost(formType, controlNumber, inputPost){
+	
+	const postSchema = include('controllers/permits/applications/special-uses/postSchema.json'); 
+	jsf.option({useDefaultValue:true});
+	const schemaData = jsf(postSchema);
+	
+	const postData = schemaData;
+
+	if (inputPost.body) {
+		inputPost = JSON.parse(inputPost.body);
+	}
+	
+	populatePostData(inputPost, postData, schemaData);
+	autoPopulatedFields(postData, inputPost);
+
 	return postData;
+	
 }
 
 function putUpload(uploadReq, uploadField, controlNumber){
-
-	//console.log('uploadReq : ' + JSON.stringify(uploadReq) );
-	//console.log('uploadField : ' + uploadField );
 
 	const uploadFile = {};
 
@@ -338,14 +366,7 @@ function putUpload(uploadReq, uploadField, controlNumber){
 		uploadFile.mimetype = uploadFile.file.mimetype;
 		uploadFile.encoding = uploadFile.file.encoding;
 		uploadFile.buffer = uploadFile.file.buffer;
-		uploadFile.keyname = controlNumber +'/' + uploadField + '/' + uploadFile.filename +'-'+Date.now() + uploadFile.ext;
-		
-		//console.log('uploadFile.originalname : ' + uploadFile.originalname);
-		//console.log('uploadFile.filename : ' + uploadFile.filename);
-		//console.log('uploadFile.ext : ' + uploadFile.ext);
-		//console.log('uploadFile.size : ' + uploadFile.size);
-		//console.log('uploadFile.mimetype : ' + uploadFile.mimetype);
-		console.log('uploadFile.keyname : ' + uploadFile.keyname);
+		uploadFile.keyname = `${controlNumber}/${uploadField}/${uploadFile.filename}-${Date.now()}${uploadFile.ext}`;
 		
 		const params = {
 			Bucket: AWS_BUCKET_NAME, 
@@ -356,10 +377,10 @@ function putUpload(uploadReq, uploadField, controlNumber){
 
 		s3.putObject(params, function(err, data) {
 			if (err) {
-				console.error(err, err.stack); 
+				console.error(err, err.stack);
 			}
 			else {     
-				console.log(data);   
+				console.log(data);  
 			}      
 		});			
 	}
