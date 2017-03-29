@@ -26,7 +26,7 @@ const schema = require('./validationSchema.json');
 //*******************************************************************
 // schemas
 
-const tempOutfitterSchema = schema.tempOutfitterPermit;
+const tempOutfitterSchema = schema.tempOutfitterApplication;
 const tempOutfitterApplicantInfo = schema.tempOutfitterApplicantInfo;
 const tempOutfitterFields = schema.tempOutfitterFields;
 const noncommercialSchema = schema.noncommercial;
@@ -35,7 +35,7 @@ const noncommercialFields = schema.noncommercialFields;
 const phoneNumber = schema.phoneNumber;
 const applicantInfoBase = schema.applicantInfoBase;
 const extraFieldsBase = schema.extraFieldsBase;
-const topLevelFieldsBase = schema.topLevelFieldsBase;
+const commonFields = schema.commonFields;
 
 //*******************************************************************
 
@@ -140,14 +140,14 @@ function makeErrorObj(field, errorType, expectedFieldType, enumMessage, dependen
 function missingSuperFields(output, field, route){
 
 	const applicantInfo = ['applicantInfo.firstName', 'applicantInfo.lastName', 'applicantInfo.dayPhone.areaCode', 'applicantInfo.dayPhone.number', 'applicantInfo.dayPhone.type', 'applicantInfo.emailAddress', 'applicantInfo.mailingAddress', 'applicantInfo.mailingCity', 'applicantInfo.mailingZIP', 'applicantInfo.mailingState'];
-	if (route === 'outfitters'){
+	if (route === 'tempOutfitters'){
 
 		applicantInfo.push('applicantInfo.orgType');
 
 	}
 	const phone = ['applicantInfo.dayPhone.areaCode', 'applicantInfo.dayPhone.number', 'applicantInfo.dayPhone.type'];
 	const noncommercial = ['noncommercialFields.activityDescription', 'noncommercialFields.locationDescription', 'noncommercialFields.startDateTime', 'noncommercialFields.endDateTime', 'noncommercialFields.numberParticipants'];
-	const tempOutfitter = ['tempOutfitterFields.activityDescription', 'tempOutfitterFields.locationDescription', 'tempOutfitterFields.startDateTime', 'tempOutfitterFields.endDateTime', 'tempOutfitterFields.insuranceCertificate', 'tempOutfitterFields.goodStandingEvidence', 'tempOutfitterFields.operatingPlan'];
+	const tempOutfitter = ['tempOutfitterFields.activityDescription', 'tempOutfitterFields.insuranceCertificate', 'tempOutfitterFields.goodStandingEvidence', 'tempOutfitterFields.operatingPlan'];
 	
 	if (field === 'applicantInfo'){
 
@@ -272,7 +272,7 @@ const validateInput = function (route, inputPost){
 	v.addSchema(tempOutfitterApplicantInfo, 'tempOutfitterApplicantInfo');
 	v.addSchema(tempOutfitterFields, 'tempOutfitterFields');
 	v.addSchema(extraFieldsBase, 'extraFieldsBase');
-	v.addSchema(topLevelFieldsBase, 'topLevelFieldsBase');
+	v.addSchema(commonFields, 'commonFields');
 
 	if (route === 'noncommercial'){
 
