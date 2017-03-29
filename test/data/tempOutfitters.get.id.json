@@ -5,7 +5,7 @@
         "type": "controller",
         "verb": "get",
         "src": "json",
-        "route": "permits/special-uses/commercial/outfitters/id"
+        "route": "permits/special-uses/commercial/temp-outfitters/id"
     },
     "controlNumber": "1095010376",
     "region": 1,
