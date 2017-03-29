@@ -30,11 +30,18 @@ This repository is being development under a task order of the Agile Blanket Pur
 
 ## How to Test
 
-- Use `npm test` to run Mocha unit tests.
-- Use `npm run coverage` for Istanbul code coverage.
-- Use `npm run lint` for ESLint static code analysis.
-- Use `npm run fix` for ESLint code fix.
-- Use `npm run prepare` to run tests, coverage, lint, and fix.
+- Scripts
+  - Use `npm test` to run Mocha unit tests.
+  - Use `npm run coverage` for Istanbul code coverage.
+  - Use `npm run lint` for ESLint static code analysis.
+  - Use `npm run fix` for ESLint code fix.
+  - Use `npm run prepare` to run tests, coverage, lint, and fix.
+  - Use `npm run dba` to run Sequelize migration and seeder.
+- Data
+  - Files: Test files are stored in [test/data](https://github.com/nci-ats/fs-middlelayer-api/tree/dev/test/data) directory
+  - Accounts: Test accounts are stored in environment variables
+    - ADMINROLE_USER, ADMINROLE_PWD
+    - USERROLE_USER, USERROLE_PWD
 
 ## Configuration
 
@@ -55,7 +62,7 @@ Refer to application package and dependency trackers for additional dependency i
   - Runtime: Node.js >= 6.9.x
   - Engine: NPM >= 3.10.x
   - Database: PostgreSQL >= 9.6.x
-  - Storage: S3
+  - Storage: AWS S3
 - Application package:
   - [package.json](https://github.com/nci-ats/fs-middlelayer-api/blob/dev/package.json)
   - [npm-shrinkwrap.json](https://github.com/nci-ats/fs-middlelayer-api/blob/dev/npm-shrinkwrap.json)
