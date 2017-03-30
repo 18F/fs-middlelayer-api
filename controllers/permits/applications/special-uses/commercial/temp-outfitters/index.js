@@ -16,7 +16,7 @@
 
 const include = require('include')(__dirname);
 
-const tempOutfittersData = include('test/data/basicGET.json');
+const tempOutfitterData = include('test/data/basicGET.json');
 
 //*******************************************************************
 // validation
@@ -46,22 +46,22 @@ get.id = function(req, res){
 	jsonResponse.src = 'json';
 	jsonResponse.route = 'permits/special-uses/commercial/temp-outfitters/{controlNumber}';
 
-	const cnData = tempOutfittersData[1095010356];
+	const cnData = tempOutfitterData[1095010356];
 
 	if (cnData){
 
-		const tempOutfittersFields = {};
+		const tempOutfitterFields = {};
 		
-		tempOutfittersFields.activityDescription = cnData.purpose;
-		tempOutfittersFields.locationDescription = null;
-		tempOutfittersFields.startDateTime = '2017-04-12 09:00:00';
-		tempOutfittersFields.endDateTime = '2017-04-15 20:00:00';
-		tempOutfittersFields.insuranceCertificate = 'insuranceCertificate.pdf';
-		tempOutfittersFields.goodStandingEvidence = 'goodStandingEvidence.pdf';
-		tempOutfittersFields.operatingPlan = 'operatingPlan.pdf';
+		tempOutfitterFields.activityDescription = cnData.purpose;
+		tempOutfitterFields.locationDescription = null;
+		tempOutfitterFields.startDateTime = '2017-04-12 09:00:00';
+		tempOutfitterFields.endDateTime = '2017-04-15 20:00:00';
+		tempOutfitterFields.insuranceCertificate = 'insuranceCertificate.pdf';
+		tempOutfitterFields.goodStandingEvidence = 'goodStandingEvidence.pdf';
+		tempOutfitterFields.operatingPlan = 'operatingPlan.pdf';
 
 		jsonData = util.copyGenericInfo(cnData, jsonData);
-		jsonData.tempOutfitterFields = tempOutfittersFields;
+		jsonData.tempOutfitterFields = tempOutfitterFields;
 
 		delete jsonData.noncommercialFields;
 
