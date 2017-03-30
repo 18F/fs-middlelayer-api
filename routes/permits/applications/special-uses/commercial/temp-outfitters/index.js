@@ -19,7 +19,7 @@ const router = express.Router();
 const include = require('include')(__dirname);
 const multer = require('multer');
 
-const outfitters = include('controllers/permits/applications/special-uses/commercial/outfitters');
+const tempOutfitters = include('controllers/permits/applications/special-uses/commercial/temp-outfitters');
 
 //*******************************************************************
 // storage
@@ -33,14 +33,14 @@ const upload = multer({ storage: storage });
 // get id
 router.get('/:id(\\d+)', function(req, res){
     
-	outfitters.get.id(req, res);
+	tempOutfitters.get.id(req, res);
     
 });
 
 // put id
 router.put('/:id(\\d+)', function(req, res){
     
-	outfitters.put.id(req, res);
+	tempOutfitters.put.id(req, res);
     
 });
 
@@ -56,7 +56,7 @@ const postUpload = upload.fields([
 
 router.post('/', postUpload, function(req, res){
     
-	outfitters.post(req, res);
+	tempOutfitters.post(req, res);
     
 });
 

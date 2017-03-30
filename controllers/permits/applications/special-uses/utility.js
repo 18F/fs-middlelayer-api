@@ -322,7 +322,7 @@ function populatePostData(inputPost, postData, schemaData){
 
 }
 
-function createPost(formType, controlNumber, inputPost){
+function createPost(controlNumber, inputPost){
 	
 	const postSchema = include('controllers/permits/applications/special-uses/postSchema.json'); 
 	jsf.option({useDefaultValue:true});
