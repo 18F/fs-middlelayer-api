@@ -15,7 +15,7 @@
 // required modules
 
 const include = require('include')(__dirname);
-
+const path = require('path');
 const tempOutfitterData = include('test/data/basicGET.json');
 
 //*******************************************************************
@@ -67,7 +67,6 @@ get.id = function(req, res){
 
 		dbUtil.getApplication(1000000000, function(err, appl){
 			if (err){
-				console.error(err);
 				error.sendError(req, res, 400, 'error getting application from database');
 			}
 			else {
@@ -110,7 +109,7 @@ put.id = function(req, res){
 
 };
 
-function fileErrors(missingFiles){
+function outputFileErrors(missingFiles){
 
 	let output = '';
 	missingFiles.forEach((missing)=>{
@@ -119,102 +118,165 @@ function fileErrors(missingFiles){
 	output = output.trim();
 	return output;
 }
+
+function concatErrors(errorMessages){
+
+	let output = '';
+	errorMessages.forEach((message)=>{
+		output = `${output}${message} `;
+	});
+	output = output.trim();
+	return output;
+}
+
 // post
+
+function postData(req, res, uploadFiles, controlNumber, fileErrors){
+
+	const postData = util.createPost(null, req.body);
+
+	const response = include('test/data/tempOutfitters.post.json');
+
+	response.apiRequest = postData;
+
+	let website;
+
+	if (postData.applicantInfo.website){
+		website = postData.applicantInfo.website;
+	}
+
+	dbUtil.saveApplication(controlNumber, postData.tempOutfitterFields.formName, website, function(err, appl) {
+
+		if (err) {
+			error.sendError(req, res, 400, 'error saving application in database');
+		}
+		else {
+
+			uploadFiles.forEach(function(uploadFile){
+
+				dbUtil.saveFile(appl.id, uploadFile.filetype, uploadFile.keyname, function(err, file) { // eslint-disable-line no-unused-vars
+
+					if (err) {
+						fileErrors.push(uploadFile.filetype + ' failed to save.');
+					}
+
+				});
+
+			});
+									
+		}
+
+		if (fileErrors.length !== 0){
+
+			error.sendError(req, res, 400, concatErrors(fileErrors));
+
+		}
+		else {
+			res.json(response);
+		}
+
+	});	
+
+}
 
 const post = function(req, res){
 
 	const filesUploadList = [
-		'guideDocumentation',
-		'acknowledgementOfRiskForm',
+		['guideDocumentation', 'gud'],
+		['acknowledgementOfRiskForm', 'arf'],
+		['insuranceCertificate', 'inc'],
+		['goodStandingEvidence', 'gse'],
+		['operatingPlan', 'opp']
+	];
+
+	const requiredFilesUploadList = [
 		'insuranceCertificate',
 		'goodStandingEvidence',
 		'operatingPlan'
-	];
-	
+	];	
+
 	if (Object.keys(req.files).length === 0) {
-		error.sendError(req, res, 400, fileErrors(filesUploadList));
+		error.sendError(req, res, 400, outputFileErrors(requiredFilesUploadList));
 	}
 	else {
-		const missingFiles = [];
-		for (let i = 0; i < filesUploadList.length; i++ ) {
+		
+		const validateRes = validateSpecialUse.validateInput('tempOutfitters', req);
 
-			if (!req.files[filesUploadList[i]]) {
-				missingFiles.push(filesUploadList[i]);
-			}		
-			else {
-				
-				util.putUpload( req.files[filesUploadList[i]], filesUploadList[i], 'abc123');
+		if (validateRes.success){
+
+			const controlNumber = Math.floor((Math.random() * 10000000000) + 1);
+
+			const uploadFiles = [];
+
+			const missingFiles = [];
+
+			const fileErrors = [];
+
+			for (let i = 0; i < requiredFilesUploadList.length; i++ ) {
+				if (!req.files[requiredFilesUploadList[i]]) {
+					missingFiles.push(requiredFilesUploadList[i]);
+				}
+			}
+
+			if (missingFiles.length !== 0){
+
+				error.sendError(req, res, 400, outputFileErrors(missingFiles));
 
 			}
-		}
 
-		if (missingFiles.length !== 0){
+			else {
 
-			error.sendError(req, res, 400, fileErrors(missingFiles));
+				for (let i = 0; i < filesUploadList.length; i++ ) {
+
+					const uploadField = filesUploadList[i][0];
+
+					if (req.files[uploadField]) {
+
+						const uploadFile = {};
+
+						const currentFile = req.files[uploadField];
+
+						uploadFile.file = currentFile[0];
+
+						uploadFile.originalname = uploadFile.file.originalname;
+						uploadFile.filename = path.parse(uploadFile.file.originalname).name;
+						uploadFile.filetype = filesUploadList[i][1];
+						uploadFile.ext = path.parse(uploadFile.file.originalname).ext;
+						uploadFile.size = uploadFile.file.size;
+						uploadFile.mimetype = uploadFile.file.mimetype;
+						uploadFile.encoding = uploadFile.file.encoding;
+						uploadFile.buffer = uploadFile.file.buffer;
+						uploadFile.keyname = `${controlNumber}/${uploadField}-${uploadFile.filename}-${Date.now()}${uploadFile.ext}`;
+						uploadFiles.push(uploadFile);
+					}
+				}
+
+				if (uploadFiles.length > 0){
+
+					util.uploadFiles(controlNumber, uploadFiles, function(err, data){  // eslint-disable-line no-unused-vars
+						if (err){
+
+							error.sendError(req, res, 400, 'error uploading files');
+
+						}
+						else {
+
+							postData(req, res, uploadFiles, controlNumber, fileErrors);	
+
+						}
+						
+					});
+				}
+				else {
+					error.sendError(req, res, 400, 'files not found');
+				}
+			}
 
 		}
 		else {
-
-			const validateRes = validateSpecialUse.validateInput('tempOutfitters', req);
-
-			if (validateRes.success){
-
-				const postData = util.createPost(null, req.body);
-
-				const response = include('test/data/tempOutfitters.post.json');
-
-				response.apiRequest = postData;
-
-				// api database updates
-				const controlNumber = Math.floor((Math.random() * 10000000000) + 1);
-
-				let website;
-
-				if (postData.applicantInfo.website){
-					website = postData.applicantInfo.website;
-				}
-
-				dbUtil.saveApplication(controlNumber, postData.tempOutfitterFields.formName, website, function(err, appl) {
-
-					if (err) {
-						error.sendError(req, res, 400, 'error saving application in database');
-					}
-					else {
-						dbUtil.saveFile(appl.id, 'inc', req.files.insuranceCertificate[0].fieldname, function(err, file) {
-
-							if (err) {
-								error.sendError(req, res, 400, 'error saving file in database');
-							}
-							else {
-								dbUtil.saveFile(appl.id, 'gse', req.files.goodStandingEvidence[0].fieldname, function(err, file) {
-
-									if (err) {
-										error.sendError(req, res, 400, 'error saving file in database');
-									}
-									else {
-										dbUtil.saveFile(appl.id, 'opp', req.files.operatingPlan[0].fieldname, function(err, file) {
-
-											if (err) {
-												error.sendError(req, res, 400, 'error saving file in database');
-											}
-											else {
-												res.json(response);
-											}
-
-										});
-									}
-								});
-							}
-						});
-					}
-				});
-			}
-			else {
-			
-				error.sendError(req, res, 400, validateRes.errorMessage, validateRes.errors);
-			
-			}
-
+		
+			error.sendError(req, res, 400, validateRes.errorMessage, validateRes.errors);
+		
 		}
 
 	}

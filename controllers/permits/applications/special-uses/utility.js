@@ -19,11 +19,12 @@ const include = require('include')(__dirname);
 const path = require('path');
 const AWS = require('aws-sdk');
 const errors = require('./patternErrorMessages.json');
+const async = require('async');
 
 //*************************************************************
 // AWS
 
-const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
+const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID1;
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 const AWS_REGION = process.env.AWS_REGION;
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME;
@@ -341,7 +342,7 @@ function createPost(controlNumber, inputPost){
 	
 }
 
-function putUpload(uploadReq, uploadField, controlNumber){
+function putUpload(uploadReq, uploadField, controlNumber, callback){
 
 	const uploadFile = {};
 
@@ -359,6 +360,7 @@ function putUpload(uploadReq, uploadField, controlNumber){
 		console.log('uploadFile undefined error');
 	}
 	else {
+		
 		uploadFile.originalname = uploadFile.file.originalname;
 		uploadFile.filename = path.parse(uploadFile.file.originalname).name;
 		uploadFile.ext = path.parse(uploadFile.file.originalname).ext;
@@ -366,8 +368,8 @@ function putUpload(uploadReq, uploadField, controlNumber){
 		uploadFile.mimetype = uploadFile.file.mimetype;
 		uploadFile.encoding = uploadFile.file.encoding;
 		uploadFile.buffer = uploadFile.file.buffer;
-		uploadFile.keyname = `${controlNumber}/${uploadField}/${uploadFile.filename}-${Date.now()}${uploadFile.ext}`;
-		
+		uploadFile.keyname = `${controlNumber}/${uploadField}-${uploadFile.filename}-${Date.now()}${uploadFile.ext}`;
+
 		const params = {
 			Bucket: AWS_BUCKET_NAME, 
 			Key: uploadFile.keyname,
@@ -378,12 +380,52 @@ function putUpload(uploadReq, uploadField, controlNumber){
 		s3.putObject(params, function(err, data) {
 			if (err) {
 				console.error(err, err.stack);
+				return callback(err, null);
 			}
 			else {     
-				console.log(data);  
+				return callback(null, data);
 			}      
 		});			
 	}
+
+}
+
+function uploadFiles(controlNumber, files, callback){
+ 
+	const asyncTasks = [];
+
+	files.forEach(function(file){
+
+		asyncTasks.push(function(callback){
+			
+			const params = {
+				Bucket: AWS_BUCKET_NAME, 
+				Key: file.keyname,
+				Body: file.buffer,
+				ACL: 'private' 
+			};
+
+			s3.putObject(params, function(err, data) {
+				if (err) {
+					console.error(err, err.stack);
+					return callback(err, null);
+				}
+				else {     
+					return callback(null, data);
+				}      
+			});	
+
+		});
+
+	});
+	async.parallel(asyncTasks, function(err, data){
+		if (err){
+			return callback(err, null);
+		}
+		else {
+			return callback(null, data);		
+		}
+	});
 
 }
 
@@ -394,3 +436,4 @@ module.exports.buildErrorMessage = buildErrorMessage;
 module.exports.copyGenericInfo = copyGenericInfo;
 module.exports.createPost = createPost;
 module.exports.putUpload = putUpload;
+module.exports.uploadFiles = uploadFiles;
