@@ -393,6 +393,32 @@ describe('tempOutfitters POST: validate required fields present', function(){
 
 		});
 
+		it('should return valid json with a 400 status code for tempOutfitters POST request without either advertisingURL or advertisingDescription', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfittersFactory.create(
+					{
+						'tempOutfitterFields.advertisingURL':undefined,
+						'tempOutfitterFields.advertisingDescription':undefined
+					}
+				)))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
+				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+
+					expect(res.body.response.message).to.equal('Either Temp Outfitter Fields/Advertising URL or Temp Outfitter Fields/Advertising Description is a required field.');
+
+				})
+				.expect(400, done);
+
+		});
+
 	});
 
 });
