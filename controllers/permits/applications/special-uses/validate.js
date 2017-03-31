@@ -103,14 +103,14 @@ function combinePropArgument(property, argument){
 	return field;
 
 }
-
-function makeErrorObj(field, errorType, expectedFieldType, enumMessage, dependency){
+function makeErrorObj(field, errorType, expectedFieldType, enumMessage, dependency, anyOfFields){
 	return {
 		field,
 		errorType,
 		expectedFieldType,
 		enumMessage,
-		dependency
+		dependency,
+		anyOfFields
 	};
 }
 
@@ -219,6 +219,18 @@ function handleDependencyError(output, result, counter){
 
 }
 
+function handleAnyOfError(errorTracking, result, counter){
+
+	const error = result[counter];
+	const property = removeInstance(error.property);
+	const requiredOptions = [];
+	error.schema.anyOf.forEach((fieldObj)=>{
+		requiredOptions.push(combinePropArgument(property, fieldObj.required[0]));
+	});
+	errorTracking.errorArray.push(makeErrorObj(null, 'anyOf', null, null, null, requiredOptions));
+	
+}
+
 const validateInput = function (route, inputPost){
 	
 	inputPost = inputPost.body;
@@ -289,6 +301,11 @@ const validateInput = function (route, inputPost){
 		else if (result[counter].name === 'dependencies'){
 
 			handleDependencyError(errorTracking, result, counter);
+
+		}
+		else if (result[counter].name === 'anyOf'){
+
+			handleAnyOfError(errorTracking, result, counter);
 
 		}
 	}
