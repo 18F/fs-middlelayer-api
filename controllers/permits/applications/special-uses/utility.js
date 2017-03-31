@@ -79,6 +79,12 @@ function buildFormatErrorMessage(fullPath){
 
 }
 
+/**
+ * Creates error message for anyOf errors
+ * 
+ * @param  {array[string]} anyOfFields - list of fields, at least one being required.
+ * @return {string}
+ */
 function makeAnyOfMessage(anyOfFields){
 	if (anyOfFields){
 		let output, count = 1;

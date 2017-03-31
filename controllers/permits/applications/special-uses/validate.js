@@ -72,6 +72,12 @@ function phoneNumberFormat(input){
 
 //*******************************************************************
 
+/**
+ * Removes 'instance' from prop field of validation errors. Used to make fields human readable
+ * 
+ * @param {string} prop - Prop field from validation error
+ * @return {string}
+ */
 function removeInstance(prop){
 
 	let fixedProp = '';
@@ -86,6 +92,13 @@ function removeInstance(prop){
 
 }
 
+/**
+ * Combines property and argument fields, if property exists, for missing field errors
+ *
+ * @param  {string}
+ * @param  {string}
+ * @return {string}
+ */
 function combinePropArgument(property, argument){
 
 	let field;
@@ -103,6 +116,18 @@ function combinePropArgument(property, argument){
 	return field;
 
 }
+/**
+ * Creates error object which can be read by error message building function
+ * 
+ * @param {string} field
+ * @param {string} errorType
+ * @param {string} expectedFieldType
+ * @param {string} enumMessage
+ * @param {string} dependency
+ * @param {array[string]} anyOfFields
+ * 
+ * @return Error object
+ */
 function makeErrorObj(field, errorType, expectedFieldType, enumMessage, dependency, anyOfFields){
 	return {
 		field,
@@ -219,6 +244,16 @@ function handleDependencyError(output, result, counter){
 
 }
 
+/**
+ * Creates error object for errors resulting from an anyOf section of the validation schema
+ *
+ * @param {object} errorTracking - Error object containing all error to report and the error message to deliver.
+ * @param {array} errorTracking.errorArray - Array contain all errors to report to user.
+ * @param {array} result - Array of errors found during validation.
+ * @param {integer} counter - Position in result that the current error being handled is.
+ * 
+ * @affects errorTracking.errorArray 
+ */
 function handleAnyOfError(errorTracking, result, counter){
 
 	const error = result[counter];
