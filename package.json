@@ -51,6 +51,7 @@
     "unionized": "^4.11.0"
   },
   "dependencies": {
+    "async": "^2.2.0",
     "aws-sdk": "^2.32.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.1",

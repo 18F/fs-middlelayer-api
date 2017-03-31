@@ -1172,14 +1172,12 @@ describe('tempOutfitters POST: file validated', function(){
 	
 	describe('tempOutfitters POST: required files checks', function(){
 
-		it('should return valid json missing single file', function(done) {
+		it('should return valid json missing single required file', function(done) {
 
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create()))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
 				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
 				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
 				.expect('Content-Type', /json/)
@@ -1192,7 +1190,7 @@ describe('tempOutfitters POST: file validated', function(){
 
 		});
 
-		it('should return valid json missing multiple files', function(done) {
+		it('should return valid json missing multiple required files', function(done) {
 
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
@@ -1220,10 +1218,24 @@ describe('tempOutfitters POST: file validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 					
-					expect(res.body.response.message).to.equal('guideDocumentation must be provided. acknowledgementOfRiskForm must be provided. insuranceCertificate must be provided. goodStandingEvidence must be provided. operatingPlan must be provided.');
+					expect(res.body.response.message).to.equal('insuranceCertificate must be provided. goodStandingEvidence must be provided. operatingPlan must be provided.');
 
 				})
 				.expect(400, done);
+
+		});
+
+		it('should return valid json when all required three files provided', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfitterFactory.create()))
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
+				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.expect('Content-Type', /json/)
+				.expect(200, done);
 
 		});
 

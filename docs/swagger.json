@@ -246,14 +246,12 @@
 						"in": "formData",
 						"name": "guideDocumentation",
 						"description": "temp-outfitter guideDocumentation file upload",
-						"required": true,
 						"type": "file"
 					},
 					{
 						"in": "formData",
 						"name": "acknowledgementOfRiskForm",
 						"description": "temp-outfitter acknowledgementOfRiskForm file upload",
-						"required": true,
 						"type": "file"
 					},
 					{
