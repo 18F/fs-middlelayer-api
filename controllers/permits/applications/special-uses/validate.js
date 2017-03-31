@@ -124,7 +124,7 @@ function missingSuperFields(output, field, route){
 	}
 	const phone = ['applicantInfo.dayPhone.areaCode', 'applicantInfo.dayPhone.number', 'applicantInfo.dayPhone.type'];
 	const noncommercial = ['noncommercialFields.activityDescription', 'noncommercialFields.locationDescription', 'noncommercialFields.startDateTime', 'noncommercialFields.endDateTime', 'noncommercialFields.numberParticipants'];
-	const tempOutfitter = ['tempOutfitterFields.activityDescription', 'tempOutfitterFields.insuranceCertificate', 'tempOutfitterFields.goodStandingEvidence', 'tempOutfitterFields.operatingPlan'];
+	const tempOutfitter = ['tempOutfitterFields.activityDescription', 'tempOutfitterFields.clientCharges'];
 	
 	if (field === 'applicantInfo'){
 
