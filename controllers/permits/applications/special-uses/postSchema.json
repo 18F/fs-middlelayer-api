@@ -1,7 +1,7 @@
 {
-  "region": {"default":0},
-  "forest": {"default":0},
-  "district": {"default":0},
+  "region": {"default":""},
+  "forest": {"default":""},
+  "district": {"default":""},
   "authorizingOfficerName": {"default":""},
   "authorizingOfficerTitle": {"default":""},
   "securityId": {"default":""},
@@ -16,13 +16,13 @@
     "dayPhone": {
       "areaCode": {"default":0},
       "number": {"default":0},
-      "extension": {"default":0},
+      "extension": {"default":""},
       "type": {"default":""}
     },
     "eveningPhone": {
       "areaCode": {"default":0},
       "number": {"default":0},
-      "extension": {"default":0},
+      "extension": {"default":""},
       "type": {"default":""}
     },
     "emailAddress": {"default":""},
@@ -30,7 +30,7 @@
     "mailingAddress2": {"default":""},
     "mailingCity": {"default":""},
     "mailingState": {"default":""},
-    "mailingZIP": {"default":0},
+    "mailingZIP": {"default":""},
     "organizationName": {"default":""},
     "website": {"default":""},
     "orgType": {"default":""},
