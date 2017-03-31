@@ -11,7 +11,7 @@
                     },
                     "type": {
                         "type": "string", 
-                        "default": "tempOutfitterGuide",
+                        "default": "tempOutfitters",
                         "enum":[
                             "noncommercial",
                             "tempOutfitters"
@@ -64,9 +64,14 @@
             "clientCharges": { "type": "string"},
             "experienceList": { "type": "string"}
         },
-        "oneOf": [
-            { "required": ["advertisingURL", "activityDescription", "clientCharges"] },
-            { "required": ["advertisingDescription", "activityDescription", "clientCharges"] }
+        "allOf":[
+            {"required":["activityDescription", "clientCharges"]},
+            {
+                "anyOf": [
+                    { "required": ["advertisingURL"] },
+                    { "required": ["advertisingDescription"] }
+                ]
+            }
         ]
     },
     "noncommercial": {
