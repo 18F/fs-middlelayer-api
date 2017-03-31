@@ -22,9 +22,12 @@
     },
     "type": "tempOutfitters",
     "tempOutfitterFields": {
+        "individualIsCitizen": true,
+        "smallBusiness": false,
         "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
-        "insuranceCertificate":"File on S3",
-        "goodStandingEvidence":"File on S3",
-        "operatingPlan":"File on S3"
+        "advertisingURL": "www.outfitting.com",
+        "advertisingDescription": "We outfit",
+        "clientCharges": "500",
+        "experienceList": "good times"
     }
 }
