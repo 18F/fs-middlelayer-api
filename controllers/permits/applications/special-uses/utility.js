@@ -24,7 +24,7 @@ const async = require('async');
 //*************************************************************
 // AWS
 
-const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID1;
+const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 const AWS_REGION = process.env.AWS_REGION;
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME;
@@ -116,6 +116,16 @@ function buildErrorMessage(output){
 	errorMessage = errorMessage.trim();
 	return errorMessage;
 
+}
+
+function concatErrors(errorMessages){
+
+	let output = '';
+	errorMessages.forEach((message)=>{
+		output = `${output}${message} `;
+	});
+	output = output.trim();
+	return output;
 }
 
 const pad = function (n) {
@@ -433,6 +443,7 @@ function uploadFiles(controlNumber, files, callback){
 // exports
 
 module.exports.buildErrorMessage = buildErrorMessage;
+module.exports.concatErrors = concatErrors;
 module.exports.copyGenericInfo = copyGenericInfo;
 module.exports.createPost = createPost;
 module.exports.putUpload = putUpload;

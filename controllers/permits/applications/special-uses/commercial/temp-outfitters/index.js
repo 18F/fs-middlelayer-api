@@ -119,16 +119,6 @@ function outputFileErrors(missingFiles){
 	return output;
 }
 
-function concatErrors(errorMessages){
-
-	let output = '';
-	errorMessages.forEach((message)=>{
-		output = `${output}${message} `;
-	});
-	output = output.trim();
-	return output;
-}
-
 // post
 
 function postData(req, res, uploadFiles, controlNumber, fileErrors){
@@ -168,7 +158,7 @@ function postData(req, res, uploadFiles, controlNumber, fileErrors){
 
 		if (fileErrors.length !== 0){
 
-			error.sendError(req, res, 400, concatErrors(fileErrors));
+			error.sendError(req, res, 400, util.concatErrors(fileErrors));
 
 		}
 		else {
