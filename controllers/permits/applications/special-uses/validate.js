@@ -104,7 +104,7 @@ function combinePropArgument(property, argument){
 	let field;
 	if (property.length > 0){
 
-		field = property + '.' + argument;
+		field = `${property}.${argument}`;
 
 	}
 	else {
