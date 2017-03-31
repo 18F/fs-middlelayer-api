@@ -79,6 +79,16 @@ function buildFormatErrorMessage(fullPath){
 
 }
 
+function concatErrors(errorMessages){
+
+	let output = '';
+	errorMessages.forEach((message)=>{
+		output = `${output}${message} `;
+	});
+	output = output.trim();
+	return output;
+}
+
 function buildErrorMessage(output){
 
 	let errorMessage = '';
@@ -110,22 +120,9 @@ function buildErrorMessage(output){
 		}
 
 	});
-	messages.forEach((message)=>{
-		errorMessage = `${errorMessage}${message} `;
-	});
-	errorMessage = errorMessage.trim();
+	errorMessage = concatErrors(messages);
 	return errorMessage;
 
-}
-
-function concatErrors(errorMessages){
-
-	let output = '';
-	errorMessages.forEach((message)=>{
-		output = `${output}${message} `;
-	});
-	output = output.trim();
-	return output;
 }
 
 const pad = function (n) {
