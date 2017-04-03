@@ -144,7 +144,7 @@ function postData(req, res, uploadFiles, controlNumber, fileErrors){
 
 			uploadFiles.forEach(function(uploadFile){
 
-				dbUtil.saveFile(appl.id, uploadFile.filetype, uploadFile.keyname, function(err, file) { // eslint-disable-line no-unused-vars
+				dbUtil.saveFile(appl.id, uploadFile.filetypecode, uploadFile.keyname, function(err, file) { // eslint-disable-line no-unused-vars
 
 					if (err) {
 						fileErrors.push(uploadFile.filetype + ' failed to save.');
@@ -230,7 +230,8 @@ const post = function(req, res){
 
 						uploadFile.originalname = uploadFile.file.originalname;
 						uploadFile.filename = path.parse(uploadFile.file.originalname).name;
-						uploadFile.filetype = filesUploadList[i][1];
+						uploadFile.filetype = uploadField;
+						uploadFile.filetypecode = filesUploadList[i][1];
 						uploadFile.ext = path.parse(uploadFile.file.originalname).ext;
 						uploadFile.size = uploadFile.file.size;
 						uploadFile.mimetype = uploadFile.file.mimetype;
@@ -238,10 +239,20 @@ const post = function(req, res){
 						uploadFile.buffer = uploadFile.file.buffer;
 						uploadFile.keyname = `${controlNumber}/${uploadField}-${uploadFile.filename}-${Date.now()}${uploadFile.ext}`;
 						uploadFiles.push(uploadFile);
+
+						const fileError = validateSpecialUse.validateFile(uploadFile);
+
+						if (fileError){
+							fileErrors.push(fileError);
+						}
 					}
 				}
 
-				if (uploadFiles.length > 0){
+				if (fileErrors.length !== 0){
+					error.sendError(req, res, 400, util.concatErrors(fileErrors));
+				}
+
+				else if (uploadFiles.length > 0){
 
 					util.uploadFiles(controlNumber, uploadFiles, function(err, data){  // eslint-disable-line no-unused-vars
 						if (err){
