@@ -22,6 +22,7 @@ const saltRounds = 10;
 
 const models = include('models');
 const jwt = require('jsonwebtoken');
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
 
 //*******************************************************************
 // passport 
@@ -71,7 +72,7 @@ const generate = function(req, res, next) {
 	req.token = jwt.sign({
 		id: req.user.id,
 		role: req.user.role
-	}, 'superSecret', { expiresIn: 120 * 60 });
+	}, jwtSecretKey, { expiresIn: 120 * 60 });
 	next();
 };
 

@@ -20,6 +20,8 @@ const jwt = require('jsonwebtoken');
 
 const error = include('error.js');
 
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
+
 //*******************************************************************
 // token
 
@@ -29,7 +31,7 @@ const token = function(req, res, next){
 	
 	if (token) {
 
-		jwt.verify(token, 'superSecret', function(err, decoded) {      
+		jwt.verify(token, jwtSecretKey, function(err, decoded) {      
 			if (err) {
 				error.sendError(req, res, 401, 'Failed to authenticate token.');
 			} 
