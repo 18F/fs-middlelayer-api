@@ -21,7 +21,7 @@ const bcrypt = require('bcrypt-nodejs');
 
 const models = include('models');
 const jwt = require('jsonwebtoken');
-const jwtSecretKey = process.env.JWT_SECRET_KEY;
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 //*******************************************************************
 // passport 
@@ -71,7 +71,7 @@ const generate = function(req, res, next) {
 	req.token = jwt.sign({
 		id: req.user.id,
 		role: req.user.role
-	}, jwtSecretKey, { expiresIn: 120 * 60 });
+	}, JWT_SECRET_KEY, { expiresIn: 120 * 60 });
 	next();
 };
 
