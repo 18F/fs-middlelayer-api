@@ -245,6 +245,165 @@
 					}
 				}
 			}
+		},
+		"/application/{accinstCn}": {
+			"get": {
+				"tags": [
+					"Application"
+				],
+				"summary": "Application",
+				"description": "",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					 {
+						"name": "accinstCn",
+						"in": "path",
+						"description": "accinstCn",
+						"required": true,
+						"type": "integer"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+      					"examples": {
+        					"application/json": {
+        						
+								"accinstCn": "4882911010848",
+								"adminOrg": "0102",
+								"authOfficerName": null,
+								"authOfficerTitle": null,
+								"contCn": "777624010848",
+								"contId": "EPERMIT PERSON 1",
+								"contName": "Test Outffiting",
+								"contactType": "PERSON",
+								"crExemptInd": "N",
+								"effectiveDate": null,
+								"epermitId": "0102",
+								"firstName": "Touffiter",
+								"formDesc": "Special Use Application & Permit (Noncommercial Group Uses)",
+								"formName": "FS-2700-3B ",
+								"holderCombKey": "4882911010848-777624010848",
+								"lastName": "Testoutffierlastname",
+								"managingOrg": "0102",
+								"orgCode": null,
+								"orgType": null,
+								"personPrefix": null,
+								"purpose": "Test purpose extended",
+								"remarks": null,
+								"securityId": "0102",
+								"status": null,
+								"sudsId": "0102",
+								"addresses": [
+									{
+										"addrCn": "565662",
+										"address1": "123 smokey lane",
+										"address2": null,
+										"address3": null,
+										"addressSeq": null,
+										"addressType": "BILLING",
+										"cityName": "Smokeytown",
+										"combKey": "4882911010848-565662",
+										"contCn": "777624010848",
+										"contId": "EPERMIT PERSON 1",
+										"contName": "Test Outffiting",
+										"contactType": "PERSON",
+										"countryName": "United States of America",
+										"createdDate": "2017-03-22",
+										"email": "apitestout@fs.fed.us",
+										"fmmiCustomerNumber": null,
+										"modifiedDate": null,
+										"postalCode": "82555",
+										"programArea": "SUDS",
+										"securityId": "0102",
+										"stateCode": "AZ"
+									}
+								],
+								"phones":[
+									{
+										"areaCode":"111",
+										"combKey":"1234567890-123456",
+										"contCn":"777624010848",
+										"contId":"TEST,LLC",
+										"contName":"contName Outfitter",
+										"contactType":"PERSON",
+										"extension":null,
+										"internationalCode":null,
+										"phoneNumber":"222-3333",
+										"phoneNumberType":"BUSINESS",
+										"pnCn":"123456",
+										"programArea":"SUDS",
+										"restrictions":"Test Rest",
+										"securityId":"0102"
+									}
+								],
+								"statuses": [
+									{
+										"authOfficerName":null,
+										"authOfficerTitle":null,
+										"combKey":"1234567890-222333-27-JUN-06",
+										"effectiveDate":"2006-06-27",
+										"status":"ACCEPTED",
+										"statusCn":"222333"
+									},
+									{
+										"authOfficerName":null,
+										"authOfficerTitle":null,
+										"combKey":"1234567890-222333-20-AUG-05",
+										"effectiveDate":"2005-08-20",
+										"status":"ACCEPTED",
+										"statusCn":"222333"
+									},
+									{
+										"authOfficerName":null,
+										"authOfficerTitle":null,
+										"combKey":"1234567890-7776666-12-DEC-05",
+										"effectiveDate":"2005-12-12",
+										"status":"ON HOLD",
+										"statusCn":"7776666"
+									},
+									{
+										"authOfficerName":null,
+										"authOfficerTitle":null,
+										"combKey":"1234567890-9998888-11-AUG-06",
+										"effectiveDate":"2006-08-11",
+										"status":"ISSUED",
+										"statusCn":"9998888"
+									},
+									{
+										"authOfficerName":"TIM POHLMAN",
+										"authOfficerTitle":"DISTRICT RANGER",
+										"combKey":"1234567890-4445555-08-DEC-09",
+										"effectiveDate":"2009-12-08",
+										"status":"CLOSED",
+										"statusCn":"4445555"
+									},
+									{
+										"authOfficerName":null,
+										"authOfficerTitle":null,
+										"combKey":"1234567890-88882222-28-JUN-06",
+										"effectiveDate":"2006-06-28",
+										"status":"APP APPROVED",
+										"statusCn":"88882222"
+									}
+								],
+								"uses": [
+									{
+										"acres": 0,
+										"cn": "99887766554433",
+										"feeCalculation": "O&G",
+										"primaryFlag": "Y",
+										"useCn": "777778888"
+									}
+								]
+
+        					}
+         				}
+					}
+				}
+			}
 		}
 	}
 }
