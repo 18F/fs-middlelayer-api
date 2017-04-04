@@ -527,6 +527,11 @@
       "from": "lru-cache@>=4.0.1 <5.0.0",
       "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-4.0.2.tgz"
     },
+    "matchstick": {
+      "version": "1.2.1",
+      "from": "https://registry.npmjs.org/matchstick/-/matchstick-1.2.1.tgz",
+      "resolved": "https://registry.npmjs.org/matchstick/-/matchstick-1.2.1.tgz"
+    },
     "media-typer": {
       "version": "0.3.0",
       "from": "https://registry.npmjs.org/media-typer/-/media-typer-0.3.0.tgz",
