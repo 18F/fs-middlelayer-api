@@ -130,7 +130,7 @@
     },
     "concat-stream": {
       "version": "1.6.0",
-      "from": "concat-stream@>=1.5.2 <2.0.0",
+      "from": "concat-stream@>=1.4.6 <2.0.0",
       "resolved": "https://registry.npmjs.org/concat-stream/-/concat-stream-1.6.0.tgz",
       "dependencies": {
         "readable-stream": {
@@ -521,6 +521,11 @@
       "version": "4.0.2",
       "from": "lru-cache@>=4.0.1 <5.0.0",
       "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-4.0.2.tgz"
+    },
+    "matchstick": {
+      "version": "1.2.1",
+      "from": "https://registry.npmjs.org/matchstick/-/matchstick-1.2.1.tgz",
+      "resolved": "https://registry.npmjs.org/matchstick/-/matchstick-1.2.1.tgz"
     },
     "media-typer": {
       "version": "0.3.0",
