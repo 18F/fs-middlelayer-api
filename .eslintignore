@@ -26,3 +26,7 @@ node_modules
 # DB related setup
 /migrations/**
 /seeders/**
+
+# Mock API
+/mocks/**
+/routes/mocks/**
