@@ -338,7 +338,7 @@ const validateFile = function (uploadFile){
 
 		returnError = util.concatErrors(tempErrors);
 
-		returnError = returnError.trim().replace(/.$/,'.'); // eslint-disable-line comma-spacing
+		returnError = returnError.trim().replace(/.$/, '.');
 
 	}
 
