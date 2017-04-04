@@ -18,7 +18,6 @@ const include = require('include')(__dirname);
 const passport = require('passport');  
 const Strategy = require('passport-local');
 const bcrypt = require('bcrypt-nodejs');
-const saltRounds = 10;
 
 const models = include('models');
 const jwt = require('jsonwebtoken');
