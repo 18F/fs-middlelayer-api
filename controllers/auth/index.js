@@ -18,10 +18,10 @@ const include = require('include')(__dirname);
 const passport = require('passport');  
 const Strategy = require('passport-local');
 const bcrypt = require('bcrypt-nodejs');
-const saltRounds = 10;
 
 const models = include('models');
 const jwt = require('jsonwebtoken');
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 //*******************************************************************
 // passport 
@@ -71,7 +71,7 @@ const generate = function(req, res, next) {
 	req.token = jwt.sign({
 		id: req.user.id,
 		role: req.user.role
-	}, 'superSecret', { expiresIn: 120 * 60 });
+	}, JWT_SECRET_KEY, { expiresIn: 120 * 60 });
 	next();
 };
 

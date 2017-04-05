@@ -22,7 +22,7 @@ const server = include('index.js');
 const util = include('test/utility.js');
 
 const factory = require('unionized');
-const tempOutfittersInput = include('test/data/testInputTempOutfitters.json');
+const tempOutfitterInput = include('test/data/testInputTempOutfitters.json');
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -30,7 +30,7 @@ const expect = chai.expect;
 //*******************************************************************
 //Mock Input
 
-const tempOutfittersFactory = factory.factory(tempOutfittersInput);
+const tempOutfitterFactory = factory.factory(tempOutfitterInput);
 
 //*******************************************************************
 
@@ -56,11 +56,11 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -76,12 +76,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({applicantInfo : undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({applicantInfo : undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -97,12 +97,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({tempOutfitterFields : undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({tempOutfitterFields : undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -122,12 +122,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.firstName':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.firstName':undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -143,12 +143,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.lastName':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.lastName':undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -164,12 +164,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.dayPhone':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone':undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -185,12 +185,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.dayPhone.areaCode':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.areaCode':undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -206,12 +206,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.dayPhone.number':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.number':undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -227,12 +227,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.dayPhone.type':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.type':undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -248,12 +248,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.emailAddress':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.emailAddress':undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -269,12 +269,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingAddress':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingAddress':undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -290,12 +290,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingCity':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingCity':undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -311,12 +311,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingState':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingState':undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -332,12 +332,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingZIP':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt').expect('Content-Type', /json/)
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingZIP':undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx').expect('Content-Type', /json/)
 				.expect(function(res){
 
 					expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip is a required field.');
@@ -352,12 +352,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.orgType':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.orgType':undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -377,12 +377,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'tempOutfitterFields.activityDescription':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'tempOutfitterFields.activityDescription':undefined})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -398,25 +398,23 @@ describe('tempOutfitters POST: validate required fields present', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create(
+				.field('body', JSON.stringify(tempOutfitterFactory.create(
 					{
 						'tempOutfitterFields.advertisingURL':undefined,
 						'tempOutfitterFields.advertisingDescription':undefined
 					}
 				)))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
 					expect(res.body.response.message).to.equal('Either Temp Outfitter Fields/Advertising URL or Temp Outfitter Fields/Advertising Description is a required field.');
-
 				})
 				.expect(400, done);
-
 		});
 
 	});
@@ -453,7 +451,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		request(server)
 			.put('/permits/applications/special-uses/commercial/temp-outfitters/1234')
 			.set('x-access-token', token)
-			.send(tempOutfittersFactory.create())
+			.send(tempOutfitterFactory.create())
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
@@ -464,12 +462,12 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		request(server)
 			.post('/permits/applications/special-uses/commercial/temp-outfitters')
 			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfittersFactory.create()))
-			.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-			.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+			.field('body', JSON.stringify(tempOutfitterFactory.create()))
+			.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+			.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
@@ -480,12 +478,12 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		request(server)
 			.post('/permits/applications/special-uses/commercial/temp-outfitters')
 			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfittersFactory.create()))
-			.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-			.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+			.field('body', JSON.stringify(tempOutfitterFactory.create()))
+			.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+			.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 				expect(res.body).to.have.property('apiRequest');
@@ -552,12 +550,12 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.firstName':1})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.firstName':1})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -573,12 +571,12 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.lastName':1})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.lastName':1})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -594,12 +592,12 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.dayPhone.areaCode':'123'})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.areaCode':'123'})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -615,12 +613,12 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.dayPhone.number':'123'})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.number':'123'})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -636,12 +634,12 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.dayPhone.type':1})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.type':1})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -657,12 +655,12 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.emailAddress':1})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.emailAddress':1})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -678,12 +676,12 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingAddress':1})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingAddress':1})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -699,12 +697,12 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingCity':1})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingCity':1})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -720,12 +718,12 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingState':1})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingState':1})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -741,12 +739,12 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingZIP':12345})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingZIP':12345})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -762,12 +760,12 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'tempOutfitterFields.activityDescription':1})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'tempOutfitterFields.activityDescription':1})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -787,12 +785,12 @@ describe('tempOutfitters POST: field type validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.dayPhone.extension':1})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.extension':1})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -829,12 +827,12 @@ describe('tempOutfitters POST: format validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.dayPhone.areaCode':1234})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.areaCode':1234})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -850,12 +848,12 @@ describe('tempOutfitters POST: format validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.dayPhone.number':45678901})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.number':45678901})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -873,12 +871,12 @@ describe('tempOutfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingState':'ORE'})))
-			.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-			.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+			.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingState':'ORE'})))
+			.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+			.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -894,12 +892,12 @@ describe('tempOutfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingZIP':'1234'})))
-			.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-			.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+			.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingZIP':'1234'})))
+			.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+			.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -915,12 +913,12 @@ describe('tempOutfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.mailingZIP':'123456789'})))
-			.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-			.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+			.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingZIP':'123456789'})))
+			.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+			.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
@@ -931,12 +929,12 @@ describe('tempOutfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfittersFactory.create({'region':'123'})))
-			.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-			.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+			.field('body', JSON.stringify(tempOutfitterFactory.create({'region':'123'})))
+			.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+			.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -952,12 +950,12 @@ describe('tempOutfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfittersFactory.create({'forest':'123'})))
-			.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-			.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+			.field('body', JSON.stringify(tempOutfitterFactory.create({'forest':'123'})))
+			.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+			.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -973,12 +971,12 @@ describe('tempOutfitters POST: format validated', function(){
 		request(server)
 			.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfittersFactory.create({'district':'123'})))
-			.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-			.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+			.field('body', JSON.stringify(tempOutfitterFactory.create({'district':'123'})))
+			.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+			.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
@@ -1013,12 +1011,12 @@ describe('tempOutfitters POST: enum validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.orgType':'invalid'})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.orgType':'invalid'})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 					
@@ -1034,12 +1032,12 @@ describe('tempOutfitters POST: enum validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'type':'invalid'})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'type':'invalid'})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1076,12 +1074,12 @@ describe('tempOutfitters POST: pattern validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create({'applicantInfo.emailAddress':'invalid'})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
-				.attach('operatingPlan', './test/data/test_operatingPlan.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.emailAddress':'invalid'})))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
@@ -1111,16 +1109,14 @@ describe('tempOutfitters POST: file validated', function(){
 	
 	describe('tempOutfitters POST: required files checks', function(){
 
-		it('should return valid json missing single file', function(done) {
+		it('should return valid json missing single required file', function(done) {
 
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create()))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create()))
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 					
@@ -1131,15 +1127,15 @@ describe('tempOutfitters POST: file validated', function(){
 
 		});
 
-		it('should return valid json missing multiple files', function(done) {
+		it('should return valid json missing multiple required files', function(done) {
 
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create()))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.txt')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.txt')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.txt')
+				.field('body', JSON.stringify(tempOutfitterFactory.create()))
+				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
+				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 					
@@ -1155,14 +1151,66 @@ describe('tempOutfitters POST: file validated', function(){
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfittersFactory.create()))
+				.field('body', JSON.stringify(tempOutfitterFactory.create()))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 					
-					expect(res.body.response.message).to.equal('guideDocumentation must be provided. acknowledgementOfRiskForm must be provided. insuranceCertificate must be provided. goodStandingEvidence must be provided. operatingPlan must be provided.');
+					expect(res.body.response.message).to.equal('insuranceCertificate must be provided. goodStandingEvidence must be provided. operatingPlan must be provided.');
 
 				})
 				.expect(400, done);
+
+		});
+
+		it('should return valid json with error messages for an invalid file (size of 0 bytes)', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfitterFactory.create()))
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_file0bytes.docx')
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+					
+					expect(res.body.response.message).to.equal('operatingPlan file errors: size of 0 bytes.');
+
+				})
+				.expect(400, done);
+
+		});
+
+		it('should return valid json with error messages for an invalid file (invalid extension)', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfitterFactory.create()))
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_invalidExtension.txt')
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+					
+					expect(res.body.response.message).to.equal('operatingPlan file errors: invalid extension.');
+
+				})
+				.expect(400, done);
+
+		});
+
+		it('should return valid json when all required three files provided', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfitterFactory.create()))
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
+				.expect('Content-Type', /json/)
+				.expect(200, done);
 
 		});
 

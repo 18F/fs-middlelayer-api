@@ -22,6 +22,11 @@
       "from": "https://registry.npmjs.org/array-flatten/-/array-flatten-1.1.1.tgz",
       "resolved": "https://registry.npmjs.org/array-flatten/-/array-flatten-1.1.1.tgz"
     },
+    "async": {
+      "version": "2.2.0",
+      "from": "async@latest",
+      "resolved": "https://registry.npmjs.org/async/-/async-2.2.0.tgz"
+    },
     "aws-sdk": {
       "version": "2.32.0",
       "from": "aws-sdk@latest",
@@ -51,7 +56,7 @@
     },
     "bcrypt-nodejs": {
       "version": "0.0.3",
-      "from": "bcrypt-nodejs@0.0.3",
+      "from": "bcrypt-nodejs@latest",
       "resolved": "https://registry.npmjs.org/bcrypt-nodejs/-/bcrypt-nodejs-0.0.3.tgz"
     },
     "bluebird": {
@@ -130,7 +135,7 @@
     },
     "concat-stream": {
       "version": "1.6.0",
-      "from": "concat-stream@>=1.5.2 <2.0.0",
+      "from": "concat-stream@>=1.4.6 <2.0.0",
       "resolved": "https://registry.npmjs.org/concat-stream/-/concat-stream-1.6.0.tgz",
       "dependencies": {
         "readable-stream": {
@@ -522,6 +527,11 @@
       "from": "lru-cache@>=4.0.1 <5.0.0",
       "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-4.0.2.tgz"
     },
+    "matchstick": {
+      "version": "1.2.1",
+      "from": "https://registry.npmjs.org/matchstick/-/matchstick-1.2.1.tgz",
+      "resolved": "https://registry.npmjs.org/matchstick/-/matchstick-1.2.1.tgz"
+    },
     "media-typer": {
       "version": "0.3.0",
       "from": "https://registry.npmjs.org/media-typer/-/media-typer-0.3.0.tgz",
@@ -653,7 +663,7 @@
     },
     "path": {
       "version": "0.12.7",
-      "from": "path@>=0.12.7 <0.13.0",
+      "from": "path@latest",
       "resolved": "https://registry.npmjs.org/path/-/path-0.12.7.tgz"
     },
     "path-to-regexp": {

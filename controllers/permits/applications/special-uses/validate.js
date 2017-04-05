@@ -36,6 +36,10 @@ const phoneNumber = schema.phoneNumber;
 const applicantInfoBase = schema.applicantInfoBase;
 const extraFieldsBase = schema.extraFieldsBase;
 const commonFields = schema.commonFields;
+const fileMimes = ['application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+	'application/msword',
+	'text/rtf',
+	'application/pdf'];
 
 //*******************************************************************
 
@@ -356,7 +360,45 @@ const validateInput = function (route, inputPost){
 
 };
 
+const validateFile = function (uploadFile){
+
+	let returnError = '';
+
+	const regex = '(rtf|doc|docx|pdf)';
+
+	const tempErrors = [];
+
+	tempErrors.push(uploadFile.filetype + ' file errors:');
+
+	if (uploadFile.ext && !uploadFile.ext.toLowerCase().match(regex)){
+		tempErrors.push('invalid extension,');
+	}
+	else if (fileMimes.indexOf(uploadFile.mimetype) < 0){
+		tempErrors.push('invalid mimetype,');		
+	}
+	if (uploadFile.size === 0){
+		tempErrors.push('size of 0 bytes,');
+	}
+	else {
+		const fileSizeInMegabytes = uploadFile.size / 1000000.0;
+		if (fileSizeInMegabytes > 100){
+			tempErrors.push('size is greater than 100 MB,');	
+		}
+	}
+
+	if (tempErrors.length > 1){
+
+		returnError = util.concatErrors(tempErrors);
+
+		returnError = returnError.trim().replace(/.$/, '.');
+
+	}
+
+	return returnError;
+	
+};
 //*******************************************************************
 // exports
 
 module.exports.validateInput = validateInput;
+module.exports.validateFile = validateFile;
