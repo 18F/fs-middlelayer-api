@@ -1,0 +1,33 @@
+{
+    "region": "38",
+    "forest": "50",
+    "district": "50",
+    "authorizingOfficerName": "WILLIAM L.NOXON",
+    "authorizingOfficerTitle": "null",
+    "applicantInfo": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "dayPhone": {
+            "areaCode": 541,
+            "number": 8156141,
+            "extension": "0",
+            "type": "BUSINESS"
+        },
+        "emailAddress": "test@email.org",
+        "mailingAddress": "ON ANW 0953",
+        "mailingCity": "ALBANY",
+        "mailingState": "OR",
+        "mailingZIP": "97321",
+        "orgType": "Limited Liability Company"
+    },
+    "type": "tempOutfitters",
+    "tempOutfitterFields": {
+        "individualIsCitizen": true,
+        "smallBusiness": false,
+        "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
+        "advertisingURL": "www.outfitting.com",
+        "advertisingDescription": "We outfit",
+        "clientCharges": "500",
+        "experienceList": "good times"
+    }
+}

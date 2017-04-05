@@ -1,5 +1,4 @@
 
-
 # DotEnv
 .env
 
@@ -23,3 +22,11 @@ node_modules
 # Third party lib/lang
 /docs/lang/**
 /docs/lib/**
+
+# DB related setup
+/migrations/**
+/seeders/**
+
+# Mock API
+/mocks/**
+/routes/mocks/**

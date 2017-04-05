@@ -22,6 +22,9 @@ const util = include('test/utility.js');
 const chai = require('chai');
 const expect = chai.expect;
 
+const factory = require('unionized');
+const loginFactory = factory.factory({'username': null, 'password': null});
+
 //*******************************************************************
 
 describe('authentication validation', function() {
@@ -30,7 +33,7 @@ describe('authentication validation', function() {
 		request(server)
 			.post('/auth')
 			.set('Accept', 'application/json')
-			.send({ 'username': 'apiuser', 'password': 'apipwd' })
+			.send(loginFactory.create({username:'apiuser', password:'apipwd'}))
 			.expect(401, done);
 	});
 
@@ -38,7 +41,7 @@ describe('authentication validation', function() {
 		request(server)
 			.post('/auth')
 			.set('Accept', 'application/json')
-			.send({ 'username': 'user', 'password': '12345' })
+			.send(loginFactory.create({username: process.env.ADMINROLE_USER, password: process.env.ADMINROLE_PWD}))
 			.expect(function(res){
 				expect(res.body).to.have.property('token'); 
 			})
@@ -47,14 +50,14 @@ describe('authentication validation', function() {
 
 	it('should return valid json with 403 when no token provided for a noncommercial GET request', function(done) {
 		request(server)
-			.get('/permits/special-uses/noncommercial/1234567890')
+			.get('/permits/applications/special-uses/noncommercial/1234567890')
 			.expect('Content-Type', /json/)
 			.expect(403, done);
 	});
 
 	it('should return valid json with 401 when an invalid token provided for a noncommercial GET request', function(done) {
 		request(server)
-			.get('/permits/special-uses/noncommercial/1234567890')
+			.get('/permits/applications/special-uses/noncommercial/1234567890')
 			.set('x-access-token', 'invalid-token')
 			.expect('Content-Type', /json/)
 			.expect(401, done);
@@ -75,7 +78,7 @@ describe('autherization with a token with admin role', function() {
 
 	it('should return valid json with 200 for a noncommercial GET request', function(done) {
 		request(server)
-			.get('/permits/special-uses/noncommercial/1234567890')
+			.get('/permits/applications/special-uses/noncommercial/1234567890')
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
 			.expect(200, done);
@@ -91,7 +94,7 @@ describe('autherization with a token with user (unauthorized) role', function() 
 		request(server)
 			.post('/auth')
 			.set('Accept', 'application/json')
-			.send({ 'username': 'user2', 'password': '12345' })
+			.send(loginFactory.create({username: process.env.USERROLE_USER, password: process.env.USERROLE_PWD}))
 			.expect('Content-Type', /json/)
 			.expect(200)
 			.end(function(err, res) {
@@ -105,7 +108,7 @@ describe('autherization with a token with user (unauthorized) role', function() 
 
 	it('should return valid json with 403 for a noncommercial GET request with an unauthorized token provided', function(done) {
 		request(server)
-			.get('/permits/special-uses/noncommercial/1234567890')
+			.get('/permits/applications/special-uses/noncommercial/1234567890')
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
 			.expect(403, done);
