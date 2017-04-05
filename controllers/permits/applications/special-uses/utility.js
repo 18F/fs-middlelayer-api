@@ -46,7 +46,8 @@ function makeFieldReadable(input){
 	.replace(/^./, function(str){
 		return str.toUpperCase();
 	})
-	.replace('Z I P', 'Zip');
+	.replace('Z I P', 'Zip')
+	.replace('U R L', 'URL');
 
 }
 
@@ -79,6 +80,29 @@ function buildFormatErrorMessage(fullPath){
 
 }
 
+/**
+ * Creates error message for anyOf errors
+ * 
+ * @param  {array[string]} anyOfFields - list of fields, at least one being required.
+ * @return {string}
+ */
+function makeAnyOfMessage(anyOfFields){
+	if (anyOfFields){
+		let output, count = 1;
+		const length = anyOfFields.length;
+		output = `${makePathReadable(anyOfFields[0])}`;
+		while (count < length) {
+			const field = anyOfFields[count];
+			output = `${output} or ${makePathReadable(field)}`;
+			count ++;
+		}
+		return output;
+	}
+	else {
+		return false;
+	}
+}
+
 function concatErrors(errorMessages){
 
 	let output = '';
@@ -99,6 +123,7 @@ function buildErrorMessage(output){
 		const type = `${makePathReadable(error.field)} is expected to be type '${error.expectedFieldType}'.`;
 		const enumMessage = `${makePathReadable(error.field)} ${error.enumMessage}.`;
 		const dependencies = `Having ${makePathReadable(error.field)} requires that ${makePathReadable(error.dependency)} be provided.`;
+		const anyOf = `Either ${makeAnyOfMessage(error.anyOfFields)} is a required field.`;
 
 		switch (error.errorType){
 		case 'missing':
@@ -116,6 +141,9 @@ function buildErrorMessage(output){
 			break;
 		case 'dependencies':
 			messages.push(dependencies);
+			break;
+		case 'anyOf':
+			messages.push(anyOf);
 			break;
 		}
 

@@ -416,12 +416,12 @@
 				"lastName": { "type": "string" },
 				"dayPhone": { "$ref": "#/definitions/phoneNumber" },
 				"eveningPhone": { "$ref": "#/definitions/phoneNumber" },
-				"emailAddress": { "type": "string" },
+				"emailAddress": { "type": "string", "pattern":"^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"},
 				"mailingAddress": { "type": "string" },
 				"mailingAddress2": { "type": "string" },
 				"mailingCity": { "type": "string" },
-				"mailingState": { "type": "string" },
-				"mailingZIP": { "type": "integer" },
+				"mailingState": { "type": "string" ,"pattern":"^(A[EKLPRSZ]|C[AOT]|D[CE]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHVJMY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$"},
+				"mailingZIP": { "type": "string", "pattern":"^[0-9]{5}$|^[0-9]{9}$"},
 				"organizationName": { "type": "string"},
 				"website":{"type": "string"},
 				"orgType":{
@@ -439,6 +439,9 @@
 				}				
 			},
 			"required": ["firstName","lastName","dayPhone","emailAddress","mailingAddress","mailingCity","mailingZIP","mailingState"],
+			"dependencies":{
+                "organizationName":["orgType"]
+            },
 			"xml": {
 				"name": "applicantInfoNoncommercial"
 			}
@@ -454,8 +457,8 @@
 				"mailingAddress": { "type": "string" },
 				"mailingAddress2": { "type": "string" },
 				"mailingCity": { "type": "string" },
-				"mailingState": { "type": "string" },
-				"mailingZIP": { "type": "integer" },
+				"mailingState": { "type": "string", "pattern":"^(A[EKLPRSZ]|C[AOT]|D[CE]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHVJMY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$" },
+            	"mailingZIP": { "type": "string", "pattern":"^[0-9]{5}$|^[0-9]{9}$" },
 				"organizationName": { "type": "string"},
 				"website":{"type": "string"},
 				"orgType":{
@@ -482,7 +485,7 @@
 			"properties": {
 				"areaCode": { "type": "integer"},
 				"number": { "type": "integer"},
-				"extension": { "type": "integer"},
+				"extension": { "type": "string"},
 				"type": {"type": "string"}
 			},
 			"required": ["areaCode","number","type"],
@@ -507,21 +510,23 @@
 		"tempOutfitterFields": {
 		  "type": "object",
 		  "properties": {
-			 "activityDescription": { "type": "string"},
-			 "locationDescription": {  "type": "string"},
-			 "startDateTime": { "type": "string"},
-			 "endDateTime": { "type": "string"},
-			 "insuranceCertificate": { "type": "string"},
-			 "goodStandingEvidence": {
-				"description": "Certificate of good standing, operating agreement, or other evidence the business is in good standing",
-				"type": "string"
-			 },
-			 "operatingPlan": {
-				"description": "A completed Word or RTF operating plan template.",
-				"type": "string"
-			 }
+			"individualIsCitizen": {"type":"boolean"},
+			"smallBusiness": {"type":"boolean"},
+			"activityDescription": { "type": "string"},
+			"advertisingURL": { "type": "string"},
+			"advertisingDescription": { "type": "string"},
+			"clientCharges": { "type": "string"},
+			"experienceList": { "type": "string"}
 		  },
-		  "required": ["insuranceCertificate"],
+		  "allOf":[
+			{"required":["activityDescription", "clientCharges"]},
+			{
+				"anyOf": [
+					{ "required": ["advertisingURL"] },
+					{ "required": ["advertisingDescription"] }
+				]
+			}
+		  ],
 		  "xml": {
 				"name": "tempOutfitterFields"
 			} 
@@ -529,9 +534,9 @@
 		"noncommercialPermit": {
 			"type": "object",
 			"properties": {
-				"region": { "type" : "integer" },
-				"forest": { "type" : "integer" },
-				"district": { "type" : "integer" },
+				"region": { "type" : "string", "pattern":"^[0-9]{2}$" },
+	            "forest": { "type" : "string", "pattern":"^[0-9]{2}$" },
+	            "district": { "type" : "string", "pattern":"^[0-9]{2}$" },
 				"authorizingOfficerName": { "type" : "string"},
 				"authorizingOfficerTitle": { "type" : "string"},
 				"applicantInfo": {
@@ -541,7 +546,7 @@
 					"type": "string",
 					"enum":[
 						"noncommercial",
-						"tempOutfitterGuide"
+						"tempOutfitters"
 					],
 					"default": "noncommercial"
 				},
@@ -558,9 +563,9 @@
 			"type": "object",
 			"properties": {
 				"controlNumber": {"type": "integer"},
-				"region": { "type" : "integer" },
-				"forest": { "type" : "integer" },
-				"district": { "type" : "integer" },
+				"region": { "type" : "string" },
+				"forest": { "type" : "string" },
+				"district": { "type" : "string" },
 				"authorizingOfficerName": { "type" : "string"},
 				"authorizingOfficerTitle": { "type" : "string"},
 				"applicantInfo": {
@@ -585,9 +590,9 @@
 		"tempOutfitterPermit": {
 			"type": "object",
 			 "properties": {
-				"region": { "type" : "integer" },
-				"forest": { "type" : "integer" },
-				"district": { "type" : "integer" },
+				"region": { "type" : "string", "pattern":"^[0-9]{2}$" },
+	            "forest": { "type" : "string", "pattern":"^[0-9]{2}$" },
+	            "district": { "type" : "string", "pattern":"^[0-9]{2}$" },
 				"authorizingOfficerName": { "type" : "string"},
 				"authorizingOfficerTitle": { "type" : "string"},
 				"applicantInfo": {
@@ -596,10 +601,10 @@
 				"type": {
 					"type": "string", 
 					"enum":[
-						"tempOutfitterGuide",
+						"tempOutfitters",
 						"noncommercial"
 					],
-					"default": "tempOutfitterGuide"
+					"default": "tempOutfitters"
 				},
 				"tempOutfitterFields": {
 				  "$ref": "#/definitions/tempOutfitterFields"
@@ -614,9 +619,9 @@
 			"type": "object",
 			 "properties": {
 				"controlNumber": { "type": "integer"},
-				"region": { "type" : "integer" },
-				"forest": { "type" : "integer" },
-				"district": { "type" : "integer" },
+				"region": { "type" : "string" },
+				"forest": { "type" : "string" },
+				"district": { "type" : "string" },
 				"authorizingOfficerName": { "type" : "string"},
 				"authorizingOfficerTitle": { "type" : "string"},
 				"applicantInfo": {

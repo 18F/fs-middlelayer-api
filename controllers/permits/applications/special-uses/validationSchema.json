@@ -11,7 +11,7 @@
                     },
                     "type": {
                         "type": "string", 
-                        "default": "tempOutfitterGuide",
+                        "default": "tempOutfitters",
                         "enum":[
                             "noncommercial",
                             "tempOutfitters"
@@ -56,19 +56,23 @@
         "id": "/tempOutfitterFields",
         "type": "object",
         "properties": {
-        "activityDescription": { "type": "string"},
-        "insuranceCertificate": { "type": "string"},
-        "goodStandingEvidence": {
-            "description": "Certificate of good standing, operating agreement, or other evidence the business is in good standing",
-            "type": "string"
+            "individualIsCitizen": {"type":"boolean"},
+            "smallBusiness": {"type":"boolean"},
+            "activityDescription": { "type": "string"},
+            "advertisingURL": { "type": "string"},
+            "advertisingDescription": { "type": "string"},
+            "clientCharges": { "type": "string"},
+            "experienceList": { "type": "string"}
         },
-        "operatingPlan": {
-            "description": "A completed Word or RTF operating plan template.",
-            "type": "string"
-        }
-    },
-    "required": ["activityDescription", "insuranceCertificate", "goodStandingEvidence", "operatingPlan"]
-
+        "allOf":[
+            {"required":["activityDescription", "clientCharges"]},
+            {
+                "anyOf": [
+                    { "required": ["advertisingURL"] },
+                    { "required": ["advertisingDescription"] }
+                ]
+            }
+        ]
     },
     "noncommercial": {
         "id":"noncommercialPermit",

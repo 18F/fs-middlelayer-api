@@ -64,7 +64,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field. Type is a required field. Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Insurance Certificate is a required field. Temp Outfitter Fields/Good Standing Evidence is a required field. Temp Outfitter Fields/Operating Plan is a required field.');
+					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field. Type is a required field. Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Client Charges is a required field.');
 
 				})
 				.expect(400, done);
@@ -106,7 +106,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Insurance Certificate is a required field. Temp Outfitter Fields/Good Standing Evidence is a required field. Temp Outfitter Fields/Operating Plan is a required field.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Client Charges is a required field.');
 
 				})
 				.expect(400, done);
@@ -393,12 +393,17 @@ describe('tempOutfitters POST: validate required fields present', function(){
 
 		});
 
-		it('should return valid json with a 400 status code for tempOutfitters POST request without an insuranceCertificate', function(done) {
+		it('should return valid json with a 400 status code for tempOutfitters POST request without either advertisingURL or advertisingDescription', function(done) {
 
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfitterFactory.create({'tempOutfitterFields.insuranceCertificate':undefined})))
+				.field('body', JSON.stringify(tempOutfitterFactory.create(
+					{
+						'tempOutfitterFields.advertisingURL':undefined,
+						'tempOutfitterFields.advertisingDescription':undefined
+					}
+				)))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
 				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
 				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
@@ -407,77 +412,9 @@ describe('tempOutfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Insurance Certificate is a required field.');
-
+					expect(res.body.response.message).to.equal('Either Temp Outfitter Fields/Advertising URL or Temp Outfitter Fields/Advertising Description is a required field.');
 				})
 				.expect(400, done);
-
-		});
-
-		it('should return valid json with a 400 status code for tempOutfitters POST request without an goodStandingEvidence', function(done) {
-
-			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
-				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfitterFactory.create({'tempOutfitterFields.goodStandingEvidence':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
-				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
-				.expect('Content-Type', /json/)
-				.expect(function(res){
-
-					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Good Standing Evidence is a required field.');
-
-				})
-				.expect(400, done);
-
-		});
-
-		it('should return valid json with a 400 status code for tempOutfitters POST request without an operatingPlan', function(done) {
-
-			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
-				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfitterFactory.create({'tempOutfitterFields.operatingPlan':undefined})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
-				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
-				.expect('Content-Type', /json/)
-				.expect(function(res){
-
-					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Operating Plan is a required field.');
-
-				})
-				.expect(400, done);
-
-		});
-
-		it('should return valid json with a 400 status code for an invalid tempOutfitters POST request', function(done) {
-
-			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
-				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfitterFactory.create({
-					'tempOutfitterFields.insuranceCertificate':undefined,
-					'tempOutfitterFields.goodStandingEvidence':undefined
-				})))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
-				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
-				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
-				.expect('Content-Type', /json/)
-				.expect(function(res){
-
-					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Insurance Certificate is a required field. Temp Outfitter Fields/Good Standing Evidence is a required field.');
-
-				})
-				.expect(400, done);
-
 		});
 
 	});
@@ -582,7 +519,7 @@ describe('tempOutfitters PUT: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field. Type is a required field. Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Insurance Certificate is a required field. Temp Outfitter Fields/Good Standing Evidence is a required field. Temp Outfitter Fields/Operating Plan is a required field.');
+					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field. Type is a required field. Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Client Charges is a required field.');
 
 				})
 				.expect(400, done);

@@ -76,6 +76,12 @@ function phoneNumberFormat(input){
 
 //*******************************************************************
 
+/**
+ * Removes 'instance' from prop field of validation errors. Used to make fields human readable
+ * 
+ * @param {string} prop - Prop field from validation error
+ * @return {string}
+ */
 function removeInstance(prop){
 
 	let fixedProp = '';
@@ -90,12 +96,19 @@ function removeInstance(prop){
 
 }
 
+/**
+ * Combines property and argument fields, if property exists, for missing field errors
+ *
+ * @param  {string}
+ * @param  {string}
+ * @return {string}
+ */
 function combinePropArgument(property, argument){
 
 	let field;
 	if (property.length > 0){
 
-		field = property + '.' + argument;
+		field = `${property}.${argument}`;
 
 	}
 	else {
@@ -107,14 +120,26 @@ function combinePropArgument(property, argument){
 	return field;
 
 }
-
-function makeErrorObj(field, errorType, expectedFieldType, enumMessage, dependency){
+/**
+ * Creates error object which can be read by error message building function
+ * 
+ * @param {string} field
+ * @param {string} errorType
+ * @param {string} expectedFieldType
+ * @param {string} enumMessage
+ * @param {string} dependency
+ * @param {array[string]} anyOfFields
+ * 
+ * @return Error object
+ */
+function makeErrorObj(field, errorType, expectedFieldType, enumMessage, dependency, anyOfFields){
 	return {
 		field,
 		errorType,
 		expectedFieldType,
 		enumMessage,
-		dependency
+		dependency,
+		anyOfFields
 	};
 }
 
@@ -128,7 +153,7 @@ function missingSuperFields(output, field, route){
 	}
 	const phone = ['applicantInfo.dayPhone.areaCode', 'applicantInfo.dayPhone.number', 'applicantInfo.dayPhone.type'];
 	const noncommercial = ['noncommercialFields.activityDescription', 'noncommercialFields.locationDescription', 'noncommercialFields.startDateTime', 'noncommercialFields.endDateTime', 'noncommercialFields.numberParticipants'];
-	const tempOutfitter = ['tempOutfitterFields.activityDescription', 'tempOutfitterFields.insuranceCertificate', 'tempOutfitterFields.goodStandingEvidence', 'tempOutfitterFields.operatingPlan'];
+	const tempOutfitter = ['tempOutfitterFields.activityDescription', 'tempOutfitterFields.clientCharges'];
 	
 	if (field === 'applicantInfo'){
 
@@ -223,6 +248,28 @@ function handleDependencyError(output, result, counter){
 
 }
 
+/**
+ * Creates error object for errors resulting from an anyOf section of the validation schema
+ *
+ * @param {object} errorTracking - Error object containing all error to report and the error message to deliver.
+ * @param {array} errorTracking.errorArray - Array contain all errors to report to user.
+ * @param {array} result - Array of errors found during validation.
+ * @param {integer} counter - Position in result that the current error being handled is.
+ * 
+ * @affects errorTracking.errorArray 
+ */
+function handleAnyOfError(errorTracking, result, counter){
+
+	const error = result[counter];
+	const property = removeInstance(error.property);
+	const requiredOptions = [];
+	error.schema.anyOf.forEach((fieldObj)=>{
+		requiredOptions.push(combinePropArgument(property, fieldObj.required[0]));
+	});
+	errorTracking.errorArray.push(makeErrorObj(null, 'anyOf', null, null, null, requiredOptions));
+	
+}
+
 const validateInput = function (route, inputPost){
 	
 	inputPost = inputPost.body;
@@ -293,6 +340,11 @@ const validateInput = function (route, inputPost){
 		else if (result[counter].name === 'dependencies'){
 
 			handleDependencyError(errorTracking, result, counter);
+
+		}
+		else if (result[counter].name === 'anyOf'){
+
+			handleAnyOfError(errorTracking, result, counter);
 
 		}
 	}

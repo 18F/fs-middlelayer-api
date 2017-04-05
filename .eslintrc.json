@@ -177,6 +177,7 @@
         "prefer-template": "off",
         "require-yield": "off",
         "keyword-spacing":"error",
-        "comma-dangle":"error"
+        "comma-dangle":"error",
+        "max-nested-callbacks":"error"
     }
 }
