@@ -8,9 +8,9 @@
         "route": "permits/applications/special-uses/commercial/temp-outfitters/id"
     },
     "controlNumber": "1095010376",
-    "region": 1,
-    "forest": 23,
-    "district": 45,
+    "region": "01",
+    "forest": "23",
+    "district": "45",
     "authorizingOfficerName": "WILLIAM L.NOXON",
     "authorizingOfficerTitle": null,
     "applicant-info": {
@@ -20,13 +20,13 @@
       "dayPhone": {
         "areaCode": 541,
         "number": 8156141,
-        "extension": 0,
+        "extension": "0",
         "type": "BUSINESS"
       },
       "eveningPhone": {
         "areaCode": 0,
         "number": 0,
-        "extension": 0,
+        "extension": "0",
         "type": null
       },
       "emailAddress": "test@email.org",
@@ -34,7 +34,7 @@
       "mailingAddress2": "Suite 121",
       "mailingCity": "ALBANY",
       "mailingState": "OR",
-      "mailingZIP": 97321,
+      "mailingZIP": "97321",
       "organizationName": "COOLEY RIVER EXPEDITIONS",
       "website": null,
       "orgType": "Limited Liability Company"
