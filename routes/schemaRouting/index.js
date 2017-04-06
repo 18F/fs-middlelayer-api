@@ -22,7 +22,7 @@ const matchstick = require('matchstick');
 
 const error = include('error.js');
 
-const controller = include('schemaControllers');
+const controller = include('server');
 
 //*******************************************************************
 // router
@@ -35,7 +35,7 @@ router.use('/:api/*', function(req, res, next){
 	let mockSwag;
 
 	try {
-		mockSwag = include(`schemaRouting/${mockAPI}.json`);	
+		mockSwag = include(`server/${mockAPI}.json`);	
 	}
 	catch (e) {
 		error.sendError(req, res, 405, 'No mock endpoint server found.');
@@ -94,11 +94,12 @@ router.use('/:api/*', function(req, res, next){
 				}
 				else {
 					if ( mockMethod === 'get'){
-						res.json(controller.get.id(mockSwag.paths[swagPath][mockMethod].mockOutput));
+						res.json(controller.get.id(req, res, mockSwag.paths[swagPath][mockMethod]));
 					}
 					else if (mockMethod === 'post'){
-						
-						res.json(controller.post.app(req, mockSwag.paths[swagPath][mockMethod].validation));
+
+						res.json(controller.post.app(req, res, mockSwag.paths[swagPath][mockMethod]));
+
 					}
 					//console.log('200 true : ' + JSON.stringify(mockSwag.paths[swagPath][mockMethod].responses['200']) );
 				}
