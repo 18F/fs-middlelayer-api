@@ -21,6 +21,7 @@ const  include = require('include')(__dirname);
 const  permits = require('./permits');
 const  auth = require('./auth');
 const  mocks = require('./mocks');
+const  schemaRouting = require('./schemaRouting/');
 
 const  token = include('controllers/auth/token.js');
 const  authorize = include('controllers/auth/authorize.js');
@@ -29,6 +30,8 @@ const  authorize = include('controllers/auth/authorize.js');
 // router
 
 router.use('/mocks', mocks);
+
+router.use('/schemaRouting', schemaRouting);
 
 router.use('/auth', auth);
 
