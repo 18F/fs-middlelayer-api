@@ -20,12 +20,13 @@ const include = require('include')(__dirname);
 // validation
 
 const validateSpecialUse = include('controllers/permits/applications/special-uses/validate.js');
-const util = include('controllers/permits/applications/special-uses/utility.js');
 const dbUtil = include('controllers/permits/applications/special-uses/dbUtil.js');
 const error = include('error.js');
 
 const Validator = require('jsonschema').Validator;
 const v = new Validator();
+
+const util = require('./util.js');
 
 //*******************************************************************
 // controller
@@ -35,15 +36,31 @@ const post = {};
 
 // get id
 
-get.id = function(mockOutput){
-	const applicationData = include(mockOutput);
-	return applicationData;
+get.id = function(req, res, pathData){
+	const applicationData = include(pathData.mockOutput);
+
+	let jsonData = {};
+
+	const jsonResponse = {};
+	jsonResponse.success = true;
+	jsonResponse.api = 'FS ePermit API';
+	jsonResponse.type = 'controller';
+	jsonResponse.verb = req.method;
+	jsonResponse.src = 'json';
+	jsonResponse.route = req.originalUrl;
+
+	const cnData = applicationData[1095010356];
+
+	jsonData = util.copyGenericInfo(cnData, jsonData, pathData.getTemplate);
+	const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
+
+	return toReturn;
 
 };
 
-post.app = function(req, validationSchema){
-	const fileToGet = `schemaRouting/${validationSchema.$ref.split('#')[0]}`;
-	const schemaToGet = validationSchema.$ref.split('#')[1];
+post.app = function(req, res, pathData){
+	const fileToGet = `server/${pathData.validation.$ref.split('#')[0]}`;
+	const schemaToGet = pathData.validation.$ref.split('#')[1];
 	const applicationSchema = include(fileToGet);
 	let key;
 	for (key in applicationSchema){
