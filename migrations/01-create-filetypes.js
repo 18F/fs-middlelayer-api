@@ -5,11 +5,14 @@ module.exports = {
 			file_type: {
 				allowNull: false,
 				primaryKey: true,
-				type: Sequelize.STRING
+				type: Sequelize.STRING(10)
+			},
+			file_type_name: {
+				type: Sequelize.STRING(100),
+				allowNull: false
 			},
 			file_type_desc: {
-				type: Sequelize.STRING,
-				allowNull: false
+				type: Sequelize.STRING(255)
 			}
 		});
 	},

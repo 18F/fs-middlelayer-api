@@ -62,14 +62,14 @@ get.id = function(req, res){
 
 		delete jsonData.tempOutfitterFields;
 		
-		dbUtil.getApplication(1000000000, function(err, appl){
+		dbUtil.getApplication('1000000000', function(err, appl){
 			if (err){
 				console.error(err);
 				error.sendError(req, res, 400, 'error getting application from database');
 			}
 			else {
 				
-				jsonData.applicantInfo.website = appl.website_addr;
+				jsonData.applicantInfo.website = appl.website;
 				jsonResponse.success = true;
 				const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
 
@@ -121,15 +121,16 @@ const post = function(req, res){
 		response.apiRequest = postData;
 
 		// api database updates
-		const controlNumber = Math.floor((Math.random() * 10000000000) + 1);
+		const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString();
 
 		let website;
 
 		if (postData.applicantInfo.website){
 			website = postData.applicantInfo.website;
 		}
+		console.log('postData='+JSON.stringify(postData));
 
-		dbUtil.saveApplication(controlNumber, postData.noncommercialFields.formName, website, function(err, appl) {
+		dbUtil.saveApplication(controlNumber, postData, function(err, appl) {
 
 			if (err) {
 				error.sendError(req, res, 400, 'error saving application in database', null);

@@ -19,26 +19,67 @@ const models = include('models');
 
 //*******************************************************************
 
-const saveApplication = function(controlNumber, formType, website, callback) {
+const saveApplication = function(controlNumber, applicationData, callback) {
+	let formName, activityDescription, locationDescription, startDateTime, endDateTime, numberParticipants;
+	let individualIsCitizen, smallBusiness, advertisingURL, advertisingDescription, clientCharges, experienceList;
+
+	if(applicationData.type === 'noncommercial') {
+		formName = applicationData.noncommercialFields.formName;
+		activityDescription = applicationData.noncommercialFields.activityDescription;
+		locationDescription = applicationData.noncommercialFields.locationDescription;
+		startDateTime = applicationData.noncommercialFields.startDateTime;
+		endDateTime = applicationData.noncommercialFields.endDateTime;
+		numberParticipants = applicationData.noncommercialFields.numberParticipants;
+	}
+	else if (applicationData.type === 'tempOutfitters') {
+		formName = applicationData.tempOutfitterFields.formName;
+		activityDescription = applicationData.tempOutfitterFields.activityDescription;
+		individualIsCitizen = applicationData.tempOutfitterFields.individualIsCitizen;
+		smallBusiness = applicationData.tempOutfitterFields.smallBusiness;
+		advertisingURL = applicationData.tempOutfitterFields.advertisingURL;
+		advertisingDescription = applicationData.tempOutfitterFields.advertisingDescription;
+		clientCharges = applicationData.tempOutfitterFields.clientCharges;
+		experienceList = applicationData.tempOutfitterFields.experienceList;
+	}
 	models.applications.create({
-		control_number: controlNumber, //eslint-disable-line camelcase
-		form_type: formType, //eslint-disable-line camelcase
-		website_addr: website //eslint-disable-line camelcase
+		control_number: controlNumber,
+		form_name: formName, 
+		region: applicationData.region,
+		forest: applicationData.forest,
+		district: applicationData.district,
+		website: applicationData.applicantInfo.website,
+		activity_description: activityDescription,
+		location_description: locationDescription,
+		start_datetime: startDateTime,
+		end_datetime: endDateTime,
+		number_participants: numberParticipants,
+		individual_is_citizen: individualIsCitizen,
+		small_business: smallBusiness,
+		advertising_url: advertisingURL,
+		advertising_description: advertisingDescription,
+		client_charges: clientCharges,
+		experience_list: experienceList
 	})
 	.then(function(appl) {
 		return callback(null, appl);
 	})
 	.catch(function(err) {
+		console.error(err);
 		return callback(err, null);
 	});
 };
 
-const saveFile = function(applicationId, fileType, fileNmae, callback){
+const saveFile = function(applicationId, uploadFile, callback){
 	models.files.create({
-		file_type: fileType, //eslint-disable-line camelcase
-		file_name: fileNmae, //eslint-disable-line camelcase
-		file_path: '/', //eslint-disable-line camelcase
-		application_id: applicationId //eslint-disable-line camelcase
+		application_id: applicationId, 
+		file_type: uploadFile.filetypecode, 
+		file_path: uploadFile.keyname,
+		file_name: uploadFile.filename,
+		file_originalname: uploadFile.originalname,
+		file_ext: uploadFile.ext,
+		file_size: uploadFile.size,
+		file_mimetype: uploadFile.mimetype,
+		file_encoding: uploadFile.encoding
 	})
 	.then(function(file) {
 		return callback(null, file);
@@ -51,7 +92,7 @@ const saveFile = function(applicationId, fileType, fileNmae, callback){
 const getApplication = function(controlNumber, callback){
 
 	models.applications.findOne({
-		where: {control_number: controlNumber} //eslint-disable-line camelcase
+		where: {control_number: controlNumber} 
 	}).then(function(appl) {
 		if (appl){
 			return callback(null, appl);	
@@ -59,9 +100,9 @@ const getApplication = function(controlNumber, callback){
 		else {
 			// TO BE REMOVED begin -- create appl if not exist
 			models.applications.create({
-				control_number: controlNumber, //eslint-disable-line camelcase
-				form_type: 'FS-2700-3f', //eslint-disable-line camelcase
-				website_addr: 'testweb1000000000.org' //eslint-disable-line camelcase
+				control_number: controlNumber,
+				form_name: 'FS-2700-3f',
+				website: 'testweb1000000000.org'
 			})
 			.then(function(appl) {
 				return callback(null, appl);	
