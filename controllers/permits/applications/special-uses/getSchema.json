@@ -40,14 +40,17 @@
 		"numberParticipants": {"default":0, "intake":"middleLayer/number_participants"}
 	},
 	"tempOutfitterFields": {
-		"activityDescription": {"default":"", "intake":"middleLayer"},
-		"locationDescription": {"default":"", "intake":"middleLayer"},
-		"startDateTime": {"default":"", "intake":"middleLayer"},
-		"endDateTime": {"default":"", "intake":"middleLayer"},
-		"insuranceCertificate":{"default":"", "intake":"middleLayer"},
-		"goodStandingEvidence":{"default":"", "intake":"middleLayer"},
-		"operatingPlan":{"default":"", "intake":"middleLayer"},
-		"crExempt": {"default":"N", "intake":"crExempt"},
-		"formName": {"default":"FS-2700-3f", "intake":"none"}
+		"individualIsCitizen": {"default":"", "intake":"middleLayer/individual_is_citizen"},
+		"smallBusiness": {"default":"", "intake":"middleLayer/small_business"},
+		"activityDescription": {"default":"", "intake":"middleLayer/activity_description"},
+		"advertisingURL": {"default":"", "intake":"middleLayer/advertising_url"},
+		"advertisingDescription":{"default":"", "intake":"middleLayer/advertising_description"},
+		"clientCharges":{"default":"", "intake":"middleLayer/client_charges"},
+		"experienceList":{"default":"", "intake":"middleLayer/experience_list"},
+		"guideDocumentation": {"default":"", "intake":"middleLayer/"},
+		"acknowledgementOfRiskForm": {"default":"", "intake":"middleLayer/acknowledgementOfRiskForm"},
+		"insuranceCertificate": {"default":"", "intake":"middleLayer/insuranceCertificate"},
+		"goodStandingEvidence": {"default":"", "intake":"middleLayer/goodStandingEvidence"},
+		"operatingPlan": {"default":"", "intake":"middleLayer/operatingPlan"}
 	}
 }

@@ -38,6 +38,8 @@ get.id = function(req, res){
 	
 	let jsonData = {};
 
+	const controlNumber = req.params.id;
+
 	const jsonResponse = {};
 	jsonResponse.success = false;
 	jsonResponse.api = 'FS ePermit API';
@@ -46,34 +48,24 @@ get.id = function(req, res){
 	jsonResponse.src = 'json';
 	jsonResponse.route = 'permits/special-uses/commercial/temp-outfitters/{controlNumber}';
 
-	const cnData = tempOutfitterData[1095010356];
+	const basicData = tempOutfitterData[1095010356];
 
-	if (cnData){
+	if (basicData){
 
-		const tempOutfitterFields = {};
-		
-		tempOutfitterFields.activityDescription = cnData.purpose;
-		tempOutfitterFields.locationDescription = null;
-		tempOutfitterFields.startDateTime = '2017-04-12 09:00:00';
-		tempOutfitterFields.endDateTime = '2017-04-15 20:00:00';
-		tempOutfitterFields.insuranceCertificate = 'insuranceCertificate.pdf';
-		tempOutfitterFields.goodStandingEvidence = 'goodStandingEvidence.pdf';
-		tempOutfitterFields.operatingPlan = 'operatingPlan.pdf';
+		dbUtil.getApplication(controlNumber, function(err, applicationData){
 
-		jsonData = util.copyGenericInfo(cnData, jsonData);
-		jsonData.tempOutfitterFields = tempOutfitterFields;
-
-		delete jsonData.noncommercialFields;
-
-		dbUtil.getApplication('1000000000', function(err, appl){
 			if (err){
+				console.error(err);
 				error.sendError(req, res, 400, 'error getting application from database');
 			}
 			else {
-				
-				jsonData.applicantInfo.website = appl.website;
+
+				jsonData = util.copyGenericInfo(basicData, applicationData, jsonData);				
+
+				delete jsonData.noncommercialFields;
+
 				jsonResponse.success = true;
-				const toReturn = Object.assign({}, {response:jsonResponse}, jsonData); 
+				const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
 
 				res.json(toReturn);
 			}

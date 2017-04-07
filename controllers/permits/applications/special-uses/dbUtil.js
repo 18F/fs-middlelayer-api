@@ -94,7 +94,7 @@ const saveFile = function(applicationId, uploadFile, callback){
 const getApplication = function(controlNumber, callback){
 
 	models.applications.findOne({
-		where: {control_number: controlNumber} 
+		where: {control_number: controlNumber}
 	}).then(function(appl) {
 		if (appl){
 			return callback(null, appl);	
@@ -117,12 +117,18 @@ const getApplication = function(controlNumber, callback){
 						region: '11',
 						forest: '22',
 						district: '33',
-						website: 'testweb1000000000.org',
+						website: 'testwebsite.org',
 						activity_description: 'test activity_description',
 						location_description: 'test location_description',
 						start_datetime: '2017-05-01T10:00:00Z',
 						end_datetime: '2017-05-05T19:00:00Z',
-						number_participants: 45
+						number_participants: 45,
+						individual_is_citizen: true,
+						small_business: true,
+						advertising_url: 'www.advertising.com',
+						advertising_description: 'test advertising_description',
+						client_charges: 'test client_charges',
+						experience_list: 'test experience_list'
 					})
 					.then(function(appl) {
 						return callback(null, appl);	
@@ -145,6 +151,18 @@ const getApplication = function(controlNumber, callback){
 	});
 };
 
+const getFiles = function(applicationId, callback){
+
+	models.files.findOne({
+		where: {application_id: applicationId} 
+	})
+	.then(function(files) {
+		return callback(null, files);
+	})
+	.catch(function(err) {
+		return callback(err, null);
+	});
+};
 //*******************************************************************
 // exports
 

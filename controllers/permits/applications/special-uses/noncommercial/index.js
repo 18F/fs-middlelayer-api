@@ -70,6 +70,9 @@ get.id = function(req, res){
 			}
 		});
 	}
+	else {
+		error.sendError(req, res, 400, 'application not found');
+	}
 };
 
 // put id

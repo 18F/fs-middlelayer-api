@@ -32,7 +32,7 @@ module.exports = function(sequelize, DataTypes) {
 			associate: function(models) {
 				applications.hasMany(models.files, {
 					foreignKey: 'application_id',
-					as: 'file_items'
+					as: 'files'
 				});
 			}
 		}
