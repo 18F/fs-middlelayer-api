@@ -51,12 +51,13 @@
     "formName": {"default":"FS-2700-3b"}
   },
   "tempOutfitterFields": {
+    "individualIsCitizen": {"default":false},
+    "smallBusiness": {"default": false},
     "activityDescription": {"default":""},
-    "locationDescription": {"default":""},
-    "startDateTime": {"default":""},
-    "endDateTime": {"default":""},
-    "purpose": {"default":""},
-    "crExempt": {"default":"N"},
+    "advertisingURL": {"default":""},
+    "advertisingDescription": {"default":""},
+    "clientCharges": {"default":""},
+    "experienceList": {"default":""},
     "formName": {"default":"FS-2700-3f"}
   }
 }

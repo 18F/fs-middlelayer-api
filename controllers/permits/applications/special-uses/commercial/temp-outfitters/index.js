@@ -38,6 +38,8 @@ get.id = function(req, res){
 	
 	let jsonData = {};
 
+	const controlNumber = req.params.id;
+
 	const jsonResponse = {};
 	jsonResponse.success = false;
 	jsonResponse.api = 'FS ePermit API';
@@ -46,34 +48,24 @@ get.id = function(req, res){
 	jsonResponse.src = 'json';
 	jsonResponse.route = 'permits/special-uses/commercial/temp-outfitters/{controlNumber}';
 
-	const cnData = tempOutfitterData[1095010356];
+	const basicData = tempOutfitterData[1095010356];
 
-	if (cnData){
+	if (basicData){
 
-		const tempOutfitterFields = {};
-		
-		tempOutfitterFields.activityDescription = cnData.purpose;
-		tempOutfitterFields.locationDescription = null;
-		tempOutfitterFields.startDateTime = '2017-04-12 09:00:00';
-		tempOutfitterFields.endDateTime = '2017-04-15 20:00:00';
-		tempOutfitterFields.insuranceCertificate = 'insuranceCertificate.pdf';
-		tempOutfitterFields.goodStandingEvidence = 'goodStandingEvidence.pdf';
-		tempOutfitterFields.operatingPlan = 'operatingPlan.pdf';
+		dbUtil.getApplication(controlNumber, function(err, applicationData){
 
-		jsonData = util.copyGenericInfo(cnData, jsonData);
-		jsonData.tempOutfitterFields = tempOutfitterFields;
-
-		delete jsonData.noncommercialFields;
-
-		dbUtil.getApplication(1000000000, function(err, appl){
 			if (err){
+				console.error(err);
 				error.sendError(req, res, 400, 'error getting application from database');
 			}
 			else {
-				
-				jsonData.applicantInfo.website = appl.website_addr;
+
+				jsonData = util.copyGenericInfo(basicData, applicationData, jsonData);				
+
+				delete jsonData.noncommercialFields;
+
 				jsonResponse.success = true;
-				const toReturn = Object.assign({}, {response:jsonResponse}, jsonData); 
+				const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
 
 				res.json(toReturn);
 			}
@@ -129,13 +121,7 @@ function postData(req, res, uploadFiles, controlNumber, fileErrors){
 
 	response.apiRequest = postData;
 
-	let website;
-
-	if (postData.applicantInfo.website){
-		website = postData.applicantInfo.website;
-	}
-
-	dbUtil.saveApplication(controlNumber, postData.tempOutfitterFields.formName, website, function(err, appl) {
+	dbUtil.saveApplication(controlNumber, postData, function(err, appl) {
 
 		if (err) {
 			error.sendError(req, res, 400, 'error saving application in database');
@@ -144,7 +130,7 @@ function postData(req, res, uploadFiles, controlNumber, fileErrors){
 
 			uploadFiles.forEach(function(uploadFile){
 
-				dbUtil.saveFile(appl.id, uploadFile.filetypecode, uploadFile.keyname, function(err, file) { // eslint-disable-line no-unused-vars
+				dbUtil.saveFile(appl.id, uploadFile, function(err, file) { // eslint-disable-line no-unused-vars
 
 					if (err) {
 						fileErrors.push(uploadFile.filetype + ' failed to save.');
@@ -228,8 +214,9 @@ const post = function(req, res){
 
 						uploadFile.file = currentFile[0];
 
+						const filename = path.parse(uploadFile.file.originalname).name;
+
 						uploadFile.originalname = uploadFile.file.originalname;
-						uploadFile.filename = path.parse(uploadFile.file.originalname).name;
 						uploadFile.filetype = uploadField;
 						uploadFile.filetypecode = filesUploadList[i][1];
 						uploadFile.ext = path.parse(uploadFile.file.originalname).ext;
@@ -237,7 +224,8 @@ const post = function(req, res){
 						uploadFile.mimetype = uploadFile.file.mimetype;
 						uploadFile.encoding = uploadFile.file.encoding;
 						uploadFile.buffer = uploadFile.file.buffer;
-						uploadFile.keyname = `${controlNumber}/${uploadField}-${uploadFile.filename}-${Date.now()}${uploadFile.ext}`;
+						uploadFile.filename = uploadField + '-' + filename + '-' + Date.now() + uploadFile.ext;
+						uploadFile.keyname = `${controlNumber}/${uploadFile.filename}`;
 						uploadFiles.push(uploadFile);
 
 						const fileError = validateSpecialUse.validateFile(uploadFile);

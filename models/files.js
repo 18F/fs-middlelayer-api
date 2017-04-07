@@ -6,10 +6,15 @@ module.exports = function(sequelize, DataTypes) {
 			primaryKey: true,
 			defaultValue: DataTypes.UUIDV4
 		},
-		file_type: DataTypes.STRING,
-		file_name: DataTypes.STRING,
-		file_path: DataTypes.STRING,
 		application_id: DataTypes.INTEGER,
+		file_type: DataTypes.STRING(10),
+		file_path: DataTypes.STRING(255),
+		file_name: DataTypes.STRING(255),
+		file_originalname: DataTypes.STRING(255),
+		file_ext: DataTypes.STRING(20),
+		file_size: DataTypes.BIGINT,
+		file_mimetype: DataTypes.STRING(100),
+		file_encoding: DataTypes.STRING(100),
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'created' },
 		updatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'updated' }
 	}, {
