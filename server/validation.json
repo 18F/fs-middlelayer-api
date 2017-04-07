@@ -65,7 +65,7 @@
             "experienceList": { "type": "string"},
             "guideDocumentation": {
                 "maxSize": 25,
-                "required":false,
+                "requiredFile":true,
                 "type": "file",
                 "validExtensions":[
                     "doc",
@@ -75,7 +75,7 @@
             },
             "acknowledgementOfRiskForm": {
                 "maxSize": 10,
-                "required":false,
+                "requirequiredFilered":false,
                 "type": "file",
                 "validExtensions":[
                     "doc",
@@ -85,7 +85,7 @@
             },
             "insuranceCertificate": {
                 "maxSize": 10,
-                "required":true,
+                "requiredFile":true,
                 "type": "file",
                 "validExtensions":[
                     "doc",
@@ -95,7 +95,7 @@
             },
             "goodStandingEvidence": {
                 "maxSize": 10,
-                "required":true,
+                "requiredFile":true,
                 "type": "file",
                 "validExtensions":[
                     "doc",
@@ -105,7 +105,7 @@
             },
             "operatingPlan": {
                 "maxSize": 10,
-                "required":true,
+                "requiredFile":true,
                 "type": "file",
                 "validExtensions":[
                     "doc",
