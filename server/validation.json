@@ -62,7 +62,57 @@
             "advertisingURL": { "type": "string"},
             "advertisingDescription": { "type": "string"},
             "clientCharges": { "type": "string"},
-            "experienceList": { "type": "string"}
+            "experienceList": { "type": "string"},
+            "guideDocumentation": {
+                "maxSize": 25,
+                "required":false,
+                "type": "file",
+                "validExtensions":[
+                    "doc",
+                    "docx",
+                    "rtf"
+                ]
+            },
+            "acknowledgementOfRiskForm": {
+                "maxSize": 10,
+                "required":false,
+                "type": "file",
+                "validExtensions":[
+                    "doc",
+                    "docx",
+                    "rtf"
+                ]
+            },
+            "insuranceCertificate": {
+                "maxSize": 10,
+                "required":true,
+                "type": "file",
+                "validExtensions":[
+                    "doc",
+                    "docx",
+                    "rtf"
+                ]
+            },
+            "goodStandingEvidence": {
+                "maxSize": 10,
+                "required":true,
+                "type": "file",
+                "validExtensions":[
+                    "doc",
+                    "docx",
+                    "rtf"
+                ]
+            },
+            "operatingPlan": {
+                "maxSize": 10,
+                "required":true,
+                "type": "file",
+                "validExtensions":[
+                    "doc",
+                    "docx",
+                    "rtf"
+                ]
+            }
         },
         "allOf":[
             {"required":["activityDescription", "clientCharges"]},
