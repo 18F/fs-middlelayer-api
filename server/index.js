@@ -19,15 +19,22 @@ const include = require('include')(__dirname);
 //*******************************************************************
 // validation
 
-const validateSpecialUse = include('controllers/permits/applications/special-uses/validate.js');
-const dbUtil = include('controllers/permits/applications/special-uses/dbUtil.js');
-const error = include('error.js');
 const errors = require('./patternErrorMessages.json');
+const error = require('./error.js')
 
 const Validator = require('jsonschema').Validator;
 const v = new Validator();
 
 const util = require('./util.js');
+const deref = require('deref');
+const path = require('path');
+
+const fileMimes = [
+	'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+	'application/msword',
+	'text/rtf',
+	'application/pdf'
+];
 
 //*******************************************************************
 // controller
@@ -262,16 +269,25 @@ function handleAnyOfError(errorTracking, result, counter){
 	
 }
 
-function validateBody(body, pathData){
+function getValidationSchema(pathData){
 	const fileToGet = `server/${pathData.validation.$ref.split('#')[0]}`;
 	const schemaToGet = pathData.validation.$ref.split('#')[1];
 	const applicationSchema = include(fileToGet);
+	return {
+		'fullSchema':applicationSchema,
+		'schemaToUse':applicationSchema[schemaToGet]
+	};
+}
+
+function validateBody(body, pathData){
+	const schema = getValidationSchema(pathData);
+	const applicationSchema = schema.fullSchema;
+	const schemaToUse = schema.schemaToUse;
 	let key;
 	for (key in applicationSchema){
 		v.addSchema(applicationSchema[key], key);
 	}
-	const val = applicationSchema[schemaToGet];
-	const error = v.validate(body, val).errors;
+	const error = v.validate(body, schemaToUse).errors;
 	return error;
 }
 
@@ -280,35 +296,26 @@ function processErrors(errors, processedErrors){
 	let counter;
 	for (counter = 0; counter < length; counter++){
 
-		if (errors[counter].name === 'required'){
-
+		switch (errors[counter].name){
+		case 'required':
 			handleMissingError(processedErrors, errors, counter);
-
-		}
-		else  if (errors[counter].name === 'type'){
-
+			break;
+		case 'type':
 			handleTypeError(processedErrors, errors, counter);
-
-		}
-		else if (errors[counter].name === 'format' || errors[counter].name === 'pattern'){
-
+			break;
+		case 'format':
+		case 'pattern':
 			handleFormatError(processedErrors, errors, counter);
-
-		}
-		else if (errors[counter].name === 'enum'){
-
+			break;
+		case 'enum':
 			handleEnumError(processedErrors, errors, counter);
-
-		}
-		else if (errors[counter].name === 'dependencies'){
-
+			break;
+		case 'dependencies':
 			handleDependencyError(processedErrors, errors, counter);
-
-		}
-		else if (errors[counter].name === 'anyOf'){
-
+			break;
+		case 'anyOf':
 			handleAnyOfError(processedErrors, errors, counter);
-
+			break;
 		}
 	}
 }
@@ -386,6 +393,39 @@ function concatErrors(errorMessages){
 	output = output.trim();
 	return output;
 }
+function generateFileErrors(output, error, messages){
+	const reqFile = `${makePathReadable(error.field)} is a required file.`;
+	const small = `${makePathReadable(error.field)} cannot be an empty file.`;
+	const large = `${makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
+	let invExt, invMime;
+	if (typeof(error.expectedFieldType) !== 'undefined' && error.expectedFieldType.constructor === Array){
+		invExt = `${makePathReadable(error.field)} must be one of the following extensions: ${error.expectedFieldType.join(', ')}.`;
+		invMime = `${makePathReadable(error.field)} must be one of the following mime types: ${error.expectedFieldType.join(', ')}.`;
+	}
+
+	switch (error.errorType){
+	case 'requiredFileMissing':
+		messages.push(reqFile);
+		error.message = reqFile;
+		break;
+	case 'invalidExtension':
+		messages.push(invExt);
+		error.message = invExt;
+		break;
+	case 'invalidMime':
+		messages.push(invMime);
+		error.message = invMime;
+		break;
+	case 'invalidSizeSmall':
+		messages.push(small);
+		error.message = small;
+		break;
+	case 'invalidSizeLarge':
+		messages.push(large);
+		error.message = large;
+		break;
+	}
+}
 
 function generateErrors(output){
 
@@ -425,35 +465,133 @@ function generateErrors(output){
 			messages.push(anyOf);
 			error.message = anyOf;
 			break;
+		default:
+			generateFileErrors(output, error, messages);
+			break;
 		}
-
 	});
 	errorMessage = concatErrors(messages);
 	return errorMessage;
 
 }
 
+const validateFile = function (uploadFile, validationConstraints){
+
+	const regex = `(^${validationConstraints.validExtensions.join('$|^')}$)`;
+	const errObjs = [];
+
+	if (uploadFile.ext && !uploadFile.ext.toLowerCase().match(regex)){
+		errObjs.push(makeErrorObj(uploadFile.filetype, 'invalidExtension', validationConstraints.validExtensions));
+	}
+	else if (fileMimes.indexOf(uploadFile.mimetype) < 0){
+		errObjs.push(makeErrorObj(uploadFile.filetype, 'invalidMime', fileMimes));
+	}
+	if (uploadFile.size === 0){
+		errObjs.push(makeErrorObj(uploadFile.filetype, 'invalidSizeSmall', 0));
+	}
+	else {
+		const fileSizeInMegabytes = uploadFile.size / 1000000.0;
+		if (fileSizeInMegabytes > validationConstraints.maxSize){
+			errObjs.push(makeErrorObj(uploadFile.filetype, 'invalidSizeLarge', validationConstraints.maxSize));
+		}
+	}
+
+	return errObjs;
+	
+};
+
+const filesToCheck = [];
+function checkForFilesInSchema(schema){
+	
+	const keys = Object.keys(schema);
+	keys.forEach((key)=>{
+		switch (key){
+		case 'allOf':
+			for (let i = 0; i < schema.allOf.length; i++){
+				checkForFilesInSchema(schema.allOf[i]);
+			}
+			break;
+		case 'properties':
+			checkForFilesInSchema(schema.properties);
+			break;
+		default:
+			if (schema[key].type === 'file'){
+				const obj = {};
+				obj[key] = schema[key];
+				filesToCheck.push(obj);
+			}
+			else if (schema[key].type === 'object'){
+				checkForFilesInSchema(schema[key]);
+			}
+			break;
+		}
+	});
+}
+
 post.app = function(req, res, pathData){
 	
-	//console.log(`output: \n${JSON.stringify(output)}`)
-	const errors = validateBody(req.body, pathData);
+	let inputPost = req.body;
+	if (inputPost.body) {
+		inputPost = JSON.parse(inputPost.body);
+	}
+	const derefFunc = deref();
 	const processedErrors = {
 		errorArray:[]
 	};
+	let fileErrors = [];
+
+	const schema = getValidationSchema(pathData);
+	const errors = validateBody(inputPost, pathData);
+	const sch = derefFunc(schema.schemaToUse, [schema.fullSchema]);
+	checkForFilesInSchema(sch);
+	if (filesToCheck.length !== 0 && req.files && Object.keys(req.files).length > 0){
+		filesToCheck.forEach((file)=>{
+			const key = Object.keys(file)[0];
+
+			const uploadFile = {};
+
+			const currentFile = req.files[key];
+			if (currentFile){
+				uploadFile.file = currentFile[0];
+
+				uploadFile.originalname = uploadFile.file.originalname;
+				uploadFile.filename = path.parse(uploadFile.file.originalname).name;
+				uploadFile.filetype = key;
+				//uploadFile.filetypecode = filesUploadList[i][1];
+				uploadFile.ext = path.parse(uploadFile.file.originalname).ext.split('.')[1];
+				uploadFile.size = uploadFile.file.size;
+				uploadFile.mimetype = uploadFile.file.mimetype;
+				uploadFile.encoding = uploadFile.file.encoding;
+				uploadFile.buffer = uploadFile.file.buffer;
+				//uploadFile.keyname = `${controlNumber}/${uploadField}-${uploadFile.filename}-${Date.now()}${uploadFile.ext}`;
+
+				fileErrors = fileErrors.concat(validateFile(uploadFile, file[key]));
+			}
+			else if (file[key].requiredFile){
+				fileErrors.push(makeErrorObj(key, 'requiredFileMissing'));
+			}
+		});
+		processedErrors.errorArray = processedErrors.errorArray.concat(fileErrors);
+	}
 	let errorMessage;
 	if (errors.length > 0){
 		processErrors(errors, processedErrors);
 		errorMessage = generateErrors(processedErrors);
 	}
-	const output = {
-		'request':req.body,
-		'length':errors.length,
-		'errors':{
-			allErrors:processedErrors,
-			message:errorMessage
-		}
-	};
-	return output;
+	if (processedErrors.errorArray.length !== 0){
+		return error.sendError(req, res, 400, errorMessage, processedErrors.errorArray);
+	}
+	else {
+		const jsonResponse = {};
+		jsonResponse.success = true;
+		jsonResponse.api = 'FS ePermit API';
+		jsonResponse.type = 'controller';
+		jsonResponse.verb = req.method;
+		jsonResponse.src = 'json';
+		jsonResponse.route = req.originalUrl;
+		jsonResponse.origReq = inputPost;
+		res.json(jsonResponse);
+	}
 };
 //*******************************************************************
 // exports
