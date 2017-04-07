@@ -121,12 +121,6 @@ function postData(req, res, uploadFiles, controlNumber, fileErrors){
 
 	response.apiRequest = postData;
 
-	let website;
-
-	if (postData.applicantInfo.website){
-		website = postData.applicantInfo.website;
-	}
-
 	dbUtil.saveApplication(controlNumber, postData, function(err, appl) {
 
 		if (err) {

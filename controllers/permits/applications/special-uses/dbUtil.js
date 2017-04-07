@@ -153,7 +153,7 @@ const getApplication = function(controlNumber, callback){
 
 const getFiles = function(applicationId, callback){
 
-	models.files.findOne({
+	models.files.findAll({
 		where: {application_id: applicationId} 
 	})
 	.then(function(files) {
@@ -167,5 +167,6 @@ const getFiles = function(applicationId, callback){
 // exports
 
 module.exports.saveApplication = saveApplication;
-module.exports.saveFile = saveFile;
 module.exports.getApplication = getApplication;
+module.exports.saveFile = saveFile;
+module.exports.getFiles = getFiles;
