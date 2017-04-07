@@ -200,20 +200,17 @@ function fromAdminOrg(cnData, postSchema, jsonData, key){
 function getTopLevelField(intakeField, cnData, postSchema, jsonData, key){
 
 	switch (intakeField){
-	case 'middleLayer':
-		//jsonData[key] = getFromMiddleLayer(key)
-		break;
-	case 'none':
-		break;
-	case 'fromAdminOrg':
-		fromAdminOrg(cnData, postSchema, jsonData, key);
-		break;
-	default:
-		if (cnData.hasOwnProperty(postSchema[key].intake)){
+		case 'none':
+			break;
+		case 'fromAdminOrg':
+			fromAdminOrg(cnData, postSchema, jsonData, key);
+			break;
+		default:
+			if (cnData.hasOwnProperty(postSchema[key].intake)){
 	
-			jsonData[key] = cnData[postSchema[key].intake];
+				jsonData[key] = cnData[postSchema[key].intake];
 		
-		}
+			}
 	}
 
 }
@@ -385,54 +382,6 @@ function createPost(controlNumber, inputPost){
 	
 }
 
-function putUpload(uploadReq, uploadField, controlNumber, callback){
-
-	const uploadFile = {};
-
-	if (!uploadReq) {
-		console.log('uploadFile invalid error');
-	}
-	else if (uploadReq.length <= 0) {
-		console.log('uploadFile missing error');
-	}
-	else {
-		uploadFile.file = uploadReq[0];
-	}
-
-	if (uploadFile.file === undefined) {		
-		console.log('uploadFile undefined error');
-	}
-	else {
-		
-		uploadFile.originalname = uploadFile.file.originalname;
-		uploadFile.filename = path.parse(uploadFile.file.originalname).name;
-		uploadFile.ext = path.parse(uploadFile.file.originalname).ext;
-		uploadFile.size = uploadFile.file.size;
-		uploadFile.mimetype = uploadFile.file.mimetype;
-		uploadFile.encoding = uploadFile.file.encoding;
-		uploadFile.buffer = uploadFile.file.buffer;
-		uploadFile.keyname = `${controlNumber}/${uploadField}-${uploadFile.filename}-${Date.now()}${uploadFile.ext}`;
-
-		const params = {
-			Bucket: AWS_BUCKET_NAME, 
-			Key: uploadFile.keyname,
-			Body: uploadFile.buffer,
-			ACL: 'private' 
-		};
-
-		s3.putObject(params, function(err, data) {
-			if (err) {
-				console.error(err, err.stack);
-				return callback(err, null);
-			}
-			else {     
-				return callback(null, data);
-			}      
-		});			
-	}
-
-}
-
 function uploadFiles(controlNumber, files, callback){
  
 	const asyncTasks = [];
@@ -479,5 +428,4 @@ module.exports.buildErrorMessage = buildErrorMessage;
 module.exports.concatErrors = concatErrors;
 module.exports.copyGenericInfo = copyGenericInfo;
 module.exports.createPost = createPost;
-module.exports.putUpload = putUpload;
 module.exports.uploadFiles = uploadFiles;
