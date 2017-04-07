@@ -1,8 +1,8 @@
 {
-	"controlNumber":{"default":"", "intake":"accinstCn"},
-	"region": {"default":0, "intake":"fromAdminOrg"},
-	"forest": {"default":0, "intake":"fromAdminOrg"},
-	"district": {"default":0, "intake":"fromAdminOrg"},
+	"controlNumber": {"default":"", "intake":"accinstCn"},
+	"region": {"default":0, "intake":"middleLayer/region"},
+	"forest": {"default":0, "intake":"middleLayer/forest"},
+	"district": {"default":0, "intake":"middleLayer/district"},
 	"authorizingOfficerName": {"default":"", "intake":"authOfficerName"},
 	"authorizingOfficerTitle": {"default":"", "intake":"authOfficerTitle"},
 	"adminOrg": {"default":"", "intake":"adminOrg"},
@@ -29,15 +29,15 @@
 		"mailingState": {"default":"", "intake":"addresses/stateCode"},
 		"mailingZIP": {"default":0, "intake":"addresses/postalCode"},
 		"organizationName": {"default":"", "intake":"addresses/contName"},
-		"website": {"default":"", "intake":"middleLayer"},
+		"website": {"default":"", "intake":"middleLayer/website"},
 		"orgType": {"default":"", "intake":"holders/orgType"}
 	},
 	"noncommercialFields": {
-		"activityDescription": {"default":"", "intake":"middleLayer"},
-		"locationDescription": {"default":"", "intake":"middleLayer"},
-		"startDateTime": {"default":"", "intake":"middleLayer"},
-		"endDateTime": {"default":"", "intake":"middleLayer"},
-		"numberParticipants": {"default":0, "intake":"middleLayer"}
+		"activityDescription": {"default":"", "intake":"middleLayer/activity_description"},
+		"locationDescription": {"default":"", "intake":"middleLayer/location_description"},
+		"startDateTime": {"default":"", "intake":"middleLayer/start_datetime"},
+		"endDateTime": {"default":"", "intake":"middleLayer/end_datetime"},
+		"numberParticipants": {"default":0, "intake":"middleLayer/number_participants"}
 	},
 	"tempOutfitterFields": {
 		"activityDescription": {"default":"", "intake":"middleLayer"},

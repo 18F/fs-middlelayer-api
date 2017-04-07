@@ -37,6 +37,8 @@ get.id = function(req, res){
     
 	let jsonData = {};
 
+	const controlNumber = req.params.id;
+
 	const jsonResponse = {};
 	jsonResponse.success = false;
 	jsonResponse.api = 'FS ePermit API';
@@ -45,31 +47,22 @@ get.id = function(req, res){
 	jsonResponse.src = 'json';
 	jsonResponse.route = 'permits/special-uses/noncommercial/{controlNumber}';
 
-	const cnData = noncommercialData[1095010356];
+	const basicData = noncommercialData[1095010356];
 
-	if (cnData){
+	if (basicData){
 
-		const noncommercialFields = {};
-        
-		noncommercialFields.activityDescription = cnData.purpose;
-		noncommercialFields.locationDescription = null;
-		noncommercialFields.startDateTime = '2017-04-12 09:00:00';
-		noncommercialFields.endDateTime = '2017-04-15 20:00:00';
-		noncommercialFields.numberParticipants = 45;
+		dbUtil.getApplication(controlNumber, function(err, applicationData){
 
-		jsonData = util.copyGenericInfo(cnData, jsonData);
-		jsonData.noncommercialFields = noncommercialFields;
-
-		delete jsonData.tempOutfitterFields;
-		
-		dbUtil.getApplication('1000000000', function(err, appl){
 			if (err){
 				console.error(err);
 				error.sendError(req, res, 400, 'error getting application from database');
 			}
 			else {
-				
-				jsonData.applicantInfo.website = appl.website;
+
+				jsonData = util.copyGenericInfo(basicData, applicationData, jsonData);				
+
+				delete jsonData.tempOutfitterFields;
+
 				jsonResponse.success = true;
 				const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
 
@@ -122,13 +115,6 @@ const post = function(req, res){
 
 		// api database updates
 		const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString();
-
-		let website;
-
-		if (postData.applicantInfo.website){
-			website = postData.applicantInfo.website;
-		}
-		console.log('postData='+JSON.stringify(postData));
 
 		dbUtil.saveApplication(controlNumber, postData, function(err, appl) {
 

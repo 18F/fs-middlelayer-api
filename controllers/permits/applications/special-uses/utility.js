@@ -242,7 +242,7 @@ function getSubLevelField(cnData, postSchema, key, jsonData){
 
 }
 
-function buildGetResponse(cnData, schemaData, jsonData, postSchema){
+function buildGetResponse(cnData, applicationData, schemaData, jsonData, postSchema){
 
 	let key; 
 	for (key in schemaData){
@@ -250,23 +250,30 @@ function buildGetResponse(cnData, schemaData, jsonData, postSchema){
 		if (typeof jsonData[key] !== 'object'){
 			
 			const intakeField = postSchema[key].intake;
-			if (intakeField.indexOf('/') === -1){
-				
-				getTopLevelField(intakeField, cnData, postSchema, jsonData, key);
-			
+
+			if (intakeField.startsWith('middleLayer/')){
+				const applicationField = intakeField.split('/')[1];
+				jsonData[key] = applicationData[applicationField];
 			}
 			else {
-				
-				getSubLevelField(cnData, postSchema, key, jsonData);
+
+				if (intakeField.indexOf('/') === -1){
+					getTopLevelField(intakeField, cnData, postSchema, jsonData, key);	
+				}
+				else {
+					
+					getSubLevelField(cnData, postSchema, key, jsonData);
+				}
 			}
+			
 		}
 		else {
-			buildGetResponse(cnData, schemaData[key], jsonData[key], postSchema[key]);
+			buildGetResponse(cnData, applicationData, schemaData[key], jsonData[key], postSchema[key]);
 		}
 	}
 
 }
-function copyGenericInfo(cnData, jsonData){
+function copyGenericInfo(cnData, applicationData, jsonData){
 
 	const postSchema = include('controllers/permits/applications/special-uses/getSchema.json');
 	jsf.option({useDefaultValue:true});
@@ -274,7 +281,8 @@ function copyGenericInfo(cnData, jsonData){
 	delete schemaData.id;
 
 	jsonData = schemaData;
-	buildGetResponse(cnData, schemaData, jsonData, postSchema);
+
+	buildGetResponse(cnData, applicationData, schemaData, jsonData, postSchema);
 
 	/*
 		Lock down all fields expected to be returned

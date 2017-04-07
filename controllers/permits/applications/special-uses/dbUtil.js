@@ -11,6 +11,8 @@
 
 'use strict';
 
+/*eslint-disable camelcase*/
+
 //*******************************************************************
 // required modules
 
@@ -23,7 +25,7 @@ const saveApplication = function(controlNumber, applicationData, callback) {
 	let formName, activityDescription, locationDescription, startDateTime, endDateTime, numberParticipants;
 	let individualIsCitizen, smallBusiness, advertisingURL, advertisingDescription, clientCharges, experienceList;
 
-	if(applicationData.type === 'noncommercial') {
+	if (applicationData.type === 'noncommercial') {
 		formName = applicationData.noncommercialFields.formName;
 		activityDescription = applicationData.noncommercialFields.activityDescription;
 		locationDescription = applicationData.noncommercialFields.locationDescription;
@@ -98,18 +100,42 @@ const getApplication = function(controlNumber, callback){
 			return callback(null, appl);	
 		}
 		else {
+
 			// TO BE REMOVED begin -- create appl if not exist
-			models.applications.create({
-				control_number: controlNumber,
-				form_name: 'FS-2700-3f',
-				website: 'testweb1000000000.org'
-			})
-			.then(function(appl) {
-				return callback(null, appl);	
+
+			models.applications.findOne({
+				where: {control_number: '1000000000'} 
+			}).then(function(appl) {
+				if (appl){
+					return callback(null, appl);	
+				}
+				else {
+
+					models.applications.create({
+						control_number: '1000000000',
+						form_name: 'FS-2700-3f',
+						region: '11',
+						forest: '22',
+						district: '33',
+						website: 'testweb1000000000.org',
+						activity_description: 'test activity_description',
+						location_description: 'test location_description',
+						start_datetime: '2017-05-01T10:00:00Z',
+						end_datetime: '2017-05-05T19:00:00Z',
+						number_participants: 45
+					})
+					.then(function(appl) {
+						return callback(null, appl);	
+					})
+					.catch(function(err) {
+						return callback(err, null);
+					});
+				}
 			})
 			.catch(function(err) {
 				return callback(err, null);
 			});
+			
 			// TO BE REMOVED end -- create appl if not exist
 			//return callback('no record found', null);
 		}
