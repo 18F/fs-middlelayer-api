@@ -40,8 +40,8 @@
 		"numberParticipants": {"default":0, "intake":"middleLayer/number_participants"}
 	},
 	"tempOutfitterFields": {
-		"individualIsCitizen": {"default":"", "intake":"middleLayer/individual_is_citizen"},
-		"smallBusiness": {"default":"", "intake":"middleLayer/small_business"},
+		"individualIsCitizen": {"default":false, "intake":"middleLayer/individual_is_citizen"},
+		"smallBusiness": {"default":false, "intake":"middleLayer/small_business"},
 		"activityDescription": {"default":"", "intake":"middleLayer/activity_description"},
 		"advertisingURL": {"default":"", "intake":"middleLayer/advertising_url"},
 		"advertisingDescription":{"default":"", "intake":"middleLayer/advertising_description"},
