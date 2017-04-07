@@ -112,4 +112,15 @@ function copyGenericInfo(cnData, jsonData, outputSchema){
 	return jsonData;
 }
 
+function concatErrors(errorMessages){
+
+	let output = '';
+	errorMessages.forEach((message)=>{
+		output = `${output}${message} `;
+	});
+	output = output.trim();
+	return output;
+}
+
 module.exports.copyGenericInfo = copyGenericInfo;
+module.exports.concatErrors = concatErrors;
