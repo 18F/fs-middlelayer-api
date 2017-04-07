@@ -19,16 +19,21 @@ const router = express.Router();
 const include = require('include')(__dirname);
 
 const matchstick = require('matchstick');
+const multer = require('multer');
 
 const error = include('error.js');
 
 const controller = include('server');
 
 //*******************************************************************
+// storage
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+//*******************************************************************
 // router
-
-router.use('/:api/*', function(req, res, next){
-
+function process(req, res){
 	const mockAPI = req.params.api;
 	//console.log('\nmockAPI : ' + mockAPI );
 
@@ -76,27 +81,33 @@ router.use('/:api/*', function(req, res, next){
 
 	if (!swagPath) {
 		error.sendError(req, res, 404, 'Invalid endpoint.');
+		return false;
 	}
 	else {
 		//console.log('swagPath true : ' + swagPath );
 		if (!mockSwag.paths[swagPath][mockMethod]) {
 			error.sendError(req, res, 405, 'No endpoint method found.');
+			return false;
 		}
 		else {
 			//console.log('mockMethod true : ' + mockMethod );
 			if (!mockSwag.paths[swagPath][mockMethod].responses) {
 				error.sendError(req, res, 500, 'No endpoint responses found.');
+				return false;
 			}
 			else {
 				//console.log('response true : ' + JSON.stringify(mockSwag.paths[swagPath][mockMethod].responses) );
 				if (!mockSwag.paths[swagPath][mockMethod].responses['200']) {
 					error.sendError(req, res, 500, 'No endpoint success found.');
+					return false;
 				}
 				else {
 					if ( mockMethod === 'get'){
-						res.json(controller.get.id(req, res, mockSwag.paths[swagPath][mockMethod]));
+						return mockSwag.paths[swagPath][mockMethod]
 					}
 					else if (mockMethod === 'post'){
+
+						
 
 						res.json(controller.post.app(req, res, mockSwag.paths[swagPath][mockMethod]));
 
@@ -106,6 +117,33 @@ router.use('/:api/*', function(req, res, next){
 			}
 		}
 	}
+}
+
+router.get('/:api/*', function(req, res, next){
+	const pathInfo = process(req, res);
+	if (pathInfo){
+		res.json(controller.get.id(req, res, pathInfo));
+	}
+});
+
+const postUpload = upload.fields([
+	{ name: 'guideDocumentation', maxCount: 1 },
+	{ name: 'acknowledgementOfRiskForm', maxCount: 1 },
+	{ name: 'insuranceCertificate', maxCount: 1 },
+	{ name: 'goodStandingEvidence', maxCount: 1 },
+	{ name: 'operatingPlan', maxCount: 1 }
+]);
+
+router.post('/:api/*', postUpload, function(req, res, next){
+	const pathInfo = process(req, res);
+	if (pathInfo){
+		controller.post.app(req, res, pathInfo);
+	}
+});
+
+router.use('/:api/*', function(req, res, next){
+
+	
 
 	//next();
 
