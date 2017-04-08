@@ -124,8 +124,9 @@
                 "type": "string"
             },
             "guideDocumentation": {
+                "filetypecode":"gud",
                 "maxSize": 25,
-                "requiredFile":true,
+                "requiredFile":false,
                 "store":["middleLayer:guideDocumentation"],
                 "type": "file",
                 "validExtensions":[
@@ -135,6 +136,7 @@
                 ]
             },
             "acknowledgementOfRiskForm": {
+                "filetypecode":"arf",
                 "maxSize": 10,
                 "requirequiredFilered":false,
                 "store":["middleLayer:acknowledgementOfRiskForm"],
@@ -146,6 +148,7 @@
                 ]
             },
             "insuranceCertificate": {
+                "filetypecode":"inc",
                 "maxSize": 10,
                 "requiredFile":true,
                 "store":["middleLayer:insuranceCertificate"],
@@ -157,6 +160,7 @@
                 ]
             },
             "goodStandingEvidence": {
+                "filetypecode":"gse",
                 "maxSize": 10,
                 "requiredFile":true,
                 "store":["middleLayer:acknowledgementOfRiskForm"],
@@ -168,6 +172,7 @@
                 ]
             },
             "operatingPlan": {
+                "filetypecode":"opp",
                 "maxSize": 10,
                 "requiredFile":true,
                 "store":["middleLayer:operatingPlan"],
