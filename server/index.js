@@ -269,6 +269,10 @@ function handleAnyOfError(errorTracking, result, counter){
 	
 }
 
+/** Get the schema to be used for validating user input
+ * @param  {Object} pathData - All data from swagger for the path that has been run
+ * @return {Object} schemas - fullSchema is the full validation schemas for all permit types. schemaToUse is the validation schema for this route
+ */
 function getValidationSchema(pathData){
 	const fileToGet = `server/${pathData.validation.$ref.split('#')[0]}`;
 	const schemaToGet = pathData.validation.$ref.split('#')[1];
@@ -279,6 +283,11 @@ function getValidationSchema(pathData){
 	};
 }
 
+/** Validates the fields in user input
+ * @param  {Object} body - Input from user to be validated
+ * @param  {Object} pathData - All data from swagger for the path that has been run
+ * @return {Array[{ValidationError}]} - All field errors from validation
+ */
 function validateBody(body, pathData){
 	const schema = getValidationSchema(pathData);
 	const applicationSchema = schema.fullSchema;
@@ -291,6 +300,10 @@ function validateBody(body, pathData){
 	return error;
 }
 
+/** Processes ValidationError into ErrorObj, extracting the info needed to create an error message
+ * @param  {Array[{ValidationError}]} - All field errors from validation
+ * @param  {Array[{ErrorObjs}]} - Array to store processed ErrorObjs in
+ */
 function processErrors(errors, processedErrors){
 	const length = errors.length;
 	let counter;
