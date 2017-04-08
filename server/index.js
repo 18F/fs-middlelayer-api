@@ -443,7 +443,7 @@ function generateFileErrors(output, error, messages){
 	}
 }
 
-function generateErrors(output){
+function generateErrorMesage(output){
 
 	let errorMessage = '';
 	const messages = [];
@@ -491,113 +491,135 @@ function generateErrors(output){
 
 }
 
-const validateFile = function (uploadFile, validationConstraints){
-
-	const regex = `(^${validationConstraints.validExtensions.join('$|^')}$)`;
-	const errObjs = [];
-
-	if (uploadFile.ext && !uploadFile.ext.toLowerCase().match(regex)){
-		errObjs.push(makeErrorObj(uploadFile.filetype, 'invalidExtension', validationConstraints.validExtensions));
-	}
-	else if (fileMimes.indexOf(uploadFile.mimetype) < 0){
-		errObjs.push(makeErrorObj(uploadFile.filetype, 'invalidMime', fileMimes));
-	}
-	if (uploadFile.size === 0){
-		errObjs.push(makeErrorObj(uploadFile.filetype, 'invalidSizeSmall', 0));
-	}
-	else {
-		const fileSizeInMegabytes = uploadFile.size / 1000000.0;
-		if (fileSizeInMegabytes > validationConstraints.maxSize){
-			errObjs.push(makeErrorObj(uploadFile.filetype, 'invalidSizeLarge', validationConstraints.maxSize));
-		}
-	}
-
-	return errObjs;
-	
-};
-
-const filesToCheck = [];
-function checkForFilesInSchema(schema){
+//function checkForFilesInSubSchema(schema){}
+function checkForFilesInSchema(schema, toCheck){
 	
 	const keys = Object.keys(schema);
 	keys.forEach((key)=>{
 		switch (key){
 		case 'allOf':
-			for (let i = 0; i < schema.allOf.length; i++){
-				checkForFilesInSchema(schema.allOf[i]);
-			}
+			schema.allOf.forEach((sch)=>{
+				checkForFilesInSchema(sch, toCheck);
+			});
 			break;
 		case 'properties':
-			checkForFilesInSchema(schema.properties);
+			checkForFilesInSchema(schema.properties, toCheck);
 			break;
 		default:
 			if (schema[key].type === 'file'){
 				const obj = {};
 				obj[key] = schema[key];
-				filesToCheck.push(obj);
+				toCheck.push(obj);
 			}
 			else if (schema[key].type === 'object'){
-				checkForFilesInSchema(schema[key]);
+				checkForFilesInSchema(schema[key], toCheck);
 			}
 			break;
 		}
 	});
 }
 
-post.app = function(req, res, pathData){
+function getFileInfo(file, constraints){//fileInfo, files, key){
+	const uploadFile = {};
+
+	if (file){
+		uploadFile.file = file[0];
+
+		uploadFile.originalname = uploadFile.file.originalname;
+		uploadFile.filename = path.parse(uploadFile.file.originalname).name;
+		uploadFile.filetype = constraints[0];
+		//uploadFile.filetypecode = filesUploadList[i][1];
+		uploadFile.ext = path.parse(uploadFile.file.originalname).ext.split('.')[1];
+		uploadFile.size = uploadFile.file.size;
+		uploadFile.mimetype = uploadFile.file.mimetype;
+		uploadFile.encoding = uploadFile.file.encoding;
+		uploadFile.buffer = uploadFile.file.buffer;
+		//uploadFile.keyname = `${controlNumber}/${uploadField}-${uploadFile.filename}-${Date.now()}${uploadFile.ext}`;
+	}
+
+	return uploadFile;
+}
+
+const validateFile = function (uploadFile, validationConstraints, fileName){
+
+	const fileInfo = getFileInfo(uploadFile, validationConstraints);
+	const constraints = validationConstraints[fileName];
+	const regex = `(^${constraints.validExtensions.join('$|^')}$)`;
+	const errObjs = [];
+
+	if (uploadFile){
+		if (uploadFile.ext && !fileInfo.ext.toLowerCase().match(regex)){
+			errObjs.push(makeErrorObj(fileInfo.filetype, 'invalidExtension', constraints.validExtensions));
+		}
+		else if (fileMimes.indexOf(fileInfo.mimetype) < 0){
+			errObjs.push(makeErrorObj(fileInfo.filetype, 'invalidMime', fileMimes));
+		}
+		if (fileInfo.size === 0){
+			errObjs.push(makeErrorObj(fileInfo.filetype, 'invalidSizeSmall', 0));
+		}
+		else {
+			const fileSizeInMegabytes = fileInfo.size / 1000000.0;
+			if (fileSizeInMegabytes > constraints.maxSize){
+				errObjs.push(makeErrorObj(fileInfo.filetype, 'invalidSizeLarge', constraints.maxSize));
+			}
+		}
+	}
+	else if (constraints.requiredFile){
+		errObjs.push(makeErrorObj(fileName, 'requiredFileMissing'));
+	}
+
+	return errObjs;
 	
+};
+
+function getBody(req){
 	let inputPost = req.body;
 	if (inputPost.body) {
 		inputPost = JSON.parse(inputPost.body);
 	}
-	const derefFunc = deref();
-	const processedErrors = {
+	return inputPost;
+}
+function getFieldValidationErrors(body, pathData){
+	const processedFieldErrors = {
 		errorArray:[]
 	};
-	let fileErrors = [];
+	const fieldErrors = validateBody(body, pathData);
+	if (fieldErrors.length > 0){
+		processErrors(fieldErrors, processedFieldErrors);
+	}
+
+	return processedFieldErrors;
+}
+
+post.app = function(req, res, pathData){
+
+	const body = getBody(req);
+	const derefFunc = deref();
+	const filesToCheck = [];
 
 	const schema = getValidationSchema(pathData);
-	const errors = validateBody(inputPost, pathData);
+	const allErrors = getFieldValidationErrors(body, pathData);
 	const sch = derefFunc(schema.schemaToUse, [schema.fullSchema]);
-	checkForFilesInSchema(sch);
+	
+	//Files to validate are in filesToCheck
+	checkForFilesInSchema(sch, filesToCheck);
+	
 	if (filesToCheck.length !== 0 && req.files && Object.keys(req.files).length > 0){
-		filesToCheck.forEach((file)=>{
-			const key = Object.keys(file)[0];
-
-			const uploadFile = {};
-
-			const currentFile = req.files[key];
-			if (currentFile){
-				uploadFile.file = currentFile[0];
-
-				uploadFile.originalname = uploadFile.file.originalname;
-				uploadFile.filename = path.parse(uploadFile.file.originalname).name;
-				uploadFile.filetype = key;
-				//uploadFile.filetypecode = filesUploadList[i][1];
-				uploadFile.ext = path.parse(uploadFile.file.originalname).ext.split('.')[1];
-				uploadFile.size = uploadFile.file.size;
-				uploadFile.mimetype = uploadFile.file.mimetype;
-				uploadFile.encoding = uploadFile.file.encoding;
-				uploadFile.buffer = uploadFile.file.buffer;
-				//uploadFile.keyname = `${controlNumber}/${uploadField}-${uploadFile.filename}-${Date.now()}${uploadFile.ext}`;
-
-				fileErrors = fileErrors.concat(validateFile(uploadFile, file[key]));
-			}
-			else if (file[key].requiredFile){
-				fileErrors.push(makeErrorObj(key, 'requiredFileMissing'));
-			}
+		filesToCheck.forEach((fileConstraints)=>{
+			const key = Object.keys(fileConstraints)[0];
+			const fileValidationErrors = validateFile(req.files[key], fileConstraints, key);
+			allErrors.errorArray = allErrors.errorArray.concat(fileValidationErrors);
 		});
-		processedErrors.errorArray = processedErrors.errorArray.concat(fileErrors);
 	}
-	let errorMessage;
-	if (errors.length > 0){
-		processErrors(errors, processedErrors);
-		errorMessage = generateErrors(processedErrors);
-	}
-	if (processedErrors.errorArray.length !== 0){
-		return error.sendError(req, res, 400, errorMessage, processedErrors.errorArray);
+	const errorMessage = generateErrorMesage(allErrors);
+	if (allErrors.errorArray.length !== 0){
+		return error.sendError(req, res, 400, errorMessage, allErrors.errorArray);
 	}
 	else {
+		//save to db
+		//save to s3
+		//post to suds
+
 		const jsonResponse = {};
 		jsonResponse.success = true;
 		jsonResponse.api = 'FS ePermit API';
@@ -605,7 +627,7 @@ post.app = function(req, res, pathData){
 		jsonResponse.verb = req.method;
 		jsonResponse.src = 'json';
 		jsonResponse.route = req.originalUrl;
-		jsonResponse.origReq = inputPost;
+		jsonResponse.origReq = body;
 		res.json(jsonResponse);
 	}
 };
