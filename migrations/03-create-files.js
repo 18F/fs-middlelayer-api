@@ -7,21 +7,6 @@ module.exports = {
 				defaultValue: Sequelize.UUIDV4,
 				primaryKey: true
 			},
-			file_type: {
-				type: Sequelize.STRING,
-				allowNull: false,
-				references: {
-					model: 'file_types',
-					key:   'file_type'
-				}
-			},
-			file_name: {
-				type: Sequelize.STRING,
-				allowNull: false
-			},
-			file_path: {
-				type: Sequelize.STRING
-			},
 			application_id: {
 				allowNull: false,
 				references: {
@@ -32,6 +17,36 @@ module.exports = {
 				onDelete: 'cascade',
 				onUpdate: 'cascade',
 				type: Sequelize.UUID
+			},
+			file_type: {
+				type: Sequelize.STRING(10),
+				allowNull: false,
+				references: {
+					model: 'file_types',
+					key:   'file_type'
+				}
+			},
+			file_path: {
+				type: Sequelize.STRING(255),
+				allowNull: false
+			},
+			file_name: {
+				type: Sequelize.STRING(255)
+			},
+			file_originalname: {
+				type: Sequelize.STRING(255)
+			},
+			file_ext: {
+				type: Sequelize.STRING(20)
+			},
+			file_size: {
+				type: Sequelize.BIGINT
+			},
+			file_mimetype: {
+				type: Sequelize.STRING(100)
+			},
+			file_encoding: {
+				type: Sequelize.STRING(100)
 			},
 			created: {
 				allowNull: false,
