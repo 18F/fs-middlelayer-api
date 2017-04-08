@@ -520,22 +520,23 @@ function checkForFilesInSchema(schema, toCheck){
 	});
 }
 
-function getFileInfo(file, constraints){//fileInfo, files, key){
+function getFileInfo(file, constraints){
 	const uploadFile = {};
-
+	const uploadField = Object.keys(constraints)[0];
 	if (file){
-		uploadFile.file = file[0];
+		const filename = path.parse(file[0].originalname).name;
 
+		uploadFile.file = file[0];
 		uploadFile.originalname = uploadFile.file.originalname;
-		uploadFile.filename = path.parse(uploadFile.file.originalname).name;
-		uploadFile.filetype = constraints[0];
-		//uploadFile.filetypecode = filesUploadList[i][1];
+		uploadFile.filetype = Object.keys(constraints)[0];
+		uploadFile.filetypecode = constraints[uploadFile.filetype].filetypecode;
 		uploadFile.ext = path.parse(uploadFile.file.originalname).ext.split('.')[1];
 		uploadFile.size = uploadFile.file.size;
 		uploadFile.mimetype = uploadFile.file.mimetype;
 		uploadFile.encoding = uploadFile.file.encoding;
 		uploadFile.buffer = uploadFile.file.buffer;
-		//uploadFile.keyname = `${controlNumber}/${uploadField}-${uploadFile.filename}-${Date.now()}${uploadFile.ext}`;
+		uploadFile.filename = uploadField + '-' + filename + '-' + Date.now() + uploadFile.ext;
+
 	}
 
 	return uploadFile;
@@ -572,7 +573,10 @@ const validateFile = function (uploadFile, validationConstraints, fileName){
 	return errObjs;
 	
 };
-
+/** If body passed in as string, converts it to a JSON object
+ * @param  {Object} req - request object
+ * @return {Object} - request body as a JSON Object
+ */
 function getBody(req){
 	let inputPost = req.body;
 	if (inputPost.body) {
@@ -580,11 +584,20 @@ function getBody(req){
 	}
 	return inputPost;
 }
+/**
+ * @param  {Object} body - user input
+ * @param  {[Object} pathData - data from swagger.json
+ * @return {[Array[ErrorObj]} - List of all field errors found
+ */
 function getFieldValidationErrors(body, pathData){
 	const processedFieldErrors = {
 		errorArray:[]
 	};
 	const fieldErrors = validateBody(body, pathData);
+	//If contactID
+		//Ensure contact exists
+
+		//If not, error
 	if (fieldErrors.length > 0){
 		processErrors(fieldErrors, processedFieldErrors);
 	}
@@ -592,7 +605,7 @@ function getFieldValidationErrors(body, pathData){
 	return processedFieldErrors;
 }
 
-/**
+/** Gets list of fields that are to be stored in DB
  * @param  {Object} schema - Schema to look through to find any fields to store in DB
  * @param  {Array[String]} fieldsToStore - Array containing names of field to store in DB
  */
@@ -626,7 +639,6 @@ function getFieldsToStoreInDB(schema, fieldsToStore, path){
 				storeInMiddle = false;
 			}
 			if (storeInMiddle){
-				//console.log(JSON.stringify(schema,null,4) + '\n\n\n\n')
 				const obj = {};
 
 				if (path !== ''){
@@ -645,6 +657,11 @@ function getFieldsToStoreInDB(schema, fieldsToStore, path){
 	});
 }
 
+/** Formats data from user input, that needs to be submitted to DB, so that DB can receive it.
+ * @param  {Object} schema - Schema of application being submitted
+ * @param  {Object} body - User input
+ * @return {Object} - Containing key:value pairs for all fields expected to be stored in DB
+ */
 function getDataToStoreInDB(schema, body){
 	const fieldsToStoreInDB = [];
 	const output = {};
@@ -669,7 +686,7 @@ post.app = function(req, res, pathData){
 
 	const body = getBody(req);
 	const derefFunc = deref();
-	const filesToCheck = [];
+	const possbileFiles = [];
 	//const basicRequests = [];
 
 	const schema = getValidationSchema(pathData);
@@ -677,10 +694,10 @@ post.app = function(req, res, pathData){
 	const sch = derefFunc(schema.schemaToUse, [schema.fullSchema]);
 	
 	//Files to validate are in filesToCheck
-	checkForFilesInSchema(sch, filesToCheck);
-	
-	if (filesToCheck.length !== 0 && req.files && Object.keys(req.files).length > 0){
-		filesToCheck.forEach((fileConstraints)=>{
+	checkForFilesInSchema(sch, possbileFiles);
+
+	if (possbileFiles.length !== 0){
+		possbileFiles.forEach((fileConstraints)=>{
 			const key = Object.keys(fileConstraints)[0];
 			const fileValidationErrors = validateFile(req.files[key], fileConstraints, key);
 			allErrors.errorArray = allErrors.errorArray.concat(fileValidationErrors);
@@ -699,7 +716,20 @@ post.app = function(req, res, pathData){
 				return error.sendError(req, res, 500, err);
 			}
 			else {
-				//save file info to db
+				const fileErrors = [];
+				possbileFiles.forEach((fileConstraints)=>{
+					const key = Object.keys(fileConstraints)[0];
+					const fileInfo = getFileInfo(req.files[key], fileConstraints);
+					fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
+
+					dbUtil.saveFile(appl.id, fileInfo, function(err, file) { // eslint-disable-line no-unused-vars
+
+						if (err) {
+							fileErrors.push(fileInfo.filetype + ' failed to save.');
+						}
+
+					});
+				});
 				//save to s3
 				//post to suds
 				const jsonResponse = {};
