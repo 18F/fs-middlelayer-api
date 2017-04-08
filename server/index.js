@@ -15,6 +15,7 @@
 // required modules
 
 const include = require('include')(__dirname);
+const dbUtil = require('./dbUtil.js');
 
 //*******************************************************************
 // validation
@@ -591,11 +592,85 @@ function getFieldValidationErrors(body, pathData){
 	return processedFieldErrors;
 }
 
+/**
+ * @param  {Object} schema - Schema to look through to find any fields to store in DB
+ * @param  {Array[String]} fieldsToStore - Array containing names of field to store in DB
+ */
+function getFieldsToStoreInDB(schema, fieldsToStore, path){
+	const keys = Object.keys(schema);
+	keys.forEach((key)=>{
+		switch (key){
+		case 'allOf':
+			for (let i = 0; i < schema.allOf.length; i++){
+				getFieldsToStoreInDB(schema.allOf[i], fieldsToStore, `${path}`);
+			}
+			break;
+		case 'properties':
+			getFieldsToStoreInDB(schema.properties, fieldsToStore, `${path}`);
+			break;
+		case 'oneOf':
+			for (let i = 0; i < schema.oneOf.length; i++){
+				getFieldsToStoreInDB(schema.oneOf[i], fieldsToStore, `${path}`);
+			}
+			break;
+		default:
+			const store = schema[key].store;
+			let storeInMiddle = false;
+			if (store){
+				store.forEach((place)=>{
+					const location = place.split(':')[0];
+					storeInMiddle = storeInMiddle || (location === 'middleLayer');
+				});
+			}
+			if (schema[key].type === 'file'){
+				storeInMiddle = false;
+			}
+			if (storeInMiddle){
+				//console.log(JSON.stringify(schema,null,4) + '\n\n\n\n')
+				const obj = {};
+
+				if (path !== ''){
+					obj[`${path.slice(path.indexOf('.') + 1)}.${key}`] = schema[key];
+				}
+				else {
+					obj[`${key}`] = schema[key];
+				}
+				fieldsToStore.push(obj);
+			}
+			else if (schema[key].type === 'object'){
+				getFieldsToStoreInDB(schema[key], fieldsToStore, `${path}.${key}`);
+			}
+			break;
+		}
+	});
+}
+
+function getDataToStoreInDB(schema, body){
+	const fieldsToStoreInDB = [];
+	const output = {};
+	getFieldsToStoreInDB(schema, fieldsToStoreInDB, '');
+	fieldsToStoreInDB.forEach((field)=>{
+		const path = Object.keys(field)[0];
+		const splitPath = path.split('.');
+		let bodyField = body;
+		splitPath.forEach((sp)=>{
+			bodyField = bodyField[sp];
+		});
+		if ((typeof bodyField) === 'undefined'){
+			bodyField = field[path].default;
+		}
+		const dbField = field[path].store[0].split(':')[1];
+		output[dbField] = bodyField;
+	});
+	return output;
+}
+
 post.app = function(req, res, pathData){
 
 	const body = getBody(req);
 	const derefFunc = deref();
 	const filesToCheck = [];
+	//const basicRequests = [];
 
 	const schema = getValidationSchema(pathData);
 	const allErrors = getFieldValidationErrors(body, pathData);
@@ -616,19 +691,29 @@ post.app = function(req, res, pathData){
 		return error.sendError(req, res, 400, errorMessage, allErrors.errorArray);
 	}
 	else {
+		const toStoreInDB = getDataToStoreInDB(sch, body);
+		const controlNumber = Math.floor((Math.random() * 10000000000) + 1);
+		toStoreInDB.control_number = controlNumber; // eslint-disable-line camelcase
+		dbUtil.saveApplication(controlNumber, toStoreInDB, function(err, appl){
+			if (err){
+				return error.sendError(req, res, 500, err);
+			}
+			else {
+				//save file info to db
+				//save to s3
+				//post to suds
+				const jsonResponse = {};
+				jsonResponse.success = true;
+				jsonResponse.api = 'FS ePermit API';
+				jsonResponse.type = 'controller';
+				jsonResponse.verb = req.method;
+				jsonResponse.src = 'json';
+				jsonResponse.route = req.originalUrl;
+				jsonResponse.origReq = body;
+				return res.json(jsonResponse);
+			}
+		});
 		//save to db
-		//save to s3
-		//post to suds
-
-		const jsonResponse = {};
-		jsonResponse.success = true;
-		jsonResponse.api = 'FS ePermit API';
-		jsonResponse.type = 'controller';
-		jsonResponse.verb = req.method;
-		jsonResponse.src = 'json';
-		jsonResponse.route = req.originalUrl;
-		jsonResponse.origReq = body;
-		res.json(jsonResponse);
 	}
 };
 //*******************************************************************
