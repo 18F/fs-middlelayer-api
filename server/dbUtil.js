@@ -19,47 +19,8 @@ const models = include('models');
 
 //*******************************************************************
 
-const saveApplication = function(controlNumber, applicationData, callback) {
-	let formName, activityDescription, locationDescription, startDateTime, endDateTime, numberParticipants;
-	let individualIsCitizen, smallBusiness, advertisingURL, advertisingDescription, clientCharges, experienceList;
-
-	if (applicationData.type === 'noncommercial') {
-		formName = applicationData.noncommercialFields.formName;
-		activityDescription = applicationData.noncommercialFields.activityDescription;
-		locationDescription = applicationData.noncommercialFields.locationDescription;
-		startDateTime = applicationData.noncommercialFields.startDateTime;
-		endDateTime = applicationData.noncommercialFields.endDateTime;
-		numberParticipants = applicationData.noncommercialFields.numberParticipants;
-	}
-	else if (applicationData.type === 'tempOutfitters') {
-		formName = applicationData.tempOutfitterFields.formName;
-		activityDescription = applicationData.tempOutfitterFields.activityDescription;
-		individualIsCitizen = applicationData.tempOutfitterFields.individualIsCitizen;
-		smallBusiness = applicationData.tempOutfitterFields.smallBusiness;
-		advertisingURL = applicationData.tempOutfitterFields.advertisingURL;
-		advertisingDescription = applicationData.tempOutfitterFields.advertisingDescription;
-		clientCharges = applicationData.tempOutfitterFields.clientCharges;
-		experienceList = applicationData.tempOutfitterFields.experienceList;
-	}
-	models.applications.create({
-		control_number: controlNumber,
-		form_name: formName, 
-		region: applicationData.region,
-		forest: applicationData.forest,
-		district: applicationData.district,
-		website: applicationData.applicantInfo.website,
-		activity_description: activityDescription,
-		location_description: locationDescription,
-		start_datetime: startDateTime,
-		end_datetime: endDateTime,
-		number_participants: numberParticipants,
-		individual_is_citizen: individualIsCitizen,
-		small_business: smallBusiness,
-		advertising_url: advertisingURL,
-		advertising_description: advertisingDescription,
-		client_charges: clientCharges,
-		experience_list: experienceList
-	})
+const saveApplication = function(controlNumber, toStore, callback) {
+	models.applications.create(toStore)
 	.then(function(appl) {
 		return callback(null, appl);
 	})
