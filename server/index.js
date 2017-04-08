@@ -16,6 +16,24 @@
 
 const include = require('include')(__dirname);
 const dbUtil = require('./dbUtil.js');
+const AWS = require('aws-sdk');
+const async = require('async');
+
+//*************************************************************
+// AWS
+
+const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
+const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
+const AWS_REGION = process.env.AWS_REGION;
+const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME;
+
+AWS.config.update({
+	accessKeyId: AWS_ACCESS_KEY_ID,
+	secretAccessKey: AWS_SECRET_ACCESS_KEY,
+	region: AWS_REGION
+});
+
+const s3 = new AWS.S3();
 
 //*******************************************************************
 // validation
@@ -681,6 +699,50 @@ function getDataToStoreInDB(schema, body){
 		output[dbField] = bodyField;
 	});
 	return output;
+}
+
+function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, application, callback){
+	const asyncTasks = [];
+
+	possbileFiles.forEach((fileConstraints)=>{
+
+		asyncTasks.push(function(callback){
+			
+			const key = Object.keys(fileConstraints)[0];
+			const fileInfo = getFileInfo(files[key], fileConstraints);
+			fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
+			dbUtil.saveFile(application.id, fileInfo, function(err, file) { // eslint-disable-line no-unused-vars
+				if (err) {
+					return error.sendError(req, res, 500, `${fileInfo.filetype} failed to save`);
+				}
+				const params = {
+					Bucket: AWS_BUCKET_NAME, 
+					Key: fileInfo.keyname,
+					Body: fileInfo.buffer,
+					ACL: 'private' 
+				};
+
+				s3.putObject(params, function(err, data) {
+					if (err) {
+						console.error(err, err.stack);
+						return callback(err, null);
+					}
+					else {     
+						return callback(null, data);
+					}      
+				});
+
+			});
+		});
+	});
+	async.parallel(asyncTasks, function(err, data){
+		if (err){
+			return callback(err, null);
+		}
+		else {
+			return callback(null, data);
+		}
+	});
 }
 
 post.app = function(req, res, pathData){
