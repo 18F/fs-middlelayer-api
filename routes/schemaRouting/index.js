@@ -25,6 +25,8 @@ const error = include('error.js');
 
 const controller = include('server');
 
+const mockSwag = include('server/swagger.json');
+
 //*******************************************************************
 // storage
 
@@ -36,16 +38,6 @@ const upload = multer({ storage: storage });
 function process(req, res){
 	const mockAPI = req.params.api;
 	//console.log('\nmockAPI : ' + mockAPI );
-
-	let mockSwag;
-
-	try {
-		mockSwag = include(`server/${mockAPI}.json`);	
-	}
-	catch (e) {
-		error.sendError(req, res, 405, 'No mock endpoint server found.');
-		return;
-	}
 
 	const mockPath = `/${req.params[0]}`;
 	const mockMethod = req.method.toLowerCase();
@@ -102,29 +94,16 @@ function process(req, res){
 					return false;
 				}
 				else {
-					if ( mockMethod === 'get'){
-						return mockSwag.paths[swagPath][mockMethod]
-					}
-					else if (mockMethod === 'post'){
-
-						
-
-						res.json(controller.post.app(req, res, mockSwag.paths[swagPath][mockMethod]));
-
-					}
-					//console.log('200 true : ' + JSON.stringify(mockSwag.paths[swagPath][mockMethod].responses['200']) );
+					
+					return mockSwag.paths[swagPath][mockMethod]
+	
 				}
 			}
 		}
 	}
 }
 
-router.get('/:api/*', function(req, res, next){
-	const pathInfo = process(req, res);
-	if (pathInfo){
-		res.json(controller.get.id(req, res, pathInfo));
-	}
-});
+//function getFiles(schema){const allFiles = [];return allFiles;}
 
 const postUpload = upload.fields([
 	{ name: 'guideDocumentation', maxCount: 1 },
@@ -134,19 +113,17 @@ const postUpload = upload.fields([
 	{ name: 'operatingPlan', maxCount: 1 }
 ]);
 
-router.post('/:api/*', postUpload, function(req, res, next){
+router.use('/:api/*', postUpload, function(req, res, next){
 	const pathInfo = process(req, res);
 	if (pathInfo){
-		controller.post.app(req, res, pathInfo);
+		const method = req.method.toLowerCase();
+		if (method === 'get'){
+			controller.get.id(req, res, pathInfo);
+		}
+		else if (method === 'post'){
+			controller.post.app(req, res, pathInfo);
+		}
 	}
-});
-
-router.use('/:api/*', function(req, res, next){
-
-	
-
-	//next();
-
 });
 
 //*******************************************************************
