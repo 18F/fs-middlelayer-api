@@ -3,10 +3,6 @@ const include = require('include')(__dirname);
 
 function fromAdminOrg(cnData, postSchema, jsonData, key){
 
-	//console.log('POSTSCHEMA: \n');
-	//console.log(`${JSON.stringify(postSchema.adminOrg)}`);
-	//console.log('cnData');
-	//console.log(cnData);
 	const adminOrg = cnData[postSchema.adminOrg.intake];
 	switch (key){
 	case 'region':
@@ -75,7 +71,6 @@ function buildGetResponse(cnData, schemaData, jsonData, postSchema){
 		if (typeof jsonData[key] !== 'object'){
 			
 			const intakeField = postSchema[key].intake;
-			console.log(key)
 			if (intakeField.indexOf('/') === -1){
 				
 				getTopLevelField(intakeField, cnData, postSchema, jsonData, key);
@@ -94,20 +89,13 @@ function buildGetResponse(cnData, schemaData, jsonData, postSchema){
 }
 function copyGenericInfo(cnData, jsonData, outputSchema){
 
-	//const postSchema = include('controllers/permits/applications/special-uses/getSchema.json');
 	//Get from schema
 	jsf.option({useDefaultValue:true});
 	const schemaData = jsf(outputSchema);
-	//console.log(schemaData);
-	console.log(jsonData);
 	delete schemaData.id;
 
 	jsonData = schemaData;
 	buildGetResponse(cnData, schemaData, jsonData, outputSchema);
-
-	/*
-		Lock down all fields expected to be returned
-	*/
 
 	return jsonData;
 }
