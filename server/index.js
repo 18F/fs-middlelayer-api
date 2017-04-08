@@ -20,7 +20,7 @@ const include = require('include')(__dirname);
 // validation
 
 const errors = require('./patternErrorMessages.json');
-const error = require('./error.js')
+const error = require('./error.js');
 
 const Validator = require('jsonschema').Validator;
 const v = new Validator();
@@ -44,8 +44,11 @@ const post = {};
 
 // get id
 
+function getBasicRes(pathData){
+	return include(pathData.mockOutput);
+}
 get.id = function(req, res, pathData){
-	const applicationData = include(pathData.mockOutput);
+	const applicationData = getBasicRes(pathData);
 
 	let jsonData = {};
 
@@ -62,7 +65,7 @@ get.id = function(req, res, pathData){
 	jsonData = util.copyGenericInfo(cnData, jsonData, pathData.getTemplate);
 	const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
 
-	return toReturn;
+	res.json(toReturn);
 
 };
 
