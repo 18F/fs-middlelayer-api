@@ -779,34 +779,25 @@ post.app = function(req, res, pathData){
 				return error.sendError(req, res, 500, err);
 			}
 			else {
-				const fileErrors = [];
-				possbileFiles.forEach((fileConstraints)=>{
-					const key = Object.keys(fileConstraints)[0];
-					const fileInfo = getFileInfo(req.files[key], fileConstraints);
-					fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
-
-					dbUtil.saveFile(appl.id, fileInfo, function(err, file) { // eslint-disable-line no-unused-vars
-
-						if (err) {
-							fileErrors.push(fileInfo.filetype + ' failed to save.');
-						}
-
-					});
+				saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
+					if (err){
+						return error.sendError(req, res, 500, err);
+					}
+					else {
+						console.log('controlNumber\n\n\n\n\n\n\n' + controlNumber);
+						const jsonResponse = {};
+						jsonResponse.success = true;
+						jsonResponse.api = 'FS ePermit API';
+						jsonResponse.type = 'controller';
+						jsonResponse.verb = req.method;
+						jsonResponse.src = 'json';
+						jsonResponse.route = req.originalUrl;
+						jsonResponse.origReq = body;
+						return res.json(jsonResponse);
+					}
 				});
-				//save to s3
-				//post to suds
-				const jsonResponse = {};
-				jsonResponse.success = true;
-				jsonResponse.api = 'FS ePermit API';
-				jsonResponse.type = 'controller';
-				jsonResponse.verb = req.method;
-				jsonResponse.src = 'json';
-				jsonResponse.route = req.originalUrl;
-				jsonResponse.origReq = body;
-				return res.json(jsonResponse);
 			}
 		});
-		//save to db
 	}
 };
 //*******************************************************************
