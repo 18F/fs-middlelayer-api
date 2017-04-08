@@ -177,6 +177,12 @@
                     "docx",
                     "rtf"
                 ]
+            },
+            "formName":{
+                "basicField":"formName",
+                "default":"FS-2700-4i",
+                "store":["middleLayer:form_name", "basic:/application"],
+                "type":"string"
             }
         },
         "allOf":[
@@ -299,6 +305,12 @@
                 "fromIntake":true,
                 "store":["middleLayer:number_participants"],
                 "type": "integer"
+            },
+            "formName":{
+                "basicField":"formName",
+                "default":"FS-2700-3b",
+                "store":["middleLayer:form_name", "basic:/application"],
+                "type":"string"
             }
         },
         "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime", "numberParticipants"]
