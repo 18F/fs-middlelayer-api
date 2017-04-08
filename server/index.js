@@ -609,21 +609,21 @@ function getFieldValidationErrors(body, pathData){
  * @param  {Object} schema - Schema to look through to find any fields to store in DB
  * @param  {Array[String]} fieldsToStore - Array containing names of field to store in DB
  */
-function getFieldsToStoreInDB(schema, fieldsToStore, path){
+function getFieldsToStoreInDB(schema, fieldsToStore, path, saveLocation){
 	const keys = Object.keys(schema);
 	keys.forEach((key)=>{
 		switch (key){
 		case 'allOf':
 			for (let i = 0; i < schema.allOf.length; i++){
-				getFieldsToStoreInDB(schema.allOf[i], fieldsToStore, `${path}`);
+				getFieldsToStoreInDB(schema.allOf[i], fieldsToStore, `${path}`, saveLocation);
 			}
 			break;
 		case 'properties':
-			getFieldsToStoreInDB(schema.properties, fieldsToStore, `${path}`);
+			getFieldsToStoreInDB(schema.properties, fieldsToStore, `${path}`, saveLocation);
 			break;
 		case 'oneOf':
 			for (let i = 0; i < schema.oneOf.length; i++){
-				getFieldsToStoreInDB(schema.oneOf[i], fieldsToStore, `${path}`);
+				getFieldsToStoreInDB(schema.oneOf[i], fieldsToStore, `${path}`, saveLocation);
 			}
 			break;
 		default:
@@ -632,7 +632,7 @@ function getFieldsToStoreInDB(schema, fieldsToStore, path){
 			if (store){
 				store.forEach((place)=>{
 					const location = place.split(':')[0];
-					storeInMiddle = storeInMiddle || (location === 'middleLayer');
+					storeInMiddle = storeInMiddle || (location === saveLocation);
 				});
 			}
 			if (schema[key].type === 'file'){
@@ -650,7 +650,7 @@ function getFieldsToStoreInDB(schema, fieldsToStore, path){
 				fieldsToStore.push(obj);
 			}
 			else if (schema[key].type === 'object'){
-				getFieldsToStoreInDB(schema[key], fieldsToStore, `${path}.${key}`);
+				getFieldsToStoreInDB(schema[key], fieldsToStore, `${path}.${key}`, saveLocation);
 			}
 			break;
 		}
@@ -665,7 +665,8 @@ function getFieldsToStoreInDB(schema, fieldsToStore, path){
 function getDataToStoreInDB(schema, body){
 	const fieldsToStoreInDB = [];
 	const output = {};
-	getFieldsToStoreInDB(schema, fieldsToStoreInDB, '');
+	getFieldsToStoreInDB(schema, fieldsToStoreInDB, '', 'middleLayer');
+	const otherFields = [];
 	fieldsToStoreInDB.forEach((field)=>{
 		const path = Object.keys(field)[0];
 		const splitPath = path.split('.');
