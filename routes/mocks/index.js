@@ -59,6 +59,7 @@ router.use('/:api/*', function(req, res, next){
 				console.log('ms.matches : ' + JSON.stringify(ms.matches ) );
 
 				swagPath = k;
+				break;
 			}
 	    }
 	}
