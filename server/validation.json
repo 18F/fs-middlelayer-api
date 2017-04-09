@@ -94,9 +94,10 @@
                 "type":"boolean"
             },
             "activityDescription": {
+                "basicField":"purpose",
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:activity_description"],
+                "store":["middleLayer:activity_description", "basic:/application"],
                 "type": "string"
             },
             "advertisingURL": {
@@ -463,7 +464,7 @@
                 "default":"",
                 "fromIntake":false,
                 "madeOf":["region","forest","district"],
-                "store":["basic:/application", "basic:/contact/address", "basic://contact/phone"],
+                "store":["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
                 "type" : "string"
             },
             "managingID":{
