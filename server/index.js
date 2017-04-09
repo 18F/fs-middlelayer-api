@@ -15,9 +15,12 @@
 // required modules
 
 const include = require('include')(__dirname);
-const dbUtil = require('./dbUtil.js');
 const AWS = require('aws-sdk');
 const async = require('async');
+const request = require('request-promise');
+const Validator = require('jsonschema').Validator;
+const deref = require('deref');
+const path = require('path');
 
 //*************************************************************
 // AWS
@@ -36,17 +39,14 @@ AWS.config.update({
 const s3 = new AWS.S3();
 
 //*******************************************************************
-// validation
+// other files
 
 const errors = require('./patternErrorMessages.json');
 const error = require('./error.js');
-
-const Validator = require('jsonschema').Validator;
-const v = new Validator();
-
+const dbUtil = require('./dbUtil.js');
 const util = require('./util.js');
-const deref = require('deref');
-const path = require('path');
+
+const v = new Validator();
 
 const fileMimes = [
 	'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -54,6 +54,7 @@ const fileMimes = [
 	'text/rtf',
 	'application/pdf'
 ];
+const basicURL = process.env.BASICURL;
 
 //*******************************************************************
 // controller
@@ -844,6 +845,7 @@ function getBasicFields(fields, body, autoPopValues){
 	});
 	return postObjs;
 }
+
 function prepareBasicPost(sch, body){
 	const otherFields = [];
 	getFieldsToStoreInDB(sch, otherFields, '', 'basic');
@@ -851,6 +853,65 @@ function prepareBasicPost(sch, body){
 	const autoPopulateValues = buildAutoPopulatedFields(toBuild, body);
 	const fieldsToPost = getBasicFields(otherFields, body, autoPopulateValues);
 	return fieldsToPost;
+}
+
+function createContact(fieldsObj, person){
+	return new Promise(function(fulfill, reject){
+		let contactField, createApplicationURL;
+		console.log('person')
+		console.log(person)
+		if (person){
+			contactField = fieldsObj['/contact/person'];
+			createApplicationURL = `${basicURL}/contact/person/`;
+		}
+		else {
+			contactField = fieldsObj['/contact/organization'];
+			createApplicationURL = `${basicURL}/contact/organization/`;
+		}
+		const createContactOptions = {
+			method: 'POST',
+			uri: createApplicationURL,
+			body: contactField,
+			json: true
+		};
+		request(createContactOptions)
+		.then(function(res){
+			const cn = res.contCn;
+			const addressField = fieldsObj['/contact/address'];
+			addressField.contact = cn;
+			const addressURL = `${basicURL}/contact-address/`;
+			const createAddressOptions = {
+				method: 'POST',
+				uri: addressURL,
+				body: addressField,
+				json: true
+			};
+			return request(createAddressOptions);
+		})
+		.then(function(res){
+			const cn = res.contact;
+			const phoneField = fieldsObj['/contact/phone'];
+			phoneField.contact = cn;
+			const phoneURL = `${basicURL}/contact-phone/`;
+			const createPhoneOptions = {
+				method: 'POST',
+				uri: phoneURL,
+				body: phoneField,
+				json: true
+			};
+			return request(createPhoneOptions);
+		})
+		.then(function(res){
+			fulfill(res.contact);
+		})
+		.catch(function(err){
+			reject(err);
+		});
+	});
+}
+
+function postToBasic(fieldsToPost){
+
 }
 
 post.app = function(req, res, pathData){
@@ -893,16 +954,69 @@ post.app = function(req, res, pathData){
 					else {
 
 						const fieldsToPost = prepareBasicPost(sch, body);
+						const fieldsObj = {};
+						fieldsToPost.forEach((post)=>{
+							const key = Object.keys(post)[0];
+							fieldsObj[key] = post[key];
+						});
+						console.log(fieldsObj);
+						//postToBasic(fieldsToPost);
 
-						const jsonResponse = {};
-						jsonResponse.success = true;
-						jsonResponse.api = 'FS ePermit API';
-						jsonResponse.type = 'controller';
-						jsonResponse.verb = req.method;
-						jsonResponse.src = 'json';
-						jsonResponse.route = req.originalUrl;
-						jsonResponse.origReq = body;
-						return res.json(jsonResponse);
+						//const org = (body.applicantInfo.orgType !== 'Individual');
+						const existingContactCheck = `${basicURL}/contact/person/${body.applicantInfo.lastName}/`;
+
+						/*
+						if (org && body.applicantInfo.orgType){
+							const orgName = body.applicantInfo.organizationName;
+							existingContactCheck = `${basicURL}/contact/organization/${orgName}/`;
+						}
+						else {
+							const lastName = body.applicantInfo.lastName;
+							
+						}
+						*/
+						const getContactOptions = {
+							method: 'GET',
+							uri: existingContactCheck,
+							qs:{},
+							json: true
+						};
+						request(getContactOptions)
+						.then(function(res){
+							if (res.contCN){
+								Promise.resolve(res.contCN);
+							}
+							else {
+								return createContact(fieldsObj, true);
+							}
+						})
+						.then(function(contCN){
+							const createApplicationURL = `${basicURL}/application/`;
+							fieldsObj['/application'].contCn = contCN;
+							const applicationPost = fieldsObj['/application'];
+							const createApplicationOptions = {
+								method: 'POST',
+								uri: createApplicationURL,
+								body: applicationPost,
+								json: true
+							};
+							return request(createApplicationOptions);
+						})
+						.then(function(){
+							const jsonResponse = {};
+							jsonResponse.success = true;
+							jsonResponse.api = 'FS ePermit API';
+							jsonResponse.type = 'controller';
+							jsonResponse.verb = req.method;
+							jsonResponse.src = 'json';
+							jsonResponse.route = req.originalUrl;
+							jsonResponse.origReq = body;
+							jsonResponse.accinstCn = res.accinstCn;
+							return res.json(jsonResponse);
+						})
+						.catch(function(err){
+							return error.sendError(req, res, 500, err);
+						});
 					}
 				});
 			}
