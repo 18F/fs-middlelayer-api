@@ -684,7 +684,6 @@ function getDataToStoreInDB(schema, body){
 	const fieldsToStoreInDB = [];
 	const output = {};
 	getFieldsToStoreInDB(schema, fieldsToStoreInDB, '', 'middleLayer');
-	const otherFields = [];
 	fieldsToStoreInDB.forEach((field)=>{
 		const path = Object.keys(field)[0];
 		const splitPath = path.split('.');
@@ -745,12 +744,120 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 	});
 }
 
+/** Finds basic API fields are to be auto-populated
+ * @param  {Array[Object]} basicFields - Fields which are stored in SUDS
+ * @return {Array[Object]} - Fields which are to be auto-populated
+ */
+function getAutoPopulatedFields(basicFields){
+	const autoPop = [];
+	basicFields.forEach((field)=>{
+		const key = Object.keys(field)[0];
+		if (!field[key].fromIntake && field[key].madeOf){
+			autoPop.push(field);
+		}
+	});
+	return autoPop;
+}
+/** Given list of fields which must be auto-populate, returns values to store
+ * @param  {Array[Object]} - Fields which need to be auto-populated
+ * @param  {Object} body - user input
+ * @return {Array[]} - created values
+ */
+function buildAutoPopulatedFields(toBuild, body){
+	const output = {};
+	toBuild.forEach((field)=>{
+		const key = Object.keys(field)[0];
+		let fieldValue = '';
+		field[key].madeOf.forEach((component)=>{
+			if (body[component]){
+				fieldValue = `${fieldValue}${body[component]}`;
+			}
+			else {
+				fieldValue = `${fieldValue}${component}`;
+			}
+		});
+		output[key] = fieldValue;
+	});
+	return output;
+}
+/**
+ * @param  {Array[Object]} fields - All fields which will be sent to basicAPI
+ * @param  {Object} body - user input
+ * @param  {Object} autoPopValues - All values which have been auto-populated
+ * @return {Array[Object]} - Array of post objects
+ */
+function getBasicFields(fields, body, autoPopValues){
+	const requests = [], postObjs = [];
+	fields.forEach((field)=>{
+		const key = Object.keys(field)[0];
+		const whereToStore = field[key].store;
+		whereToStore.forEach((location)=>{
+			const requestToUse = location.split(':')[1];
+			if (location.split(':')[0] === 'basic'){
+				let postObjExists = false;
+				requests.forEach((request)=>{
+					const requestKey = Object.keys(request)[0];
+					if (requestKey === requestToUse){
+						postObjExists = true;
+						request[requestToUse][key] = field[key];
+					}
+				});
+				if (!postObjExists){
+					const obj = {};
+					obj[requestToUse] = {};
+					obj[requestToUse][key] = field[key];
+					requests.push(obj);
+				}
+			}
+		});
+	});
+	requests.forEach((request)=>{
+		const key = Object.keys(request)[0];
+		const obj = {};
+		obj[key] = {};
+		Object.keys(request[key]).forEach((fieldKey)=>{
+			const field = request[key][fieldKey];
+			const fieldPath = fieldKey;
+			const splitPath = fieldPath.split('.');
+			let bodyField = body;
+			if (field.fromIntake){
+				splitPath.forEach((sp)=>{
+					if (bodyField[sp]){
+						bodyField = bodyField[sp];
+					}
+					else {
+						bodyField = field.default;
+					}
+				});
+				obj[key][field.basicField] = bodyField;
+			}
+			else {
+				if (autoPopValues[fieldKey]){
+					obj[key][field.basicField] = autoPopValues[fieldKey];
+				}
+				else {
+					obj[key][field.basicField] = field.default;
+				}
+			}
+		});
+		postObjs.push(obj);
+	});
+	return postObjs;
+}
+function prepareBasicPost(sch, body){
+	const otherFields = [];
+	getFieldsToStoreInDB(sch, otherFields, '', 'basic');
+	const toBuild = getAutoPopulatedFields(otherFields);
+	const autoPopulateValues = buildAutoPopulatedFields(toBuild, body);
+	const fieldsToPost = getBasicFields(otherFields, body, autoPopulateValues);
+	return fieldsToPost;
+}
+
 post.app = function(req, res, pathData){
 
 	const body = getBody(req);
 	const derefFunc = deref();
 	const possbileFiles = [];
-	//const basicRequests = [];
 
 	const schema = getValidationSchema(pathData);
 	const allErrors = getFieldValidationErrors(body, pathData);
@@ -784,7 +891,9 @@ post.app = function(req, res, pathData){
 						return error.sendError(req, res, 500, err);
 					}
 					else {
-						console.log('controlNumber\n\n\n\n\n\n\n' + controlNumber);
+
+						const fieldsToPost = prepareBasicPost(sch, body);
+
 						const jsonResponse = {};
 						jsonResponse.success = true;
 						jsonResponse.api = 'FS ePermit API';
