@@ -66,6 +66,8 @@ app.use(morgan('combined', {stream: accessLogStream}));
 
 app.use(express.static('docs'));
 app.use('/docs', express.static('docs'));
+app.use('/docs/api', express.static('docs'));
+app.use('/docs/code', express.static('code-docs'));
 
 //*******************************************************************
 // routes
