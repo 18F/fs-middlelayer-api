@@ -32,16 +32,16 @@ This repository is being development under a task order of the Agile Blanket Pur
 
 - Scripts
   - Use `npm test` to run Mocha unit tests.
-  - Use `npm run coverage` for Istanbul code coverage.
-  - Use `npm run lint` for ESLint static code analysis.
+  - Use `npm run coverage` for Istanbul code coverage. *Results in /coverage folder.*
+  - Use `npm run lint` for ESLint static code analysis. *Results in /lint folder.*
   - Use `npm run fix` for ESLint code fix.
-  - Use `npm run prepare` to run tests, coverage, lint, and fix.
   - Use `npm run dba` to run Sequelize migration and seeder.
+  - Use `npm run doc` to run JSDoc code documentation. *Results in /code-docs folder.*
 - Data
   - Files: Test files are stored in [test/data](https://github.com/nci-ats/fs-middlelayer-api/tree/dev/test/data) directory
   - Accounts: Test accounts are stored in environment variables
-    - ADMINROLE_USER, ADMINROLE_PWD
-    - USERROLE_USER, USERROLE_PWD
+    - ADMINROLE_USER, ADMINROLE_PWD, ADMINROLE_HASH
+    - USERROLE_USER, USERROLE_PWD, USERROLE_HASH
 
 ## Configuration
 
@@ -50,6 +50,7 @@ This repository is being development under a task order of the Agile Blanket Pur
   - DATABASE_URL | Format: postgres://user:password@host:port/database
   - AWS_ACCESS_KEY_ID
   - AWS_SECRET_ACCESS_KEY
+  - AWS_REGION
   - AWS_BUCKET_NAME
 - Dotenv:
   - [Dotenv](https://www.npmjs.com/package/dotenv) is used which can load environment variables from a .env file into process.env
