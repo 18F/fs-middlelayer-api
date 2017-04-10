@@ -917,29 +917,32 @@ function prepareBasicPost(sch, body){
 	return fieldsToPost;
 }
 
-function createContact(fieldsObj, person){
+function createContact(fieldsObj, person, postObject){
 	return new Promise(function(fulfill, reject){
-		let contactField, createApplicationURL;
+		let contactField, createPersonOrOrgURL;
 		if (person){
 			contactField = fieldsObj['/contact/person'];
-			createApplicationURL = `${basicURL}/contact/person/`;
+			createPersonOrOrgURL = `${basicURL}/contact/person/`;
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
-			createApplicationURL = `${basicURL}/contact/organization/`;
+			createPersonOrOrgURL = `${basicURL}/contact/orgcode/`;
 		}
+		postObject['/contact/personOrOrgcode'].request = contactField;
 		const createContactOptions = {
 			method: 'POST',
-			uri: createApplicationURL,
+			uri: createPersonOrOrgURL,
 			body: contactField,
 			json: true
 		};
 		request(createContactOptions)
 		.then(function(res){
+			postObject['/contact/personOrOrgcode'].response = res;
 			const cn = res.contCn;
 			const addressField = fieldsObj['/contact/address'];
 			addressField.contact = cn;
 			const addressURL = `${basicURL}/contact-address/`;
+			postObject['/contact-address'].request = addressField;
 			const createAddressOptions = {
 				method: 'POST',
 				uri: addressURL,
@@ -949,10 +952,12 @@ function createContact(fieldsObj, person){
 			return request(createAddressOptions);
 		})
 		.then(function(res){
+			postObject['/contact-address'].response = res;
 			const cn = res.contact;
 			const phoneField = fieldsObj['/contact/phone'];
 			phoneField.contact = cn;
 			const phoneURL = `${basicURL}/contact-phone/`;
+			postObject['/contact-phone'].request = phoneField;
 			const createPhoneOptions = {
 				method: 'POST',
 				uri: phoneURL,
@@ -962,6 +967,7 @@ function createContact(fieldsObj, person){
 			return request(createPhoneOptions);
 		})
 		.then(function(res){
+			postObject['/contact-phone'].response = res;
 			fulfill(res.contact);
 		})
 		.catch(function(err){
@@ -970,8 +976,20 @@ function createContact(fieldsObj, person){
 	});
 }
 
+/** Sends requests needed to create an application via the Basic API
+ * @param  {Object} req - Request Object
+ * @param  {Object} res - Response Object
+ * @param  {Object} sch - Schema object 
+ * @param  {Object} body - User input
+ */
 function postToBasic(req, res, sch, body){
 
+	const postObject = {
+		'/contact/personOrOrgcode':{},
+		'/contact-address':{},
+		'/contact-phone':{},
+		'/application':{}
+	};
 	const fieldsToPost = prepareBasicPost(sch, body);
 	const fieldsObj = {};
 	fieldsToPost.forEach((post)=>{
@@ -1005,13 +1023,14 @@ function postToBasic(req, res, sch, body){
 			Promise.resolve(res.contCN);
 		}
 		else {
-			return createContact(fieldsObj, true);
+			return createContact(fieldsObj, true, postObject);
 		}
 	})
 	.then(function(contCN){
 		const createApplicationURL = `${basicURL}/application/`;
 		fieldsObj['/application'].contCn = contCN;
 		const applicationPost = fieldsObj['/application'];
+		postObject['/application'].request = applicationPost;
 		const createApplicationOptions = {
 			method: 'POST',
 			uri: createApplicationURL,
@@ -1020,7 +1039,8 @@ function postToBasic(req, res, sch, body){
 		};
 		return request(createApplicationOptions);
 	})
-	.then(function(){
+	.then(function(response){
+		postObject['/application'].response = response;
 		const jsonResponse = {};
 		jsonResponse.success = true;
 		jsonResponse.api = 'FS ePermit API';
@@ -1030,6 +1050,7 @@ function postToBasic(req, res, sch, body){
 		jsonResponse.route = req.originalUrl;
 		jsonResponse.origReq = body;
 		jsonResponse.accinstCn = res.accinstCn;
+		jsonResponse.basicPosts = postObject;
 		return res.json(jsonResponse);
 	})
 	.catch(function(err){
