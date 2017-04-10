@@ -87,8 +87,7 @@ get.id = function(req, res, pathData){
 	if (basicData){
 		dbUtil.getApplication(controlNumber, function(err, appl){
 			if (err){
-				console.error(err)
-				error.sendError(req, res, 400, 'error getting application from database');
+				return error.sendError(req, res, 400, 'error getting application from database');
 			}
 			else {
 				jsonData = util.copyGenericInfo(cnData, appl, jsonData, pathData.getTemplate);
@@ -175,70 +174,77 @@ function makeErrorObj(field, errorType, expectedFieldType, enumMessage, dependen
 	return output;
 }
 
-function missingSuperFields(output, field, route){
-
-	const applicantInfo = ['applicantInfo.firstName', 'applicantInfo.lastName', 'applicantInfo.dayPhone.areaCode', 'applicantInfo.dayPhone.number', 'applicantInfo.dayPhone.type', 'applicantInfo.emailAddress', 'applicantInfo.mailingAddress', 'applicantInfo.mailingCity', 'applicantInfo.mailingZIP', 'applicantInfo.mailingState'];
-	if (route === 'tempOutfitters'){
-
-		applicantInfo.push('applicantInfo.orgType');
-
-	}
-	const phone = ['applicantInfo.dayPhone.areaCode', 'applicantInfo.dayPhone.number', 'applicantInfo.dayPhone.type'];
-	const noncommercial = ['noncommercialFields.activityDescription', 'noncommercialFields.locationDescription', 'noncommercialFields.startDateTime', 'noncommercialFields.endDateTime', 'noncommercialFields.numberParticipants'];
-	const tempOutfitter = ['tempOutfitterFields.activityDescription', 'tempOutfitterFields.clientCharges'];
-	
-	if (field === 'applicantInfo'){
-
-		applicantInfo.forEach((missingField)=>{
-
-			output.errorArray.push(makeErrorObj(missingField, 'missing'));
-
-		});
-
-	}
-	else if (field === 'applicantInfo.dayPhone'){
-
-		phone.forEach((missingField)=>{
-
-			output.errorArray.push(makeErrorObj(missingField, 'missing'));
-
-		});
-
-	}
-	else if (field === 'noncommercialFields'){
-
-		noncommercial.forEach((missingField)=>{
-
-			output.errorArray.push(makeErrorObj(missingField, 'missing'));
-
-		});
-
-	}
-	else {
-
-		tempOutfitter.forEach((missingField)=>{
-
-			output.errorArray.push(makeErrorObj(missingField, 'missing'));
-
-		});
-	}
+let requiredFields = [];
+/** Traverses schema object in search of all fields listed as required. Stores all fields in requiredFiles array. 
+ * @param  {Object} schema - schema to traverse in search for all required fields
+ */
+function getAllRequired(schema){
+	const keys = Object.keys(schema);
+	keys.forEach((key)=>{
+		switch (key){
+		case 'allOf':
+			schema.allOf.forEach((sch)=>{
+				getAllRequired(sch);
+			});
+			break;
+		case 'properties':
+			getAllRequired(schema.properties);
+			break;
+		case 'required':
+			requiredFields = requiredFields.concat(schema.required);
+		}
+	});
+}
+/** Traverses through schema to find field specified. Once found it executes a function on that field in the schema.
+ * @param  {Object} schema - schema to look for field in
+ * @param  {Array[String]} field - Array containing the path to the field to find
+ * @param  {Function} func - Function to be run on the schema of field
+ */
+function findField(schema, field, func){
+	const fieldCopy = JSON.parse(JSON.stringify(field));
+	const schemaKeys = Object.keys(schema);
+	schemaKeys.forEach((key)=>{
+		if (key === fieldCopy[0]){
+			if (fieldCopy.length === 1){
+				func(schema[key]);
+			}
+			else {
+				fieldCopy.shift();
+				findField(schema[key], fieldCopy, func);
+			}
+		}
+		else {
+			switch (key){
+			case 'allOf':
+			case 'oneOf':
+				schema[key].forEach((sch)=>{
+					findField(sch, fieldCopy, func);
+				});
+				break;
+			case 'properties':
+				findField(schema.properties, fieldCopy, func);
+				break;
+			}
+		}
+	});
 }
 
-function handleMissingError(output, result, counter){
+function handleMissingError(output, result, counter, schema){
+	console.log('field missing')
 	const property = removeInstance(result[counter].property);
 	const field = combinePropArgument(property, result[counter].argument);
-	switch (field){
-	/*
-	case 'applicantInfo':
-	case 'applicantInfo.dayPhone':
-	case 'noncommercialFields':
-	case 'tempOutfitterFields':
-		missingSuperFields(output, field, route);
-	 	break;
-	 */
-	default:
+
+	if (field.split('.').length > 1){
+		findField(schema, field.split('.'), getAllRequired);
+		for (const i in requiredFields){
+			requiredFields[i] = `${field}.${requiredFields[i]}`
+		}
+		requiredFields.forEach((requiredField)=>{
+			output.errorArray.push(makeErrorObj(requiredField, 'missing'));
+		});
+	}
+	else {
 		output.errorArray.push(makeErrorObj(field, 'missing'));
-		break;
 	}
 }
 
@@ -339,14 +345,14 @@ function validateBody(body, pathData){
  * @param  {Array[{ValidationError}]} - All field errors from validation
  * @param  {Array[{ErrorObjs}]} - Array to store processed ErrorObjs in
  */
-function processErrors(errors, processedErrors){
+function processErrors(errors, processedErrors, schema){
 	const length = errors.length;
 	let counter;
 	for (counter = 0; counter < length; counter++){
 
 		switch (errors[counter].name){
 		case 'required':
-			handleMissingError(processedErrors, errors, counter);
+			handleMissingError(processedErrors, errors, counter, schema);
 			break;
 		case 'type':
 			handleTypeError(processedErrors, errors, counter);
@@ -475,7 +481,52 @@ function generateFileErrors(output, error, messages){
 	}
 }
 
-function generateErrorMesage(output){
+function getFieldsToStoreInDB(schema, fieldsToStore, path, saveLocation){
+	const keys = Object.keys(schema);
+	keys.forEach((key)=>{
+		switch (key){
+		case 'allOf':
+			for (let i = 0; i < schema.allOf.length; i++){
+				getFieldsToStoreInDB(schema.allOf[i], fieldsToStore, `${path}`, saveLocation);
+			}
+			break;
+		case 'properties':
+			getFieldsToStoreInDB(schema.properties, fieldsToStore, `${path}`, saveLocation);
+			break;
+		case 'oneOf':
+			for (let i = 0; i < schema.oneOf.length; i++){
+				getFieldsToStoreInDB(schema.oneOf[i], fieldsToStore, `${path}`, saveLocation);
+			}
+			break;
+		default:
+			const store = schema[key].store;
+			let storeInMiddle = false;
+			if (store && schema[key].type !== 'file'){
+				store.forEach((place)=>{
+					const location = place.split(':')[0];
+					storeInMiddle = storeInMiddle || (location === saveLocation);
+				});
+			}
+			if (storeInMiddle){
+				const obj = {};
+
+				if (path !== ''){
+					obj[`${path.slice(path.indexOf('.') + 1)}.${key}`] = schema[key];
+				}
+				else {
+					obj[`${key}`] = schema[key];
+				}
+				fieldsToStore.push(obj);
+			}
+			else if (schema[key].type === 'object'){
+				getFieldsToStoreInDB(schema[key], fieldsToStore, `${path}.${key}`, saveLocation);
+			}
+			break;
+		}
+	});
+}
+
+function generateErrorMesage(output, schema){
 
 	let errorMessage = '';
 	const messages = [];
@@ -619,7 +670,7 @@ function getBody(req){
  * @param  {[Object} pathData - data from swagger.json
  * @return {[Array[ErrorObj]} - List of all field errors found
  */
-function getFieldValidationErrors(body, pathData){
+function getFieldValidationErrors(body, pathData, derefSchema){
 	const processedFieldErrors = {
 		errorArray:[]
 	};
@@ -629,7 +680,7 @@ function getFieldValidationErrors(body, pathData){
 
 		//If not, error
 	if (fieldErrors.length > 0){
-		processErrors(fieldErrors, processedFieldErrors);
+		processErrors(fieldErrors, processedFieldErrors, derefSchema);
 	}
 
 	return processedFieldErrors;
@@ -659,14 +710,11 @@ function getFieldsToStoreInDB(schema, fieldsToStore, path, saveLocation){
 		default:
 			const store = schema[key].store;
 			let storeInMiddle = false;
-			if (store){
+			if (store && schema[key].type !== 'file'){
 				store.forEach((place)=>{
 					const location = place.split(':')[0];
 					storeInMiddle = storeInMiddle || (location === saveLocation);
 				});
-			}
-			if (schema[key].type === 'file'){
-				storeInMiddle = false;
 			}
 			if (storeInMiddle){
 				const obj = {};
@@ -998,10 +1046,9 @@ post.app = function(req, res, pathData){
 	const possbileFiles = [];
 
 	const schema = getValidationSchema(pathData);
-	const allErrors = getFieldValidationErrors(body, pathData);
 	const sch = derefFunc(schema.schemaToUse, [schema.fullSchema]);
-	
-	//Files to validate are in filesToCheck
+	const allErrors = getFieldValidationErrors(body, pathData, sch);
+	//Files to validate are in possbileFiles
 	checkForFilesInSchema(sch, possbileFiles);
 
 	if (possbileFiles.length !== 0){
