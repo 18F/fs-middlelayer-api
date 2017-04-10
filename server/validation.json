@@ -481,7 +481,7 @@
                 "type" : "integer"
             },
             "contCN":{
-                "basicField":"contCN",
+                "basicField":"contact",
                 "default":"",
                 "fromIntake":false,
                 "store":["basic:/contact/phone", "basic:/contact/address", "basic:/contact/person"],
