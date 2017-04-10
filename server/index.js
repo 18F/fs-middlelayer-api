@@ -647,52 +647,7 @@ function generateFileErrors(output, error, messages){
 	}
 }
 
-function getFieldsToStoreInDB(schema, fieldsToStore, path, saveLocation){
-	const keys = Object.keys(schema);
-	keys.forEach((key)=>{
-		switch (key){
-		case 'allOf':
-			for (let i = 0; i < schema.allOf.length; i++){
-				getFieldsToStoreInDB(schema.allOf[i], fieldsToStore, `${path}`, saveLocation);
-			}
-			break;
-		case 'properties':
-			getFieldsToStoreInDB(schema.properties, fieldsToStore, `${path}`, saveLocation);
-			break;
-		case 'oneOf':
-			for (let i = 0; i < schema.oneOf.length; i++){
-				getFieldsToStoreInDB(schema.oneOf[i], fieldsToStore, `${path}`, saveLocation);
-			}
-			break;
-		default:
-			const store = schema[key].store;
-			let storeInMiddle = false;
-			if (store && schema[key].type !== 'file'){
-				store.forEach((place)=>{
-					const location = place.split(':')[0];
-					storeInMiddle = storeInMiddle || (location === saveLocation);
-				});
-			}
-			if (storeInMiddle){
-				const obj = {};
-
-				if (path !== ''){
-					obj[`${path.slice(path.indexOf('.') + 1)}.${key}`] = schema[key];
-				}
-				else {
-					obj[`${key}`] = schema[key];
-				}
-				fieldsToStore.push(obj);
-			}
-			else if (schema[key].type === 'object'){
-				getFieldsToStoreInDB(schema[key], fieldsToStore, `${path}.${key}`, saveLocation);
-			}
-			break;
-		}
-	});
-}
-
-function generateErrorMesage(output, schema){
+function generateErrorMesage(output){
 
 	let errorMessage = '';
 	const messages = [];
