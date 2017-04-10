@@ -33,19 +33,18 @@ const apiSchema = include('server/swagger.json');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-
 //*******************************************************************
 
 function getAllFileNames() {
 
-	let allFilesNames = [];
+	const allFilesNames = [];
 
 	if (apiSchema) {
-		for (let k in apiSchema.paths) {
+		for (const k in apiSchema.paths) {
 
 			//console.log('\n k : ' + k );
 
-			for (let l in apiSchema.paths[k]) {
+			for (const l in apiSchema.paths[k]) {
 
 				//console.log('\n l : ' + l );
 				

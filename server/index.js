@@ -72,10 +72,10 @@ const use = function(req, res){
 
 	console.log('\n apiSchemaData(apiSchema, reqPath) : ' + JSON.stringify(apiSchemaData(apiSchema, reqPath)));
 
-	let apiReqData = apiSchemaData(apiSchema, reqPath);
-	let apiPath = apiReqData.path;
-	let apiTokens = apiReqData.tokens;
-	let apiMatches = apiReqData.matches;
+	const apiReqData = apiSchemaData(apiSchema, reqPath);
+	const apiPath = apiReqData.path;
+	const apiTokens = apiReqData.tokens;
+	const apiMatches = apiReqData.matches;
 
 	console.log('\n apiTokens : ' + JSON.stringify(apiTokens));
 	console.log('\n apiMatches : ' + JSON.stringify(apiMatches));
@@ -104,16 +104,16 @@ const use = function(req, res){
 				}
 				else {
 					
-					let schemaData = apiSchema.paths[apiPath][reqMethod];
+					const schemaData = apiSchema.paths[apiPath][reqMethod];
 
 					console.log('schemaData : ' + JSON.stringify(schemaData) );
 
-					let reqData = {
+					const reqData = {
 						path: apiPath,
 						tokens: apiTokens,
 						matches: apiMatches,
 						schema: schemaData
-					}
+					};
 
 					if (reqMethod === 'get') {
 
@@ -137,7 +137,7 @@ const use = function(req, res){
 			}
 		}
 	}
-}
+};
 
 //*************************************************************
 
@@ -146,11 +146,10 @@ const getControlNumberFileName = function(req, res, pathData) {
 
 	res.json('hello');
 	
-}
+};
 
 const getControlNumber = function(req, res, pathData){
 	console.log('getControlNumber ' );
-
 
 	const basicData = getBasicRes(pathData);
 
@@ -188,7 +187,6 @@ const getControlNumber = function(req, res, pathData){
 
 const postApplication = function(req, res, pathData){
 	console.log('postApplication ' );
-
 
 	const body = getBody(req);
 	const derefFunc = deref();
@@ -245,7 +243,7 @@ function getBasicRes(pathData){
 function apiSchemaData(apiSchema, reqPath){
 
 	if (apiSchema) {
-		for (let k in apiSchema.paths) {
+		for (const k in apiSchema.paths) {
 			//console.log('\nk : ' + JSON.stringify(k) );
 
 			const ms = matchstick(k, 'template');
@@ -405,7 +403,7 @@ function handleMissingError(output, result, counter, schema){
 	if (field.split('.').length > 1){
 		findField(schema, field.split('.'), getAllRequired);
 		for (const i in requiredFields){
-			requiredFields[i] = `${field}.${requiredFields[i]}`
+			requiredFields[i] = `${field}.${requiredFields[i]}`;
 		}
 		requiredFields.forEach((requiredField)=>{
 			output.errorArray.push(makeErrorObj(requiredField, 'missing'));

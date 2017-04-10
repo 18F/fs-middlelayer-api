@@ -200,17 +200,17 @@ function fromAdminOrg(cnData, postSchema, jsonData, key){
 function getTopLevelField(intakeField, cnData, postSchema, jsonData, key){
 
 	switch (intakeField){
-		case 'none':
-			break;
-		case 'fromAdminOrg':
-			fromAdminOrg(cnData, postSchema, jsonData, key);
-			break;
-		default:
-			if (cnData.hasOwnProperty(postSchema[key].intake)){
+	case 'none':
+		break;
+	case 'fromAdminOrg':
+		fromAdminOrg(cnData, postSchema, jsonData, key);
+		break;
+	default:
+		if (cnData.hasOwnProperty(postSchema[key].intake)){
 	
-				jsonData[key] = cnData[postSchema[key].intake];
+			jsonData[key] = cnData[postSchema[key].intake];
 		
-			}
+		}
 	}
 
 }
