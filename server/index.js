@@ -21,6 +21,9 @@ const request = require('request-promise');
 const Validator = require('jsonschema').Validator;
 const deref = require('deref');
 const path = require('path');
+const matchstick = require('matchstick');
+
+const apiSchema = include('server/swagger.json');
 
 //*************************************************************
 // AWS
@@ -59,15 +62,96 @@ const basicURL = process.env.BASICURL;
 //*******************************************************************
 // controller
 
-const get = {};
-const post = {};
+const use = function(req, res){
 
-// get id
+	const reqPath = `/${req.params[0]}`;
+	const reqMethod = req.method.toLowerCase();
 
-function getBasicRes(pathData){
-	return include(pathData.mockOutput);
+	//console.log('reqPath: ' + reqPath);
+	//console.log('reqMethod: ' + reqMethod);
+
+	console.log('\n apiSchemaData(apiSchema, reqPath) : ' + JSON.stringify(apiSchemaData(apiSchema, reqPath)));
+
+	let apiReqData = apiSchemaData(apiSchema, reqPath);
+	let apiPath = apiReqData.path;
+	let apiTokens = apiReqData.tokens;
+	let apiMatches = apiReqData.matches;
+
+	console.log('\n apiTokens : ' + JSON.stringify(apiTokens));
+	console.log('\n apiMatches : ' + JSON.stringify(apiMatches));
+
+	console.log('reqPath : ' + reqPath );
+	console.log('reqMethod : ' + reqMethod );
+	console.log('apiPath : ' + apiPath );
+
+	if (!apiPath) {
+		return error.sendError(req, res, 404, 'Invalid endpoint.');
+	}
+	else {
+		//console.log('apiPath true : ' + apiPath );
+		if (!apiSchema.paths[apiPath][reqMethod]) {
+			return error.sendError(req, res, 405, 'No endpoint method found.');
+		}
+		else {
+			//console.log('reqMethod true : ' + reqMethod );
+			if (!apiSchema.paths[apiPath][reqMethod].responses) {
+				return error.sendError(req, res, 500, 'No endpoint responses found.');
+			}
+			else {
+				//console.log('response true : ' + JSON.stringify(apiSchema.paths[apiPath][reqMethod].responses) );
+				if (!apiSchema.paths[apiPath][reqMethod].responses['200']) {
+					return error.sendError(req, res, 500, 'No endpoint success found.');
+				}
+				else {
+					
+					let schemaData = apiSchema.paths[apiPath][reqMethod];
+
+					console.log('schemaData : ' + JSON.stringify(schemaData) );
+
+					let reqData = {
+						path: apiPath,
+						tokens: apiTokens,
+						matches: apiMatches,
+						schema: schemaData
+					}
+
+					if (reqMethod === 'get') {
+
+						if (apiTokens.includes('fileName')) {
+							console.log('apiTokens true');
+
+							getControlNumberFileName(req, res, schemaData);
+
+						}
+						else {
+			
+							getControlNumber(req, res, schemaData);
+						}
+
+					}
+					else if (reqMethod === 'post') {
+						postApplication(req, res, schemaData);
+					}
+	
+				}
+			}
+		}
+	}
 }
-get.id = function(req, res, pathData){
+
+//*************************************************************
+
+const getControlNumberFileName = function(req, res, pathData) {
+	console.log('getControlNumberFileName ' );
+
+	res.json('hello');
+	
+}
+
+const getControlNumber = function(req, res, pathData){
+	console.log('getControlNumber ' );
+
+
 	const basicData = getBasicRes(pathData);
 
 	let jsonData = {};
@@ -82,7 +166,7 @@ get.id = function(req, res, pathData){
 	jsonResponse.src = 'json';
 	jsonResponse.route = req.originalUrl;
 
-	const cnData = basicData[1095010356];
+	const cnData = basicData[1095010356];  // TODO: remove - used for mocks
 
 	if (basicData){
 		dbUtil.getApplication(controlNumber, function(err, appl){
@@ -99,6 +183,91 @@ get.id = function(req, res, pathData){
 	}
 
 };
+
+//*************************************************************
+
+const postApplication = function(req, res, pathData){
+	console.log('postApplication ' );
+
+
+	const body = getBody(req);
+	const derefFunc = deref();
+	const possbileFiles = [];
+
+	const schema = getValidationSchema(pathData);
+	const sch = derefFunc(schema.schemaToUse, [schema.fullSchema]);
+	const allErrors = getFieldValidationErrors(body, pathData, sch);
+	//Files to validate are in possbileFiles
+	checkForFilesInSchema(sch, possbileFiles);
+
+	if (possbileFiles.length !== 0){
+		possbileFiles.forEach((fileConstraints)=>{
+			const key = Object.keys(fileConstraints)[0];
+			const fileValidationErrors = validateFile(req.files[key], fileConstraints, key);
+			allErrors.errorArray = allErrors.errorArray.concat(fileValidationErrors);
+		});
+	}
+	const errorMessage = generateErrorMesage(allErrors);
+	if (allErrors.errorArray.length !== 0){
+		return error.sendError(req, res, 400, errorMessage, allErrors.errorArray);
+	}
+	else {
+		const toStoreInDB = getDataToStoreInDB(sch, body);
+
+		const controlNumber = Math.floor((Math.random() * 10000000000) + 1); //TODO: remove - used for mocks
+		toStoreInDB.control_number = controlNumber;
+		dbUtil.saveApplication(controlNumber, toStoreInDB, function(err, appl){
+			if (err){
+				return error.sendError(req, res, 500, err);
+			}
+			else {
+				saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
+					if (err) {
+						return error.sendError(req, res, 500, err);
+					}
+					else {
+
+						postToBasic(req, res, sch, body);
+						
+					}
+				});
+			}
+		});
+	}
+};
+
+//*************************************************************
+
+function getBasicRes(pathData){
+	return include(pathData.mockOutput);
+}
+
+function apiSchemaData(apiSchema, reqPath){
+
+	if (apiSchema) {
+		for (let k in apiSchema.paths) {
+			//console.log('\nk : ' + JSON.stringify(k) );
+
+			const ms = matchstick(k, 'template');
+			//console.log('ms : ' + JSON.stringify(ms) );
+			ms.match(reqPath);
+
+			if ( ms.match(reqPath) ) { 
+
+				console.log('ms.tokens : ' + JSON.stringify(ms.tokens) );
+				console.log('ms.match : ' + JSON.stringify(ms.match(reqPath)) );
+				console.log('ms.matches : ' + JSON.stringify(ms.matches ) );
+
+				return {
+					path: k,
+					tokens: ms.tokens,
+					matches: ms.matches
+				};
+			}
+		}
+	}
+
+}
 
 /**
  * Removes 'instance' from prop field of validation errors. Used to make fields human readable
@@ -769,7 +938,7 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 			const key = Object.keys(fileConstraints)[0];
 			const fileInfo = getFileInfo(files[key], fileConstraints);
 			fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
-			dbUtil.saveFile(application.id, fileInfo, function(err, file) { // eslint-disable-line no-unused-vars
+			dbUtil.saveFile(application.id, fileInfo, function(err, file) {
 				if (err) {
 					return error.sendError(req, res, 500, `${fileInfo.filetype} failed to save`);
 				}
@@ -1058,57 +1227,10 @@ function postToBasic(req, res, sch, body){
 	});
 }
 
-post.app = function(req, res, pathData){
-
-	const body = getBody(req);
-	const derefFunc = deref();
-	const possbileFiles = [];
-
-	const schema = getValidationSchema(pathData);
-	const sch = derefFunc(schema.schemaToUse, [schema.fullSchema]);
-	const allErrors = getFieldValidationErrors(body, pathData, sch);
-	//Files to validate are in possbileFiles
-	checkForFilesInSchema(sch, possbileFiles);
-
-	if (possbileFiles.length !== 0){
-		possbileFiles.forEach((fileConstraints)=>{
-			const key = Object.keys(fileConstraints)[0];
-			const fileValidationErrors = validateFile(req.files[key], fileConstraints, key);
-			allErrors.errorArray = allErrors.errorArray.concat(fileValidationErrors);
-		});
-	}
-	const errorMessage = generateErrorMesage(allErrors);
-	if (allErrors.errorArray.length !== 0){
-		return error.sendError(req, res, 400, errorMessage, allErrors.errorArray);
-	}
-	else {
-		const toStoreInDB = getDataToStoreInDB(sch, body);
-		const controlNumber = Math.floor((Math.random() * 10000000000) + 1);
-		toStoreInDB.control_number = controlNumber; // eslint-disable-line camelcase
-		dbUtil.saveApplication(controlNumber, toStoreInDB, function(err, appl){
-			if (err){
-				return error.sendError(req, res, 500, err);
-			}
-			else {
-				saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
-					if (err){
-						return error.sendError(req, res, 500, err);
-					}
-					else {
-
-						postToBasic(req, res, sch, body);
-						
-					}
-				});
-			}
-		});
-	}
-};
 //*******************************************************************
 // exports
 
-module.exports.get = get;
-module.exports.post = post;
+module.exports.use = use;
 
 //POST
 	//Update basic paths so it matches url

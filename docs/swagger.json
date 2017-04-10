@@ -407,7 +407,7 @@
 				}
 			}
 		},
-		"/schemaRouting/swagger/permits/applications/special-uses/commercial/temp-outfitters/": {
+		"/schemaRouting/permits/applications/special-uses/commercial/temp-outfitters/": {
 			"post": {
 				"tags": [
 					"Schema Routing"
