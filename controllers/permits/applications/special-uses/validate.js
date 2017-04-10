@@ -128,7 +128,7 @@ function combinePropArgument(property, argument){
  * @param {string} expectedFieldType
  * @param {string} enumMessage
  * @param {string} dependency
- * @param {array[string]} anyOfFields
+ * @param {string|string[]} anyOfFields
  * 
  * @return Error object
  */
