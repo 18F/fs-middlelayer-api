@@ -6,18 +6,9 @@
             { "$ref": "commonFields"},
             {
                 "properties":{
-                    "oneOf":[
-                        {
-                            "applicantInfo": {
-                                "$ref": "tempOutfitterApplicantInfo"
-                            }
-                        },
-                        {
-                            "contactId":{
-                                "type":"integer"
-                            }
-                        }
-                    ],
+                    "applicantInfo": {
+                        "$ref": "tempOutfitterApplicantInfo"
+                    },
                     "type": {
                         "type": "string", 
                         "default": "tempOutfitters",
@@ -208,18 +199,9 @@
             { "$ref": "commonFields"},
             {
                 "properties":{
-                    "oneOf":[
-                        {
-                            "applicantInfo": {
-                                "$ref": "applicantInfoNoncommercial"
-                            }
-                        },
-                        {
-                            "contactId":{
-                                "type":"integer"
-                            }
-                        }
-                    ],
+                    "applicantInfo": {
+                        "$ref": "noncommercialApplicantInfo"
+                    },
                     "type": {
                         "default": "noncommercial",
                         "enum":[
@@ -238,7 +220,7 @@
         ]
     },
     "noncommercialApplicantInfo": {
-        "id": "/applicantInfoNoncommercial",
+        "id": "/noncommercialApplicantInfo",
         "type": "object",
         "allOf":[
             {"$ref":"applicantInfoBase"},
