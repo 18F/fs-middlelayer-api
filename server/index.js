@@ -230,7 +230,6 @@ function findField(schema, field, func){
 }
 
 function handleMissingError(output, result, counter, schema){
-	console.log('field missing')
 	const property = removeInstance(result[counter].property);
 	const field = combinePropArgument(property, result[counter].argument);
 
@@ -783,7 +782,6 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 
 				s3.putObject(params, function(err, data) {
 					if (err) {
-						console.error(err, err.stack);
 						return callback(err, null);
 					}
 					else {     
