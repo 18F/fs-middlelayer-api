@@ -163,10 +163,26 @@ const getFiles = function(applicationId, callback){
 		return callback(err, null);
 	});
 };
+
+const getFile = function(filePath, callback){
+
+	models.files.findOne({
+		where: {file_path: filePath} 
+	})
+	.then(function(file) {
+		return callback(null, file);
+	})
+	.catch(function(err) {
+		console.error(err);
+		return callback(err, null);
+	});
+};
+
 //*******************************************************************
 // exports
 
 module.exports.saveApplication = saveApplication;
 module.exports.getApplication = getApplication;
 module.exports.saveFile = saveFile;
+module.exports.getFile = getFile;
 module.exports.getFiles = getFiles;
