@@ -72,7 +72,7 @@ const use = function(req, res){
 
 	console.log('\n apiSchemaData(apiSchema, reqPath) : ' + JSON.stringify(apiSchemaData(apiSchema, reqPath)));
 
-	const apiReqData = apiSchemaData(apiSchema, reqPath);
+	const apiReqData = apiSchemaData(apiSchema, reqPath);	//Need to handle if this is undefined
 	const apiPath = apiReqData.path;
 	const apiTokens = apiReqData.tokens;
 	const apiMatches = apiReqData.matches;
@@ -932,31 +932,36 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 	possbileFiles.forEach((fileConstraints)=>{
 
 		asyncTasks.push(function(callback){
-			
+
 			const key = Object.keys(fileConstraints)[0];
-			const fileInfo = getFileInfo(files[key], fileConstraints);
-			fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
-			dbUtil.saveFile(application.id, fileInfo, function(err, file) {
-				if (err) {
-					return error.sendError(req, res, 500, `${fileInfo.filetype} failed to save`);
-				}
-				const params = {
-					Bucket: AWS_BUCKET_NAME, 
-					Key: fileInfo.keyname,
-					Body: fileInfo.buffer,
-					ACL: 'private' 
-				};
-
-				s3.putObject(params, function(err, data) {
+			if (files[key]){
+				const fileInfo = getFileInfo(files[key], fileConstraints);
+				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
+				dbUtil.saveFile(application.id, fileInfo, function(err, file) {
 					if (err) {
-						return callback(err, null);
+						return error.sendError(req, res, 500, `${fileInfo.filetype} failed to save`);
 					}
-					else {     
-						return callback(null, data);
-					}      
-				});
+					const params = {
+						Bucket: AWS_BUCKET_NAME, 
+						Key: fileInfo.keyname,
+						Body: fileInfo.buffer,
+						ACL: 'private' 
+					};
 
-			});
+					s3.putObject(params, function(err, data) {
+						if (err) {
+							return callback(err, null);
+						}
+						else {     
+							return callback(null, data);
+						}      
+					});
+
+				});
+			}
+			else {
+				return callback (null, null);
+			}
 		});
 	});
 	async.parallel(asyncTasks, function(err, data){
