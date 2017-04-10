@@ -9,12 +9,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "./node_modules/.bin/mocha test --recursive",
-    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive",
-    "lint": "./node_modules/.bin/eslint './' -f stylish; ./node_modules/.bin/eslint './' -o ./lint/eslint.html -f html; exit 0",
-    "fix": "./node_modules/.bin/eslint './' --fix; exit 0",
-    "dba": "./node_modules/.bin/sequelize db:migrate && ./node_modules/.bin/sequelize db:seed:all",
-    "doc": "./node_modules/.bin/jsdoc -c .jsdoc.json -d code-docs -t ./node_modules/ink-docstrap/template -R README.md -r ."
+    "test": "mocha test --recursive",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive",
+    "lint": "eslint './' -f stylish; eslint './' -o ./lint/eslint.html -f html; exit 0",
+    "fix": "eslint './' --fix; exit 0",
+    "dba": "sequelize db:migrate && sequelize db:seed:all",
+    "doc": "jsdoc -c .jsdoc.json -d code-docs -t ./node_modules/ink-docstrap/template -R README.md -r ."
   },
   "repository": {
     "type": "git",
