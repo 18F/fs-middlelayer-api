@@ -68,9 +68,11 @@ function getBasicRes(pathData){
 	return include(pathData.mockOutput);
 }
 get.id = function(req, res, pathData){
-	const applicationData = getBasicRes(pathData);
+	const basicData = getBasicRes(pathData);
 
 	let jsonData = {};
+
+	const controlNumber = req.params.id;
 
 	const jsonResponse = {};
 	jsonResponse.success = true;
@@ -80,12 +82,22 @@ get.id = function(req, res, pathData){
 	jsonResponse.src = 'json';
 	jsonResponse.route = req.originalUrl;
 
-	const cnData = applicationData[1095010356];
+	const cnData = basicData[1095010356];
 
-	jsonData = util.copyGenericInfo(cnData, jsonData, pathData.getTemplate);
-	const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
+	if (basicData){
+		dbUtil.getApplication(controlNumber, function(err, appl){
+			if (err){
+				console.error(err)
+				error.sendError(req, res, 400, 'error getting application from database');
+			}
+			else {
+				jsonData = util.copyGenericInfo(cnData, appl, jsonData, pathData.getTemplate);
+				const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
 
-	res.json(toReturn);
+				res.json(toReturn);
+			}
+		});
+	}
 
 };
 
@@ -511,7 +523,6 @@ function generateErrorMesage(output){
 
 }
 
-//function checkForFilesInSubSchema(schema){}
 function checkForFilesInSchema(schema, toCheck){
 	
 	const keys = Object.keys(schema);
@@ -846,6 +857,11 @@ function getBasicFields(fields, body, autoPopValues){
 	return postObjs;
 }
 
+/** Takes fields to be stored, creates post objects and populated with user input
+ * @param  {Object} sch - validation schema for this request
+ * @param  {Object} body - user input
+ * @return {Array[Object]} - All post objects 
+ */
 function prepareBasicPost(sch, body){
 	const otherFields = [];
 	getFieldsToStoreInDB(sch, otherFields, '', 'basic');
@@ -858,8 +874,6 @@ function prepareBasicPost(sch, body){
 function createContact(fieldsObj, person){
 	return new Promise(function(fulfill, reject){
 		let contactField, createApplicationURL;
-		console.log('person')
-		console.log(person)
 		if (person){
 			contactField = fieldsObj['/contact/person'];
 			createApplicationURL = `${basicURL}/contact/person/`;
@@ -910,8 +924,71 @@ function createContact(fieldsObj, person){
 	});
 }
 
-function postToBasic(fieldsToPost){
+function postToBasic(req, res, sch, body){
 
+	const fieldsToPost = prepareBasicPost(sch, body);
+	const fieldsObj = {};
+	fieldsToPost.forEach((post)=>{
+		const key = Object.keys(post)[0];
+		fieldsObj[key] = post[key];
+	});
+
+	const org = (body.applicantInfo.orgType && body.applicantInfo.orgType !== 'Individual');
+	let existingContactCheck;
+	if (org){
+		let orgName = body.applicantInfo.organizationName;
+		if (!orgName){
+			orgName = 'abc';
+		}
+		existingContactCheck = `${basicURL}/contact/orgcode/${orgName}/`;
+	}
+	else {
+		const lastName = body.applicantInfo.lastName;
+		existingContactCheck = `${basicURL}/contact/person/${lastName}/`;
+	}
+	
+	const getContactOptions = {
+		method: 'GET',
+		uri: existingContactCheck,
+		qs:{},
+		json: true
+	};
+	request(getContactOptions)
+	.then(function(res){
+		if (res.contCN){
+			Promise.resolve(res.contCN);
+		}
+		else {
+			return createContact(fieldsObj, true);
+		}
+	})
+	.then(function(contCN){
+		const createApplicationURL = `${basicURL}/application/`;
+		fieldsObj['/application'].contCn = contCN;
+		const applicationPost = fieldsObj['/application'];
+		const createApplicationOptions = {
+			method: 'POST',
+			uri: createApplicationURL,
+			body: applicationPost,
+			json: true
+		};
+		return request(createApplicationOptions);
+	})
+	.then(function(){
+		const jsonResponse = {};
+		jsonResponse.success = true;
+		jsonResponse.api = 'FS ePermit API';
+		jsonResponse.type = 'controller';
+		jsonResponse.verb = req.method;
+		jsonResponse.src = 'json';
+		jsonResponse.route = req.originalUrl;
+		jsonResponse.origReq = body;
+		jsonResponse.accinstCn = res.accinstCn;
+		return res.json(jsonResponse);
+	})
+	.catch(function(err){
+		return error.sendError(req, res, 500, err);
+	});
 }
 
 post.app = function(req, res, pathData){
@@ -953,70 +1030,8 @@ post.app = function(req, res, pathData){
 					}
 					else {
 
-						const fieldsToPost = prepareBasicPost(sch, body);
-						const fieldsObj = {};
-						fieldsToPost.forEach((post)=>{
-							const key = Object.keys(post)[0];
-							fieldsObj[key] = post[key];
-						});
-						console.log(fieldsObj);
-						//postToBasic(fieldsToPost);
-
-						//const org = (body.applicantInfo.orgType !== 'Individual');
-						const existingContactCheck = `${basicURL}/contact/person/${body.applicantInfo.lastName}/`;
-
-						/*
-						if (org && body.applicantInfo.orgType){
-							const orgName = body.applicantInfo.organizationName;
-							existingContactCheck = `${basicURL}/contact/organization/${orgName}/`;
-						}
-						else {
-							const lastName = body.applicantInfo.lastName;
-							
-						}
-						*/
-						const getContactOptions = {
-							method: 'GET',
-							uri: existingContactCheck,
-							qs:{},
-							json: true
-						};
-						request(getContactOptions)
-						.then(function(res){
-							if (res.contCN){
-								Promise.resolve(res.contCN);
-							}
-							else {
-								return createContact(fieldsObj, true);
-							}
-						})
-						.then(function(contCN){
-							const createApplicationURL = `${basicURL}/application/`;
-							fieldsObj['/application'].contCn = contCN;
-							const applicationPost = fieldsObj['/application'];
-							const createApplicationOptions = {
-								method: 'POST',
-								uri: createApplicationURL,
-								body: applicationPost,
-								json: true
-							};
-							return request(createApplicationOptions);
-						})
-						.then(function(){
-							const jsonResponse = {};
-							jsonResponse.success = true;
-							jsonResponse.api = 'FS ePermit API';
-							jsonResponse.type = 'controller';
-							jsonResponse.verb = req.method;
-							jsonResponse.src = 'json';
-							jsonResponse.route = req.originalUrl;
-							jsonResponse.origReq = body;
-							jsonResponse.accinstCn = res.accinstCn;
-							return res.json(jsonResponse);
-						})
-						.catch(function(err){
-							return error.sendError(req, res, 500, err);
-						});
+						postToBasic(req, res, sch, body);
+						
 					}
 				});
 			}
@@ -1028,3 +1043,14 @@ post.app = function(req, res, pathData){
 
 module.exports.get = get;
 module.exports.post = post;
+
+//POST
+	//Update basic paths so it matches url
+
+	//Returning contents of super field if missing
+
+//GET
+//Build Get object from schema
+	//Already in examples/200/response
+//Populate object
+	//Need to use code to pull from middle layer/S3
