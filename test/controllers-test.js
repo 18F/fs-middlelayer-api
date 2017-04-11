@@ -18,8 +18,7 @@ const expect = chai.expect;
 
 const specialUses = {};
 
-specialUses.validate = require('../controllers/permits/applications/special-uses/validate.js');
-specialUses.buildErrorMessage = require('../controllers/permits/applications/special-uses/utility.js');
+specialUses.validate = require('../controllers/validation.js');
 
 const factory = require('unionized');
 const errorMessageFactory = factory.factory({'field': null, 'errorType': null, 'expectedFieldType': null, 'enumMessage': null, 'dependency':null});
@@ -30,7 +29,7 @@ const errorFactory = factory.factory({'errorArray':factory.array(errorMessageFac
 describe('API Controllers: build error message', function(){
 
 	it('should return \'First name is a required field.\'', function(){
-		expect( specialUses.buildErrorMessage.buildErrorMessage(errorFactory.create(
+		expect( specialUses.validate.generateErrorMesage(errorFactory.create(
 			{
 				'errorArray[]':1, 
 				'errorArray[0].field':'applicantInfo.firstName',
@@ -43,7 +42,7 @@ describe('API Controllers: build error message', function(){
 
 	it('should return \'First Name is a required field. Last Name is a required field.\'', function(){
     
-		expect( specialUses.buildErrorMessage.buildErrorMessage(errorFactory.create(
+		expect( specialUses.validate.generateErrorMesage(errorFactory.create(
 			{
 				'errorArray[]':2,
 				'errorArray[0].field':'applicantInfo.firstName',
@@ -58,7 +57,7 @@ describe('API Controllers: build error message', function(){
 
 	it('should return \'First Name is expected to be of type \'string\'.\'', function(){
     
-		expect( specialUses.buildErrorMessage.buildErrorMessage(errorFactory.create(
+		expect( specialUses.validate.generateErrorMesage(errorFactory.create(
 			{
 				'errorArray[]':1,
 				'errorArray[0].field':'applicantInfo.firstName',
@@ -72,7 +71,7 @@ describe('API Controllers: build error message', function(){
 
 	it('should return \'Mailing Zip must be 5 or 9 digits.\'', function(){
     
-		expect( specialUses.buildErrorMessage.buildErrorMessage(errorFactory.create(
+		expect( specialUses.validate.generateErrorMesage(errorFactory.create(
 			{
 				'errorArray[]':1,
 				'errorArray[0].field':'applicantInfo.mailingZIP',
@@ -85,7 +84,7 @@ describe('API Controllers: build error message', function(){
 
 	it('should return \'First Name with some enum message.\'', function(){
     
-		expect( specialUses.buildErrorMessage.buildErrorMessage(errorFactory.create(
+		expect( specialUses.validate.generateErrorMesage(errorFactory.create(
 			{
 				'errorArray[]':1,
 				'errorArray[0].field':'applicantInfo.firstName',
@@ -99,7 +98,7 @@ describe('API Controllers: build error message', function(){
 
 	it('should return \'Having Applicant Info/First Name requires that Applicant Info/Last Name be provided.\'', function(){
     
-		expect( specialUses.buildErrorMessage.buildErrorMessage(errorFactory.create(
+		expect( specialUses.validate.generateErrorMesage(errorFactory.create(
 			{
 				'errorArray[]':1,
 				'errorArray[0].field':'applicantInfo.firstName',

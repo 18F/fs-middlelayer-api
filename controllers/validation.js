@@ -290,7 +290,7 @@ function handleAnyOfError(errorTracking, result, counter){
  * @return {Object} schemas - fullSchema is the full validation schemas for all permit types. schemaToUse is the validation schema for this route
  */
 function getValidationSchema(pathData){
-	const fileToGet = `server/${pathData.validation.$ref.split('#')[0]}`;
+	const fileToGet = `controllers/${pathData.validation.$ref.split('#')[0]}`;
 	const schemaToGet = pathData.validation.$ref.split('#')[1];
 	const applicationSchema = include(fileToGet);
 	return {

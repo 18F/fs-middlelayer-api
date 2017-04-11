@@ -20,7 +20,7 @@ const include = require('include')(__dirname);
 
 const multer = require('multer');
 
-const controller = include('server');
+const controller = include('controllers');
 
 const apiSchema = include('docs/swagger.json');
 
