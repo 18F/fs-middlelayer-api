@@ -13,7 +13,13 @@ engines:
   markdownlint:
     enabled: true
     checks:
+      MD009:
+        enabled: false
+      MD010:
+        enabled: false
       MD013:
+        enabled: false      
+      MD029:
         enabled: false
 ratings:
   paths:
@@ -25,9 +31,12 @@ exclude_paths:
 - test/
 - config/
 - mocks/
+- lint/
 - docs/
 - api-docs/
 - code-docs/
+- migrations/
+- seeders/
 - "**/lang/"
 - "**/lib/"
 ecmaFeatures:
