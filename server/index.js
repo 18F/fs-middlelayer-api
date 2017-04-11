@@ -248,7 +248,7 @@ const postApplication = function(req, res, reqData){
 					}
 					else {
 
-						basic.postToBasic(req, res, sch, body);
+						basic.postToBasic(req, res, sch, body, controlNumber);
 						
 					}
 				});
