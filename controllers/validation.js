@@ -137,7 +137,6 @@ function makeErrorObj(field, errorType, expectedFieldType, enumMessage, dependen
 }
 
 let requiredFields = [];
-let requiredFieldSchema = {};
 function checkForExtraRequired(schema){
 	const keys = schema.properties;
 	for (const key in keys){
@@ -184,7 +183,6 @@ function findField(schema, field, func){
 		if (key === fieldCopy[0]){
 			if (fieldCopy.length === 1){
 				func(schema[key]);
-				requiredFieldSchema = schema[key];
 			}
 			else {
 				fieldCopy.shift();
@@ -209,7 +207,6 @@ function findField(schema, field, func){
 
 function handleMissingError(output, result, counter, schema){
 	requiredFields = [];
-	requiredFieldSchema = {};
 	const property = removeInstance(result[counter].property);
 	const field = combinePropArgument(property, result[counter].argument);
 
