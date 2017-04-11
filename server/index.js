@@ -340,9 +340,3 @@ const use = function(req, res){
 
 module.exports.use = use;
 
-//POST
-	//Update basic paths so it matches url
-
-//GET
-//Populate object
-	//Need to use code to pull from middle layer/S3
