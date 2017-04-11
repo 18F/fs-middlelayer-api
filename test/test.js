@@ -51,7 +51,7 @@ describe('FS ePermit API', function() {
 	it('should return a 404 error if invalid', function(done) {
 
 		request(server)
-			.get('/asdfsad')
+			.get('/asdfsad/')
 			.set('x-access-token', token)
 			.expect(404, done);
 	
