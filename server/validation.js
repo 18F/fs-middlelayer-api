@@ -137,6 +137,20 @@ function makeErrorObj(field, errorType, expectedFieldType, enumMessage, dependen
 }
 
 let requiredFields = [];
+let requiredFieldSchema = {};
+function checkForExtraRequired(schema){
+	const keys = schema.properties;
+	for (const key in keys){
+		if (schema.properties[key].type === 'object' && schema.required.includes(key)){
+			const indexOfSuper = requiredFields.indexOf(key) + 1;
+
+			requiredFields.splice(indexOfSuper, 0, ...schema.properties[key].required.map(function(s){
+				return `${key}.${s}`;
+			}));
+			checkForExtraRequired(schema.properties[key]);
+		}
+	}
+}
 /** Traverses schema object in search of all fields listed as required. Stores all fields in requiredFiles array. 
  * @param  {Object} schema - schema to traverse in search for all required fields
  */
@@ -154,6 +168,7 @@ function getAllRequired(schema){
 			break;
 		case 'required':
 			requiredFields = requiredFields.concat(schema.required);
+			checkForExtraRequired(schema);
 		}
 	});
 }
@@ -169,6 +184,7 @@ function findField(schema, field, func){
 		if (key === fieldCopy[0]){
 			if (fieldCopy.length === 1){
 				func(schema[key]);
+				requiredFieldSchema = schema[key];
 			}
 			else {
 				fieldCopy.shift();
@@ -193,6 +209,7 @@ function findField(schema, field, func){
 
 function handleMissingError(output, result, counter, schema){
 	requiredFields = [];
+	requiredFieldSchema = {};
 	const property = removeInstance(result[counter].property);
 	const field = combinePropArgument(property, result[counter].argument);
 
