@@ -235,7 +235,7 @@ const postApplication = function(req, res, reqData){
 	else {
 		const toStoreInDB = db.getDataToStoreInDB(sch, body);
 
-		const controlNumber = Math.floor((Math.random() * 10000000000) + 1); //TODO: remove - used for mocks
+		const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString(); //TODO: remove - used for mocks
 		toStoreInDB.control_number = controlNumber;
 		db.saveApplication(controlNumber, toStoreInDB, function(err, appl){
 			if (err){

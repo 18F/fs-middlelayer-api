@@ -1137,6 +1137,62 @@ describe('tempOutfitters POST: file validated', function(){
 
 		});
 
+		it('should return valid json with error messages for an invalid file (size over 10 MB)', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfitterFactory.create()))
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_file_16mb.pdf')
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+					
+					expect(res.body.response.message).to.equal('Operating Plan cannot be larger than 10 MB.');
+
+				})
+				.expect(400, done);
+
+		});
+
+		it('should return valid json when guideDocumentation file uploaded of size 16 MB (size limit 25 MB)', function(done) {
+
+			this.timeout(15000);
+			
+			request(server)
+				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfitterFactory.create()))
+				.attach('guideDocumentation', './test/data/test_file_16mb.pdf')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
+				.expect('Content-Type', /json/)
+				.expect(200, done);
+
+		});
+
+		it('should return valid json with error message when guideDocumentation file uploaded of size 32 MB (size limit 25 MB)', function(done) {
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfitterFactory.create()))
+				.attach('guideDocumentation', './test/data/test_file_32mb.pdf')
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+					
+					expect(res.body.response.message).to.equal('Guide Documentation cannot be larger than 25 MB.');
+
+				})
+				.expect(400, done);
+
+		});
+
 		it('should return valid json with error messages for an invalid file (invalid extension)', function(done) {
 
 			request(server)
@@ -1149,7 +1205,7 @@ describe('tempOutfitters POST: file validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 					
-					expect(res.body.response.message).to.equal('Operating Plan must be one of the following extensions: doc, docx, rtf.');
+					expect(res.body.response.message).to.equal('Operating Plan must be one of the following extensions: pdf, doc, docx, rtf.');
 
 				})
 				.expect(400, done);
