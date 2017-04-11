@@ -1052,6 +1052,9 @@ describe('tempOutfitters POST: file validated', function(){
 
 	let token;
 
+	let postControlNumber;
+	let postFileName;
+
 	before(function(done) {
 
 		util.getToken(function(t){
@@ -1222,7 +1225,22 @@ describe('tempOutfitters POST: file validated', function(){
 				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
 				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
+				.expect(function(res){
+					postControlNumber = res.body.controlNumber;
+				})
 				.expect(200, done);
+
+		});
+
+		it('should return valid json when getting outfitters permit using the controlNumber returned from POST', function(done) {
+
+			request(server)
+			.get(`${testURL}${postControlNumber}/`)
+			.set('x-access-token', token)
+			.expect(function(res){
+				postFileName = res.body.tempOutfitterFields.insuranceCertificate;
+			})
+			.expect(200, done);
 
 		});
 
