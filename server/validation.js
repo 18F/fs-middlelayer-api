@@ -31,6 +31,37 @@ const fileMimes = [
 	'application/pdf'
 ];
 
+function digitCheck(input, num){
+
+	let valid = true;
+	
+	if (typeof input === 'number'){
+
+		const inputStr = input + '';
+
+		if (!inputStr.match(new RegExp(`^[0-9]{${num}}$`))){
+
+			valid = false;
+
+		}
+
+	}
+
+	return valid;
+
+}
+
+function areaCodeFormat(input){
+
+	return digitCheck(input, 3);
+
+}
+function phoneNumberFormat(input){
+
+	return digitCheck(input, 7);
+
+}
+
 /**
  * Removes 'instance' from prop field of validation errors. Used to make fields human readable
  * 
