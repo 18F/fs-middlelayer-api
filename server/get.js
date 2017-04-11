@@ -36,9 +36,6 @@ function fromAdminOrg(cnData, postSchema, jsonData, key){
 function getTopLevelField(intakeField, cnData, postSchema, jsonData, key){
 
 	switch (intakeField){
-	case 'middleLayer':
-		//jsonData[key] = getFromMiddleLayer(key)
-		break;
 	case 'none':
 		break;
 	case 'fromAdminOrg':
@@ -109,7 +106,6 @@ function buildGetResponse(cnData, applicationData, schemaData, jsonData, postSch
 
 function copyGenericInfo(cnData, applicationData, jsonData, outputSchema){
 
-	//Get from schema
 	jsf.option({useDefaultValue:true});
 	const schemaData = jsf(outputSchema);
 	delete schemaData.id;

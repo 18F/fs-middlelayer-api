@@ -115,21 +115,62 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 //*******************************************************************
 // controller functions
 
-const getControlNumberFileName = function(req, res, pathData) {
-	console.log('getControlNumberFileName ' );
+const getControlNumberFileName = function(req, res, reqData) {
+	const pathData = reqData.schema;
+	console.log('getControlNumberFileName');
 
-	res.json('hello');
+	const controlNumber = reqData.matches.controlNumber;
+	const fileName = reqData.matches.fileName;
+
+	console.log('controlNumber=' + controlNumber + ', fileName=' + fileName);
+
+	const filePath = controlNumber + '/' + fileName;
+
+	db.getFile(filePath, function (err, file){
+
+		if (err){
+			error.sendError(req, res, 400, 'error getting file');	
+		}
+		else {
+			if (file){
+
+				aws.getFile(controlNumber, fileName, function(err, data){
+
+					if (err){
+						error.sendError(req, res, 404, 'file not found');
+					}
+					else {
+						res.attachment(file.file_name);
+						res.send(data.Body);	
+					}
+
+				});
+			}
+			else {
+				error.sendError(req, res, 400, 'Invalid controlNumber or fileName provided');
+			}
+		}
+	});
 	
 };
 
-const getControlNumber = function(req, res, pathData){
+const getControlNumber = function(req, res, reqData){
+	const pathData = reqData.schema;
+	const fileTypes = {
+		'gud': 'guideDocumentation',
+		'arf': 'acknowledgementOfRiskForm',
+		'inc': 'insuranceCertificate',
+		'gse': 'goodStandingEvidence',
+		'opp': 'operatingPlan'
+	};
+
 	console.log('getControlNumber ' );
 
 	const basicData = getBasicRes(pathData);
 
 	let jsonData = {};
 
-	const controlNumber = req.params.id;
+	const controlNumber = reqData.matches.controlNumber;
 
 	const jsonResponse = {};
 	jsonResponse.success = true;
@@ -142,11 +183,17 @@ const getControlNumber = function(req, res, pathData){
 	const cnData = basicData[1095010356];  // TODO: remove - used for mocks
 
 	if (basicData){
-		db.getApplication(controlNumber, function(err, appl){
+		db.getApplication(controlNumber, function(err, appl, fileData){
 			if (err){
 				return error.sendError(req, res, 400, 'error getting application from database');
 			}
 			else {
+				if (fileData){
+					fileData.forEach(function(file){
+						const fileType = fileTypes[file.file_type];
+						appl[fileType] = file.file_name;
+					});
+				}
 				jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData.getTemplate);
 				const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
 
@@ -159,7 +206,8 @@ const getControlNumber = function(req, res, pathData){
 
 //*************************************************************
 
-const postApplication = function(req, res, pathData){
+const postApplication = function(req, res, reqData){
+	const pathData = reqData.schema;
 	console.log('postApplication ' );
 
 	const body = getBody(req);
@@ -213,9 +261,6 @@ const use = function(req, res){
 	const reqPath = `/${req.params[0]}`;
 	const reqMethod = req.method.toLowerCase();
 
-	//console.log('reqPath: ' + reqPath);
-	//console.log('reqMethod: ' + reqMethod);
-
 	console.log('\n apiSchemaData(apiSchema, reqPath) : ' + JSON.stringify(apiSchemaData(apiSchema, reqPath)));
 
 	const apiReqData = apiSchemaData(apiSchema, reqPath);	//Need to handle if this is undefined
@@ -267,23 +312,26 @@ const use = function(req, res){
 							if (apiTokens.includes('fileName')) {
 								console.log('apiTokens true');
 
-								getControlNumberFileName(req, res, schemaData);
+								getControlNumberFileName(req, res, reqData);
 
 							}
 							else {
 				
-								getControlNumber(req, res, schemaData);
+								getControlNumber(req, res, reqData);
 							}
 
 						}
 						else if (reqMethod === 'post') {
-							postApplication(req, res, schemaData);
+							postApplication(req, res, reqData);
 						}
 		
 					}
 				}
 			}
 		}
+	}
+	else {
+		return error.sendError(req, res, 404, 'Invalid endpoint.');
 	}
 };
 

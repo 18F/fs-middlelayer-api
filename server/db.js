@@ -41,10 +41,24 @@ function saveFile(applicationId, uploadFile, callback){
 	});
 }
 
+const getFile = function(filePath, callback){
+
+	models.files.findOne({
+		where: {file_path: filePath} 
+	})
+	.then(function(file) {
+		return callback(null, file);
+	})
+	.catch(function(err) {
+		console.error(err);
+		return callback(err, null);
+	});
+};
+
 const getFiles = function(applicationId, callback){
 
 	models.files.findAll({
-		where: {application_id: applicationId} 
+		where: {application_id: applicationId}
 	})
 	.then(function(files) {
 		return callback(null, files);
@@ -54,64 +68,42 @@ const getFiles = function(applicationId, callback){
 	});
 };
 
-function getApplication(controlNumber, callback){
+const getApplication = function(controlNumber, callback){
+
 	models.applications.findOne({
-		where: {control_number: controlNumber}
+		where: {
+			control_number: controlNumber
+		}
 	}).then(function(appl) {
 		if (appl){
-			return callback(null, appl);	
+			if (appl.form_name === 'FS-2700-3f') {
+				getFiles(appl.id, function(fileErr, files) {
+					if (fileErr){
+						console.error(fileErr);
+						return callback(fileErr, null, null);
+					}
+					else {
+						if (files) {
+							return callback(null, appl, files);
+						}
+						else {
+							return callback(null, appl, null);
+						}
+					}
+				});
+			}
+			else {
+				return callback(null, appl, null);
+			}
 		}
 		else {
-
-			// TO BE REMOVED begin -- create appl if not exist
-
-			models.applications.findOne({
-				where: {control_number: '1000000000'} 
-			}).then(function(appl) {
-				if (appl){
-					return callback(null, appl);	
-				}
-				else {
-
-					models.applications.create({
-						control_number: '1000000000',
-						form_name: 'FS-2700-3f',
-						region: '11',
-						forest: '22',
-						district: '33',
-						website: 'testwebsite.org',
-						activity_description: 'test activity_description',
-						location_description: 'test location_description',
-						start_datetime: '2017-05-01T10:00:00Z',
-						end_datetime: '2017-05-05T19:00:00Z',
-						number_participants: 45,
-						individual_is_citizen: true,
-						small_business: true,
-						advertising_url: 'www.advertising.com',
-						advertising_description: 'test advertising_description',
-						client_charges: 'test client_charges',
-						experience_list: 'test experience_list'
-					})
-					.then(function(appl) {
-						return callback(null, appl);	
-					})
-					.catch(function(err) {
-						return callback(err, null);
-					});
-				}
-			})
-			.catch(function(err) {
-				return callback(err, null);
-			});
-			
-			// TO BE REMOVED end -- create appl if not exist
-			//return callback('no record found', null);
+			return callback('no record found', null);
 		}
 	}).catch(function (err) {
 		console.error(err);
-		return callback(err, null);
+		return callback(err, null, null);
 	});
-}
+};
 
 const saveApplication = function(controlNumber, toStore, callback) {
 	models.applications.create(toStore)
@@ -203,6 +195,7 @@ function getDataToStoreInDB(schema, body){
 module.exports.getDataToStoreInDB = getDataToStoreInDB;
 module.exports.getFieldsToStore = getFieldsToStore;
 module.exports.saveFile = saveFile;
+module.exports.getFile = getFile;
 module.exports.getFiles = getFiles;
 module.exports.getApplication = getApplication;
 module.exports.saveApplication = saveApplication;

@@ -52,4 +52,27 @@ function uploadFile(fileInfo, callback){
 	});
 }
 
+function getFile(controlNumber, fileName, callback){
+
+	const filePath = `${controlNumber}/${fileName}`;
+
+	const getParams = {
+		Bucket: AWS_BUCKET_NAME, 
+		Key: filePath
+	};
+
+	s3.getObject(getParams, function(err, data) {
+
+		if (err) {
+			console.error(err);
+			return callback(err, null);
+		}
+		else {
+			return callback(null, data);
+		}
+
+	});
+}
+
+module.exports.getFile = getFile;
 module.exports.uploadFile = uploadFile;
