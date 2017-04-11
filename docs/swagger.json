@@ -64,6 +64,9 @@
 		},
 		"/permits/applications/special-uses/noncommercial/": {
 			"post": {
+				"validation":{
+                    "$ref":"validation.json#noncommercialApplication"
+                },
 				"tags": [
 					"Noncommercial Permit"
 				],
@@ -172,7 +175,50 @@
 				}
 			},
 			"get": {
-				"tags": [
+				"mockOutput":"test/data/basicGET.json",
+                "getTemplate":{
+                    "controlNumber":{"default":"", "intake":"accinstCn"},
+                    "region": {"default":"", "intake":"middleLayer/region"},
+                    "forest": {"default":"", "intake":"middleLayer/forest"},
+                    "district": {"default":"", "intake":"middleLayer/district"},
+                    "authorizingOfficerName": {"default":"", "intake":"authOfficerName"},
+                    "authorizingOfficerTitle": {"default":"", "intake":"authOfficerTitle"},
+                    "adminOrg": {"default":"", "intake":"adminOrg"},
+                    "applicantInfo": {
+                        "contactControlNumber":{"default":"", "intake":"addresses/contCn"},
+                        "firstName": {"default":"", "intake":"holders/firstName"},
+                        "lastName": {"default":"", "intake":"holders/lastName"},
+                        "dayPhone": {
+                            "areaCode": {"default":0, "intake":"phones/areaCode"},
+                            "number": {"default":0, "intake":"phones/phoneNumber"},
+                            "extension": {"default":"", "intake":"phones/extension"},
+                            "type": {"default":"", "intake":"phones/phoneNumberType"}
+                        },
+                        "eveningPhone": {
+                            "areaCode": {"default":0, "intake":"phones/areaCode"},
+                            "number": {"default":0, "intake":"phones/phoneNumber"},
+                            "extension": {"default":"", "intake":"phones/extension"},
+                            "type": {"default":"", "intake":"phones/phoneNumberType"}
+                        },
+                        "emailAddress": {"default":"", "intake":"addresses/email"},
+                        "mailingAddress": {"default":"", "intake":"addresses/address1"},
+                        "mailingAddress2": {"default":"", "intake":"addresses/address2"},
+                        "mailingCity": {"default":"", "intake":"addresses/cityName"},
+                        "mailingState": {"default":"", "intake":"addresses/stateCode"},
+                        "mailingZIP": {"default":"", "intake":"addresses/postalCode"},
+                        "organizationName": {"default":"", "intake":"addresses/contName"},
+                        "website": {"default":"", "intake":"middleLayer/website"},
+                        "orgType": {"default":"", "intake":"holders/orgType"}
+                    },
+                    "noncommercialFields": {
+                        "activityDescription": {"default":"", "intake":"middleLayer/activity_description"},
+                        "locationDescription": {"default":"", "intake":"middleLayer/location_description"},
+                        "startDateTime": {"default":"", "intake":"middleLayer/start_datetime"},
+                        "endDateTime": {"default":"", "intake":"middleLayer/end_datetime"},
+                        "numberParticipants": {"default":0, "intake":"middleLayer/number_participants"}
+                    }
+                },
+                "tags": [
 					"Noncommercial Permit"
 				],
 				"summary": "Find noncommercial permit by ID",
@@ -219,9 +265,68 @@
 				}
 			}
 		},
+		"/permits/applications/special-uses/commercial/temp-outfitters/{controlNumber}/files/{fileName}": {
+			"get": {
+				"tags": [
+					"Outfitter and Guide Permit"
+				],
+				"summary": "Get files of Outfitter and Guide Permit",
+				"description": "",
+				"consumes": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"name": "controlNumber",
+						"in": "path",
+						"description": "Control Number of temp-outfitter permit",
+						"required": true,
+						"type": "integer",
+						"format": "int64"
+					},
+					{
+						"name": "fileName",
+						"in": "path",
+						"description": "File Name",
+						"required": true,
+						"type": "string"
+					},
+					{
+						"name": "x-access-token",
+						"in": "header",
+						"description": "access token",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+						 "schema": {
+						 	"type": "file"
+						 }
+					},
+					"400": {
+						"description": "Invalid controlNumber or fileName supplied"
+					},
+					"401": {
+						"description": "Unauthorized"
+					},
+					"403": {
+						"description": "Forbidden"
+					},
+					"404": {
+						"description": "Permit or File not found"
+					}
+				}
+			}
+		},
 		"/permits/applications/special-uses/commercial/temp-outfitters/": {
 			"post": {
-				"tags": [
+				"validation":{
+                    "$ref":"validation.json#tempOutfitterApplication"
+                },
+                "tags": [
 					"Outfitter and Guide Permit"
 				],
 				"summary": "Submit a new temp-outfitter permit",
@@ -360,6 +465,56 @@
 				}
 			},
 			"get": {
+				"mockOutput":"test/data/basicGET.json",
+				"getTemplate":{
+					"controlNumber":{"default":"", "intake":"accinstCn"},
+					"region": {"default":"", "intake":"middleLayer/region"},
+                    "forest": {"default":"", "intake":"middleLayer/forest"},
+                    "district": {"default":"", "intake":"middleLayer/district"},
+					"authorizingOfficerName": {"default":"", "intake":"authOfficerName"},
+					"authorizingOfficerTitle": {"default":"", "intake":"authOfficerTitle"},
+					"adminOrg": {"default":"", "intake":"adminOrg"},
+					"applicantInfo": {
+						"contactControlNumber":{"default":"", "intake":"addresses/contCn"},
+						"firstName": {"default":"", "intake":"holders/firstName"},
+						"lastName": {"default":"", "intake":"holders/lastName"},
+						"dayPhone": {
+							"areaCode": {"default":0, "intake":"phones/areaCode"},
+							"number": {"default":0, "intake":"phones/phoneNumber"},
+							"extension": {"default":0, "intake":"phones/extension"},
+							"type": {"default":"", "intake":"phones/phoneNumberType"}
+						},
+						"eveningPhone": {
+							"areaCode": {"default":0, "intake":"phones/areaCode"},
+							"number": {"default":0, "intake":"phones/phoneNumber"},
+							"extension": {"default":0, "intake":"phones/extension"},
+							"type": {"default":"", "intake":"phones/phoneNumberType"}
+						},
+						"emailAddress": {"default":"", "intake":"addresses/email"},
+						"mailingAddress": {"default":"", "intake":"addresses/address1"},
+						"mailingAddress2": {"default":"", "intake":"addresses/address2"},
+						"mailingCity": {"default":"", "intake":"addresses/cityName"},
+						"mailingState": {"default":"", "intake":"addresses/stateCode"},
+						"mailingZIP": {"default":0, "intake":"addresses/postalCode"},
+						"organizationName": {"default":"", "intake":"addresses/contName"},
+						"website": {"default":"", "intake":"middleLayer/website"},
+						"orgType": {"default":"", "intake":"holders/orgType"}
+					},
+					"tempOutfitterFields": {
+						"individualIsCitizen": {"default":false, "intake":"middleLayer/individual_is_citizen"},
+						"smallBusiness": {"default":false, "intake":"middleLayer/small_business"},
+						"activityDescription": {"default":"", "intake":"middleLayer/activity_description"},
+						"advertisingURL": {"default":"", "intake":"middleLayer/advertising_url"},
+						"advertisingDescription":{"default":"", "intake":"middleLayer/advertising_description"},
+						"clientCharges":{"default":"", "intake":"middleLayer/client_charges"},
+						"experienceList":{"default":"", "intake":"middleLayer/experience_list"},
+						"guideDocumentation": {"default":"", "intake":"middleLayer/"},
+						"acknowledgementOfRiskForm": {"default":"", "intake":"middleLayer/acknowledgementOfRiskForm"},
+						"insuranceCertificate": {"default":"", "intake":"middleLayer/insuranceCertificate"},
+						"goodStandingEvidence": {"default":"", "intake":"middleLayer/goodStandingEvidence"},
+						"operatingPlan": {"default":"", "intake":"middleLayer/operatingPlan"}
+					}
+				},
 				"tags": [
 					"Outfitter and Guide Permit"
 				],
@@ -403,135 +558,6 @@
 					},
 					"404": {
 						"description": "Permit not found"
-					}
-				}
-			}
-		},
-		"/permits/applications/special-uses/commercial/temp-outfitters/{controlNumber}/files/{fileName}": {
-			"get": {
-				"tags": [
-					"Outfitter and Guide Permit"
-				],
-				"summary": "Get files of Outfitter and Guide Permit",
-				"description": "",
-				"consumes": [
-					"application/json"
-				],
-				"parameters": [
-					{
-						"name": "controlNumber",
-						"in": "path",
-						"description": "Control Number of temp-outfitter permit",
-						"required": true,
-						"type": "integer",
-						"format": "int64"
-					},
-					{
-						"name": "fileName",
-						"in": "path",
-						"description": "File Name",
-						"required": true,
-						"type": "string"
-					},
-					{
-						"name": "x-access-token",
-						"in": "header",
-						"description": "access token",
-						"required": true,
-						"type": "string"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Success",
-						 "schema": {
-						 	"type": "file"
-						 }
-					},
-					"400": {
-						"description": "Invalid controlNumber or fileName supplied"
-					},
-					"401": {
-						"description": "Unauthorized"
-					},
-					"403": {
-						"description": "Forbidden"
-					},
-					"404": {
-						"description": "Permit or File not found"
-					}
-				}
-			}
-		},
-		"/schemaRouting/permits/applications/special-uses/commercial/temp-outfitters/": {
-			"post": {
-				"tags": [
-					"Schema Routing"
-				],
-				"summary": "Submit a new temp-outfitter permit",
-				"description": "",
-				"consumes": [
-					"multipart/form-data"
-				],
-				"produces": [
-					"application/json"
-				],
-				"parameters": [					
-					{
-						"in": "formData",
-						"name": "body",
-						"description": "temp-outfitter permit information",
-						"required": true,
-						"schema": {
-							"$ref": "#/definitions/tempOutfitterPermit"
-						}
-					},
-					{
-						"in": "formData",
-						"name": "guideDocumentation",
-						"description": "temp-outfitter guideDocumentation file upload",
-						"type": "file"
-					},
-					{
-						"in": "formData",
-						"name": "acknowledgementOfRiskForm",
-						"description": "temp-outfitter acknowledgementOfRiskForm file upload",
-						"type": "file"
-					},
-					{
-						"in": "formData",
-						"name": "insuranceCertificate",
-						"description": "temp-outfitter insuranceCertificate file upload",
-						"required": false,
-						"type": "file"
-					},
-					{
-						"in": "formData",
-						"name": "goodStandingEvidence",
-						"description": "temp-outfitter goodStandingEvidence file upload",
-						"required": false,
-						"type": "file"
-					},
-					{
-						"in": "formData",
-						"name": "operatingPlan",
-						"description": "temp-outfitter operatingPlan file upload",
-						"required": false,
-						"type": "file"
-					}
-				],
-				"responses": {
-					"200": {
-						"description": "Success"
-					},
-					"400": {
-						"description": "Invalid input"
-					},
-					"401": {
-						"description": "Unauthorized"
-					},
-					"403": {
-						"description": "Forbidden"
 					}
 				}
 			}
