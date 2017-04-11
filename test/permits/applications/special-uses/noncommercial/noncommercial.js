@@ -61,7 +61,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Type is a required field. Noncommercial Fields/Activity Description is a required field. Noncommercial Fields/Location Description is a required field. Noncommercial Fields/Start Date Time is a required field. Noncommercial Fields/End Date Time is a required field. Noncommercial Fields/Number Participants is a required field.');
+					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Type is a required field. Noncommercial Fields is a required field. Noncommercial Fields/Activity Description is a required field. Noncommercial Fields/Location Description is a required field. Noncommercial Fields/Start Date Time is a required field. Noncommercial Fields/End Date Time is a required field. Noncommercial Fields/Number Participants is a required field.');
 
 				})
 				.expect(400, done);
@@ -76,8 +76,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.send(noncommercialFactory.create({applicantInfo : undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
-
-					expect(res.body.response.message).to.equal('Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field.');
 
 				})
 				.expect(400, done);
