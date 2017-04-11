@@ -25,7 +25,6 @@ const apiSchema = include('server/swagger.json');
 // other files
 
 const error = require('./error.js');
-const dbUtil = require('./dbUtil.js');
 const util = require('./util.js');
 const aws = require('./aws.js');
 const db = require('./db.js');
@@ -143,7 +142,7 @@ const getControlNumber = function(req, res, pathData){
 	const cnData = basicData[1095010356];  // TODO: remove - used for mocks
 
 	if (basicData){
-		dbUtil.getApplication(controlNumber, function(err, appl){
+		db.getApplication(controlNumber, function(err, appl){
 			if (err){
 				return error.sendError(req, res, 400, 'error getting application from database');
 			}
@@ -189,7 +188,7 @@ const postApplication = function(req, res, pathData){
 
 		const controlNumber = Math.floor((Math.random() * 10000000000) + 1); //TODO: remove - used for mocks
 		toStoreInDB.control_number = controlNumber;
-		dbUtil.saveApplication(controlNumber, toStoreInDB, function(err, appl){
+		db.saveApplication(controlNumber, toStoreInDB, function(err, appl){
 			if (err){
 				return error.sendError(req, res, 500, err);
 			}
