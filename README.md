@@ -14,8 +14,6 @@
 [![Semver](https://img.shields.io/badge/SemVer-2.0-blue.svg)](http://semver.org/spec/v2.0.0.html)
 [![license](https://img.shields.io/badge/license-CC0--1.0-blue.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
 # US Forest Service ePermit Middlelayer API
 
 A repository for the development of an API to support the public facing ePermit system to connect to the related Forest Service database, the Special Use Data System (SUDS) located in the National Resource Management System.
@@ -59,6 +57,7 @@ This repository is being development under a task order of the Agile Blanket Pur
 ## Dependencies
 
 Refer to application package and dependency trackers for additional dependency information:
+
 - Infrastructure:
   - Runtime: Node.js >= 6.9.x
   - Engine: NPM >= 3.10.x
@@ -73,7 +72,8 @@ Refer to application package and dependency trackers for additional dependency i
   - [Bithound](https://www.bithound.io/github/nci-ats/fs-middlelayer-api/feat%2Fswagger-ui/dependencies/npm)
 
 ## Point of Contact and Notifications
-You can report issues and submit questions by opening a new [Issue](https://help.github.com/articles/creating-an-issue/) in GitHub. You can [Watch](https://help.github.com/articles/watching-repositories/) this repo to receive notifications from GitHub when a new issue is posted, when an existing issue’s status is updated, and when a pull request is created. 
+
+You can report issues and submit questions by opening a new [Issue](https://help.github.com/articles/creating-an-issue/) in GitHub. You can [Watch](https://help.github.com/articles/watching-repositories/) this repo to receive notifications from GitHub when a new issue is posted, when an existing issue’s status is updated, and when a pull request is created.
 
 ## Contributing
 
