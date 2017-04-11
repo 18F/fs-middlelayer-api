@@ -195,6 +195,7 @@ const getControlNumber = function(req, res, reqData){
 					});
 				}
 				jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData.getTemplate);
+				jsonData.controlNumber = controlNumber;// TODO: remove - used for mocks
 				const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
 
 				res.json(toReturn);
