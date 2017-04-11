@@ -114,6 +114,7 @@
                 "store":["middleLayer:guideDocumentation"],
                 "type": "file",
                 "validExtensions":[
+                    "pdf",
                     "doc",
                     "docx",
                     "rtf"
@@ -126,6 +127,7 @@
                 "store":["middleLayer:acknowledgementOfRiskForm"],
                 "type": "file",
                 "validExtensions":[
+                    "pdf",
                     "doc",
                     "docx",
                     "rtf"
@@ -138,6 +140,7 @@
                 "store":["middleLayer:insuranceCertificate"],
                 "type": "file",
                 "validExtensions":[
+                    "pdf",
                     "doc",
                     "docx",
                     "rtf"
@@ -150,6 +153,7 @@
                 "store":["middleLayer:acknowledgementOfRiskForm"],
                 "type": "file",
                 "validExtensions":[
+                    "pdf",
                     "doc",
                     "docx",
                     "rtf"
@@ -162,6 +166,7 @@
                 "store":["middleLayer:operatingPlan"],
                 "type": "file",
                 "validExtensions":[
+                    "pdf",
                     "doc",
                     "docx",
                     "rtf"
