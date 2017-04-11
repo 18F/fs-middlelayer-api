@@ -127,17 +127,13 @@ function getFieldsToStore(schema, fieldsToStore, path, saveLocation){
 	keys.forEach((key)=>{
 		switch (key){
 		case 'allOf':
-			for (let i = 0; i < schema.allOf.length; i++){
-				getFieldsToStore(schema.allOf[i], fieldsToStore, `${path}`, saveLocation);
+		case 'oneOf':
+			for (let i = 0; i < schema[key].length; i++){
+				getFieldsToStore(schema[key][i], fieldsToStore, `${path}`, saveLocation);
 			}
 			break;
 		case 'properties':
 			getFieldsToStore(schema.properties, fieldsToStore, `${path}`, saveLocation);
-			break;
-		case 'oneOf':
-			for (let i = 0; i < schema.oneOf.length; i++){
-				getFieldsToStore(schema.oneOf[i], fieldsToStore, `${path}`, saveLocation);
-			}
 			break;
 		default:
 			const store = schema[key].store;
