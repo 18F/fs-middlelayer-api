@@ -533,7 +533,7 @@ function getFileInfo(file, constraints){
 		uploadFile.mimetype = uploadFile.file.mimetype;
 		uploadFile.encoding = uploadFile.file.encoding;
 		uploadFile.buffer = uploadFile.file.buffer;
-		uploadFile.filename = uploadField + '-' + filename + '-' + Date.now() + uploadFile.ext;
+		uploadFile.filename = uploadField + '-' + filename + '-' + Date.now() + '.' + uploadFile.ext;
 
 	}
 
