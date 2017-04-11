@@ -85,9 +85,9 @@ function removeInstance(prop){
 /**
  * Combines property and argument fields, if property exists, for missing field errors
  *
- * @param  {string}
- * @param  {string}
- * @return {string}
+ * @param  {string} property - Upper field to combine
+ * @param  {string} argument - Field where error is.
+ * @return {string} - Concatination of property, '.', and argument
  */
 function combinePropArgument(property, argument){
 
@@ -109,12 +109,12 @@ function combinePropArgument(property, argument){
 /**
  * Creates error object which can be read by error message building function
  * 
- * @param {string} field
- * @param {string} errorType
- * @param {string} expectedFieldType
- * @param {string} enumMessage
- * @param {string} dependency
- * @param {array[string]} anyOfFields
+ * @param {string} field - Field where error occured at
+ * @param {string} errorType - Type of error returned
+ * @param {string} expectedFieldType - Type that the field is expected to be
+ * @param {string} enumMessage - Enum message returned by validation
+ * @param {string} dependency - Fields that are a dependeny of field
+ * @param {array} anyOfFields - Array of strings of all field included in anyOf
  * 
  * @return Error object
  */
@@ -173,7 +173,7 @@ function getAllRequired(schema){
 }
 /** Traverses through schema to find field specified. Once found it executes a function on that field in the schema.
  * @param  {Object} schema - schema to look for field in
- * @param  {Array[String]} field - Array containing the path to the field to find
+ * @param  {Array} field - Array(String) containing the path to the field to find
  * @param  {Function} func - Function to be run on the schema of field
  */
 function findField(schema, field, func){
@@ -299,7 +299,7 @@ function getValidationSchema(pathData){
 /** Validates the fields in user input
  * @param  {Object} body - Input from user to be validated
  * @param  {Object} pathData - All data from swagger for the path that has been run
- * @return {Array[{ValidationError}]} - All field errors from validation
+ * @return {Array} - Array of ValidationErrors from validation
  */
 function validateBody(body, pathData){
 	const schema = getValidationSchema(pathData);
@@ -317,8 +317,8 @@ function validateBody(body, pathData){
 }
 
 /** Processes ValidationError into ErrorObj, extracting the info needed to create an error message
- * @param  {Array[{ValidationError}]} - All field errors from validation
- * @param  {Array[{ErrorObjs}]} - Array to store processed ErrorObjs in
+ * @param  {Array} - Array of ValidationErrors from validation
+ * @param  {Array} - Array to store processed ErrorObjs in
  */
 function processErrors(errors, processedErrors, schema){
 	const length = errors.length;
@@ -393,7 +393,7 @@ function buildFormatErrorMessage(fullPath){
 /**
  * Creates error message for anyOf errors
  * 
- * @param  {array[string]} anyOfFields - list of fields, at least one being required.
+ * @param  {array} anyOfFields - list of fields, at least one being required.
  * @return {string}
  */
 function makeAnyOfMessage(anyOfFields){

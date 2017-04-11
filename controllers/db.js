@@ -118,7 +118,7 @@ const saveApplication = function(controlNumber, toStore, callback) {
 
 /** Gets list of fields that are to be stored in DB
  * @param  {Object} schema - Schema to look through to find any fields to store in DB
- * @param  {Array[String]} fieldsToStore - Array containing names of field to store in DB
+ * @param  {Array} fieldsToStore - Array(String) containing names of field to store in DB
  * @param  {String} path - path to each field from root of schema
  * @param  {String} saveLocation - location which field should be saved. Valid options are middleLayer or basic.
  */

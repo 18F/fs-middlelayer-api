@@ -25,8 +25,8 @@ const basicURL = process.env.BASICURL;
 //*******************************************************************
 
 /** Finds basic API fields are to be auto-populated
- * @param  {Array[Object]} basicFields - Fields which are stored in SUDS
- * @return {Array[Object]} - Fields which are to be auto-populated
+ * @param  {Array} basicFields - Fields(Objects) which are stored in SUDS
+ * @return {Array} - Fields(Objects) which are to be auto-populated
  */
 function getAutoPopulatedFields(basicFields){
 	const autoPop = [];
@@ -39,9 +39,9 @@ function getAutoPopulatedFields(basicFields){
 	return autoPop;
 }
 /** Given list of fields which must be auto-populate, returns values to store
- * @param  {Array[Object]} - Fields which need to be auto-populated
+ * @param  {Array} - Array of objects representing Fields which need to be auto-populated
  * @param  {Object} body - user input
- * @return {Array[]} - created values
+ * @return {Array} - created values
  */
 function buildAutoPopulatedFields(toBuild, body){
 	const output = {};
@@ -61,10 +61,10 @@ function buildAutoPopulatedFields(toBuild, body){
 	return output;
 }
 /**
- * @param  {Array[Object]} fields - All fields which will be sent to basicAPI
+ * @param  {Array} fields - All fields in object form which will be sent to basicAPI
  * @param  {Object} body - user input
  * @param  {Object} autoPopValues - All values which have been auto-populated
- * @return {Array[Object]} - Array of post objects
+ * @return {Array} - Array of post objects
  */
 function getBasicFields(fields, body, autoPopValues){
 	const requests = [], postObjs = [];
@@ -128,7 +128,7 @@ function getBasicFields(fields, body, autoPopValues){
 /** Takes fields to be stored, creates post objects and populated with user input
  * @param  {Object} sch - validation schema for this request
  * @param  {Object} body - user input
- * @return {Array[Object]} - All post objects 
+ * @return {Array} - All post objects 
  */
 function prepareBasicPost(sch, body){
 	const otherFields = [];
