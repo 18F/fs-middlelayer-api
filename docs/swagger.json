@@ -113,7 +113,7 @@
 				}
 			}
 		},
-		"/permits/applications/special-uses/noncommercial/{controlNumber}": {
+		"/permits/applications/special-uses/noncommercial/{controlNumber}/": {
 			"put": {
 				"tags": [
 					"Noncommercial Permit"
@@ -265,7 +265,7 @@
 				}
 			}
 		},
-		"/permits/applications/special-uses/commercial/temp-outfitters/{controlNumber}/files/{fileName}": {
+		"/permits/applications/special-uses/commercial/temp-outfitters/{controlNumber}/files/{fileName}/": {
 			"get": {
 				"tags": [
 					"Outfitter and Guide Permit"
@@ -404,7 +404,7 @@
 				}
 			}
 		},
-		"/permits/applications/special-uses/commercial/temp-outfitters/{controlNumber}": {
+		"/permits/applications/special-uses/commercial/temp-outfitters/{controlNumber}/": {
 			"put": {
 				"tags": [
 					"Outfitter and Guide Permit"
