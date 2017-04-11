@@ -577,10 +577,6 @@ function getFieldValidationErrors(body, pathData, derefSchema){
 		errorArray:[]
 	};
 	const fieldErrors = validateBody(body, pathData);
-	//If contactID
-		//Ensure contact exists
-
-		//If not, error
 	if (fieldErrors.length > 0){
 		processErrors(fieldErrors, processedFieldErrors, derefSchema);
 	}
