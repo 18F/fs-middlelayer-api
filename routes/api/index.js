@@ -33,7 +33,7 @@ const upload = multer({ storage: storage });
 //*******************************************************************
 
 /** Function to retrieve all of the files that might be expected by any route.
- * @return {Array[Object]} - Array of objects used by multer to describe the files that can be expected.
+ * @return {Array} - Array of objects used by multer to describe the files that can be expected.
  */
 function getAllFileNames() {
 
