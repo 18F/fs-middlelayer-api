@@ -20,7 +20,7 @@ const include = require('include')(__dirname);
 
 const matchstick = require('matchstick');
 
-const error = include('error.js');
+const error = include('controllers/error.js');
 
 //*******************************************************************
 // router
