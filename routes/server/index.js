@@ -25,7 +25,7 @@ const error = include('error.js');
 
 const controller = include('server');
 
-const apiSchema = include('server/swagger.json');
+const apiSchema = include('docs/swagger.json');
 
 //*******************************************************************
 // storage

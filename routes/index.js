@@ -18,7 +18,6 @@ const  express = require('express');
 const  router = express.Router();
 const  include = require('include')(__dirname);
 
-const  permits = require('./permits');
 const  auth = require('./auth');
 const  mocks = require('./mocks');
 const  server = require('./server/');
@@ -31,15 +30,13 @@ const  authorize = include('controllers/auth/authorize.js');
 
 router.use('/mocks', mocks);
 
-router.use('/schemaRouting', server);
+router.use('/', server);
 
 router.use('/auth', auth);
 
 router.use(token);
 
 router.use(authorize);
-
-router.use('/permits', permits);
 
 //*******************************************************************
 //exports
