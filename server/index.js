@@ -32,87 +32,89 @@ const db = require('./db.js');
 const basic = require('./basic.js');
 const validation = require('./validation.js');
 
-//*******************************************************************
-// controller
+//*************************************************************
+// Helper Functions
 
-const use = function(req, res){
+function getBasicRes(pathData){
+	return include(pathData.mockOutput);
+}
 
-	const reqPath = `/${req.params[0]}`;
-	const reqMethod = req.method.toLowerCase();
+function apiSchemaData(apiSchema, reqPath){
 
-	//console.log('reqPath: ' + reqPath);
-	//console.log('reqMethod: ' + reqMethod);
+	if (apiSchema) {
+		for (const k in apiSchema.paths) {
+			//console.log('\nk : ' + JSON.stringify(k) );
 
-	console.log('\n apiSchemaData(apiSchema, reqPath) : ' + JSON.stringify(apiSchemaData(apiSchema, reqPath)));
+			const ms = matchstick(k, 'template');
+			//console.log('ms : ' + JSON.stringify(ms) );
+			ms.match(reqPath);
 
-	const apiReqData = apiSchemaData(apiSchema, reqPath);	//Need to handle if this is undefined
-	const apiPath = apiReqData.path;
-	const apiTokens = apiReqData.tokens;
-	const apiMatches = apiReqData.matches;
+			if ( ms.match(reqPath) ) { 
 
-	console.log('\n apiTokens : ' + JSON.stringify(apiTokens));
-	console.log('\n apiMatches : ' + JSON.stringify(apiMatches));
+				console.log('ms.tokens : ' + JSON.stringify(ms.tokens) );
+				console.log('ms.match : ' + JSON.stringify(ms.match(reqPath)) );
+				console.log('ms.matches : ' + JSON.stringify(ms.matches ) );
 
-	console.log('reqPath : ' + reqPath );
-	console.log('reqMethod : ' + reqMethod );
-	console.log('apiPath : ' + apiPath );
-
-	if (!apiPath) {
-		return error.sendError(req, res, 404, 'Invalid endpoint.');
-	}
-	else {
-		//console.log('apiPath true : ' + apiPath );
-		if (!apiSchema.paths[apiPath][reqMethod]) {
-			return error.sendError(req, res, 405, 'No endpoint method found.');
+				return {
+					path: k,
+					tokens: ms.tokens,
+					matches: ms.matches
+				};
+			}
 		}
-		else {
-			//console.log('reqMethod true : ' + reqMethod );
-			if (!apiSchema.paths[apiPath][reqMethod].responses) {
-				return error.sendError(req, res, 500, 'No endpoint responses found.');
+	}
+
+}
+
+/** If body passed in as string, converts it to a JSON object
+ * @param  {Object} req - request object
+ * @return {Object} - request body as a JSON Object
+ */
+function getBody(req){
+	let inputPost = req.body;
+	if (inputPost.body) {
+		inputPost = JSON.parse(inputPost.body);
+	}
+	return inputPost;
+}
+
+function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, application, callback){
+	const asyncTasks = [];
+
+	possbileFiles.forEach((fileConstraints)=>{
+
+		asyncTasks.push(function(callback){
+
+			const key = Object.keys(fileConstraints)[0];
+			if (files[key]){
+				const fileInfo = validation.getFileInfo(files[key], fileConstraints);
+				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
+				db.saveFile(application.id, fileInfo, function(err){
+					if (err){
+						return error.sendError(req, res, 500, `${fileInfo.filetype} failed to save`);
+					}
+					else {
+						aws.uploadFile(fileInfo, callback);
+					}
+				});
 			}
 			else {
-				//console.log('response true : ' + JSON.stringify(apiSchema.paths[apiPath][reqMethod].responses) );
-				if (!apiSchema.paths[apiPath][reqMethod].responses['200']) {
-					return error.sendError(req, res, 500, 'No endpoint success found.');
-				}
-				else {
-					
-					const schemaData = apiSchema.paths[apiPath][reqMethod];
-
-					console.log('schemaData : ' + JSON.stringify(schemaData) );
-
-					const reqData = {
-						path: apiPath,
-						tokens: apiTokens,
-						matches: apiMatches,
-						schema: schemaData
-					};
-
-					if (reqMethod === 'get') {
-
-						if (apiTokens.includes('fileName')) {
-							console.log('apiTokens true');
-
-							getControlNumberFileName(req, res, schemaData);
-
-						}
-						else {
-			
-							getControlNumber(req, res, schemaData);
-						}
-
-					}
-					else if (reqMethod === 'post') {
-						postApplication(req, res, schemaData);
-					}
-	
-				}
+				return callback (null, null);
 			}
+		});
+	});
+	async.parallel(asyncTasks, function(err, data){
+		if (err){
+			return callback(err, null);
 		}
-	}
-};
+		else {
+			return callback(null, data);
+		}
+	});
+}
 
-//*************************************************************
+//*******************************************************************
+// controller functions
 
 const getControlNumberFileName = function(req, res, pathData) {
 	console.log('getControlNumberFileName ' );
@@ -207,85 +209,84 @@ const postApplication = function(req, res, pathData){
 	}
 };
 
-//*************************************************************
+const use = function(req, res){
 
-function getBasicRes(pathData){
-	return include(pathData.mockOutput);
-}
+	const reqPath = `/${req.params[0]}`;
+	const reqMethod = req.method.toLowerCase();
 
-function apiSchemaData(apiSchema, reqPath){
+	//console.log('reqPath: ' + reqPath);
+	//console.log('reqMethod: ' + reqMethod);
 
-	if (apiSchema) {
-		for (const k in apiSchema.paths) {
-			//console.log('\nk : ' + JSON.stringify(k) );
+	console.log('\n apiSchemaData(apiSchema, reqPath) : ' + JSON.stringify(apiSchemaData(apiSchema, reqPath)));
 
-			const ms = matchstick(k, 'template');
-			//console.log('ms : ' + JSON.stringify(ms) );
-			ms.match(reqPath);
+	const apiReqData = apiSchemaData(apiSchema, reqPath);	//Need to handle if this is undefined
+	if (apiReqData){
+		const apiPath = apiReqData.path;
+		const apiTokens = apiReqData.tokens;
+		const apiMatches = apiReqData.matches;
 
-			if ( ms.match(reqPath) ) { 
+		console.log('\n apiTokens : ' + JSON.stringify(apiTokens));
+		console.log('\n apiMatches : ' + JSON.stringify(apiMatches));
 
-				console.log('ms.tokens : ' + JSON.stringify(ms.tokens) );
-				console.log('ms.match : ' + JSON.stringify(ms.match(reqPath)) );
-				console.log('ms.matches : ' + JSON.stringify(ms.matches ) );
+		console.log('reqPath : ' + reqPath );
+		console.log('reqMethod : ' + reqMethod );
+		console.log('apiPath : ' + apiPath );
 
-				return {
-					path: k,
-					tokens: ms.tokens,
-					matches: ms.matches
-				};
-			}
-		}
-	}
-
-}
-
-/** If body passed in as string, converts it to a JSON object
- * @param  {Object} req - request object
- * @return {Object} - request body as a JSON Object
- */
-function getBody(req){
-	let inputPost = req.body;
-	if (inputPost.body) {
-		inputPost = JSON.parse(inputPost.body);
-	}
-	return inputPost;
-}
-
-function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, application, callback){
-	const asyncTasks = [];
-
-	possbileFiles.forEach((fileConstraints)=>{
-
-		asyncTasks.push(function(callback){
-
-			const key = Object.keys(fileConstraints)[0];
-			if (files[key]){
-				const fileInfo = validation.getFileInfo(files[key], fileConstraints);
-				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
-				db.saveFile(application.id, fileInfo, function(err){
-					if (err){
-						return error.sendError(req, res, 500, `${fileInfo.filetype} failed to save`);
-					}
-					else {
-						aws.uploadFile(fileInfo, callback);
-					}
-				});
-			}
-			else {
-				return callback (null, null);
-			}
-		});
-	});
-	async.parallel(asyncTasks, function(err, data){
-		if (err){
-			return callback(err, null);
+		if (!apiPath) {
+			return error.sendError(req, res, 404, 'Invalid endpoint.');
 		}
 		else {
-			return callback(null, data);
+			//console.log('apiPath true : ' + apiPath );
+			if (!apiSchema.paths[apiPath][reqMethod]) {
+				return error.sendError(req, res, 405, 'No endpoint method found.');
+			}
+			else {
+				//console.log('reqMethod true : ' + reqMethod );
+				if (!apiSchema.paths[apiPath][reqMethod].responses) {
+					return error.sendError(req, res, 500, 'No endpoint responses found.');
+				}
+				else {
+					//console.log('response true : ' + JSON.stringify(apiSchema.paths[apiPath][reqMethod].responses) );
+					if (!apiSchema.paths[apiPath][reqMethod].responses['200']) {
+						return error.sendError(req, res, 500, 'No endpoint success found.');
+					}
+					else {
+						
+						const schemaData = apiSchema.paths[apiPath][reqMethod];
+
+						console.log('schemaData : ' + JSON.stringify(schemaData) );
+
+						const reqData = {
+							path: apiPath,
+							tokens: apiTokens,
+							matches: apiMatches,
+							schema: schemaData
+						};
+
+						if (reqMethod === 'get') {
+
+							if (apiTokens.includes('fileName')) {
+								console.log('apiTokens true');
+
+								getControlNumberFileName(req, res, schemaData);
+
+							}
+							else {
+				
+								getControlNumber(req, res, schemaData);
+							}
+
+						}
+						else if (reqMethod === 'post') {
+							postApplication(req, res, schemaData);
+						}
+		
+					}
+				}
+			}
 		}
-	});
-}
+	}
+};
 
 //*******************************************************************
 // exports
