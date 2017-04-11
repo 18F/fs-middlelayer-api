@@ -270,7 +270,7 @@ function postToBasic(req, res, sch, body){
 		jsonResponse.verb = req.method;
 		jsonResponse.src = 'json';
 		jsonResponse.route = req.originalUrl;
-		jsonResponse.origReq = body;
+		jsonResponse.apiRequest = body;
 		jsonResponse.accinstCn = res.accinstCn;
 		jsonResponse.basicPosts = postObject;
 		return res.json(jsonResponse);
