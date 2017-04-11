@@ -548,7 +548,7 @@ function validateFile(uploadFile, validationConstraints, fileName){
 	const errObjs = [];
 
 	if (uploadFile){
-		if (uploadFile.ext && !fileInfo.ext.toLowerCase().match(regex)){
+		if (fileInfo.ext && !fileInfo.ext.toLowerCase().match(regex)){
 			errObjs.push(makeErrorObj(fileInfo.filetype, 'invalidExtension', constraints.validExtensions));
 		}
 		else if (fileMimes.indexOf(fileInfo.mimetype) < 0){
