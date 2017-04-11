@@ -76,6 +76,17 @@ const postUploadFields = upload.fields(getAllFileNames());
 //*******************************************************************
 // router
 
+// trailing slash middleware
+router.use('/*', function(req, res, next){
+	const reqPath = `/${req.params[0]}`;
+	
+	if (reqPath.slice(-1) !== '/') {
+		res.redirect(301, reqPath + '/');
+	}
+	next();	
+});
+
+// api router to controller
 router.use('/*', postUploadFields, function(req, res, next){
 	controller.use(req, res);
 });
