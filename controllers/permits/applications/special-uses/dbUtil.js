@@ -91,13 +91,60 @@ const saveFile = function(applicationId, uploadFile, callback){
 	});
 };
 
+const getFile = function(filePath, callback){
+
+	models.files.findOne({
+		where: {file_path: filePath} 
+	})
+	.then(function(file) {
+		return callback(null, file);
+	})
+	.catch(function(err) {
+		console.error(err);
+		return callback(err, null);
+	});
+};
+
+const getFiles = function(applicationId, callback){
+
+	models.files.findAll({
+		where: {application_id: applicationId}
+	})
+	.then(function(files) {
+		return callback(null, files);
+	})
+	.catch(function(err) {
+		return callback(err, null);
+	});
+};
+
 const getApplication = function(controlNumber, callback){
 
 	models.applications.findOne({
-		where: {control_number: controlNumber}
+		where: {
+			control_number: controlNumber
+		}
 	}).then(function(appl) {
 		if (appl){
-			return callback(null, appl);	
+			if (appl.form_name === 'FS-2700-3f') {
+				getFiles(appl.id, function(fileErr, files) {
+					if (fileErr){
+						console.error(fileErr);
+						return callback(fileErr, null, null);
+					}
+					else {
+						if (files) {
+							return callback(null, appl, files);
+						}
+						else {
+							return callback(null, appl, null);
+						}
+					}
+				});
+			}
+			else {
+				return callback(null, appl, null);
+			}
 		}
 		else {
 
@@ -107,7 +154,7 @@ const getApplication = function(controlNumber, callback){
 				where: {control_number: '1000000000'} 
 			}).then(function(appl) {
 				if (appl){
-					return callback(null, appl);	
+					return callback(null, appl, null);	
 				}
 				else {
 
@@ -131,15 +178,15 @@ const getApplication = function(controlNumber, callback){
 						experience_list: 'test experience_list'
 					})
 					.then(function(appl) {
-						return callback(null, appl);	
+						return callback(null, appl, null);	
 					})
 					.catch(function(err) {
-						return callback(err, null);
+						return callback(err, null, null);
 					});
 				}
 			})
 			.catch(function(err) {
-				return callback(err, null);
+				return callback(err, null, null);
 			});
 			
 			// TO BE REMOVED end -- create appl if not exist
@@ -147,26 +194,15 @@ const getApplication = function(controlNumber, callback){
 		}
 	}).catch(function (err) {
 		console.error(err);
-		return callback(err, null);
+		return callback(err, null, null);
 	});
 };
 
-const getFiles = function(applicationId, callback){
-
-	models.files.findAll({
-		where: {application_id: applicationId} 
-	})
-	.then(function(files) {
-		return callback(null, files);
-	})
-	.catch(function(err) {
-		return callback(err, null);
-	});
-};
 //*******************************************************************
 // exports
 
 module.exports.saveApplication = saveApplication;
 module.exports.getApplication = getApplication;
 module.exports.saveFile = saveFile;
+module.exports.getFile = getFile;
 module.exports.getFiles = getFiles;

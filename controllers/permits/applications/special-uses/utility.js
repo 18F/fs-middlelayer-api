@@ -200,17 +200,17 @@ function fromAdminOrg(cnData, postSchema, jsonData, key){
 function getTopLevelField(intakeField, cnData, postSchema, jsonData, key){
 
 	switch (intakeField){
-		case 'none':
-			break;
-		case 'fromAdminOrg':
-			fromAdminOrg(cnData, postSchema, jsonData, key);
-			break;
-		default:
-			if (cnData.hasOwnProperty(postSchema[key].intake)){
+	case 'none':
+		break;
+	case 'fromAdminOrg':
+		fromAdminOrg(cnData, postSchema, jsonData, key);
+		break;
+	default:
+		if (cnData.hasOwnProperty(postSchema[key].intake)){
 	
-				jsonData[key] = cnData[postSchema[key].intake];
+			jsonData[key] = cnData[postSchema[key].intake];
 		
-			}
+		}
 	}
 
 }
@@ -421,6 +421,28 @@ function uploadFiles(controlNumber, files, callback){
 
 }
 
+function getFile(controlNumber, fileName, callback){
+
+	const filePath = controlNumber + '/' + fileName;
+
+	const getParams = {
+		Bucket: AWS_BUCKET_NAME, 
+		Key: filePath
+	};
+
+	s3.getObject(getParams, function(err, data) {
+
+		if (err) {
+			console.error(err);
+			return callback(err, null);
+		}
+		else {
+			return callback(null, data);
+		}
+
+	});
+}
+
 //*******************************************************************
 // exports
 
@@ -429,3 +451,5 @@ module.exports.concatErrors = concatErrors;
 module.exports.copyGenericInfo = copyGenericInfo;
 module.exports.createPost = createPost;
 module.exports.uploadFiles = uploadFiles;
+module.exports.getFile = getFile;
+

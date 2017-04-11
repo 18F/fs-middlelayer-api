@@ -6,7 +6,7 @@ module.exports = function(sequelize, DataTypes) {
 			primaryKey: true,
 			defaultValue: DataTypes.UUIDV4
 		},
-		application_id: DataTypes.INTEGER,
+		application_id: DataTypes.UUID,
 		file_type: DataTypes.STRING(10),
 		file_path: DataTypes.STRING(255),
 		file_name: DataTypes.STRING(255),
