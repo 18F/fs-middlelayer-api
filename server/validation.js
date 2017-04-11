@@ -192,21 +192,18 @@ function findField(schema, field, func){
 }
 
 function handleMissingError(output, result, counter, schema){
+	requiredFields = [];
 	const property = removeInstance(result[counter].property);
 	const field = combinePropArgument(property, result[counter].argument);
 
-	if (field.split('.').length > 1){
-		findField(schema, field.split('.'), getAllRequired);
-		for (const i in requiredFields){
-			requiredFields[i] = `${field}.${requiredFields[i]}`;
-		}
-		requiredFields.forEach((requiredField)=>{
-			output.errorArray.push(makeErrorObj(requiredField, 'missing'));
-		});
+	output.errorArray.push(makeErrorObj(field, 'missing'));
+	findField(schema, field.split('.'), getAllRequired);
+	for (const i in requiredFields){
+		requiredFields[i] = `${field}.${requiredFields[i]}`;
 	}
-	else {
-		output.errorArray.push(makeErrorObj(field, 'missing'));
-	}
+	requiredFields.forEach((requiredField)=>{
+		output.errorArray.push(makeErrorObj(requiredField, 'missing'));
+	});
 }
 
 function handleTypeError(output, result, counter){
@@ -298,7 +295,10 @@ function validateBody(body, pathData){
 	for (key in applicationSchema){
 		v.addSchema(applicationSchema[key], key);
 	}
-	const error = v.validate(body, schemaToUse).errors;
+	v.customFormats.areaCodeFormat = areaCodeFormat;
+	v.customFormats.phoneNumberFormat = phoneNumberFormat;
+	const val = v.validate(body, schemaToUse);
+	const error = val.errors;
 	return error;
 }
 
