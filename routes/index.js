@@ -20,7 +20,7 @@ const include = require('include')(__dirname);
 
 const auth = require('./auth');
 const mocks = require('./mocks');
-const controllers = require('./controllers/');
+const api = require('./api');
 
 const token = include('controllers/auth/token.js');
 const authorize = include('controllers/auth/authorize.js');
@@ -36,7 +36,7 @@ router.use(token);
 
 router.use(authorize);
 
-router.use('/', controllers);
+router.use('/', api);
 
 //*******************************************************************
 //exports
