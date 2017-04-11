@@ -108,3 +108,4 @@ function getFieldsToStoreInDB(schema, fieldsToStore, path, saveLocation){
 
 module.exports.saveFile = saveFile;
 module.exports.getDataToStoreInDB = getDataToStoreInDB;
+module.exports.getFieldsToStoreInDB = getFieldsToStoreInDB;
