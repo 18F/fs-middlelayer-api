@@ -32,6 +32,9 @@ const upload = multer({ storage: storage });
 
 //*******************************************************************
 
+/** Function to retrieve all of the files that might be expected by any route.
+ * @return {Array[Object]} - Array of objects used by multer to describe the files that can be expected.
+ */
 function getAllFileNames() {
 
 	const allFilesNames = [];
@@ -39,19 +42,11 @@ function getAllFileNames() {
 	if (apiSchema) {
 		for (const k in apiSchema.paths) {
 
-			//console.log('\n k : ' + k );
-
 			for (const l in apiSchema.paths[k]) {
-
-				//console.log('\n l : ' + l );
 				
 				if (apiSchema.paths[k][l].parameters) {
 
-					//console.log('\n apiSchema.paths[k][l].parameters : ' + JSON.stringify(apiSchema.paths[k][l].parameters) );
-
 					for (let i = 0; i < apiSchema.paths[k][l].parameters.length; i++) {
-
-						//console.log('\n apiSchema.paths[k][l].parameters[i] : ' + JSON.stringify(apiSchema.paths[k][l].parameters[i]) );
 
 						if (apiSchema.paths[k][l].parameters[i].type === 'file') {
 							
@@ -68,8 +63,6 @@ function getAllFileNames() {
 
 	return allFilesNames;
 }
-
-//console.log('\n getAllFileNames : ' + JSON.stringify(getAllFileNames()) );
 
 const postUploadFields = upload.fields(getAllFileNames());
 

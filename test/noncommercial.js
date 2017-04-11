@@ -740,8 +740,7 @@ describe('noncommercial POST: format validated', function(){
 				.send(noncommercialFactory.create({'applicantInfo.dayPhone.number':456789}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
-					//console.log('res\n\n\n')
-					//console.log(res)
+
 					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Number must be 7 digits.');
 
 				})

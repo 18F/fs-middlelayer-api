@@ -42,17 +42,11 @@ function apiSchemaData(apiSchema, reqPath){
 
 	if (apiSchema) {
 		for (const k in apiSchema.paths) {
-			//console.log('\nk : ' + JSON.stringify(k) );
 
 			const ms = matchstick(k, 'template');
-			//console.log('ms : ' + JSON.stringify(ms) );
 			ms.match(reqPath);
 
 			if ( ms.match(reqPath) ) { 
-
-				console.log('ms.tokens : ' + JSON.stringify(ms.tokens) );
-				console.log('ms.match : ' + JSON.stringify(ms.match(reqPath)) );
-				console.log('ms.matches : ' + JSON.stringify(ms.matches ) );
 
 				return {
 					path: k,
@@ -116,13 +110,9 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 // controller functions
 
 const getControlNumberFileName = function(req, res, reqData) {
-	const pathData = reqData.schema;
-	console.log('getControlNumberFileName');
 
 	const controlNumber = reqData.matches.controlNumber;
 	const fileName = reqData.matches.fileName;
-
-	console.log('controlNumber=' + controlNumber + ', fileName=' + fileName);
 
 	const filePath = controlNumber + '/' + fileName;
 
@@ -163,8 +153,6 @@ const getControlNumber = function(req, res, reqData){
 		'gse': 'goodStandingEvidence',
 		'opp': 'operatingPlan'
 	};
-
-	console.log('getControlNumber ' );
 
 	const basicData = getBasicRes(pathData);
 
@@ -209,7 +197,6 @@ const getControlNumber = function(req, res, reqData){
 
 const postApplication = function(req, res, reqData){
 	const pathData = reqData.schema;
-	console.log('postApplication ' );
 
 	const body = getBody(req);
 	const derefFunc = deref();
@@ -218,6 +205,7 @@ const postApplication = function(req, res, reqData){
 	const schema = validation.getValidationSchema(pathData);
 	const sch = derefFunc(schema.schemaToUse, [schema.fullSchema]);
 	const allErrors = validation.getFieldValidationErrors(body, pathData, sch);
+	
 	//Files to validate are in possbileFiles
 	validation.checkForFilesInSchema(sch, possbileFiles);
 
@@ -262,44 +250,30 @@ const use = function(req, res){
 	const reqPath = `/${req.params[0]}`;
 	const reqMethod = req.method.toLowerCase();
 
-	console.log('\n apiSchemaData(apiSchema, reqPath) : ' + JSON.stringify(apiSchemaData(apiSchema, reqPath)));
-
-	const apiReqData = apiSchemaData(apiSchema, reqPath);	//Need to handle if this is undefined
+	const apiReqData = apiSchemaData(apiSchema, reqPath);
 	if (apiReqData){
 		const apiPath = apiReqData.path;
 		const apiTokens = apiReqData.tokens;
 		const apiMatches = apiReqData.matches;
 
-		console.log('\n apiTokens : ' + JSON.stringify(apiTokens));
-		console.log('\n apiMatches : ' + JSON.stringify(apiMatches));
-
-		console.log('reqPath : ' + reqPath );
-		console.log('reqMethod : ' + reqMethod );
-		console.log('apiPath : ' + apiPath );
-
 		if (!apiPath) {
 			return error.sendError(req, res, 404, 'Invalid endpoint.');
 		}
 		else {
-			//console.log('apiPath true : ' + apiPath );
 			if (!apiSchema.paths[apiPath][reqMethod]) {
 				return error.sendError(req, res, 405, 'No endpoint method found.');
 			}
 			else {
-				//console.log('reqMethod true : ' + reqMethod );
 				if (!apiSchema.paths[apiPath][reqMethod].responses) {
 					return error.sendError(req, res, 500, 'No endpoint responses found.');
 				}
 				else {
-					//console.log('response true : ' + JSON.stringify(apiSchema.paths[apiPath][reqMethod].responses) );
 					if (!apiSchema.paths[apiPath][reqMethod].responses['200']) {
 						return error.sendError(req, res, 500, 'No endpoint success found.');
 					}
 					else {
 						
 						const schemaData = apiSchema.paths[apiPath][reqMethod];
-
-						console.log('schemaData : ' + JSON.stringify(schemaData) );
 
 						const reqData = {
 							path: apiPath,
@@ -311,7 +285,6 @@ const use = function(req, res){
 						if (reqMethod === 'get') {
 
 							if (apiTokens.includes('fileName')) {
-								console.log('apiTokens true');
 
 								getControlNumberFileName(req, res, reqData);
 
