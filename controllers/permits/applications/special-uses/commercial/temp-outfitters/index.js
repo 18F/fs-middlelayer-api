@@ -31,6 +31,13 @@ const error = include('error.js');
 
 const get = {};
 const put = {};
+const fileTypes = {
+	'gud': 'guideDocumentation',
+	'arf': 'acknowledgementOfRiskForm',
+	'inc': 'insuranceCertificate',
+	'gse': 'goodStandingEvidence',
+	'opp': 'operatingPlan'
+};
 
 // get id
 
@@ -52,7 +59,7 @@ get.id = function(req, res){
 
 	if (basicData){
 
-		dbUtil.getApplication(controlNumber, function(err, applicationData){
+		dbUtil.getApplication(controlNumber, function(err, applicationData, fileData){
 
 			if (err){
 				console.error(err);
@@ -60,7 +67,18 @@ get.id = function(req, res){
 			}
 			else {
 
-				jsonData = util.copyGenericInfo(basicData, applicationData, jsonData);				
+				const applData = JSON.parse(JSON.stringify(applicationData));
+
+				if (fileData){
+
+					fileData.forEach(function(file){
+						const fileType = fileTypes[file.file_type];
+						applData[fileType] = file.file_name;
+					});
+
+				}
+
+				jsonData = util.copyGenericInfo(basicData, applData, jsonData);				
 
 				delete jsonData.noncommercialFields;
 

@@ -15,18 +15,21 @@ pids
 # Coverage & quality directories
 coverage
 quality
+lint
+config
 
 # Dependency directories
 node_modules
 
 # Third party lib/lang
-/docs/lang/**
-/docs/lib/**
+docs
+api-docs
+code-docs
 
 # DB related setup
-/migrations/**
-/seeders/**
+migrations
+seeders
 
 # Mock API
-/mocks/**
+mocks
 /routes/mocks/**

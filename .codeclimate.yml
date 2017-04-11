@@ -6,9 +6,6 @@ engines:
       - javascript
   eslint:
     enabled: true
-    checks:
-      no-unused-expressions:
-        enabled: false
   fixme:
     enabled: true
   nodesecurity:
@@ -26,6 +23,11 @@ exclude_paths:
 - node_modules/
 - coverage/
 - test/
+- config/
+- mocks/
+- docs/
+- api-docs/
+- code-docs/
 - "**/lang/"
 - "**/lib/"
 ecmaFeatures:

@@ -1,0 +1,44 @@
+{
+	"tags": {
+		"allowUnknownTags": true
+	},
+	"source": {
+		"includePattern": ".+\\.js(doc|x)?$",
+		"excludePattern": "(^|\\/|\\\\)_",
+		"exclude": [
+            "node_modules",
+			"docs",
+			"api-docs",
+			"code-docs",
+			"logs",
+			"coverage",
+			"lint",
+			"test",
+			"mocks",
+            "plugins"
+        ]
+	},
+	"plugins": ["plugins/markdown"],
+	"templates": {
+		"logoFile": "/images/fs_bw.png",
+		"cleverLinks": false,
+		"monospaceLinks": false,
+		"dateFormat": "MMMM D, YYYY",
+		"outputSourceFiles": true,
+		"outputSourcePath": true,
+		"systemName": "US Forest Service ePermit Middlelayer API",
+		"footer": "",
+		"copyright": "",
+		"navType": "vertical",
+		"theme": "flatly",
+		"linenums": true,
+		"collapseSymbols": false,
+		"inverseNav": true,
+		"protocol": "html://",
+		"methodHeadingReturns": false
+	},
+	"markdown": {
+		"parser": "gfm",
+		"hardwrap": true
+	}
+}

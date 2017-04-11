@@ -20,6 +20,7 @@ const include = require('include')(__dirname);
 const multer = require('multer');
 
 const tempOutfitters = include('controllers/permits/applications/special-uses/commercial/temp-outfitters');
+const tempOutfittersFiles = include('controllers/permits/applications/special-uses/commercial/temp-outfitters/files.js');
 
 //*******************************************************************
 // storage
@@ -34,6 +35,12 @@ const upload = multer({ storage: storage });
 router.get('/:id(\\d+)', function(req, res){
     
 	tempOutfitters.get.id(req, res);
+    
+});
+
+router.get('/:id/files/:fileName', function(req, res){
+	
+	tempOutfittersFiles.get.id(req, res);
     
 });
 
