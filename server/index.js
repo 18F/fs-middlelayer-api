@@ -19,7 +19,7 @@ const async = require('async');
 const deref = require('deref');
 const matchstick = require('matchstick');
 
-const apiSchema = include('server/swagger.json');
+const apiSchema = include('docs/swagger.json');
 
 //*******************************************************************
 // other files
