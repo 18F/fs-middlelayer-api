@@ -1,5 +1,7 @@
 # Application Creation Process
+
 These steps define the process for creating a new permit type using **Example Permit** for illustration.
+
 1. Create the Swagger Documentation.
 
 	1. Go to `docs/swagger.json` and add the new `GET`, `PUT`, and `POST` route for the new **Example Permit** as shown below:
