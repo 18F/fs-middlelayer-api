@@ -23,6 +23,7 @@ const util = include('test/utility.js');
 
 const factory = require('unionized');
 const tempOutfitterInput = include('test/data/testInputTempOutfitters.json');
+const testURL = '/permits/applications/special-uses/commercial/temp-outfitters/';
 
 const chai = require('chai');
 const expect = chai.expect;
@@ -54,7 +55,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without a body', function(done) {
 		
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
 				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
@@ -64,7 +65,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field. Type is a required field. Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Client Charges is a required field.');
+					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field. Type is a required field. Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Client Charges is a required field.');
 
 				})
 				.expect(400, done);
@@ -74,7 +75,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without an applicantInfo object', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({applicantInfo : undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -85,7 +86,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field.');
 
 				})
 				.expect(400, done);
@@ -95,7 +96,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without a tempOutfitterFields object', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({tempOutfitterFields : undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -106,7 +107,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Client Charges is a required field.');
+					expect(res.body.response.message).to.equal('Temp Outfitter Fields is a required field. Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Client Charges is a required field.');
 
 				})
 				.expect(400, done);
@@ -120,7 +121,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without a firstName', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.firstName':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -141,7 +142,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without a lastName', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.lastName':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -162,7 +163,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without a dayPhone', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -173,7 +174,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field.');
 
 				})
 				.expect(400, done);
@@ -183,7 +184,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without a dayPhone/areaCode', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.areaCode':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -204,7 +205,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without a dayPhone/number', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.number':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -225,7 +226,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without a dayPhone/type', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.type':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -246,7 +247,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without an emailAddress', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.emailAddress':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -267,7 +268,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without a mailingAddress', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingAddress':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -288,7 +289,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without a mailingCity', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingCity':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -309,7 +310,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without a mailingState', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingState':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -330,7 +331,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without a mailingZIP', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.mailingZIP':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -350,7 +351,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without an orgType', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.orgType':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -375,7 +376,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without an activityDescription', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create({'tempOutfitterFields.activityDescription':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -396,7 +397,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 		it('should return valid json with a 400 status code for tempOutfitters POST request without either advertisingURL or advertisingDescription', function(done) {
 
 			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters')
+				.post(testURL)
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create(
 					{
@@ -439,19 +440,8 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 	it('should return valid json for tempOutfitters GET request for id', function(done) {
 
 		request(server)
-			.get('/permits/applications/special-uses/commercial/temp-outfitters/1234567890')
+			.get(`${testURL}123456789/`)
 			.set('x-access-token', token)
-			.expect('Content-Type', /json/)
-			.expect(200, done);
-
-	});
-
-	it('should return valid json for tempOutfitters PUT request for id', function(done) {
-
-		request(server)
-			.put('/permits/applications/special-uses/commercial/temp-outfitters/1234')
-			.set('x-access-token', token)
-			.send(tempOutfitterFactory.create())
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 
@@ -460,7 +450,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 	it('should return valid json for tempOutfitters POST request', function(done) {
 
 		request(server)
-			.post('/permits/applications/special-uses/commercial/temp-outfitters')
+			.post(testURL)
 			.set('x-access-token', token)
 			.field('body', JSON.stringify(tempOutfitterFactory.create()))
 			.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -476,7 +466,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 	it('should return valid json for tempOutfitters POST request with apiRequest', function(done) {
 
 		request(server)
-			.post('/permits/applications/special-uses/commercial/temp-outfitters')
+			.post(testURL)
 			.set('x-access-token', token)
 			.field('body', JSON.stringify(tempOutfitterFactory.create()))
 			.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
@@ -492,40 +482,6 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	});
 
-});
-
-describe('tempOutfitters PUT: field type validated', function(){
-
-	let token;
-
-	before(function(done) {
-
-		util.getToken(function(t){
-
-			token = t;
-			return done();
-
-		});
-	
-	});
-
-	describe('tempOutfitters PUT: required fields are type validated', function(){
-
-		it('should return valid json with error if no updated provided', function(done) {
-
-			request(server)
-				.put('/permits/applications/special-uses/commercial/temp-outfitters/123')
-				.set('x-access-token', token)
-				.expect('Content-Type', /json/)
-				.expect(function(res){
-
-					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field. Type is a required field. Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Client Charges is a required field.');
-
-				})
-				.expect(400, done);
-
-		});
-	});
 });
 
 describe('tempOutfitters POST: field type validated', function(){
@@ -1120,7 +1076,7 @@ describe('tempOutfitters POST: file validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 					
-					expect(res.body.response.message).to.equal('operatingPlan must be provided.');
+					expect(res.body.response.message).to.equal('Operating Plan is a required file.');
 
 				})
 				.expect(400, done);
@@ -1139,7 +1095,7 @@ describe('tempOutfitters POST: file validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 					
-					expect(res.body.response.message).to.equal('goodStandingEvidence must be provided. operatingPlan must be provided.');
+					expect(res.body.response.message).to.equal('Good Standing Evidence is a required file. Operating Plan is a required file.');
 
 				})
 				.expect(400, done);
@@ -1155,7 +1111,7 @@ describe('tempOutfitters POST: file validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 					
-					expect(res.body.response.message).to.equal('insuranceCertificate must be provided. goodStandingEvidence must be provided. operatingPlan must be provided.');
+					expect(res.body.response.message).to.equal('Insurance Certificate is a required file. Good Standing Evidence is a required file. Operating Plan is a required file.');
 
 				})
 				.expect(400, done);
@@ -1174,7 +1130,7 @@ describe('tempOutfitters POST: file validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 					
-					expect(res.body.response.message).to.equal('operatingPlan file errors: size of 0 bytes.');
+					expect(res.body.response.message).to.equal('Operating Plan cannot be an empty file.');
 
 				})
 				.expect(400, done);
@@ -1193,7 +1149,7 @@ describe('tempOutfitters POST: file validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 					
-					expect(res.body.response.message).to.equal('operatingPlan file errors: invalid extension.');
+					expect(res.body.response.message).to.equal('Operating Plan must be one of the following extensions: doc, docx, rtf.');
 
 				})
 				.expect(400, done);
