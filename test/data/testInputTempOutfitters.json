@@ -2,32 +2,32 @@
     "region": "38",
     "forest": "50",
     "district": "50",
-    "authorizingOfficerName": "WILLIAM L.NOXON",
+    "authorizingOfficerName": "Jane Roe",
     "authorizingOfficerTitle": "null",
     "applicantInfo": {
         "firstName": "John",
         "lastName": "Doe",
         "dayPhone": {
-            "areaCode": 541,
-            "number": 8156141,
+            "areaCode": 202,
+            "number": 5551234,
             "extension": "0",
             "type": "BUSINESS"
         },
-        "emailAddress": "test@email.org",
-        "mailingAddress": "ON ANW 0953",
-        "mailingCity": "ALBANY",
-        "mailingState": "OR",
-        "mailingZIP": "97321",
+        "emailAddress": "test@email.com",
+        "mailingAddress": "1234 Main St",
+        "mailingCity": "Washington",
+        "mailingState": "DC",
+        "mailingZIP": "12345",
         "orgType": "Limited Liability Company"
     },
     "type": "tempOutfitters",
     "tempOutfitterFields": {
         "individualIsCitizen": true,
         "smallBusiness": false,
-        "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
-        "advertisingURL": "www.outfitting.com",
-        "advertisingDescription": "We outfit",
+        "activityDescription": "Sample Activity",
+        "advertisingURL": "www.sample.com",
+        "advertisingDescription": "Sample Advertising",
         "clientCharges": "500",
-        "experienceList": "good times"
+        "experienceList": "Sample List"
     }
 }
