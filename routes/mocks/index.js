@@ -27,42 +27,40 @@ const error = include('error.js');
 
 router.use('/:api/*', function(req, res, next){
 
-	let mockAPI = req.params['api'];
+	const mockAPI = req.params.api;
 
 	let mockSwag;
 
 	try {
-		mockSwag = include('mocks/'+ mockAPI +'.json');	
+		mockSwag = include(`mocks/${mockAPI}.json`);	
 	}
 	catch (e) {
 		error.sendError(req, res, 405, 'No mock endpoint server found.');
 		return;
 	}
 
-	let mockPath = '/' + req.params[0];
-	let mockMethod = req.method.toLowerCase();
+	const mockPath = '/' + req.params[0];
+	const mockMethod = req.method.toLowerCase();
 
 	let swagPath;
 
 	if (mockSwag) {
 		for (let k in mockSwag.paths) {
 
-			let ms = matchstick(k, 'template');
+			const ms = matchstick(k, 'template');
 			ms.match(mockPath);
 
-			if( ms.match(mockPath) ) { 
-
+			if ( ms.match(mockPath) ) { 
 
 				swagPath = k;
 				break;
 			}
-	    }
+		}
 	}
 
-
-    if (!swagPath) {
-    	error.sendError(req, res, 404, 'No mock endpoint path found.');
-    }
+	if (!swagPath) {
+		error.sendError(req, res, 404, 'No mock endpoint path found.');
+	}
 	else {
 		if (!mockSwag.paths[swagPath][mockMethod]) {
 			error.sendError(req, res, 405, 'No mock endpoint method found.');
