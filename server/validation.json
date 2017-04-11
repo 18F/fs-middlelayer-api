@@ -21,15 +21,7 @@
                         "$ref": "tempOutfitterFields"
                     }
                 },
-                "allOf":[
-                    {"required": ["type", "tempOutfitterFields"]},
-                    {
-                        "anyOf": [
-                            { "required": ["applicantInfo"] },
-                            { "required": ["contactId"] }
-                        ]
-                    }
-                ]
+                "required": ["applicantInfo", "type", "tempOutfitterFields"]
             }
         ]
     },
