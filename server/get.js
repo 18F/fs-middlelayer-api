@@ -1,5 +1,20 @@
+/*
+
+  ___ ___       ___               _ _       _   ___ ___ 
+ | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
+
+*/
+
+//*******************************************************************
+
+'use strict';
+
+//*******************************************************************
+// required modules
 const jsf = require('json-schema-faker');
-const include = require('include')(__dirname);
+//*******************************************************************
 
 function fromAdminOrg(cnData, postSchema, jsonData, key){
 
@@ -62,7 +77,6 @@ function getSubLevelField(cnData, postSchema, key, jsonData){
 	}
 
 }
-
 function buildGetResponse(cnData, applicationData, schemaData, jsonData, postSchema){
 
 	let key; 
@@ -92,6 +106,7 @@ function buildGetResponse(cnData, applicationData, schemaData, jsonData, postSch
 	}
 
 }
+
 function copyGenericInfo(cnData, applicationData, jsonData, outputSchema){
 
 	//Get from schema
@@ -105,15 +120,4 @@ function copyGenericInfo(cnData, applicationData, jsonData, outputSchema){
 	return jsonData;
 }
 
-function concatErrors(errorMessages){
-
-	let output = '';
-	errorMessages.forEach((message)=>{
-		output = `${output}${message} `;
-	});
-	output = output.trim();
-	return output;
-}
-
 module.exports.copyGenericInfo = copyGenericInfo;
-module.exports.concatErrors = concatErrors;

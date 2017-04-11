@@ -25,7 +25,7 @@ const apiSchema = include('server/swagger.json');
 // other files
 
 const error = require('./error.js');
-const util = require('./util.js');
+const get = require('./get.js');
 const aws = require('./aws.js');
 const db = require('./db.js');
 const basic = require('./basic.js');
@@ -147,7 +147,7 @@ const getControlNumber = function(req, res, pathData){
 				return error.sendError(req, res, 400, 'error getting application from database');
 			}
 			else {
-				jsonData = util.copyGenericInfo(cnData, appl, jsonData, pathData.getTemplate);
+				jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData.getTemplate);
 				const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
 
 				res.json(toReturn);
