@@ -204,7 +204,7 @@ function createContact(fieldsObj, person, postObject){
  * @param  {Object} sch - Schema object 
  * @param  {Object} body - User input
  */
-function postToBasic(req, res, sch, body){
+function postToBasic(req, res, sch, body, controlNumber){ //Should remove control number once we get from BASIC api
 
 	const postObject = {
 		'/contact/personOrOrgcode':{},
@@ -270,8 +270,8 @@ function postToBasic(req, res, sch, body){
 		jsonResponse.verb = req.method;
 		jsonResponse.src = 'json';
 		jsonResponse.route = req.originalUrl;
+		jsonResponse.accinstCn = controlNumber;
 		jsonResponse.apiRequest = body;
-		jsonResponse.accinstCn = res.accinstCn;
 		jsonResponse.basicPosts = postObject;
 		return res.json(jsonResponse);
 	})
