@@ -314,6 +314,14 @@
 				"consumes": [
 					"application/json"
 				],
+				"produces": [
+					"application/json",
+					"application/pdf",
+					"text/rtf",
+					"application/msword",
+					"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+					"application/octet-stream"
+				],
 				"parameters": [
 					{
 						"name": "controlNumber",
