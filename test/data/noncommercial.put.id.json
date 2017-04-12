@@ -5,6 +5,6 @@
 	    "type": "controller",
 	    "verb": "put",
 	    "src": "json",
-	    "route": "permits/special-uses/noncommercial/id"
+	    "route": "permits/applications/special-uses/noncommercial/id"
 	}
 }

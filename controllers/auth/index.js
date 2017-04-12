@@ -14,41 +14,45 @@
 //*******************************************************************
 // required modules
 
+const include = require('include')(__dirname);
 const passport = require('passport');  
 const Strategy = require('passport-local');
+const bcrypt = require('bcrypt-nodejs');
 
+const models = include('models');
 const jwt = require('jsonwebtoken');
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 //*******************************************************************
 // passport 
 
 passport.use(new Strategy(  
-    function(username, password, done) {
 
-	if (username === 'user' && password === '12345'){
-		done(null, {
-			id: username,
-			firstname: 'first',
-			lastname: 'last',
-			email: 'name@email.com',
-			role: 'admin',
-			verified: true
+	function(username, password, done) {
+		
+		models.users.findOne({
+			where: {user_name: username} //eslint-disable-line camelcase
+		}).then(function(user) {
+			if (user){
+				if (bcrypt.compareSync(password, user.pass_hash)){
+					done(null, {
+						id: user.user_name,
+						role: user.user_role,
+						verified: true
+					});	
+				}
+				else {
+					done(null, false);
+				}
+			}
+			else {
+				done(null, false);
+			}
+		}).catch(function (err) {
+			console.error(err);
+			done(null, false);
 		});
 	}
-	else if (username === 'user2' && password === '12345'){
-		done(null, {
-			id: username,
-			firstname: 'first',
-			lastname: 'last',
-			email: 'name@email.com',
-			role: 'user',
-			verified: true
-		});
-	}
-	else {
-		done(null, false);
-	}
-}
 ));
 
 //*******************************************************************
@@ -63,11 +67,11 @@ const serialize = function(req, res, next) {
 };
 
 const generate = function(req, res, next) {   
-    
+	
 	req.token = jwt.sign({
 		id: req.user.id,
 		role: req.user.role
-	}, 'superSecret', { expiresIn: 120 * 60 });
+	}, JWT_SECRET_KEY, { expiresIn: 120 * 60 });
 	next();
 };
 

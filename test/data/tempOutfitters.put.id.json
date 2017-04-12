@@ -1,0 +1,10 @@
+{
+	"response" : {
+		"success" : true,
+    "api": "FS ePermit API",
+    "type": "controller",
+    "verb": "put",
+    "src": "json",
+    "route": "permits/applications/special-uses/commercial/temp-outfitters/id"
+	}
+}

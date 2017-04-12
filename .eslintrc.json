@@ -82,7 +82,7 @@
         "no-shadow": "off",
         "no-undef-init": "error",
         "no-undef": "error",
-        "no-undefined": "error",
+        "no-undefined": "warn",
         "no-unused-vars": "error",
         "no-use-before-define": "error",
         "callback-return": "error",
@@ -177,6 +177,7 @@
         "prefer-template": "off",
         "require-yield": "off",
         "keyword-spacing":"error",
-        "comma-dangle":"error"
+        "comma-dangle":"error",
+        "max-nested-callbacks":"error"
     }
 }

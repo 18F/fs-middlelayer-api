@@ -13,9 +13,8 @@
 
 //*******************************************************************
 // required modules
-const include = require('include')(__dirname);
 
-const error = include('error.js');
+const error = require('../error.js');
 
 //*******************************************************************
 // authorize
