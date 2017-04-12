@@ -1,7 +1,7 @@
 {
-    "region": 31,
-    "forest": 50,
-    "district": 50,
+    "region": "31",
+    "forest": "50",
+    "district": "50",
     "authorizingOfficerName": "WILLIAM L.NOXON",
     "authorizingOfficerTitle": "null",
     "applicantInfo": {
@@ -10,14 +10,14 @@
         "dayPhone": {
             "areaCode": 541,
             "number": 8156141,
-            "extension": 0,
+            "extension": "0",
             "type": "BUSINESS"
         },
         "emailAddress": "test@email.org",
         "mailingAddress": "ON ANW 0953",
         "mailingCity": "ALBANY",
         "mailingState": "OR",
-        "mailingZIP": 97321
+        "mailingZIP": "97321"
     },
     "type": "noncommercial",
     "noncommercialFields": {

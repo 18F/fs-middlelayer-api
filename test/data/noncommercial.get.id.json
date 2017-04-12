@@ -5,7 +5,7 @@
         "type": "controller",
         "verb": "get",
         "src": "json",
-        "route": "permits/special-uses/noncommercial/id"
+        "route": "permits/applications/special-uses/noncommercial/id"
     },
     "controlNumber": "1095010356",
     "region": 1,

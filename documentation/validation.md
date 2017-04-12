@@ -1,15 +1,18 @@
 # Validation
 
-### Updating State Abreviations
+## Updating State Abreviations
+
 Stored in controllers/permits/applications/special-uses/validationSchema.json
 In schema 'applicantInfoBase', under mailingState is a field called pattern.
 
-#### Adding a state
+### Adding a state
+
 Given the following pattern `^(A[EZ]|C[AOT]|D[E])$`
 To add a state code AQ, update the pattern to `^(A[EZQ]|C[AOT]|D[E])$`
 To add a state code ZQ, update the pattern to `^(A[EZ]|C[AOT]|D[E]|Z[Q])$`
 
-#### Removing a state
+### Removing a state
+
 Given the following pattern `^(A[EZ]|C[AOT]|D[E]|Z[Q])$`
 To remove a state code AE, update the pattern to `^(A[Z]|C[AOT]|D[E]|Z[Q])$`
 To remove a state code ZQ, update the pattern to `^(A[EZ]|C[AOT]|D[E])$`
@@ -17,21 +20,26 @@ To remove a state code ZQ, update the pattern to `^(A[EZ]|C[AOT]|D[E])$`
 ## Adding field validations
 
 ### Adding validation for required field
+
 Under the properties field, add a field by adding the following, replacing fieldName with the name of the field to make:
 `"fieldName": { "type": "fieldType" }`
 Then add the name of the field to the required array, located after the properties object.
 
 #### Adding error for required field
+
 No extra steps needed.
 
 ### Adding validation for required field type
+
 Using the above example: `"fieldName": { "type": "fieldType" }`
 Types that the field is required to be can be specied by updating fieldType to the type fieldName should be. Fields can have multiple type by providing an array containing the types fieldName can be to type.
 
 #### Adding error for required type
+
 No extra steps needed.
 
 ### Adding validation for field format
+
 Using the example: `"fieldName": { "type": "fieldType" }`
 Format validation can be added by adding a format field to the fieldName object:
 `"fieldName": { "type": "fieldType", "format": "fieldFormat1" }`

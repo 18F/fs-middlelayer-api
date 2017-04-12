@@ -5,7 +5,7 @@
       "type": "controller",
       "verb": "get",
       "src": "json",
-      "route": "permits/special-uses/noncommercial"
+      "route": "permits/applications/special-uses/noncommercial"
   },
   "noncommercial" : [
     {

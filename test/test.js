@@ -51,7 +51,7 @@ describe('FS ePermit API', function() {
 	it('should return a 404 error if invalid', function(done) {
 
 		request(server)
-			.get('/asdfsad')
+			.get('/asdfsad/')
 			.set('x-access-token', token)
 			.expect(404, done);
 	
@@ -60,7 +60,7 @@ describe('FS ePermit API', function() {
 	it('should not have x-powered-by header', function(done) {
 
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/1234567890')
+			.get('/permits/applications/special-uses/noncommercial/987654321/')
 			.set('x-access-token', token)
 			.expect(function(res) {
 
@@ -74,7 +74,7 @@ describe('FS ePermit API', function() {
 	it('should have cors support', function(done) {
 
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/1234567890')
+			.get('/permits/applications/special-uses/noncommercial/987654321/')
 			.set('x-access-token', token)
 			.expect(function(res) {
 
@@ -88,7 +88,7 @@ describe('FS ePermit API', function() {
 	it('should have cache-control set', function(done) {
 
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/1234567890')
+			.get('/permits/applications/special-uses/noncommercial/987654321/')
 			.set('x-access-token', token)
 			.expect(function(res) {
 
@@ -102,7 +102,7 @@ describe('FS ePermit API', function() {
 	it('should have pragma set', function(done) {
 
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/1234567890')
+			.get('/permits/applications/special-uses/noncommercial/987654321/')
 			.set('x-access-token', token)
 			.expect(function(res) {
 
@@ -116,10 +116,10 @@ describe('FS ePermit API', function() {
 	it('should have x-xss-protection set', function(done) {
 
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/1234567890')
+			.get('/permits/applications/special-uses/noncommercial/987654321/')
 			.set('x-access-token', token)
 			.expect(function(res) {
-
+				
 				expect(res.headers['x-xss-protection']).to.equal('1; mode=block');
 			
 			})

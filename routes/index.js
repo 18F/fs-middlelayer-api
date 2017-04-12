@@ -14,18 +14,21 @@
 //*******************************************************************
 // required modules
 
-const  express = require('express');
-const  router = express.Router();
-const  include = require('include')(__dirname);
+const express = require('express');
+const router = express.Router();
+const include = require('include')(__dirname);
 
-const  permits = require('./permits');
-const  auth = require('./auth');
+const auth = require('./auth');
+const mocks = require('./mocks');
+const api = require('./api');
 
-const  token = include('controllers/auth/token.js');
-const  authorize = include('controllers/auth/authorize.js');
+const token = include('controllers/auth/token.js');
+const authorize = include('controllers/auth/authorize.js');
 
 //*******************************************************************
 // router
+
+router.use('/mocks', mocks);
 
 router.use('/auth', auth);
 
@@ -33,7 +36,7 @@ router.use(token);
 
 router.use(authorize);
 
-router.use('/permits', permits);
+router.use('/', api);
 
 //*******************************************************************
 //exports

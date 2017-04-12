@@ -1,0 +1,11 @@
+{
+    "response":{
+    	"success" : true,
+	    "api": "FS ePermit API",
+	    "type": "controller",
+	    "verb": "post",
+	    "src": "json",
+	    "route": "permits/applications/special-uses/commercial/temp-outfitters"
+    },
+    "controlNumber": "1095010356"
+}

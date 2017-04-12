@@ -14,11 +14,11 @@
 //*******************************************************************
 // required modules
 
-const include = require('include')(__dirname);
-
 const jwt = require('jsonwebtoken');
 
-const error = include('error.js');
+const error = require('../error.js');
+
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 //*******************************************************************
 // token
@@ -29,7 +29,7 @@ const token = function(req, res, next){
 	
 	if (token) {
 
-		jwt.verify(token, 'superSecret', function(err, decoded) {      
+		jwt.verify(token, JWT_SECRET_KEY, function(err, decoded) {      
 			if (err) {
 				error.sendError(req, res, 401, 'Failed to authenticate token.');
 			} 
