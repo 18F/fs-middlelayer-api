@@ -14,7 +14,7 @@
     "lint": "npm-run-all -c -s lint:es lint:es:out lint:md",
     "lint:es": "eslint . -f stylish || exit 0",
     "lint:es:out": "eslint . -o ./lint/eslint.html -f html || exit 0",
-	"lint:es:fix": "eslint . --fix || exit 0",
+    "lint:es:fix": "eslint . --fix || exit 0",
     "lint:md": "markdownlint ./documentation ./README.md || exit 0",
     "dba": "sequelize db:migrate && sequelize db:seed:all",
     "doc": "jsdoc -c .jsdoc.json -d code-docs -t ./node_modules/ink-docstrap/template -R README.md -r ."
@@ -81,6 +81,7 @@
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "pg": "^6.1.4",
+    "request": "^2.81.0",
     "request-promise": "^4.2.0",
     "sequelize": "^3.30.2"
   }
