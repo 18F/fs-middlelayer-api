@@ -111,7 +111,6 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 
 const getControlNumberFileName = function(req, res, reqData) {
 
-	console.log('getControlNumberFileName')
 	const controlNumber = reqData.matches.controlNumber;
 	const fileName = reqData.matches.fileName;
 

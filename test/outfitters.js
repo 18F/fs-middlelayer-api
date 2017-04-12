@@ -33,6 +33,17 @@ const expect = chai.expect;
 
 const tempOutfitterFactory = factory.factory(tempOutfitterInput);
 
+const binaryParser = function (res, cb) {
+	res.setEncoding("binary");
+	res.data = "";
+	res.on("data", function (chunk) {
+		res.data += chunk;
+	});
+	res.on("end", function () {
+		cb(null, new Buffer(res.data, "binary"));
+	});
+};
+
 //*******************************************************************
 
 describe('tempOutfitters POST: validate required fields present', function(){
@@ -1052,9 +1063,6 @@ describe('tempOutfitters POST: file validated', function(){
 
 	let token;
 
-	let postControlNumber;
-	let postFileName;
-
 	before(function(done) {
 
 		util.getToken(function(t){
@@ -1063,7 +1071,7 @@ describe('tempOutfitters POST: file validated', function(){
 			return done();
 
 		});
-	
+
 	});
 	
 	describe('tempOutfitters POST: required files checks', function(){
@@ -1161,7 +1169,7 @@ describe('tempOutfitters POST: file validated', function(){
 
 		it('should return valid json when guideDocumentation file uploaded of size 16 MB (size limit 25 MB)', function(done) {
 
-			this.timeout(15000);
+			this.timeout(10000);
 			
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
@@ -1225,6 +1233,45 @@ describe('tempOutfitters POST: file validated', function(){
 				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
 				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 				.expect('Content-Type', /json/)
+				.expect(200, done);
+
+		});
+
+	});
+});
+
+describe('tempOutfitters GET: files validated', function(){
+
+	let token;
+
+	let postControlNumber;
+	let postFileName;
+
+	before(function(done) {
+
+		util.getToken(function(t){
+
+			token = t;
+			return done();
+
+		});
+
+	});
+	
+	describe('tempOutfitters GET/POST: post a new application with files, get that application, get file', function(){
+
+		it('should return valid json when application submitted with three required files', function(done) {
+			
+			this.timeout(5000);
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfitterFactory.create()))
+				.attach('insuranceCertificate', './test/data/test_file.doc')
+				.attach('goodStandingEvidence', './test/data/test_file.docx')
+				.attach('operatingPlan', './test/data/test_file.pdf')
+				.expect('Content-Type', /json/)
 				.expect(function(res){
 					postControlNumber = res.body.controlNumber;
 				})
@@ -1238,12 +1285,32 @@ describe('tempOutfitters POST: file validated', function(){
 			.get(`${testURL}${postControlNumber}/`)
 			.set('x-access-token', token)
 			.expect(function(res){
-				postFileName = res.body.tempOutfitterFields.insuranceCertificate;
+				postFileName = res.body.tempOutfitterFields.operatingPlan;
 			})
 			.expect(200, done);
 
 		});
 
+		it('should return valid json when getting outfitters files using the controlNumber and fileName returned from POST', function(done) {
+
+			request(server)
+			.get(`${testURL}${postControlNumber}/files/${postFileName}`)
+			.set('x-access-token', token)
+			.expect(200)
+			.expect('Content-Type', 'application/pdf')
+			.buffer()
+			.parse(binaryParser)
+			.end(function(err, res) {
+				if (err) 
+					return done(err);
+				
+				expect(200, done);
+				done();
+			});
+
+		});
 	});
 });
+
+
 
