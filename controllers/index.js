@@ -26,7 +26,7 @@ const apiSchema = include('docs/swagger.json');
 
 const error = require('./error.js');
 const get = require('./get.js');
-const aws = require('./aws.js');
+const store = require('./store.js');
 const db = require('./db.js');
 const basic = require('./basic.js');
 const validation = require('./validation.js');
@@ -87,7 +87,7 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 						return error.sendError(req, res, 500, `${fileInfo.filetype} failed to save`);
 					}
 					else {
-						aws.uploadFile(fileInfo, callback);
+						store.uploadFile(fileInfo, callback);
 					}
 				});
 			}
@@ -126,7 +126,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 		else {
 			if (file){
 
-				aws.getFile(controlNumber, fileName, function(err, data){
+				store.getFile(controlNumber, fileName, function(err, data){
 
 					if (err){
 						error.sendError(req, res, 404, 'file not found');
