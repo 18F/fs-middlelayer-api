@@ -16,6 +16,7 @@
 
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 const include = require('include')(__dirname);
 
 const multer = require('multer');
@@ -71,12 +72,14 @@ const postUploadFields = upload.fields(getAllFileNames());
 
 // trailing slash middleware
 router.use('/*', function(req, res, next){
-	const reqPath = `/${req.params[0]}`;
 	
-	if (reqPath.slice(-1) !== '/') {
-		res.redirect(301, reqPath + '/');
+	const reqPath = `/${req.params[0]}`;
+
+	if ((reqPath.slice(-1) !== '/') && (!path.parse(reqPath).ext)) {
+		return res.redirect(301, reqPath + '/');
 	}
-	next();	
+
+	next();
 });
 
 // api router to controller
