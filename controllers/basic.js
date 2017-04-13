@@ -206,77 +206,73 @@ function createContact(fieldsObj, person, postObject){
  */
 function postToBasic(req, res, sch, body, controlNumber){ //Should remove control number once we get from BASIC api
 
-	const postObject = {
-		'/contact/personOrOrgcode':{},
-		'/contact-address':{},
-		'/contact-phone':{},
-		'/application':{}
-	};
-	const fieldsToPost = prepareBasicPost(sch, body);
-	const fieldsObj = {};
-	fieldsToPost.forEach((post)=>{
-		const key = Object.keys(post)[0];
-		fieldsObj[key] = post[key];
-	});
+	return new Promise(function(fulfill, reject){
 
-	const org = (body.applicantInfo.orgType && body.applicantInfo.orgType !== 'Individual');
-	let existingContactCheck;
-	if (org){
-		let orgName = body.applicantInfo.organizationName;
-		if (!orgName){
-			orgName = 'abc';
-		}
-		existingContactCheck = `${basicURL}/contact/orgcode/${orgName}/`;
-	}
-	else {
-		const lastName = body.applicantInfo.lastName;
-		existingContactCheck = `${basicURL}/contact/person/${lastName}/`;
-	}
-	
-	const getContactOptions = {
-		method: 'GET',
-		uri: existingContactCheck,
-		qs:{},
-		json: true
-	};
-	request(getContactOptions)
-	.then(function(res){
-		if (res.contCN){
-			Promise.resolve(res.contCN);
+		const postObject = {
+			'/contact/personOrOrgcode':{},
+			'/contact-address':{},
+			'/contact-phone':{},
+			'/application':{}
+		};
+		const fieldsToPost = prepareBasicPost(sch, body);
+		const fieldsObj = {};
+		fieldsToPost.forEach((post)=>{
+			const key = Object.keys(post)[0];
+			fieldsObj[key] = post[key];
+		});
+
+		const org = (body.applicantInfo.orgType && body.applicantInfo.orgType !== 'Individual');
+		let existingContactCheck;
+		if (org){
+			let orgName = body.applicantInfo.organizationName;
+			if (!orgName){
+				orgName = 'abc';
+			}
+			existingContactCheck = `${basicURL}/contact/orgcode/${orgName}/`;
 		}
 		else {
-			return createContact(fieldsObj, true, postObject);
+			const lastName = body.applicantInfo.lastName;
+			existingContactCheck = `${basicURL}/contact/person/${lastName}/`;
 		}
-	})
-	.then(function(contCN){
-		const createApplicationURL = `${basicURL}/application/`;
-		fieldsObj['/application'].contCn = contCN;
-		const applicationPost = fieldsObj['/application'];
-		postObject['/application'].request = applicationPost;
-		const createApplicationOptions = {
-			method: 'POST',
-			uri: createApplicationURL,
-			body: applicationPost,
+		
+		const getContactOptions = {
+			method: 'GET',
+			uri: existingContactCheck,
+			qs:{},
 			json: true
 		};
-		return request(createApplicationOptions);
-	})
-	.then(function(response){
-		postObject['/application'].response = response;
-		const jsonResponse = {};
-		jsonResponse.success = true;
-		jsonResponse.api = 'FS ePermit API';
-		jsonResponse.type = 'controller';
-		jsonResponse.verb = req.method;
-		jsonResponse.src = 'json';
-		jsonResponse.route = req.originalUrl;
-		jsonResponse.controlNumber = controlNumber;
-		jsonResponse.basicPosts = postObject;
-		return res.json(jsonResponse);
-	})
-	.catch(function(err){
-		return error.sendError(req, res, 500, err);
+		request(getContactOptions)
+		.then(function(res){
+			if (res.contCN){
+				Promise.resolve(res.contCN);
+			}
+			else {
+				return createContact(fieldsObj, true, postObject);
+			}
+		})
+		.then(function(contCN){
+			const createApplicationURL = `${basicURL}/application/`;
+			fieldsObj['/application'].contCn = contCN;
+			const applicationPost = fieldsObj['/application'];
+			postObject['/application'].request = applicationPost;
+			const createApplicationOptions = {
+				method: 'POST',
+				uri: createApplicationURL,
+				body: applicationPost,
+				json: true
+			};
+			return request(createApplicationOptions);
+		})
+		.then(function(response){
+			postObject['/application'].response = response;
+			fulfill(postObject);
+		})
+		.catch(function(err){
+			reject(err);
+		});
+
 	});
+
 }
 
 module.exports.postToBasic = postToBasic;
