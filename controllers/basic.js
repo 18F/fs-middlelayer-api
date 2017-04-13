@@ -271,7 +271,6 @@ function postToBasic(req, res, sch, body, controlNumber){ //Should remove contro
 		jsonResponse.src = 'json';
 		jsonResponse.route = req.originalUrl;
 		jsonResponse.controlNumber = controlNumber;
-		jsonResponse.apiRequest = body;
 		jsonResponse.basicPosts = postObject;
 		return res.json(jsonResponse);
 	})
