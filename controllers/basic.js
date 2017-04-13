@@ -204,7 +204,7 @@ function createContact(fieldsObj, person, postObject){
  * @param  {Object} sch - Schema object 
  * @param  {Object} body - User input
  */
-function postToBasic(req, res, sch, body, controlNumber){ //Should remove control number once we get from BASIC api
+function postToBasic(req, res, sch, body){ //Should remove control number once we get from BASIC api
 
 	return new Promise(function(fulfill, reject){
 
