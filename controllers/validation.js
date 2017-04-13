@@ -296,26 +296,6 @@ function getValidationSchema(pathData){
 	};
 }
 
-/** Validates the fields in user input
- * @param  {Object} body - Input from user to be validated
- * @param  {Object} pathData - All data from swagger for the path that has been run
- * @return {Array} - Array of ValidationErrors from validation
- */
-function validateBody(body, pathData){
-	const schema = getValidationSchema(pathData);
-	const applicationSchema = schema.fullSchema;
-	const schemaToUse = schema.schemaToUse;
-	let key;
-	for (key in applicationSchema){
-		v.addSchema(applicationSchema[key], key);
-	}
-	v.customFormats.areaCodeFormat = areaCodeFormat;
-	v.customFormats.phoneNumberFormat = phoneNumberFormat;
-	const val = v.validate(body, schemaToUse);
-	const error = val.errors;
-	return error;
-}
-
 /** Processes ValidationError into ErrorObj, extracting the info needed to create an error message
  * @param  {Array} - Array of ValidationErrors from validation
  * @param  {Array} - Array to store processed ErrorObjs in
@@ -347,6 +327,32 @@ function processErrors(errors, processedErrors, schema){
 			break;
 		}
 	}
+}
+
+/** Validates the fields in user input
+ * @param  {Object} body - Input from user to be validated
+ * @param  {Object} pathData - All data from swagger for the path that has been run
+ * @return {Array} - Array of ValidationErrors from validation
+ */
+function validateBody(body, pathData, derefSchema){
+	const processedFieldErrors = {
+		errorArray:[]
+	};
+	const schema = getValidationSchema(pathData);
+	const applicationSchema = schema.fullSchema;
+	const schemaToUse = schema.schemaToUse;
+	let key;
+	for (key in applicationSchema){
+		v.addSchema(applicationSchema[key], key);
+	}
+	v.customFormats.areaCodeFormat = areaCodeFormat;
+	v.customFormats.phoneNumberFormat = phoneNumberFormat;
+	const val = v.validate(body, schemaToUse);
+	const error = val.errors;
+	if (error.length > 0){
+		processErrors(error, processedFieldErrors, derefSchema);
+	}
+	return processedFieldErrors;
 }
 
 function makeFieldReadable(input){
@@ -586,14 +592,50 @@ function validateFile(uploadFile, validationConstraints, fileName){
 	
 }
 
-function getFieldValidationErrors(body, pathData, derefSchema){
-	const processedFieldErrors = {
+function checkFieldLengths(schema, input){
+	const fieldLengthErrors = {
 		errorArray:[]
 	};
-	const fieldErrors = validateBody(body, pathData);
-	if (fieldErrors.length > 0){
-		processErrors(fieldErrors, processedFieldErrors, derefSchema);
-	}
+	const keys = Object.keys(schema);
+	keys.forEach((key)=>{
+		switch (key){
+		case 'allOf':
+		case 'anyOf':
+			schema[key].forEach((sch)=>{
+				checkFieldLengths(sch, input);
+			});
+			break;
+		case 'properties':
+			checkFieldLengths(schema.properties, input);
+			break;
+		default:
+			if (schema[key].type === 'object'){
+				checkFieldLengths(schema[key], input[key]);
+			}
+			else if (schema[key].fromIntake){
+				
+				if (input){
+					const maxLength = schema[key].maxLength;
+					const fieldLength = `${input[key]}`.length;
+
+					if (maxLength < fieldLength){
+						console.log(key);
+						console.log('Too Long!\n\n\n\n\n');
+						//Create error obj for field being too long
+					}
+
+				}
+
+			}
+			break;
+		}
+	});
+	return fieldLengthErrors;
+}
+function getFieldValidationErrors(body, pathData, derefSchema){
+
+	const processedFieldErrors = validateBody(body, pathData, derefSchema);
+	checkFieldLengths(derefSchema, body);
 
 	return processedFieldErrors;
 }

@@ -347,6 +347,7 @@
                 "basicField":"firstName",
                 "default":"",
                 "fromIntake":true,
+                "maxLength":255,
                 "store":["basic:/contact/person"],
                 "type": "string"
             },
@@ -354,6 +355,7 @@
                 "basicField":"lastName",
                 "default":"",
                 "fromIntake":true,
+                "maxLength":0,
                 "store":["basic:/contact/person"],
                 "type": "string"
             },
