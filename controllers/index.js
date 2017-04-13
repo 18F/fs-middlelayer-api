@@ -114,7 +114,6 @@ const getControlNumberFileName = function(req, res, reqData) {
 	const controlNumber = reqData.matches.controlNumber;
 	const fileName = reqData.matches.fileName;
 
-
 	const filePath = controlNumber + '/' + fileName;
 
 	db.getFile(filePath, function (err, file){
@@ -226,22 +225,38 @@ const postApplication = function(req, res, reqData){
 
 		const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString(); //TODO: remove - used for mocks
 		toStoreInDB.control_number = controlNumber;
-		db.saveApplication(controlNumber, toStoreInDB, function(err, appl){
-			if (err){
-				return error.sendError(req, res, 500, err);
-			}
-			else {
-				saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
-					if (err) {
-						return error.sendError(req, res, 500, err);
-					}
-					else {
 
-						basic.postToBasic(req, res, sch, body, controlNumber);
-						
-					}
-				});
-			}
+		basic.postToBasic(req, res, sch, body, controlNumber)
+		.then((postObject)=>{
+			db.saveApplication(toStoreInDB, function(err, appl){
+				if (err){
+					return error.sendError(req, res, 500, err);
+				}
+				else {
+					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
+						if (err) {
+							return error.sendError(req, res, 500, err);
+						}
+						else {
+
+							const jsonResponse = {};
+							jsonResponse.success = true;
+							jsonResponse.api = 'FS ePermit API';
+							jsonResponse.type = 'controller';
+							jsonResponse.verb = req.method;
+							jsonResponse.src = 'json';
+							jsonResponse.route = req.originalUrl;
+							jsonResponse.controlNumber = controlNumber;
+							jsonResponse.basicPosts = postObject;
+							return res.json(jsonResponse);
+							
+						}
+					});
+				}
+			});
+		})
+		.catch((err)=>{
+			return error.sendError(req, res, 500, err);
 		});
 	}
 };
