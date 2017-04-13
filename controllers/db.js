@@ -105,7 +105,7 @@ const getApplication = function(controlNumber, callback){
 	});
 };
 
-const saveApplication = function(controlNumber, toStore, callback) {
+const saveApplication = function(toStore, callback) {
 	models.applications.create(toStore)
 	.then(function(appl) {
 		return callback(null, appl);
