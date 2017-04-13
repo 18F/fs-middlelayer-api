@@ -221,13 +221,11 @@ const postApplication = function(req, res, reqData){
 		return error.sendError(req, res, 400, errorMessage, allErrors.errorArray);
 	}
 	else {
-		const toStoreInDB = db.getDataToStoreInDB(sch, body);
-
-		const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString(); //TODO: remove - used for mocks
-		toStoreInDB.control_number = controlNumber;
-
-		basic.postToBasic(req, res, sch, body, controlNumber)
+		basic.postToBasic(req, res, sch, body)
 		.then((postObject)=>{
+			const toStoreInDB = db.getDataToStoreInDB(sch, body);
+			const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString(); //TODO: remove - used for mocks
+			toStoreInDB.control_number = controlNumber;
 			db.saveApplication(toStoreInDB, function(err, appl){
 				if (err){
 					return error.sendError(req, res, 500, err);
