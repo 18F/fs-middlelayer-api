@@ -27,7 +27,7 @@ const morgan = require('morgan');
 
 const bodyParser = require('body-parser');
 
-const routes = require('./routes');
+const routes = require('./src/routes');
 
 //*******************************************************************
 // environment variables

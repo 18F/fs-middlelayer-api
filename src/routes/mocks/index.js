@@ -20,7 +20,7 @@ const include = require('include')(__dirname);
 
 const matchstick = require('matchstick');
 
-const error = include('controllers/error.js');
+const error = include('src/controllers/error.js');
 
 //*******************************************************************
 // router
@@ -32,7 +32,7 @@ router.use('/:api/*', function(req, res, next){
 	let mockSwag;
 
 	try {
-		mockSwag = include(`mocks/${mockAPI}.json`);	
+		mockSwag = include(`src/mocks/${mockAPI}.json`);	
 	}
 	catch (e) {
 		error.sendError(req, res, 405, 'No mock endpoint server found.');

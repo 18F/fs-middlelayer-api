@@ -22,8 +22,8 @@ const auth = require('./auth');
 const mocks = require('./mocks');
 const api = require('./api');
 
-const token = include('controllers/auth/token.js');
-const authorize = include('controllers/auth/authorize.js');
+const token = include('src/controllers/auth/token.js');
+const authorize = include('src/controllers/auth/authorize.js');
 
 //*******************************************************************
 // router
