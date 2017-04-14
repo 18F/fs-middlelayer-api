@@ -17,7 +17,7 @@
 //*******************************************************************
 // other files
 const include = require('include')(__dirname);
-const models = include('models');
+const models = include('src/models');
 
 //*******************************************************************
 

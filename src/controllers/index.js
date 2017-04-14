@@ -19,7 +19,7 @@ const async = require('async');
 const deref = require('deref');
 const matchstick = require('matchstick');
 
-const apiSchema = include('docs/swagger.json');
+const apiSchema = include('src/api.json');
 
 //*******************************************************************
 // other files
@@ -120,7 +120,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 	db.getFile(filePath, function (err, file){
 
 		if (err){
-			error.sendError(req, res, 400, 'error getting file');	
+			error.sendError(req, res, 500, 'cannot process the request');	
 		}
 		else {
 			if (file){
@@ -138,7 +138,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 				});
 			}
 			else {
-				error.sendError(req, res, 400, 'Invalid controlNumber or fileName provided');
+				error.sendError(req, res, 404, 'file not found');
 			}
 		}
 	});
@@ -174,7 +174,7 @@ const getControlNumber = function(req, res, reqData){
 	if (basicData){
 		db.getApplication(controlNumber, function(err, appl, fileData){
 			if (err){
-				return error.sendError(req, res, 400, 'error getting application from database');
+				return error.sendError(req, res, 404, 'file not found');
 			}
 			else {
 				if (fileData){
@@ -228,12 +228,12 @@ const postApplication = function(req, res, reqData){
 		toStoreInDB.control_number = controlNumber;
 		db.saveApplication(controlNumber, toStoreInDB, function(err, appl){
 			if (err){
-				return error.sendError(req, res, 500, err);
+				return error.sendError(req, res, 500, 'cannot process the request');
 			}
 			else {
 				saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
 					if (err) {
-						return error.sendError(req, res, 500, err);
+						return error.sendError(req, res, 500, 'cannot process the request');
 					}
 					else {
 
