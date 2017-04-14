@@ -16,30 +16,23 @@
 
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const fs = require('fs');
 const include = require('include')(__dirname);
-
-const auth = require('./auth');
-const mocks = require('./mocks');
-const api = require('./api');
-const schema = require('./schema');
-
-const token = include('src/controllers/auth/token.js');
-const authorize = include('src/controllers/auth/authorize.js');
 
 //*******************************************************************
 // router
 
-router.use('/schema', schema);
-
-router.use('/mocks', mocks);
-
-router.use('/auth', auth);
-
-router.use(token);
-
-router.use(authorize);
-
-router.use('/', api);
+router.get('/api.json', function (req, res) {  
+	
+	fs.readFile(path.normalize('src/api.json'), 'utf8', function (err,data) { 
+		if (err) { 
+			return console.log(err); 
+		} 
+		res.send(data); 
+	});
+	
+});
 
 //*******************************************************************
 //exports

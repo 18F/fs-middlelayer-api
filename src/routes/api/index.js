@@ -23,7 +23,7 @@ const multer = require('multer');
 
 const controller = include('src/controllers');
 
-const apiSchema = include('docs/swagger.json');
+const apiSchema = include('src/api.json');
 
 //*******************************************************************
 // storage
