@@ -474,6 +474,7 @@ function generateErrorMesage(output){
 		const enumMessage = `${makePathReadable(error.field)} ${error.enumMessage}.`;
 		const dependencies = `Having ${makePathReadable(error.field)} requires that ${makePathReadable(error.dependency)} be provided.`;
 		const anyOf = `Either ${makeAnyOfMessage(error.anyOfFields)} is a required field.`;
+		const length = `${makePathReadable(error.field)} is too long, must be ${error.expectedFieldType} chracters or shorter`;
 
 		switch (error.errorType){
 		case 'missing':
@@ -500,6 +501,10 @@ function generateErrorMesage(output){
 		case 'anyOf':
 			messages.push(anyOf);
 			error.message = anyOf;
+			break;
+		case 'length':
+			messages.push(length);
+			error.message = length;
 			break;
 		default:
 			generateFileErrors(output, error, messages);
@@ -592,25 +597,29 @@ function validateFile(uploadFile, validationConstraints, fileName){
 	
 }
 
-function checkFieldLengths(schema, input){
-	const fieldLengthErrors = {
-		errorArray:[]
-	};
+function checkFieldLengths(schema, input, processedFieldErrors, path){
 	const keys = Object.keys(schema);
 	keys.forEach((key)=>{
 		switch (key){
 		case 'allOf':
 		case 'anyOf':
 			schema[key].forEach((sch)=>{
-				checkFieldLengths(sch, input);
+				checkFieldLengths(sch, input, processedFieldErrors, path);
 			});
 			break;
 		case 'properties':
-			checkFieldLengths(schema.properties, input);
+			checkFieldLengths(schema.properties, input, processedFieldErrors, path);
 			break;
 		default:
+			let field;
+			if (path === ''){
+				field = `${key}`;
+			}
+			else {
+				field = `${path}.${key}`;
+			}
 			if (schema[key].type === 'object'){
-				checkFieldLengths(schema[key], input[key]);
+				checkFieldLengths(schema[key], input[key], processedFieldErrors, field);
 			}
 			else if (schema[key].fromIntake){
 				
@@ -619,9 +628,8 @@ function checkFieldLengths(schema, input){
 					const fieldLength = `${input[key]}`.length;
 
 					if (maxLength < fieldLength){
-						console.log(key);
-						console.log('Too Long!\n\n\n\n\n');
-						//Create error obj for field being too long
+						
+						processedFieldErrors.errorArray.push(makeErrorObj(field, 'length', maxLength));
 					}
 
 				}
@@ -630,12 +638,13 @@ function checkFieldLengths(schema, input){
 			break;
 		}
 	});
-	return fieldLengthErrors;
+	return processedFieldErrors;
 }
 function getFieldValidationErrors(body, pathData, derefSchema){
 
-	const processedFieldErrors = validateBody(body, pathData, derefSchema);
-	checkFieldLengths(derefSchema, body);
+	let processedFieldErrors = validateBody(body, pathData, derefSchema);
+	processedFieldErrors = checkFieldLengths(derefSchema, body, processedFieldErrors, '');
+	console.log(processedFieldErrors);
 
 	return processedFieldErrors;
 }
