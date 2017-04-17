@@ -13,8 +13,9 @@
 
 //*******************************************************************
 
+const include = require('include')(__dirname);
 const request = require('supertest');
-const server = require('../index.js');
+const server = include('src/index.js');
 
 const util = require('./utility.js');
 
