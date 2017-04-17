@@ -80,7 +80,17 @@ function getBody(req){
 	return inputPost;
 }
 
+/** Saves all information for a file upload to the DB and uploads the file to S3.
+ * @param  {Object} req - request object
+ * @param  {Object} res - response object
+ * @param  {Array} possbileFiles - list of all files that can be uploaded for this permit type
+ * @param  {[type]} files - Files being uploaded and saved
+ * @param  {String} controlNumber - Control number of the application being processed
+ * @param  {Object} application - Body of application being submitted
+ * @param  {Function} callback - Function to be called after attempting to save the files.
+ */
 function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, application, callback){
+
 	const asyncTasks = [];
 
 	possbileFiles.forEach((fileConstraints)=>{
@@ -122,7 +132,6 @@ const getControlNumberFileName = function(req, res, reqData) {
 
 	const controlNumber = reqData.matches.controlNumber;
 	const fileName = reqData.matches.fileName;
-
 
 	const filePath = controlNumber + '/' + fileName;
 
