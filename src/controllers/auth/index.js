@@ -19,7 +19,7 @@ const passport = require('passport');
 const Strategy = require('passport-local');
 const bcrypt = require('bcrypt-nodejs');
 
-const models = include('models');
+const models = include('src/models');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 

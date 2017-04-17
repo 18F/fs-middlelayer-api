@@ -27,7 +27,7 @@ const morgan = require('morgan');
 
 const bodyParser = require('body-parser');
 
-const routes = require('./routes');
+const routes = require('./src/routes');
 
 //*******************************************************************
 // environment variables
@@ -64,10 +64,10 @@ app.use(morgan('combined', {stream: accessLogStream}));
 //*******************************************************************
 // public 
 
-app.use(express.static('docs'));
-app.use('/docs', express.static('docs'));
-app.use('/docs/api', express.static('docs'));
-app.use('/docs/code', express.static('code-docs'));
+app.use(express.static('docs/api'));
+app.use('/docs', express.static('docs/api'));
+app.use('/docs/api', express.static('docs/api'));
+app.use('/docs/code', express.static('docs/code'));
 
 //*******************************************************************
 // routes

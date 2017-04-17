@@ -27,9 +27,8 @@ api-docs
 code-docs
 
 # DB related setup
-migrations
-seeders
+dba
 
 # Mock API
-mocks
-/routes/mocks/**
+src/mocks
+src/routes/mocks/**
