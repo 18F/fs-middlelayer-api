@@ -6,9 +6,9 @@
     "node": "6.9.x",
     "npm": "3.10.x"
   },
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node src/index.js",
     "test": "mocha test --recursive",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive",
     "lint": "npm-run-all -c -s lint:es lint:es:out lint:md",
@@ -17,7 +17,8 @@
     "lint:es:fix": "eslint . --fix || exit 0",
     "lint:md": "markdownlint ./documentation ./README.md || exit 0",
     "dba": "sequelize db:migrate && sequelize db:seed:all",
-    "doc": "jsdoc -c .jsdoc.json -d code-docs -t ./node_modules/ink-docstrap/template -R README.md -r ."
+    "doc": "jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -R README.md -r .",
+    "postinstall": "npm run doc"
   },
   "repository": {
     "type": "git",

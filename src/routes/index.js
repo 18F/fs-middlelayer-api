@@ -29,8 +29,6 @@ const authorize = include('src/controllers/auth/authorize.js');
 //*******************************************************************
 // router
 
-router.use('/schema', schema);
-
 router.use('/mocks', mocks);
 
 router.use('/auth', auth);

@@ -21,7 +21,7 @@ config
 # Dependency directories
 node_modules
 
-# Third party lib/lang
+# Third party lib/lang & docs
 docs
 api-docs
 code-docs
