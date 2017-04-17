@@ -34,10 +34,19 @@ const validation = require('./validation.js');
 //*************************************************************
 // Helper Functions
 
+/** Gets info about an application and returns it.
+ * @param  {Object} pathData - All data from swagger for the path that has been run
+ * @return {Object} - Data from the basic API about an application 
+ */
 function getBasicRes(pathData){
 	return include(pathData.mockOutput);
 }
 
+/** Find the matching route in the routing schema for any request. If one is found, extract the useful information from it and return that information.
+ * @param  {Object} apiSchema - The whole routing schema, which contains the route used.
+ * @param  {String} reqPath - The path that was requested from the API
+ * @return {Object} Object describing the matching route, if any, in the routing schema. The path field contains the matched path listed in the routing schema. The tokens field contains all tokens, listed in the matched path. And the matches field contains the tokens with the values that have been given for them.
+ */
 function apiSchemaData(apiSchema, reqPath){
 
 	if (apiSchema) {
@@ -256,6 +265,12 @@ const use = function(req, res){
 		const apiPath = apiReqData.path;
 		const apiTokens = apiReqData.tokens;
 		const apiMatches = apiReqData.matches;
+		console.log('apiPath\n')
+		console.log(apiPath)
+		console.log('apiTokens\n')
+		console.log(apiTokens)
+		console.log('apiMatches\n')
+		console.log(apiMatches)
 
 		if (!apiPath) {
 			return error.sendError(req, res, 404, 'Invalid endpoint.');
