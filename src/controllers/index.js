@@ -265,12 +265,6 @@ const use = function(req, res){
 		const apiPath = apiReqData.path;
 		const apiTokens = apiReqData.tokens;
 		const apiMatches = apiReqData.matches;
-		console.log('apiPath\n')
-		console.log(apiPath)
-		console.log('apiTokens\n')
-		console.log(apiTokens)
-		console.log('apiMatches\n')
-		console.log(apiMatches)
 
 		if (!apiPath) {
 			return error.sendError(req, res, 404, 'Invalid endpoint.');
