@@ -16,27 +16,26 @@
 const jsf = require('json-schema-faker');
 //*******************************************************************
 
-function getTopLevelField(intakeField, cnData, postSchema, jsonData, key){
+function getTopLevelField(intakeField, cnData, getSchema, jsonData, key){
 
 	switch (intakeField){
 	case 'none':
 		break;
 	default:
-		if (cnData.hasOwnProperty(postSchema[key].intake)){
+		if (cnData.hasOwnProperty(getSchema[key].intake)){
 	
-			jsonData[key] = cnData[postSchema[key].intake];
+			jsonData[key] = cnData[getSchema[key].intake];
 		
 		}
 	}
 
 }
-
-function getSubLevelField(cnData, postSchema, key, jsonData){
+function getSubLevelField(cnData, getSchema, key, jsonData){
 
 	const addressData = cnData.addresses[0];
 	const phoneData = cnData.phones[0];
 	const holderData = cnData.holders[0];
-	const path = postSchema[key].intake.split('/');
+	const path = getSchema[key].intake.split('/');
 	let data;
 	switch (path[0]){
 	case 'holders':
@@ -54,14 +53,14 @@ function getSubLevelField(cnData, postSchema, key, jsonData){
 	}
 
 }
-function buildGetResponse(cnData, applicationData, schemaData, jsonData, postSchema){
+function buildGetResponse(cnData, applicationData, schemaData, jsonData, getSchema){
 
 	let key; 
 	for (key in schemaData){
 		
 		if (typeof jsonData[key] !== 'object'){
 			
-			const intakeField = postSchema[key].intake;
+			const intakeField = getSchema[key].intake;
 			if (intakeField.startsWith('middleLayer/')){
 				const applicationField = intakeField.split('/')[1];
 				jsonData[key] = applicationData[applicationField];
@@ -69,16 +68,16 @@ function buildGetResponse(cnData, applicationData, schemaData, jsonData, postSch
 			else {
 
 				if (intakeField.indexOf('/') === -1){
-					getTopLevelField(intakeField, cnData, postSchema, jsonData, key);	
+					getTopLevelField(intakeField, cnData, getSchema, jsonData, key);	
 				}
 				else {
 					
-					getSubLevelField(cnData, postSchema, key, jsonData);
+					getSubLevelField(cnData, getSchema, key, jsonData);
 				}
 			}
 		}
 		else {
-			buildGetResponse(cnData, applicationData, schemaData[key], jsonData[key], postSchema[key]);
+			buildGetResponse(cnData, applicationData, schemaData[key], jsonData[key], getSchema[key]);
 		}
 	}
 
