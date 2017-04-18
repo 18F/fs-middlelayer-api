@@ -16,30 +16,10 @@
 const jsf = require('json-schema-faker');
 //*******************************************************************
 
-function fromAdminOrg(cnData, postSchema, jsonData, key){
-
-	const adminOrg = cnData[postSchema.adminOrg.intake];
-	switch (key){
-	case 'region':
-		jsonData[key] = adminOrg.slice(0, 2);
-		break;
-	case 'forest':
-		jsonData[key] = adminOrg.slice(2, 4);
-		break;
-	case 'district':
-		jsonData[key] = adminOrg.slice(4, 6);
-		break;
-	}
-
-}
-
 function getTopLevelField(intakeField, cnData, postSchema, jsonData, key){
 
 	switch (intakeField){
 	case 'none':
-		break;
-	case 'fromAdminOrg':
-		fromAdminOrg(cnData, postSchema, jsonData, key);
 		break;
 	default:
 		if (cnData.hasOwnProperty(postSchema[key].intake)){
