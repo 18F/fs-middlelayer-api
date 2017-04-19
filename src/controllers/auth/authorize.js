@@ -19,6 +19,12 @@ const error = require('../error.js');
 //*******************************************************************
 // authorize
 
+/**
+ * Function to authorize users
+ * @param  {Object}   req - Request object
+ * @param  {Object}   res - Response object
+ * @param  {Function} next - What to call after authorizing user
+ */
 const authorize = function(req, res, next){
 
 	if (req.decoded.role === 'admin'){

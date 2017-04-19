@@ -34,10 +34,19 @@ const validation = require('./validation.js');
 //*************************************************************
 // Helper Functions
 
+/** Gets info about an application and returns it.
+ * @param  {Object} pathData - All data from swagger for the path that has been run
+ * @return {Object} - Data from the basic API about an application 
+ */
 function getBasicRes(pathData){
 	return include(pathData.mockOutput);
 }
 
+/** Find the matching route in the routing schema for any request. If one is found, extract the useful information from it and return that information.
+ * @param  {Object} apiSchema - The whole routing schema, which contains the route used.
+ * @param  {String} reqPath - The path that was requested from the API
+ * @return {Object} Object describing the matching route, if any, in the routing schema. The path field contains the matched path listed in the routing schema. The tokens field contains all tokens, listed in the matched path. And the matches field contains the tokens with the values that have been given for them.
+ */
 function apiSchemaData(apiSchema, reqPath){
 
 	if (apiSchema) {
@@ -71,7 +80,17 @@ function getBody(req){
 	return inputPost;
 }
 
+/** Saves all information for a file upload to the DB and uploads the file to S3.
+ * @param  {Object} req - request object
+ * @param  {Object} res - response object
+ * @param  {Array} possbileFiles - list of all files that can be uploaded for this permit type
+ * @param  {[type]} files - Files being uploaded and saved
+ * @param  {String} controlNumber - Control number of the application being processed
+ * @param  {Object} application - Body of application being submitted
+ * @param  {Function} callback - Function to be called after attempting to save the files.
+ */
 function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, application, callback){
+
 	const asyncTasks = [];
 
 	possbileFiles.forEach((fileConstraints)=>{
@@ -116,6 +135,15 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 //*******************************************************************
 // controller functions
 
+/** Controller for GET routes with a control number and a file name
+ * @param  {Object} req - request object
+ * @param  {Object} res - response object
+ * @param  {Object} reqData - Object containing information about the request and the route requested
+ * @param  {String} reqData.path - Path being requested
+ * @param  {Array} reqData.tokens - Array of all tokens present in path being requested 
+ * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
+ * @param  {Object} reqData.schema - Schema of the route requested
+ */
 const getControlNumberFileName = function(req, res, reqData) {
 
 	const controlNumber = reqData.matches.controlNumber;
@@ -151,6 +179,15 @@ const getControlNumberFileName = function(req, res, reqData) {
 	
 };
 
+/** Controller for GET routes with only a control number
+ * @param  {Object} req - request object
+ * @param  {Object} res - response object
+ * @param  {Object} reqData - Object containing information about the request and the route requested
+ * @param  {String} reqData.path - Path being requested
+ * @param  {Array} reqData.tokens - Array of all tokens present in path being requested 
+ * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
+ * @param  {Object} reqData.schema - Schema of the route requested
+ */
 const getControlNumber = function(req, res, reqData){
 	const pathData = reqData.schema;
 	const fileTypes = {
@@ -202,7 +239,17 @@ const getControlNumber = function(req, res, reqData){
 
 //*************************************************************
 
+/** Controller for POST routes
+ * @param  {Object} req - request object
+ * @param  {Object} res - response object
+ * @param  {Object} reqData - Object containing information about the request and the route requested
+ * @param  {String} reqData.path - Path being requested
+ * @param  {Array} reqData.tokens - Array of all tokens present in path being requested 
+ * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
+ * @param  {Object} reqData.schema - Schema of the route requested
+ */
 const postApplication = function(req, res, reqData){
+
 	const pathData = reqData.schema;
 
 	const body = getBody(req);
@@ -266,6 +313,11 @@ const postApplication = function(req, res, reqData){
 	}
 };
 
+/**
+ * Takes in request and calls functions based on what route was called
+ * @param  {Object} req - User request object
+ * @param  {Object} res - Response object
+ */
 const use = function(req, res){
 
 	const reqPath = `/${req.params[0]}`;

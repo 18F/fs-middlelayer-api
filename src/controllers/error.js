@@ -13,6 +13,11 @@
 
 //*******************************************************************
 
+/**
+ * Creates JSON response for any error, given a message. Also logs the error.
+ * @param  {Object} req     - User request object
+ * @param  {String} message - Error message to output
+ */
 function logging(req, message){
 
 	const attemptedRoute = req.originalUrl;
@@ -29,6 +34,14 @@ function logging(req, message){
 
 }
 
+/**
+ * Returns error message, and any error objects to user
+ * @param  {Object} req     - User request object
+ * @param  {Object} res     - Response object
+ * @param  {integer} code    - Status code to return
+ * @param  {String} message - Error message to return
+ * @param  {Array} errors  - Array of error objects to return
+ */
 const sendError = function(req, res, code, message, errors){
 
 	const output = {

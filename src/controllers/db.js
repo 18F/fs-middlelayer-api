@@ -21,6 +21,12 @@ const models = include('src/models');
 
 //*******************************************************************
 
+/**
+ * Saves information about file into DB
+ * @param  {[type]}   applicationId - Id of application file is associated with
+ * @param  {[type]}   uploadFile    - Information about file being saved
+ * @param  {Function} callback      - function to be called after trying to save file
+ */
 function saveFile(applicationId, uploadFile, callback){
 	models.files.create({
 		application_id: applicationId, 
@@ -41,6 +47,11 @@ function saveFile(applicationId, uploadFile, callback){
 	});
 }
 
+/**
+ * Gets file info from DB
+ * @param  {String}   filePath - Path to file in S3
+ * @param  {Function} callback - Function to call after getting info back from DB
+ */
 const getFile = function(filePath, callback){
 
 	models.files.findOne({
@@ -55,6 +66,11 @@ const getFile = function(filePath, callback){
 	});
 };
 
+/**
+ * Get info of multiple files from DB
+ * @param  {Number}   applicationId - application Id of files to get
+ * @param  {Function} callback      - Function to call after getting info back from DB
+ */
 const getFiles = function(applicationId, callback){
 
 	models.files.findAll({
@@ -68,6 +84,11 @@ const getFiles = function(applicationId, callback){
 	});
 };
 
+/**
+ * Gets application info from DB
+ * @param  {Number}   controlNumber - control number of application to retreive
+ * @param  {Function} callback      - Function to call after getting info back from DB
+ */
 const getApplication = function(controlNumber, callback){
 
 	models.applications.findOne({
@@ -105,6 +126,12 @@ const getApplication = function(controlNumber, callback){
 	});
 };
 
+/**
+ * Save application data to DB
+ * @param  {Number}   controlNumber - control number of application to save
+ * @param  {Object}   toStore       - object containing all of the fields to save to DB
+ * @param  {Function} callback      - Function to call after saving application to DB
+ */
 const saveApplication = function(toStore, callback) {
 	models.applications.create(toStore)
 	.then(function(appl) {
