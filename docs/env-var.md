@@ -14,3 +14,5 @@ These are the environment variables that must be created on the Node.js server f
 - `AWS_REGION=<AWS region>`
 - `AWS_BUCKET_NAME=<AWS S3 bucket name>`
 - `BASICURL=<SUDS Basic API URL>`
+
+AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_REGION are optional if an AWS credentials file is avaliable on the system. For more information visit: http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html
