@@ -355,7 +355,7 @@
                 "basicField":"lastName",
                 "default":"",
                 "fromIntake":true,
-                "maxLength":0,
+                "maxLength":255,
                 "store":["basic:/contact/person"],
                 "type": "string"
             },
