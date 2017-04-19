@@ -1169,7 +1169,7 @@ describe('tempOutfitters POST: file validated', function(){
 
 		it('should return valid json when guideDocumentation file uploaded of size 16 MB (size limit 25 MB)', function(done) {
 
-			this.timeout(30000);
+			this.timeout(60000);
 			
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
