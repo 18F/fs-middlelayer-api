@@ -19,7 +19,6 @@ const request = require('request-promise');
 // other files
 
 const db = require('./db.js');
-const error = require('./error.js');
 const sudsApiUrl = process.env.SUDS_API_URL;
 
 //*******************************************************************
