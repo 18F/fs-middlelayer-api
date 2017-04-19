@@ -474,25 +474,6 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	});
 
-	it('should return valid json for tempOutfitters POST request with apiRequest', function(done) {
-
-		request(server)
-			.post(testURL)
-			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfitterFactory.create()))
-			.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
-			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
-			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
-			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
-			.attach('operatingPlan', './test/data/test_operatingPlan.docx')
-			.expect('Content-Type', /json/)
-			.expect(function(res){
-				expect(res.body).to.have.property('apiRequest');
-			})	
-			.expect(200, done);
-
-	});
-
 });
 
 describe('tempOutfitters POST: field type validated', function(){
