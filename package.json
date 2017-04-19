@@ -8,7 +8,6 @@
   },
   "main": "src/index.js",
   "scripts": {
-    "preinstall": "npm install -g jsdoc",
     "start": "node src/index.js",
     "test": "mocha test --recursive",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive",
@@ -18,7 +17,7 @@
     "lint:es:fix": "eslint . --fix || exit 0",
     "lint:md": "markdownlint ./documentation ./README.md || exit 0",
     "dba": "sequelize db:migrate && sequelize db:seed:all",
-    "doc": "jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -R README.md -r .",
+    "doc": "./node_modules/.bin/jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -R README.md -r .",
     "postinstall": "npm run doc"
   },
   "repository": {
