@@ -68,6 +68,9 @@ app.use(express.static('docs/api'));
 app.use('/docs', express.static('docs/api'));
 app.use('/docs/api', express.static('docs/api'));
 app.use('/docs/code', express.static('docs/code'));
+
+app.use('/api.json', express.static('src/api.json'));
+app.use('/docs/api.json', express.static('src/api.json'));
 app.use('/schema/api.json', express.static('src/api.json'));
 
 //*******************************************************************
