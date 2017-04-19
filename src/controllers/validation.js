@@ -705,6 +705,15 @@ function validateFile(uploadFile, validationConstraints, fileName){
 	
 }
 
+/**
+ * Checks the length of all fields with a maxLength field in schema
+ * @param  {Object} schema              			- Section of the validation schema being used
+ * @param  {Object} input               			- User input being validated
+ * @param  {Object} processedFieldErrors 			- Current object containing errors
+ * @param  {Array} processedFieldErrors.errorArray 	- Array of all errors found so far
+ * @param  {String} path                			- Path to field being checked
+ * @return {Array}                      			- Array of error objects representing all errors found so far
+ */
 function checkFieldLengths(schema, input, processedFieldErrors, path){
 	const keys = Object.keys(schema);
 	keys.forEach((key)=>{
