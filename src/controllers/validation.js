@@ -736,7 +736,9 @@ function checkFieldLengths(schema, input, processedFieldErrors, path){
 				field = `${path}.${key}`;
 			}
 			if (schema[key].type === 'object'){
-				checkFieldLengths(schema[key], input[key], processedFieldErrors, field);
+				if (input[key]){
+					checkFieldLengths(schema[key], input[key], processedFieldErrors, field);
+				}
 			}
 			else if (schema[key].fromIntake){
 				
@@ -769,7 +771,6 @@ function getFieldValidationErrors(body, pathData, derefSchema){
 
 	let processedFieldErrors = validateBody(body, pathData, derefSchema);
 	processedFieldErrors = checkFieldLengths(derefSchema, body, processedFieldErrors, '');
-	console.log(processedFieldErrors);
 
 	return processedFieldErrors;
 }
