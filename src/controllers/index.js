@@ -103,12 +103,12 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
 				store.uploadFile(fileInfo, function(err, data){
 					if (err){
-						return error.sendError(req, res, 500, `${fileInfo.filetype} failed to upload`);
+						return error.sendError(req, res, 500, 'Cannot process request.');
 					}
 					else {
 						db.saveFile(application.id, fileInfo, function(err, fileInfo){
 							if (err){
-								return error.sendError(req, res, 500, `${fileInfo.filetype} failed to save`);
+								return error.sendError(req, res, 500, 'Cannot process request.');
 							}
 							else {
 								return callback (null, fileInfo);
