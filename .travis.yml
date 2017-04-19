@@ -16,6 +16,7 @@ before_script:
 - npm install -g mocha
 - npm install -g eslint
 - npm install -g codecov
+- npm install -g jsdoc
 - npm install -g codeclimate-test-reporter
 - npm install -g sequelize-cli
 script:
