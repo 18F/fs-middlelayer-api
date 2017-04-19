@@ -43,6 +43,7 @@ function saveFile(applicationId, uploadFile, callback){
 		return callback(null, file);
 	})
 	.catch(function(err) {
+		console.error(err);
 		return callback(err, null);
 	});
 }
@@ -80,6 +81,7 @@ const getFiles = function(applicationId, callback){
 		return callback(null, files);
 	})
 	.catch(function(err) {
+		console.error(err);
 		return callback(err, null);
 	});
 };

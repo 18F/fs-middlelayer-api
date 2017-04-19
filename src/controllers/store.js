@@ -49,6 +49,7 @@ function uploadFile(fileInfo, callback){
 
 	s3.putObject(params, function(err, data) {
 		if (err) {
+			console.error(err);
 			return callback(err, null);
 		}
 		else {     
