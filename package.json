@@ -8,6 +8,7 @@
   },
   "main": "src/index.js",
   "scripts": {
+    "preinstall": "npm install -g jsdoc",
     "start": "node src/index.js",
     "test": "mocha test --recursive",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive",

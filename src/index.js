@@ -49,7 +49,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 // **********************************************************
 // log
 
-const logDirectory = path.join(__dirname, '/log');
+const logDirectory = path.join(__dirname, '../log');
     
 mkdirp(logDirectory);
 
