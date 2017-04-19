@@ -84,7 +84,7 @@ function getBody(req){
  * @param  {Object} req - request object
  * @param  {Object} res - response object
  * @param  {Array} possbileFiles - list of all files that can be uploaded for this permit type
- * @param  {[type]} files - Files being uploaded and saved
+ * @param  {Array} files - Files being uploaded and saved
  * @param  {String} controlNumber - Control number of the application being processed
  * @param  {Object} application - Body of application being submitted
  * @param  {Function} callback - Function to be called after attempting to save the files.

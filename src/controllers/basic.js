@@ -144,7 +144,7 @@ function prepareBasicPost(sch, body){
  * [createContact description]
  * @param  {Object} fieldsObj  Object containing post objects to be sent to basic api
  * @param  {boolean} person    Boolean indicating whether the contract being created is for a person or not
- * @param  {[type]} postObject Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @param  {Object} postObject Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @return {Promise}
  */
 function createContact(fieldsObj, person, postObject){

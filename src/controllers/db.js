@@ -23,8 +23,8 @@ const models = include('src/models');
 
 /**
  * Saves information about file into DB
- * @param  {[type]}   applicationId - Id of application file is associated with
- * @param  {[type]}   uploadFile    - Information about file being saved
+ * @param  {Number}   applicationId - Id of application file is associated with
+ * @param  {Array}   uploadFile    - Information about file being saved
  * @param  {Function} callback      - function to be called after trying to save file
  */
 function saveFile(applicationId, uploadFile, callback){

@@ -36,7 +36,7 @@ const s3 = new AWS.S3();
 
 /**
  * Uploads file to S3
- * @param  {[type]}   fileInfo - Information about file, include the contents of it in hex
+ * @param  {Array}   fileInfo - Information about file, include the contents of it in hex
  * @param  {Function} callback - function to call after uploading
  */
 function uploadFile(fileInfo, callback){

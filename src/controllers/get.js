@@ -42,7 +42,6 @@ function getTopLevelField(intakeField, cnData, getSchema, jsonData, key){
  * @param  {Object} getSchema - schema used for GET requests
  * @param  {Object} jsonData - object to be populated and returned to user
  * @param  {String} key - field in jsonData to populated
- * @return {[type]}
  */
 function getSubLevelField(cnData, getSchema, key, jsonData){
 
