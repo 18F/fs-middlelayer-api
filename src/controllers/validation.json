@@ -328,7 +328,7 @@
                 "store":["basic:/contact/phone"],
                 "type": "string"
             },
-            "type": {
+            "phoneType": {
                 "basicField":"phoneNumberType",
                 "default":"",
                 "fromIntake":true,
@@ -336,7 +336,7 @@
                 "type": "string"
             }
         },
-        "required": ["areaCode", "number", "type"]
+        "required": ["areaCode", "number", "phoneType"]
 
     },
     "applicantInfoBase":{

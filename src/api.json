@@ -82,13 +82,13 @@
                             "areaCode": {"default":0, "intake":"phones/areaCode"},
                             "number": {"default":0, "intake":"phones/phoneNumber"},
                             "extension": {"default":"", "intake":"phones/extension"},
-                            "type": {"default":"", "intake":"phones/phoneNumberType"}
+                            "phoneType": {"default":"", "intake":"phones/phoneNumberType"}
                         },
                         "eveningPhone": {
                             "areaCode": {"default":0, "intake":"phones/areaCode"},
                             "number": {"default":0, "intake":"phones/phoneNumber"},
                             "extension": {"default":"", "intake":"phones/extension"},
-                            "type": {"default":"", "intake":"phones/phoneNumberType"}
+                            "phoneType": {"default":"", "intake":"phones/phoneNumberType"}
                         },
                         "emailAddress": {"default":"", "intake":"addresses/email"},
                         "mailingAddress": {"default":"", "intake":"addresses/address1"},
@@ -531,9 +531,9 @@
         "areaCode": { "type": "integer"},
         "number": { "type": "integer"},
         "extension": { "type": "string"},
-        "type": {"type": "string"}
+        "phoneType": {"type": "string"}
       },
-      "required": ["areaCode","number","type"],
+      "required": ["areaCode","number","phoneType"],
       "xml": {
         "name": "phoneNumber"
       }  
