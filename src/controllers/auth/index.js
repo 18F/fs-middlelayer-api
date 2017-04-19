@@ -57,6 +57,12 @@ passport.use(new Strategy(
 
 //*******************************************************************
 
+/**
+ * Serializes user info
+ * @param  {Object}   req - Request object
+ * @param  {Object}   res - Response object
+ * @param  {Function} next - What to call after serializing user info
+ */
 const serialize = function(req, res, next) {  
 
 	req.user = {
@@ -66,6 +72,12 @@ const serialize = function(req, res, next) {
 	next();
 };
 
+/**
+ * Creates JWT to return to user
+ * @param  {Object}   req - Request object
+ * @param  {Object}   res - Response object
+ * @param  {Function} next - What to call after creating JWT
+ */
 const generate = function(req, res, next) {   
 	
 	req.token = jwt.sign({
@@ -75,6 +87,11 @@ const generate = function(req, res, next) {
 	next();
 };
 
+/**
+ * Responds to user request with token
+ * @param  {Object}   req - Request object
+ * @param  {Object}   res - Response object
+ */
 const respond = function(req, res) { 
 
 	res.status(200).json({

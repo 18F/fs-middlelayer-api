@@ -23,6 +23,12 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 //*******************************************************************
 // token
 
+/**
+ * Verifies that token is a valid token
+ * @param  {Object}   req - Request object
+ * @param  {Object}   res - Response object
+ * @param  {Function} next - What to call after verifying token
+ */
 const token = function(req, res, next){
     
 	const token = req.body.token || req.query.token || req.headers['x-access-token'];

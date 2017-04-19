@@ -402,20 +402,6 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 
 	});
 
-	it('should return valid json for noncommercial POST request with apiRequest', function(done) {
-
-		request(server)
-			.post(testURL)
-			.set('x-access-token', token)
-			.send(noncommercialFactory.create())
-			.expect('Content-Type', /json/)
-			.expect(function(res){
-				expect(res.body).to.have.property('apiRequest');
-			})	
-			.expect(200, done);
-
-	});
-
 });
 
 describe('noncommercial POST: field type validated', function(){

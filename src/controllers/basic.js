@@ -19,8 +19,7 @@ const request = require('request-promise');
 // other files
 
 const db = require('./db.js');
-const error = require('./error.js');
-const basicURL = process.env.BASICURL;
+const sudsApiUrl = process.env.SUDS_API_URL;
 
 //*******************************************************************
 
@@ -61,6 +60,7 @@ function buildAutoPopulatedFields(toBuild, body){
 	return output;
 }
 /**
+ * Gets the data from all fields that are to be send to the basic API, also builds post object, used to pass data to basic api
  * @param  {Array} fields - All fields in object form which will be sent to basicAPI
  * @param  {Object} body - user input
  * @param  {Object} autoPopValues - All values which have been auto-populated
@@ -139,16 +139,23 @@ function prepareBasicPost(sch, body){
 	return fieldsToPost;
 }
 
+/**
+ * [createContact description]
+ * @param  {Object} fieldsObj  Object containing post objects to be sent to basic api
+ * @param  {boolean} person    Boolean indicating whether the contract being created is for a person or not
+ * @param  {Object} postObject Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @return {Promise}
+ */
 function createContact(fieldsObj, person, postObject){
 	return new Promise(function(fulfill, reject){
 		let contactField, createPersonOrOrgURL;
 		if (person){
 			contactField = fieldsObj['/contact/person'];
-			createPersonOrOrgURL = `${basicURL}/contact/person/`;
+			createPersonOrOrgURL = `${sudsApiUrl}/contact/person/`;
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
-			createPersonOrOrgURL = `${basicURL}/contact/orgcode/`;
+			createPersonOrOrgURL = `${sudsApiUrl}/contact/orgcode/`;
 		}
 		postObject['/contact/personOrOrgcode'].request = contactField;
 		const createContactOptions = {
@@ -163,7 +170,7 @@ function createContact(fieldsObj, person, postObject){
 			const cn = res.contCn;
 			const addressField = fieldsObj['/contact/address'];
 			addressField.contact = cn;
-			const addressURL = `${basicURL}/contact-address/`;
+			const addressURL = `${sudsApiUrl}/contact-address/`;
 			postObject['/contact-address'].request = addressField;
 			const createAddressOptions = {
 				method: 'POST',
@@ -178,7 +185,7 @@ function createContact(fieldsObj, person, postObject){
 			const cn = res.contact;
 			const phoneField = fieldsObj['/contact/phone'];
 			phoneField.contact = cn;
-			const phoneURL = `${basicURL}/contact-phone/`;
+			const phoneURL = `${sudsApiUrl}/contact-phone/`;
 			postObject['/contact-phone'].request = phoneField;
 			const createPhoneOptions = {
 				method: 'POST',
@@ -204,80 +211,75 @@ function createContact(fieldsObj, person, postObject){
  * @param  {Object} sch - Schema object 
  * @param  {Object} body - User input
  */
-function postToBasic(req, res, sch, body, controlNumber){ //Should remove control number once we get from BASIC api
+function postToBasic(req, res, sch, body){ //Should remove control number once we get from BASIC api
 
-	const postObject = {
-		'/contact/personOrOrgcode':{},
-		'/contact-address':{},
-		'/contact-phone':{},
-		'/application':{}
-	};
-	const fieldsToPost = prepareBasicPost(sch, body);
-	const fieldsObj = {};
-	fieldsToPost.forEach((post)=>{
-		const key = Object.keys(post)[0];
-		fieldsObj[key] = post[key];
-	});
+	return new Promise(function(fulfill, reject){
 
-	const org = (body.applicantInfo.orgType && body.applicantInfo.orgType !== 'Individual');
-	let existingContactCheck;
-	if (org){
-		let orgName = body.applicantInfo.organizationName;
-		if (!orgName){
-			orgName = 'abc';
-		}
-		existingContactCheck = `${basicURL}/contact/orgcode/${orgName}/`;
-	}
-	else {
-		const lastName = body.applicantInfo.lastName;
-		existingContactCheck = `${basicURL}/contact/person/${lastName}/`;
-	}
-	
-	const getContactOptions = {
-		method: 'GET',
-		uri: existingContactCheck,
-		qs:{},
-		json: true
-	};
-	request(getContactOptions)
-	.then(function(res){
-		if (res.contCN){
-			Promise.resolve(res.contCN);
+		const postObject = {
+			'/contact/personOrOrgcode':{},
+			'/contact-address':{},
+			'/contact-phone':{},
+			'/application':{}
+		};
+		const fieldsToPost = prepareBasicPost(sch, body);
+		const fieldsObj = {};
+		fieldsToPost.forEach((post)=>{
+			const key = Object.keys(post)[0];
+			fieldsObj[key] = post[key];
+		});
+
+		const org = (body.applicantInfo.orgType && body.applicantInfo.orgType !== 'Individual');
+		let existingContactCheck;
+		if (org){
+			let orgName = body.applicantInfo.organizationName;
+			if (!orgName){
+				orgName = 'abc';
+			}
+			existingContactCheck = `${sudsApiUrl}/contact/orgcode/${orgName}/`;
 		}
 		else {
-			return createContact(fieldsObj, true, postObject);
+			const lastName = body.applicantInfo.lastName;
+			existingContactCheck = `${sudsApiUrl}/contact/person/${lastName}/`;
 		}
-	})
-	.then(function(contCN){
-		const createApplicationURL = `${basicURL}/application/`;
-		fieldsObj['/application'].contCn = contCN;
-		const applicationPost = fieldsObj['/application'];
-		postObject['/application'].request = applicationPost;
-		const createApplicationOptions = {
-			method: 'POST',
-			uri: createApplicationURL,
-			body: applicationPost,
+		
+		const getContactOptions = {
+			method: 'GET',
+			uri: existingContactCheck,
+			qs:{},
 			json: true
 		};
-		return request(createApplicationOptions);
-	})
-	.then(function(response){
-		postObject['/application'].response = response;
-		const jsonResponse = {};
-		jsonResponse.success = true;
-		jsonResponse.api = 'FS ePermit API';
-		jsonResponse.type = 'controller';
-		jsonResponse.verb = req.method;
-		jsonResponse.src = 'json';
-		jsonResponse.route = req.originalUrl;
-		jsonResponse.controlNumber = controlNumber;
-		jsonResponse.apiRequest = body;
-		jsonResponse.basicPosts = postObject;
-		return res.json(jsonResponse);
-	})
-	.catch(function(err){
-		return error.sendError(req, res, 500, err);
+		request(getContactOptions)
+		.then(function(res){
+			if (res.contCN){
+				Promise.resolve(res.contCN);
+			}
+			else {
+				return createContact(fieldsObj, true, postObject);
+			}
+		})
+		.then(function(contCN){
+			const createApplicationURL = `${sudsApiUrl}/application/`;
+			fieldsObj['/application'].contCn = contCN;
+			const applicationPost = fieldsObj['/application'];
+			postObject['/application'].request = applicationPost;
+			const createApplicationOptions = {
+				method: 'POST',
+				uri: createApplicationURL,
+				body: applicationPost,
+				json: true
+			};
+			return request(createApplicationOptions);
+		})
+		.then(function(response){
+			postObject['/application'].response = response;
+			fulfill(postObject);
+		})
+		.catch(function(err){
+			reject(err);
+		});
+
 	});
+
 }
 
 module.exports.postToBasic = postToBasic;
