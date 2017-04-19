@@ -292,6 +292,11 @@ const postApplication = function(req, res, reqData){
 	}
 };
 
+/**
+ * Takes in request and calls functions based on what route was called
+ * @param  {Object} req - User request object
+ * @param  {Object} res - Response object
+ */
 const use = function(req, res){
 
 	const reqPath = `/${req.params[0]}`;
