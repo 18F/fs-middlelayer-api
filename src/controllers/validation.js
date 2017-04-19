@@ -657,16 +657,12 @@ function getFileInfo(file, constraints){
 
 /**
  * Driving function for validating file
- * @param  {[type]} uploadFile            [description]
- * @param  {[type]} validationConstraints [description]
- * @param  {[type]} fileName              [description]
- * @return {[type]}                       [description]
+ * @param  {Array} uploadFile             - Information about file, include the contents of it in hex
+ * @param  {Object} validationConstraints - Description of how to validate file
+ * @param  {String} fileName              - Name of file being validated
+ * @return {Array}                        - Array of all error objects for this file
  */
 function validateFile(uploadFile, validationConstraints, fileName){
-
-	console.log(uploadFile);
-	console.log(validationConstraints);
-	console.log(fileName);
 
 	const fileInfo = getFileInfo(uploadFile, validationConstraints);
 	const constraints = validationConstraints[fileName];
@@ -698,6 +694,13 @@ function validateFile(uploadFile, validationConstraints, fileName){
 	
 }
 
+/**
+ * Drives validation of fields
+ * @param  {Object} body        - User input
+ * @param  {Object} pathData    - information about path
+ * @param  {Object} derefSchema - schema to be used for validating input
+ * @return {Array}              - Array of error objects for every error with fields
+ */
 function getFieldValidationErrors(body, pathData, derefSchema){
 	const processedFieldErrors = {
 		errorArray:[]
