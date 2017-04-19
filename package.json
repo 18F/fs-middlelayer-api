@@ -15,7 +15,7 @@
     "lint:es": "eslint . -f stylish || exit 0",
     "lint:es:out": "eslint . -o ./lint/eslint.html -f html || exit 0",
     "lint:es:fix": "eslint . --fix || exit 0",
-    "lint:md": "markdownlint ./src/docs ./README.md || exit 0",
+    "lint:md": "markdownlint ./docs ./README.md || exit 0",
     "dba": "sequelize db:migrate && sequelize db:seed:all",
     "doc": "./node_modules/.bin/jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -R README.md -r .",
     "postinstall": "npm run doc"
