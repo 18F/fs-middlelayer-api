@@ -99,25 +99,21 @@ const getApplication = function(cNum, callback){
 		}
 	}).then(function(appl) {
 		if (appl){
-			if (appl.formName === 'FS-2700-3f') {
-				getFiles(appl.id, function(fileErr, files) {
-					if (fileErr){
-						console.error(fileErr);
-						return callback(fileErr, null, null);
+			
+			getFiles(appl.id, function(fileErr, files) {
+				if (fileErr){
+					return callback(fileErr, null, null);
+				}
+				else {
+					if (files) {
+						return callback(null, appl, files);
 					}
 					else {
-						if (files) {
-							return callback(null, appl, files);
-						}
-						else {
-							return callback(null, appl, null);
-						}
+						return callback(null, appl, null);
 					}
-				});
-			}
-			else {
-				return callback(null, appl, null);
-			}
+				}
+			});
+
 		}
 		else {
 			return callback('no record found', null);
