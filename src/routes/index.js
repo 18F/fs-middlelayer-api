@@ -12,37 +12,33 @@
 'use strict';
 
 //*******************************************************************
+// required modules
 
+const express = require('express');
+const router = express.Router();
 const include = require('include')(__dirname);
 
-const request = require('supertest');
-const server = include('src/index.js');
+const auth = require('./auth');
+const mocks = require('./mocks');
+const api = require('./api');
+
+const token = include('src/controllers/auth/token.js');
+const authorize = include('src/controllers/auth/authorize.js');
 
 //*******************************************************************
+// router
 
-function getToken(callback){
+router.use('/mocks', mocks);
 
-	let token; 
+router.use('/auth', auth);
 
-	request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': process.env.ADMINROLE_USER, 'password': process.env.ADMINROLE_PWD })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
+router.use(token);
 
-			if (err){
-				console.error(err);
-			}
-			token = res.body.token;
-			return callback(token);
-				
-		});
+router.use(authorize);
 
-}
+router.use('/', api);
 
 //*******************************************************************
-// exports
+//exports
 
-module.exports.getToken = getToken;
+module.exports = router;

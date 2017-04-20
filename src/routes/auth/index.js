@@ -12,37 +12,28 @@
 'use strict';
 
 //*******************************************************************
+// required modules
 
+const express = require('express');
+const router = express.Router();
 const include = require('include')(__dirname);
 
-const request = require('supertest');
-const server = include('src/index.js');
+const auth = include('src/controllers/auth');
+const passport = auth.passport;
 
 //*******************************************************************
+// router
 
-function getToken(callback){
+router.use(passport.initialize());  
 
-	let token; 
-
-	request(server)
-		.post('/auth')
-		.set('Accept', 'application/json')
-		.send({ 'username': process.env.ADMINROLE_USER, 'password': process.env.ADMINROLE_PWD })
-		.expect('Content-Type', /json/)
-		.expect(200)
-		.end(function(err, res) {
-
-			if (err){
-				console.error(err);
-			}
-			token = res.body.token;
-			return callback(token);
-				
-		});
-
-}
+router.post('/', passport.authenticate(  
+    'local', {
+	session: false
+}), 
+    auth.serialize, auth.generate, auth.respond
+);
 
 //*******************************************************************
-// exports
+//exports
 
-module.exports.getToken = getToken;
+module.exports = router;

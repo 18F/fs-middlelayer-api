@@ -18,7 +18,7 @@ const include = require('include')(__dirname);
 //*******************************************************************
 
 const request = require('supertest');
-const server = include('index.js');
+const server = include('src/index.js');
 const util = include('test/utility.js');
 
 const factory = require('unionized');
@@ -398,20 +398,6 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 			.set('x-access-token', token)
 			.send(noncommercialFactory.create())
 			.expect('Content-Type', /json/)
-			.expect(200, done);
-
-	});
-
-	it('should return valid json for noncommercial POST request with apiRequest', function(done) {
-
-		request(server)
-			.post(testURL)
-			.set('x-access-token', token)
-			.send(noncommercialFactory.create())
-			.expect('Content-Type', /json/)
-			.expect(function(res){
-				expect(res.body).to.have.property('apiRequest');
-			})	
 			.expect(200, done);
 
 	});
