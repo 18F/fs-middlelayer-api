@@ -19,7 +19,7 @@ const request = require('request-promise');
 // other files
 
 const db = require('./db.js');
-const sudsApiUrl = process.env.SUDS_API_URL;
+const SUDS_API_URL = process.env.SUDS_API_URL;
 
 //*******************************************************************
 
@@ -151,11 +151,11 @@ function createContact(fieldsObj, person, postObject){
 		let contactField, createPersonOrOrgURL;
 		if (person){
 			contactField = fieldsObj['/contact/person'];
-			createPersonOrOrgURL = `${sudsApiUrl}/contact/person/`;
+			createPersonOrOrgURL = `${SUDS_API_URL}/contact/person/`;
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
-			createPersonOrOrgURL = `${sudsApiUrl}/contact/orgcode/`;
+			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode/`;
 		}
 		postObject['/contact/personOrOrgcode'].request = contactField;
 		const createContactOptions = {
@@ -170,7 +170,7 @@ function createContact(fieldsObj, person, postObject){
 			const cn = res.contCn;
 			const addressField = fieldsObj['/contact/address'];
 			addressField.contact = cn;
-			const addressURL = `${sudsApiUrl}/contact-address/`;
+			const addressURL = `${SUDS_API_URL}/contact-address/`;
 			postObject['/contact-address'].request = addressField;
 			const createAddressOptions = {
 				method: 'POST',
@@ -185,7 +185,7 @@ function createContact(fieldsObj, person, postObject){
 			const cn = res.contact;
 			const phoneField = fieldsObj['/contact/phone'];
 			phoneField.contact = cn;
-			const phoneURL = `${sudsApiUrl}/contact-phone/`;
+			const phoneURL = `${SUDS_API_URL}/contact-phone/`;
 			postObject['/contact-phone'].request = phoneField;
 			const createPhoneOptions = {
 				method: 'POST',
@@ -235,11 +235,11 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 			if (!orgName){
 				orgName = 'abc';
 			}
-			existingContactCheck = `${sudsApiUrl}/contact/orgcode/${orgName}/`;
+			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}/`;
 		}
 		else {
 			const lastName = body.applicantInfo.lastName;
-			existingContactCheck = `${sudsApiUrl}/contact/person/${lastName}/`;
+			existingContactCheck = `${SUDS_API_URL}/contact/person/${lastName}/`;
 		}
 		
 		const getContactOptions = {
@@ -258,7 +258,7 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 			}
 		})
 		.then(function(contCN){
-			const createApplicationURL = `${sudsApiUrl}/application/`;
+			const createApplicationURL = `${SUDS_API_URL}/application/`;
 			fieldsObj['/application'].contCn = contCN;
 			const applicationPost = fieldsObj['/application'];
 			postObject['/application'].request = applicationPost;

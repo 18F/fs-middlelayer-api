@@ -1,9 +1,9 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
 	const fileTypes = sequelize.define('file_types', {
-		file_type: DataTypes.STRING(10),
-		file_type_name: DataTypes.STRING(100),
-		file_type_desc: DataTypes.STRING(255)
+		fileType: { type: DataTypes.STRING(10), field: 'file_type' },
+		fileTypeName: { type: DataTypes.STRING(100), field: 'file_type_name' },
+		fileTypeDesc: { type: DataTypes.STRING(255), field: 'file_type_desc' }
 	});
 	return fileTypes;
 };
