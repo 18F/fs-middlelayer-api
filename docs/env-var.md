@@ -1,4 +1,5 @@
 ## Environment Variables
+
 These are the environment variables that must be created on the Node.js server for the application to run:
 
 - `DATABASE_URL=postgres://<username>:<password>@<database hostname>:5432<database name>`
