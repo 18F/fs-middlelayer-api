@@ -3,7 +3,7 @@ sudo: false
 addons:
   code_climate:
     repo_token: 83664567837c2e1a63f2d6cb31e0873d99852a439474adb2fd2277458178f94b
-  postgresql: "9.6"
+  postgresql: "9.4"
 node_js:
 - '6'
 global:
