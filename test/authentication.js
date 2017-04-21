@@ -78,7 +78,7 @@ describe('autherization with a token with admin role', function() {
 
 	it('should return valid json with 200 for a noncommercial GET request', function(done) {
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/1234567890')
+			.get('/permits/applications/special-uses/noncommercial/123456789/')
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
 			.expect(200, done);
@@ -108,7 +108,7 @@ describe('autherization with a token with user (unauthorized) role', function() 
 
 	it('should return valid json with 403 for a noncommercial GET request with an unauthorized token provided', function(done) {
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/1234567890')
+			.get('/permits/applications/special-uses/noncommercial/123456789/')
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
 			.expect(403, done);

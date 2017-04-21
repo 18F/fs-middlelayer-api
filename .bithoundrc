@@ -44,6 +44,12 @@
     "**/docs/lang/**",
     "**/docs/lib/**",
     "bower_components/**"
+	"lint/**"
+	"docs/**"
+	"api-docs**"
+	"code-docs/**"
+	"mocks/**"
+	"config/**"
   ],
   "test": [
     "**/test/**",

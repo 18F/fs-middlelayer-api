@@ -14,11 +14,9 @@
 //*******************************************************************
 // required modules
 
-const include = require('include')(__dirname);
-
 const jwt = require('jsonwebtoken');
 
-const error = include('error.js');
+const error = require('../error.js');
 
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
