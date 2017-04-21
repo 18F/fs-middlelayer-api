@@ -1,0 +1,9 @@
+{
+	"comment": "markdown rules",
+
+	"default": true,
+	"whitespace": false,
+	"line_length": false,
+	"hard_tab": false,
+	"ol-prefix": { "style": "ordered" }
+}

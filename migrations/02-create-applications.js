@@ -8,25 +8,66 @@ module.exports = {
 				primaryKey: true
 			},
 			control_number: {
+				type: Sequelize.STRING(50),
 				allowNull: false,
-				type: Sequelize.BIGINT,
 				unique: true
 			},
-			form_type: {
-				type: Sequelize.STRING,
+			form_name: {
+				type: Sequelize.STRING(100),
 				allowNull: false
 			},
-			website_addr: {
-				type: Sequelize.STRING,
-				allowNull: true
+			region: {
+				type: Sequelize.STRING(2)
+			},
+			forest: {
+				type: Sequelize.STRING(2)
+			},
+			district: {
+				type: Sequelize.STRING(2)
+			},
+			website: {
+				type: Sequelize.STRING(255)
+			},
+			activity_description: {
+				type: Sequelize.STRING(255)
+			},
+			location_description: {
+				type: Sequelize.STRING(255)
+			},
+			start_datetime: {
+				type: Sequelize.DATE
+			},
+			end_datetime: {
+				type: Sequelize.DATE
+			},
+			number_participants: {
+				type: Sequelize.INTEGER
+			},
+			individual_is_citizen: {
+				type: Sequelize.BOOLEAN
+			},
+			small_business: {
+				type: Sequelize.BOOLEAN
+			},
+			advertising_url: {
+				type: Sequelize.STRING(255)
+			},			
+			advertising_description: {
+				type: Sequelize.STRING(255)
+			},
+			client_charges: {
+				type: Sequelize.STRING(255)
+			},
+			experience_list: {
+				type: Sequelize.STRING(255)
 			},
 			created: {
-				allowNull: false,
-				type: Sequelize.DATE
+				type: Sequelize.DATE,
+				allowNull: false
 			},
 			updated: {
-				allowNull: false,
-				type: Sequelize.DATE
+				type: Sequelize.DATE,
+				allowNull: false
 			}
 		});
 	},
