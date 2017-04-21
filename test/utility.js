@@ -16,21 +16,9 @@
 const include = require('include')(__dirname);
 
 const request = require('supertest');
-const server = include('index.js');
+const server = include('src/index.js');
 
 //*******************************************************************
-
-function updateInputData(baseData, update){
-
-	const updatedInput = Object.assign(
-        {},
-        baseData,
-        update
-    );
-
-	return updatedInput;
-    
-}
 
 function getToken(callback){
 
@@ -39,7 +27,7 @@ function getToken(callback){
 	request(server)
 		.post('/auth')
 		.set('Accept', 'application/json')
-		.send({ 'username': 'user', 'password': '12345' })
+		.send({ 'username': process.env.ADMINROLE_USER, 'password': process.env.ADMINROLE_PWD })
 		.expect('Content-Type', /json/)
 		.expect(200)
 		.end(function(err, res) {
@@ -57,5 +45,4 @@ function getToken(callback){
 //*******************************************************************
 // exports
 
-module.exports.updateInputData = updateInputData;
 module.exports.getToken = getToken;

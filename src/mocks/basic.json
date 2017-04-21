@@ -1,0 +1,409 @@
+{
+	"swagger": "2.0",
+	"info": {
+		"description": "Mocks for Basic API",
+		"title": "Mock API Documentation",
+		"version": "0.0.1"
+	},
+	"tags": [
+	],
+	"paths": {
+		"/contact/person/{lastname}/": {
+			"get": {
+				"tags": [
+					"Contact Person"
+				],
+				"summary": "Contact Person",
+				"description": "",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					 {
+						"name": "lastname",
+						"in": "path",
+						"description": "lastname",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+      					"examples": {
+        					"application/json": {
+        						"contCn": "777655010848",
+								"contId": "EPERMIT PERSON 3",
+								"contName": "unnecc",
+								"contactType": "PERSON",
+								"firstName": "Test",
+								"lastName": "Unique lastname",
+								"orgCode": null,
+								"orgType": null,
+								"personPrefix": "MR",
+								"securityId": " 0102"
+        					}
+         				}
+					}
+				}
+			}
+		},
+		"/contact/person/": {
+			"post": {
+				"tags": [
+					"Contact Person"
+				],
+				"summary": "Contact Person",
+				"description": "",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+      					"examples": {
+        					"application/json": {
+        						"contCn": "777655010848",
+								"contId": "EPERMIT PERSON 3",
+								"contName": "unnecc",
+								"contactType": "PERSON",
+								"firstName": "Test",
+								"lastName": "Unique lastname",
+								"personPrefix": "MR"
+        					}
+         				}
+					}
+				}
+			}
+		},
+		"/contact/orgcode/{orgname}/": {
+			"get": {
+				"tags": [
+					"Contact Organization"
+				],
+				"summary": "Contact Organization",
+				"description": "",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					 {
+						"name": "orgname",
+						"in": "path",
+						"description": "orgname",
+						"required": true,
+						"type": "string"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+      					"examples": {
+        					"application/json": {
+        						"contCn": "777683010848",
+								"contId": "EPERMIT INC 2",
+								"contName": "Test inc 2",
+								"contactType": "ORGANIZATION",
+								"firstName": null,
+								"lastName": null,
+								"orgCode": "Test Organization Name",
+								"orgType": "CORPORATION",
+								"personPrefix": null,
+								"securityId": null
+        					}
+         				}
+					}
+				}
+			}
+		},
+		"/contact/orgcode/": {
+			"post": {
+				"tags": [
+					"Contact Organization"
+				],
+				"summary": "Contact Organization",
+				"description": "",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+      					"examples": {
+        					"application/json": {
+        						"contCn": "777683010848",
+								"contId": "EPERMIT INC 2",
+								"contName": "Test inc 2",
+								"contactType": "ORGANIZATION",
+								"firstName": null,
+								"lastName": null,
+								"orgCode": "Test Organization Name",
+								"orgType": "CORPORATION",
+								"personPrefix": null,
+								"securityId": null
+        					}
+         				}
+					}
+				}
+			}
+		},
+		"/contact-address/": {
+			"post": {
+				"tags": [
+					"Contact Address"
+				],
+				"summary": "Contact Address",
+				"description": "",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+      					"examples": {
+        					"application/json": {
+        						"addrCn": "565689",
+								"address1": "201 time",
+								"addressType": "BILLING",
+								"cityName": "Smokeville",
+								"contact": "777655010848",
+								"createdDate": "2017-03-28",
+								"postalCode": "82555",
+								"programArea": "SUDS",
+								"securityId": "0102",
+								"stateCode": "AZ"
+        					}
+         				}
+					}
+				}
+			}
+		},
+		"/contact-phone/": {
+			"post": {
+				"tags": [
+					"Contact Phone"
+				],
+				"summary": "Contact Phone",
+				"description": "",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+      					"examples": {
+        					"application/json": {
+        						"areaCode": "510",
+								"contact": "777655010848",
+								"createdDate": "2017-03-28",
+								"phoneNumber": "233-3333",
+								"phoneNumberType": "MOBILE",
+								"pnCn": "604258010848",
+								"programArea": "SUDS",
+								"securityId": "0102"
+        					}
+         				}
+					}
+				}
+			}
+		},
+		"/application/": {
+			"post": {
+				"tags": [
+					"Application"
+				],
+				"summary": "Application",
+				"description": "",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+      					"examples": {
+        					"application/json": {
+        						"accinstCn": "4882913010848",
+								"epermitId": "0102000001",
+								"sudsId": "0102000001",
+								"securityId": "0102",
+								"managingOrg": "0102",
+								"adminOrg": "0102",
+								"purpose": "2nd permit with the purpose",
+								"formName": "FS-2700-3f ",
+								"formDesc": "Outfitting & Guiding Special Use Permit",
+								"holderCombKey": "4882913010848-777655010848",
+								"contCn": "777655010848",
+								"contId": "EPERMIT PERSON 3",
+								"contName": "unnecc",
+								"contactType": "PERSON",
+								"firstName": "Test",
+								"lastName": "Unique lastname",
+								"personPrefix": "MR",
+								"crExemptInd": "N"
+        					}
+         				}
+					}
+				}
+			}
+		},
+		"/application/{accinstCn}": {
+			"get": {
+				"tags": [
+					"Application"
+				],
+				"summary": "Application",
+				"description": "",
+				"produces": [
+					"application/json"
+				],
+				"parameters": [
+					 {
+						"name": "accinstCn",
+						"in": "path",
+						"description": "accinstCn",
+						"required": true,
+						"type": "integer"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+      					"examples": {
+        					"application/json": {
+        						
+								"accinstCn": "4882911010848",
+								"adminOrg": "0102",
+								"authOfficerName": null,
+								"authOfficerTitle": null,
+								"contCn": "777624010848",
+								"contId": "EPERMIT PERSON 1",
+								"contName": "Test Outffiting",
+								"contactType": "PERSON",
+								"crExemptInd": "N",
+								"effectiveDate": null,
+								"epermitId": "0102",
+								"firstName": "Touffiter",
+								"formDesc": "Special Use Application & Permit (Noncommercial Group Uses)",
+								"formName": "FS-2700-3b ",
+								"holderCombKey": "4882911010848-777624010848",
+								"lastName": "Testoutffierlastname",
+								"managingOrg": "0102",
+								"orgCode": null,
+								"orgType": null,
+								"personPrefix": null,
+								"purpose": "Test purpose extended",
+								"remarks": null,
+								"securityId": "0102",
+								"status": null,
+								"sudsId": "0102",
+								"addresses": [
+									{
+										"addrCn": "565662",
+										"address1": "123 smokey lane",
+										"address2": null,
+										"address3": null,
+										"addressSeq": null,
+										"addressType": "BILLING",
+										"cityName": "Smokeytown",
+										"combKey": "4882911010848-565662",
+										"contCn": "777624010848",
+										"contId": "EPERMIT PERSON 1",
+										"contName": "Test Outffiting",
+										"contactType": "PERSON",
+										"countryName": "United States of America",
+										"createdDate": "2017-03-22",
+										"email": "apitestout@fs.fed.us",
+										"fmmiCustomerNumber": null,
+										"modifiedDate": null,
+										"postalCode": "82555",
+										"programArea": "SUDS",
+										"securityId": "0102",
+										"stateCode": "AZ"
+									}
+								],
+								"phones":[
+									{
+										"areaCode":"111",
+										"combKey":"1234567890-123456",
+										"contCn":"777624010848",
+										"contId":"TEST,LLC",
+										"contName":"contName Outfitter",
+										"contactType":"PERSON",
+										"extension":null,
+										"internationalCode":null,
+										"phoneNumber":"222-3333",
+										"phoneNumberType":"BUSINESS",
+										"pnCn":"123456",
+										"programArea":"SUDS",
+										"restrictions":"Test Rest",
+										"securityId":"0102"
+									}
+								],
+								"statuses": [
+									{
+										"authOfficerName":null,
+										"authOfficerTitle":null,
+										"combKey":"1234567890-222333-27-JUN-06",
+										"effectiveDate":"2006-06-27",
+										"status":"ACCEPTED",
+										"statusCn":"222333"
+									},
+									{
+										"authOfficerName":null,
+										"authOfficerTitle":null,
+										"combKey":"1234567890-222333-20-AUG-05",
+										"effectiveDate":"2005-08-20",
+										"status":"ACCEPTED",
+										"statusCn":"222333"
+									},
+									{
+										"authOfficerName":null,
+										"authOfficerTitle":null,
+										"combKey":"1234567890-7776666-12-DEC-05",
+										"effectiveDate":"2005-12-12",
+										"status":"ON HOLD",
+										"statusCn":"7776666"
+									},
+									{
+										"authOfficerName":null,
+										"authOfficerTitle":null,
+										"combKey":"1234567890-9998888-11-AUG-06",
+										"effectiveDate":"2006-08-11",
+										"status":"ISSUED",
+										"statusCn":"9998888"
+									},
+									{
+										"authOfficerName":"AUTH OFFICER",
+										"authOfficerTitle":"DISTRICT RANGER",
+										"combKey":"1234567890-4445555-08-DEC-09",
+										"effectiveDate":"2009-12-08",
+										"status":"CLOSED",
+										"statusCn":"4445555"
+									},
+									{
+										"authOfficerName":null,
+										"authOfficerTitle":null,
+										"combKey":"1234567890-88882222-28-JUN-06",
+										"effectiveDate":"2006-06-28",
+										"status":"APP APPROVED",
+										"statusCn":"88882222"
+									}
+								],
+								"uses": [
+									{
+										"acres": 0,
+										"cn": "99887766554433",
+										"feeCalculation": "O&G",
+										"primaryFlag": "Y",
+										"useCn": "777778888"
+									}
+								]
+
+        					}
+         				}
+					}
+				}
+			}
+		}
+	}
+}

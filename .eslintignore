@@ -1,5 +1,4 @@
 
-
 # DotEnv
 .env
 
@@ -16,10 +15,20 @@ pids
 # Coverage & quality directories
 coverage
 quality
+lint
+config
 
 # Dependency directories
 node_modules
 
-# Third party lib/lang
-/docs/lang/**
-/docs/lib/**
+# Third party lib/lang & docs
+docs
+api-docs
+code-docs
+
+# DB related setup
+dba
+
+# Mock API
+src/mocks
+src/routes/mocks/**

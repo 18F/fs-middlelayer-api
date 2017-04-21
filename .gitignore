@@ -11,9 +11,11 @@ pids
 *.pid
 *.seed
 
-# Coverage and quality directories
+# Coverage, code docs and quality directories
 coverage
 quality
+lint
+docs/code
 
 # Grunt intermediate storage
 .grunt
