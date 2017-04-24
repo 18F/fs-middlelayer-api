@@ -1,4 +1,4 @@
-## Creating a New Permit Type in ePermit API
+# Creating a New Permit Type in ePermit API
 
 These steps define the process for creating a new permit type using Example Permit.
 
@@ -123,9 +123,9 @@ These steps define the process for creating a new permit type using Example Perm
           - `basic:/contact/address`
           - `basic:/contact/phone`
 
-          If the store contains one of the `basic` type options, `basicField` attribute must be included. This is the name of the field used to submit this data to the basic API.
+          If the store contains one of the `basic` type options, `basicField` attribute must be included. This is the name of the field used to submit this data to the Basic API.
 
-2. Extend schema, if necessary.
+2. Extend the schema, if necessary.
     1. If there are any new form fields not supported by the current middle-layer  database, they can be added in the application table. To do this, go to `dba/migrations/ 02-create-applications.js` and update the sequelize migration script as needed. Also, update `src/models/applications.js` to include the new database fields.
     2. If there are routing changes, update `src/controllers/index.js`.
     3. If there are validation changes, update `src/controllers/validation.js`.
