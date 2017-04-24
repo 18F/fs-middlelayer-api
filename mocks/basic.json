@@ -32,16 +32,16 @@
 						"description": "Success",
       					"examples": {
         					"application/json": {
-        						"contCn": "777655010848",
-								"contId": "EPERMIT PERSON 3",
-								"contName": "unnecc",
+        						"contCn": "987654321",
+								"contId": "1234",
+								"contName": "Jane Roe",
 								"contactType": "PERSON",
-								"firstName": "Test",
-								"lastName": "Unique lastname",
+								"firstName": "Jane",
+								"lastName": "Roe",
 								"orgCode": null,
 								"orgType": null,
-								"personPrefix": "MR",
-								"securityId": " 0102"
+								"personPrefix": "MS",
+								"securityId": "0000"
         					}
          				}
 					}
@@ -63,13 +63,13 @@
 						"description": "Success",
       					"examples": {
         					"application/json": {
-        						"contCn": "777655010848",
-								"contId": "EPERMIT PERSON 3",
-								"contName": "unnecc",
+        						"contCn": "987654321",
+								"contId": "1234",
+								"contName": "Jane Roe",
 								"contactType": "PERSON",
-								"firstName": "Test",
-								"lastName": "Unique lastname",
-								"personPrefix": "MR"
+								"firstName": "Jane",
+								"lastName": "Roe",
+								"personPrefix": "MS"
         					}
          				}
 					}
@@ -100,13 +100,13 @@
 						"description": "Success",
       					"examples": {
         					"application/json": {
-        						"contCn": "777683010848",
-								"contId": "EPERMIT INC 2",
-								"contName": "Test inc 2",
+        						"contCn": "987654321",
+								"contId": "1234",
+								"contName": "Acme",
 								"contactType": "ORGANIZATION",
 								"firstName": null,
 								"lastName": null,
-								"orgCode": "Test Organization Name",
+								"orgCode": "INC",
 								"orgType": "CORPORATION",
 								"personPrefix": null,
 								"securityId": null
@@ -131,13 +131,13 @@
 						"description": "Success",
       					"examples": {
         					"application/json": {
-        						"contCn": "777683010848",
-								"contId": "EPERMIT INC 2",
-								"contName": "Test inc 2",
+        						"contCn": "987654321",
+								"contId": "1234",
+								"contName": "Acme",
 								"contactType": "ORGANIZATION",
 								"firstName": null,
 								"lastName": null,
-								"orgCode": "Test Organization Name",
+								"orgCode": "INC",
 								"orgType": "CORPORATION",
 								"personPrefix": null,
 								"securityId": null
@@ -162,16 +162,16 @@
 						"description": "Success",
       					"examples": {
         					"application/json": {
-        						"addrCn": "565689",
-								"address1": "201 time",
+        						"addrCn": "987654321",
 								"addressType": "BILLING",
-								"cityName": "Smokeville",
-								"contact": "777655010848",
-								"createdDate": "2017-03-28",
-								"postalCode": "82555",
+								"address1": "1234 Main St",								
+								"cityName": "Washington",
+								"stateCode": "DC",
+								"postalCode": "12345",
+								"contact": "987654321",
+								"createdDate": "2016-06-04",								
 								"programArea": "SUDS",
-								"securityId": "0102",
-								"stateCode": "AZ"
+								"securityId": "0102"								
         					}
          				}
 					}
@@ -193,12 +193,12 @@
 						"description": "Success",
       					"examples": {
         					"application/json": {
-        						"areaCode": "510",
-								"contact": "777655010848",
-								"createdDate": "2017-03-28",
-								"phoneNumber": "233-3333",
+        						"areaCode": "555",
+								"contact": "987654321",
+								"createdDate": "2016-06-04",
+								"phoneNumber": "555-1234",
 								"phoneNumberType": "MOBILE",
-								"pnCn": "604258010848",
+								"pnCn": "987654321",
 								"programArea": "SUDS",
 								"securityId": "0102"
         					}
@@ -222,23 +222,23 @@
 						"description": "Success",
       					"examples": {
         					"application/json": {
-        						"accinstCn": "4882913010848",
+        						"accinstCn": "123456789",
 								"epermitId": "0102000001",
 								"sudsId": "0102000001",
 								"securityId": "0102",
 								"managingOrg": "0102",
 								"adminOrg": "0102",
-								"purpose": "2nd permit with the purpose",
+								"purpose": "Permit Purpose",
 								"formName": "FS-2700-4I",
 								"formDesc": "Outfitting & Guiding Special Use Permit",
-								"holderCombKey": "4882913010848-777655010848",
-								"contCn": "777655010848",
-								"contId": "EPERMIT PERSON 3",
-								"contName": "unnecc",
+								"holderCombKey": "123456789-987654321",
+								"contCn": "987654321",
+								"contId": "1234",
+								"contName": "Jane Roe",
 								"contactType": "PERSON",
-								"firstName": "Test",
-								"lastName": "Unique lastname",
-								"personPrefix": "MR",
+								"firstName": "Jane",
+								"lastName": "Roe",
+								"personPrefix": "MS",
 								"crExemptInd": "N"
         					}
          				}
@@ -269,122 +269,121 @@
 					"200": {
 						"description": "Success",
       					"examples": {
-        					"application/json": {
-        						
-								"accinstCn": "4882911010848",
+        					"application/json": {        						
+								"accinstCn": "123456789",
 								"adminOrg": "0102",
-								"authOfficerName": null,
-								"authOfficerTitle": null,
-								"contCn": "777624010848",
-								"contId": "EPERMIT PERSON 1",
-								"contName": "Test Outffiting",
+								"authOfficerName": "John Doe",
+								"authOfficerTitle": "Officer",
+								"contCn": "987654321",
+								"contId": "1234",
+								"contName": "Jane Roe",
 								"contactType": "PERSON",
 								"crExemptInd": "N",
-								"effectiveDate": null,
-								"epermitId": "0102",
-								"firstName": "Touffiter",
+								"effectiveDate": "2016-06-04",
+								"epermitId": "0102",								
 								"formDesc": "Special Use Application & Permit (Noncommercial Group Uses)",
 								"formName": "FS-2700-3b ",
-								"holderCombKey": "4882911010848-777624010848",
-								"lastName": "Testoutffierlastname",
+								"holderCombKey": "123456789-987654321",
+								"firstName": "Jane",
+								"lastName": "Roe",
 								"managingOrg": "0102",
 								"orgCode": null,
 								"orgType": null,
 								"personPrefix": null,
-								"purpose": "Test purpose extended",
+								"purpose": "Permit Purpose",
 								"remarks": null,
 								"securityId": "0102",
-								"status": null,
+								"status": "ACCEPTED",
 								"sudsId": "0102",
 								"addresses": [
 									{
-										"addrCn": "565662",
-										"address1": "123 smokey lane",
+										"addrCn": "987654321",
+										"addressType": "BILLING",
+										"address1": "1234 Main St",
 										"address2": null,
 										"address3": null,
-										"addressSeq": null,
-										"addressType": "BILLING",
-										"cityName": "Smokeytown",
+										"addressSeq": null,										
+										"cityName": "Washington",
+										"stateCode": "DC",
+										"postalCode": "82555",
 										"combKey": "4882911010848-565662",
-										"contCn": "777624010848",
-										"contId": "EPERMIT PERSON 1",
-										"contName": "Test Outffiting",
+										"contCn": "987654321",
+										"contId": "1234",
+										"contName": "Jane Roe",
 										"contactType": "PERSON",
 										"countryName": "United States of America",
-										"createdDate": "2017-03-22",
-										"email": "apitestout@fs.fed.us",
-										"fmmiCustomerNumber": null,
-										"modifiedDate": null,
-										"postalCode": "82555",
+										"createdDate": "2016-06-04",
+										"email": "test@fs.fed.us",
+										"fmmiCustomerNumber": "1234",
+										"modifiedDate": "2016-06-04",										
 										"programArea": "SUDS",
-										"securityId": "0102",
-										"stateCode": "AZ"
+										"securityId": "0102"										
 									}
 								],
 								"phones":[
 									{
-										"areaCode":"111",
-										"combKey":"1234567890-123456",
-										"contCn":"777624010848",
-										"contId":"TEST,LLC",
-										"contName":"contName Outfitter",
+										"areaCode":"555",
+										"combKey":"987654321-123456789",
+										"contCn":"987654321",
+										"contId":"1234",
+										"contName":"Jane Roe",
 										"contactType":"PERSON",
 										"extension":null,
 										"internationalCode":null,
-										"phoneNumber":"222-3333",
+										"phoneNumber":"555-1234",
 										"phoneNumberType":"BUSINESS",
-										"pnCn":"123456",
+										"pnCn":"123456789",
 										"programArea":"SUDS",
-										"restrictions":"Test Rest",
+										"restrictions":"Test",
 										"securityId":"0102"
 									}
 								],
 								"statuses": [
 									{
-										"authOfficerName":null,
-										"authOfficerTitle":null,
+										"authOfficerName":"John Doe",
+										"authOfficerTitle":"Officer",
 										"combKey":"1234567890-222333-27-JUN-06",
-										"effectiveDate":"2006-06-27",
+										"effectiveDate":"2016-06-04",
 										"status":"ACCEPTED",
 										"statusCn":"222333"
 									},
 									{
-										"authOfficerName":null,
-										"authOfficerTitle":null,
+										"authOfficerName":"John Doe",
+										"authOfficerTitle":"Officer",
 										"combKey":"1234567890-222333-20-AUG-05",
-										"effectiveDate":"2005-08-20",
+										"effectiveDate":"2016-06-04",
 										"status":"ACCEPTED",
 										"statusCn":"222333"
 									},
 									{
-										"authOfficerName":null,
-										"authOfficerTitle":null,
+										"authOfficerName":"John Doe",
+										"authOfficerTitle":"Officer",
 										"combKey":"1234567890-7776666-12-DEC-05",
-										"effectiveDate":"2005-12-12",
+										"effectiveDate":"2016-06-04",
 										"status":"ON HOLD",
 										"statusCn":"7776666"
 									},
 									{
-										"authOfficerName":null,
-										"authOfficerTitle":null,
+										"authOfficerName":"John Doe",
+										"authOfficerTitle":"Officer",
 										"combKey":"1234567890-9998888-11-AUG-06",
-										"effectiveDate":"2006-08-11",
+										"effectiveDate":"2016-06-04",
 										"status":"ISSUED",
 										"statusCn":"9998888"
 									},
 									{
-										"authOfficerName":"AUTH OFFICER",
-										"authOfficerTitle":"DISTRICT RANGER",
+										"authOfficerName":"John Doe",
+										"authOfficerTitle":"Officer",
 										"combKey":"1234567890-4445555-08-DEC-09",
-										"effectiveDate":"2009-12-08",
+										"effectiveDate":"2016-06-04",
 										"status":"CLOSED",
 										"statusCn":"4445555"
 									},
 									{
-										"authOfficerName":null,
-										"authOfficerTitle":null,
+										"authOfficerName":"John Doe",
+										"authOfficerTitle":"Officer",
 										"combKey":"1234567890-88882222-28-JUN-06",
-										"effectiveDate":"2006-06-28",
+										"effectiveDate":"2016-06-04",
 										"status":"APP APPROVED",
 										"statusCn":"88882222"
 									}
@@ -392,7 +391,7 @@
 								"uses": [
 									{
 										"acres": 0,
-										"cn": "99887766554433",
+										"cn": "987654321",
 										"feeCalculation": "O&G",
 										"primaryFlag": "Y",
 										"useCn": "777778888"
