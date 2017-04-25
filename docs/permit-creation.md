@@ -10,17 +10,19 @@ These steps define the process for creating a new permit type using Example Perm
     2. Add the relevant application form fields for these routes. </br>
         Example `GET` in `api.json`:
 
-
-               /permits/applications/special-uses/commercial/example-permit{controlNumber}/: {
-                        "get": {
-                   "getTemplate":{
-                       "controlNumber":{"default":"", "intake":"accinstCn"},
-                       "region": {"default":"", "intake":"middleLayer/region"},
-                       "forest": {"default":"", "intake":"middleLayer/forest"},
-                     "applicantInfo": {
-                          "contactControlNumber":{"default":"", "intake":"addresses/contCn"},
-                          "firstName": {"default":"", "intake":"holders/firstName"},
-                          ...
+            /permits/applications/special-uses/commercial/example-permit{controlNumber}/: {
+                "get": {
+                    "getTemplate":{
+                        "controlNumber":{"default":"", "intake":"accinstCn"},
+                        "region": {"default":"", "intake":"middleLayer/region"},
+                        "forest": {"default":"", "intake":"middleLayer/forest"},
+                        "applicantInfo": {
+                            "contactControlNumber":{"default":"", "intake":"addresses/contCn"},
+                            "firstName": {"default":"", "intake":"holders/firstName"},
+                        }
+                    }
+                }
+            }
 
         Intake options include:
         - `middleLayer/<fieldName>`
@@ -37,78 +39,78 @@ These steps define the process for creating a new permit type using Example Perm
 
     3. Example `POST` in `api.json`:
 
-               "/permits/applications/special-uses/commercial/example-permit/": {
-                  "post": {
+            "/permits/applications/special-uses/commercial/example-permit/": {
+                "post": {
                     "x-validation":{
-                                "$ref":"validation.json#examplePermit"
-                            },
-                "parameters": [          
-                      {
-                        "in": "formData",
-                        "name": "body",
-                        "description": "example permit information",
-                        "required": true,
-                      "schema": {
-                          "$ref": "#/definitions/examplePermit"
+                        "$ref":"validation.json#examplePermit"
+                    },
+                    "parameters": [          
+                        {
+                            "in": "formData",
+                            "name": "body",
+                            "description": "example permit information",
+                            "required": true,
+                            "schema": {
+                                "$ref": "#/definitions/examplePermit"
+                            }
+                        },
+                        {
+                            "in": "formData",
+                            "name": "exampleDocumentation",
+                            "description": "example file upload",
+                            "type": "file"
                         }
-                      },
-                      {
-                        "in": "formData",
-                        "name": "exampleDocumentation",
-                        "description": "example file upload",
-                        "type": "file"
-                      }
-                  ] 
+                    ] 
                 }
                 "examplePermit": {
-                "type": "object",
-                "properties": {
-                "region": { "type" : "string" },
-                          "forest": { "type" : "string" },
-                          "district": { "type" : "string" }
-                  ....
-                },
-                "required": ["region","forest","district"...]
+                    "type": "object",
+                    "properties": {
+                        "region": { "type" : "string" },
+                        "forest": { "type" : "string" },
+                        "district": { "type" : "string" }
+                        ...
+                    },
+                    "required": ["region","forest","district"...]
                 }
     
       4. Example `POST` in `validation.json`:
 	   
                 "district": {
-                                "default":"",
-                                "fromIntake":true,
-                                "pattern":"^[0-9]{2}$",
-                                "store":["middleLayer:district"],
-                                "type" : "string"
-                            },
+                    "default":"",
+                    "fromIntake":true,
+                    "pattern":"^[0-9]{2}$",
+                    "store":["middleLayer:district"],
+                    "type" : "string"
+                },
                 "firstName": {
-                               "basicField":"firstName",
-                               "default":"",
-                               "fromIntake":true,
-                               "maxLength":255,
-                               "store":["basic:/contact/person"],
-                               "type": "string"
-                            },
+                    "basicField":"firstName",
+                    "default":"",
+                    "fromIntake":true,
+                    "maxLength":255,
+                    "store":["basic:/contact/person"],
+                    "type": "string"
+                },
                 "securityId":{
-                                "basicField":"securityId",
-                                "default":"",
-                                "fromIntake":false,
-                                "madeOf":["region","forest","district"],
-                                "store":["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
-                                "type" : "string"
-                            },
+                    "basicField":"securityId",
+                    "default":"",
+                    "fromIntake":false,
+                    "madeOf":["region","forest","district"],
+                    "store":["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
+                    "type" : "string"
+                },
                 "exampleDocumentation": {
-                                "filetypecode":"exd",
-                                "maxSize": 25,
-                                "requiredFile":false,
-                                "store":["middleLayer:exampleDocumentation"],
-                                "type": "file",
-                                "validExtensions":[
-                                    "pdf",
-                                    "doc",
-                                    "docx",
-                                    "rtf"
-                                ]
-                            },
+                    "filetypecode":"exd",
+                    "maxSize": 25,
+                    "requiredFile":false,
+                    "store":["middleLayer:exampleDocumentation"],
+                    "type": "file",
+                    "validExtensions":[
+                        "pdf",
+                        "doc",
+                        "docx",
+                        "rtf"
+                    ]
+                },
             
 
           - `fromIntake` indicates whether the field will be directly populated with user input. If set to `false`, `madeOf` must be provided, giving the fields, or strings used to populate this field.
