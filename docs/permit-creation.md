@@ -1,49 +1,133 @@
-# Application Creation Process
+# Creating a New Permit Type in ePermit API
 
-These steps define the process for creating a new permit type using **Example Permit** for illustration.
+These steps define the process for creating a new permit type using Example Permit.
 
-1. Create the Swagger Documentation.
+1. Create Swagger Documentation.
+    1. Go to `src/api.json` and add the new `GET`, `PUT`, and `POST` route for the new Example Permit as shown below:
 
-	1. Go to `docs/swagger.json` and add the new `GET`, `PUT`, and `POST` route for the new **Example Permit** as shown below:
-	
-		`/permits/applications/special-uses/commercial/example-permit/`
+        `/permits/applications/special-uses/commercial/example-permit/`
+
+    2. Add the relevant application form fields for these routes. </br>
+        Example `GET` in `api.json`:
+
+
+               /permits/applications/special-uses/commercial/example-permit{controlNumber}/: {
+                        "get": {
+                   "getTemplate":{
+                       "controlNumber":{"default":"", "intake":"accinstCn"},
+                       "region": {"default":"", "intake":"middleLayer/region"},
+                       "forest": {"default":"", "intake":"middleLayer/forest"},
+                     "applicantInfo": {
+                          "contactControlNumber":{"default":"", "intake":"addresses/contCn"},
+                          "firstName": {"default":"", "intake":"holders/firstName"},
+                          ...
+
+        Intake options include:
+        - `middleLayer/<fieldName>`
+          - From the application table in middleLayer database, column name <fieldName>
+        - `addresses/<fieldName>`
+          - From Basic API response, addresses array
+        - `holders/<fieldName>`
+          - From Basic API response, holders array
+        - `phones/<fieldName>`
+          - From Basic API response, phones array
+        - `<fieldName>`
+          - From Basic API response, not in any array
+
+
+    3. Example `POST` in `api.json`:
+
+               "/permits/applications/special-uses/commercial/example-permit/": {
+                  "post": {
+                    "x-validation":{
+                                "$ref":"validation.json#examplePermit"
+                            },
+                "parameters": [          
+                      {
+                        "in": "formData",
+                        "name": "body",
+                        "description": "example permit information",
+                        "required": true,
+                      "schema": {
+                          "$ref": "#/definitions/examplePermit"
+                        }
+                      },
+                      {
+                        "in": "formData",
+                        "name": "exampleDocumentation",
+                        "description": "example file upload",
+                        "type": "file"
+                      }
+                  ] 
+                }
+                "examplePermit": {
+                "type": "object",
+                "properties": {
+                "region": { "type" : "string" },
+                          "forest": { "type" : "string" },
+                          "district": { "type" : "string" }
+                  ....
+                },
+                "required": ["region","forest","district"...]
+                }
     
-	2. Add the relevant application form fields for these routes. 
-	
-2. Create a controller.
+      4. Example `POST` in `validation.json`:
+	   
+                "district": {
+                                "default":"",
+                                "fromIntake":true,
+                                "pattern":"^[0-9]{2}$",
+                                "store":["middleLayer:district"],
+                                "type" : "string"
+                            },
+                "firstName": {
+                               "basicField":"firstName",
+                               "default":"",
+                               "fromIntake":true,
+                               "maxLength":255,
+                               "store":["basic:/contact/person"],
+                               "type": "string"
+                            },
+                "securityId":{
+                                "basicField":"securityId",
+                                "default":"",
+                                "fromIntake":false,
+                                "madeOf":["region","forest","district"],
+                                "store":["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
+                                "type" : "string"
+                            },
+                "exampleDocumentation": {
+                                "filetypecode":"exd",
+                                "maxSize": 25,
+                                "requiredFile":false,
+                                "store":["middleLayer:exampleDocumentation"],
+                                "type": "file",
+                                "validExtensions":[
+                                    "pdf",
+                                    "doc",
+                                    "docx",
+                                    "rtf"
+                                ]
+                            },
+            
 
-	1. Go to `controllers/permits/applications/special-uses/commercial`, and create a new controller folder, `example-permit`, within the `commercial` folder.
-	
-	2. Within the `example-permit` folder, create an `index.js` file.
+          - `fromIntake` indicates whether the field will be directly populated with user input. If set to `false`, `madeOf` must be provided, giving the fields, or strings used to populate this field.
 
-	3. In the `index.js` file, create functions for the three REST endpoints: `GET`, `POST`, and `PUT`. Refer to [this temp-outfitters permit controller](https://github.com/18F/fs-middlelayer-api/blob/master/controllers/permits/special-uses/commercial/outfitters/index.js) for an example.
+          Files:
+          - `maxSize` is measured in megabytes
 
-3. Create a new route.
-	
-	1. Go to `routes/permits/applications/special-uses/commercial`, and create a folder for the new permit type, `example-permit`, within the commercial folder.
-	
-	2. Create an `index.js` file within the new `example-permit` folder to include `GET`, `PUT`, and `POST` routes. These routes will access the respective functions in the controller created in step 2. These routes can be tested for a valid response in the Swagger documentation.
- 
-4. Create validation.
+          Store options include:
+          - `middleLayer:<fieldName>`
+          - `basic:/application`
+          - `basic:/contact/person`
+          - `basic:/contact/address`
+          - `basic:/contact/phone`
 
-	1. Go to `controllers/permits/applications/special-uses/validationSchema.json` and create a validation schema section for the new Example Permit.
+          If the store contains one of the `basic` type options, `basicField` attribute must be included. This is the name of the field used to submit this data to the Basic API.
 
-	2. In the validation schema, define the validation criteria for the application form fields.
-	
-	3. Go to `controllers/permits/applications/special-uses/validate.js` and update the `validateInput` function according to the new validation schema.
-
-5. Create the `POST` schema.
-
-	1. Go to `controllers/permits/applications/special-uses/postSchema.json` and create the schema that is accepted by the Basic API `POST` request for this new permit.
-
-6. Create the `GET` schema.
-
-	1. Go to `controllers/permits/applications/special-uses/getSchema.json` and create the schema that is accepted by the Basic API `GET` request for this new permit.
-
-7. Update the database, if necessary.
-
-	1. If there are any form fields not supported by the Basic API, they can be saved in the middle-layer API database. To do this, go to `migrations/02-create-applications.js` and update the sequelize migration script as needed.
-
-8. Update the controller.
-
-	1. Update the new `example-permit` controller file to incorporate user input validation, create `GET` and `POST` requests using schemas, make the Basic API call, create application in the middle-layer database, and send back the API response. 
+2. Extend the schema, if necessary.
+    1. If there are any new form fields not supported by the current middle-layer  database, they can be added in the application table. To do this, go to `dba/migrations/ 02-create-applications.js` and update the sequelize migration script as needed. Also, update `src/models/applications.js` to include the new database fields.
+    2. If there are routing changes, update `src/controllers/index.js`.
+    3. If there are validation changes, update `src/controllers/validation.js`.
+    4. If there are any changes on how the files are to be stored, update `src/controllers/store.js`.
+    5. If there are any changes on how the requests are made to Basic API, update `src/controllers/basic.js`.
