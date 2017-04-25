@@ -34,7 +34,7 @@ const validation = require('./validation.js');
 
 //*************************************************************
 
-const sudsApiUrl = process.env.SUDS_API_URL;
+const SUDS_API_URL = process.env.SUDS_API_URL;
 
 //*************************************************************
 // Helper Functions
@@ -45,7 +45,7 @@ const sudsApiUrl = process.env.SUDS_API_URL;
  */
 function getBasicRes(controlNumber){
 
-	const existingContactCheck = `${sudsApiUrl}/application/${controlNumber}`;
+	const existingContactCheck = `${SUDS_API_URL}/application/${controlNumber}`;
 	const getContactOptions = {
 		method: 'GET',
 		uri: existingContactCheck,
