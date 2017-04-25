@@ -13,4 +13,4 @@ These are the properties for AWS S3 data storage:
 - `AWS_REGION=<AWS region>`
 - `AWS_BUCKET_NAME=<AWS S3 bucket name>`
 
-If you have the configuration defined in the code, the Node.JS server will use that configuration. Otherwise, the server will pull from the `credentials` file under the `.aws` directory.
+The Node.js server will look for the AWS properties in the environment variables first. If they are not found, the server will look for the `credentials` file under the `.aws` directory. Refer to [Setting Credentials in Node.js](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html) for more information. 
