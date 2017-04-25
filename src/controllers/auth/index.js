@@ -28,16 +28,16 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 passport.use(new Strategy(  
 
-	function(username, password, done) {
+	function(un, pw, done) {
 		
 		models.users.findOne({
-			where: {user_name: username} //eslint-disable-line camelcase
+			where: {userName: un}
 		}).then(function(user) {
 			if (user){
-				if (bcrypt.compareSync(password, user.pass_hash)){
+				if (bcrypt.compareSync(pw, user.passHash)){
 					done(null, {
-						id: user.user_name,
-						role: user.user_role,
+						id: user.userName,
+						role: user.userRole,
 						verified: true
 					});	
 				}

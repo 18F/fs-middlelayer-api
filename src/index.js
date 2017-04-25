@@ -24,8 +24,8 @@ const path = require('path');
 const fsr = require('file-stream-rotator');
 const mkdirp = require('mkdirp');
 const morgan = require('morgan');
-
 const bodyParser = require('body-parser');
+const moxai = require('moxai');
 
 const routes = require('./routes');
 
@@ -72,6 +72,11 @@ app.use('/docs/code', express.static('docs/code'));
 app.use('/api.json', express.static('src/api.json'));
 app.use('/docs/api.json', express.static('src/api.json'));
 app.use('/schema/api.json', express.static('src/api.json'));
+
+//*******************************************************************
+// mocks
+
+app.use('/mocks', moxai({'dir': '../mocks', 'file': 'basic'}));
 
 //*******************************************************************
 // routes

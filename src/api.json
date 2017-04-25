@@ -101,11 +101,11 @@
                         "orgType": {"default":"", "intake":"holders/orgType"}
                     },
                     "noncommercialFields": {
-                        "activityDescription": {"default":"", "intake":"middleLayer/activity_description"},
-                        "locationDescription": {"default":"", "intake":"middleLayer/location_description"},
-                        "startDateTime": {"default":"", "intake":"middleLayer/start_datetime"},
-                        "endDateTime": {"default":"", "intake":"middleLayer/end_datetime"},
-                        "numberParticipants": {"default":0, "intake":"middleLayer/number_participants"}
+                        "activityDescription": {"default":"", "intake":"middleLayer/activityDescription"},
+                        "locationDescription": {"default":"", "intake":"middleLayer/locationDescription"},
+                        "startDateTime": {"default":"", "intake":"middleLayer/startDatetime"},
+                        "endDateTime": {"default":"", "intake":"middleLayer/endDatetime"},
+                        "numberParticipants": {"default":0, "intake":"middleLayer/numberParticipants"}
                     }
                 },
                 "tags": [
@@ -212,8 +212,8 @@
         "x-getTemplate":{
           "controlNumber":{"default":"", "intake":"accinstCn"},
           "region": {"default":"", "intake":"middleLayer/region"},
-                    "forest": {"default":"", "intake":"middleLayer/forest"},
-                    "district": {"default":"", "intake":"middleLayer/district"},
+          "forest": {"default":"", "intake":"middleLayer/forest"},
+          "district": {"default":"", "intake":"middleLayer/district"},
           "authorizingOfficerName": {"default":"", "intake":"authOfficerName"},
           "authorizingOfficerTitle": {"default":"", "intake":"authOfficerTitle"},
           "adminOrg": {"default":"", "intake":"adminOrg"},
@@ -225,13 +225,13 @@
               "areaCode": {"default":0, "intake":"phones/areaCode"},
               "number": {"default":0, "intake":"phones/phoneNumber"},
               "extension": {"default":0, "intake":"phones/extension"},
-              "x-type": {"default":"", "intake":"phones/phoneNumberType"}
+              "phoneType": {"default":"", "intake":"phones/phoneNumberType"}
             },
             "eveningPhone": {
               "areaCode": {"default":0, "intake":"phones/areaCode"},
               "number": {"default":0, "intake":"phones/phoneNumber"},
               "extension": {"default":0, "intake":"phones/extension"},
-              "x-type": {"default":"", "intake":"phones/phoneNumberType"}
+              "phoneType": {"default":"", "intake":"phones/phoneNumberType"}
             },
             "emailAddress": {"default":"", "intake":"addresses/email"},
             "mailingAddress": {"default":"", "intake":"addresses/address1"},
@@ -244,14 +244,14 @@
             "orgType": {"default":"", "intake":"holders/orgType"}
           },
           "tempOutfitterFields": {
-            "individualIsCitizen": {"default":false, "intake":"middleLayer/individual_is_citizen"},
-            "smallBusiness": {"default":false, "intake":"middleLayer/small_business"},
-            "activityDescription": {"default":"", "intake":"middleLayer/activity_description"},
-            "advertisingURL": {"default":"", "intake":"middleLayer/advertising_url"},
-            "advertisingDescription":{"default":"", "intake":"middleLayer/advertising_description"},
-            "clientCharges":{"default":"", "intake":"middleLayer/client_charges"},
-            "experienceList":{"default":"", "intake":"middleLayer/experience_list"},
-            "guideDocumentation": {"default":"", "intake":"middleLayer/"},
+            "individualIsCitizen": {"default":false, "intake":"middleLayer/individualIsCitizen"},
+            "smallBusiness": {"default":false, "intake":"middleLayer/smallBusiness"},
+            "activityDescription": {"default":"", "intake":"middleLayer/activityDescription"},
+            "advertisingURL": {"default":"", "intake":"middleLayer/advertisingUrl"},
+            "advertisingDescription":{"default":"", "intake":"middleLayer/advertisingDescription"},
+            "clientCharges":{"default":"", "intake":"middleLayer/clientCharges"},
+            "experienceList":{"default":"", "intake":"middleLayer/experienceList"},
+            "guideDocumentation": {"default":"", "intake":"middleLayer/guideDocumentation"},
             "acknowledgementOfRiskForm": {"default":"", "intake":"middleLayer/acknowledgementOfRiskForm"},
             "insuranceCertificate": {"default":"", "intake":"middleLayer/insuranceCertificate"},
             "goodStandingEvidence": {"default":"", "intake":"middleLayer/goodStandingEvidence"},
@@ -372,9 +372,9 @@
     "/permits/applications/special-uses/commercial/temp-outfitters/": {
       "post": {
         "x-validation":{
-                    "$ref":"validation.json#tempOutfitterApplication"
-                },
-                "tags": [
+            "$ref":"validation.json#tempOutfitterApplication"
+        },
+        "tags": [
           "Outfitter and Guide Permit"
         ],
         "summary": "Submit a new temp-outfitter permit",
@@ -580,8 +580,8 @@
       "type": "object",
       "properties": {
         "region": { "type" : "string", "pattern":"^[0-9]{2}$" },
-              "forest": { "type" : "string", "pattern":"^[0-9]{2}$" },
-              "district": { "type" : "string", "pattern":"^[0-9]{2}$" },
+        "forest": { "type" : "string", "pattern":"^[0-9]{2}$" },
+        "district": { "type" : "string", "pattern":"^[0-9]{2}$" },
         "authorizingOfficerName": { "type" : "string"},
         "authorizingOfficerTitle": { "type" : "string"},
         "applicantInfo": {

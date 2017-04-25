@@ -178,7 +178,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 						error.sendError(req, res, 404, 'file not found');
 					}
 					else {
-						res.attachment(file.file_name);
+						res.attachment(file.fileName);
 						res.send(data.Body);	
 					}
 
@@ -238,8 +238,8 @@ const getControlNumber = function(req, res, reqData){
 				else {
 					if (fileData){
 						fileData.forEach(function(file){
-							const fileType = fileTypes[file.file_type];
-							appl[fileType] = file.file_name;
+							const fileType = fileTypes[file.fileType];
+							appl[fileType] = file.fileName;
 						});
 					}
 					jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData['x-getTemplate']);
@@ -300,7 +300,7 @@ const postApplication = function(req, res, reqData){
 		.then((postObject)=>{
 			const toStoreInDB = db.getDataToStoreInDB(sch, body);
 			const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString(); //TODO: remove - used for mocks
-			toStoreInDB.control_number = controlNumber;
+			toStoreInDB.controlNumber = controlNumber;
 			db.saveApplication(toStoreInDB, function(err, appl){
 				if (err){
 					return error.sendError(req, res, 500, err);
@@ -377,7 +377,6 @@ const use = function(req, res){
 						};
 
 						if (reqMethod === 'get') {
-
 							if (apiTokens.includes('fileName')) {
 
 								getControlNumberFileName(req, res, reqData);
