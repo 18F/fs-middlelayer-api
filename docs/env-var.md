@@ -2,7 +2,7 @@
 
 These are the environment variables that must be created on the Node.js server for the application to run:
 
-## Required for Production
+## Required for Production and Testing
 
 - `DATABASE_URL=postgres://<username>:<password>@<database hostname>:5432<database name>`
 - `JWT_SECRET_KEY=<secret key to generate tokens>`
@@ -12,7 +12,7 @@ These are the environment variables that must be created on the Node.js server f
 - `AWS_BUCKET_NAME=<AWS S3 bucket name>`
 - `SUDS_API_URL=<SUDS Basic API URL>`
 
-## Required for Testing
+## Required for Testing Only
 
 - `ADMINROLE_USER=<admin role account username>`
 - `ADMINROLE_PWD=<admin role account password>`
@@ -23,8 +23,8 @@ These are the environment variables that must be created on the Node.js server f
 
 ## Setting AWS Credentials
 
-The Node.js server will look for the AWS properties in the environment variables first. If they are not found, the server will look for the credentials file under the .aws directory. Refer to [Setting Credentials in Node.js](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html) for more information.
+The Node.js server will look for the AWS properties in the system's environment variables first. If they are not found, the server will look for the credentials file under the `.aws` directory. Refer to [Setting Credentials in Node.js](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html) for more information.
 
 ## Setting Environment Variables
 
-The dotenv npm package is used to load to provide environment variables to the application. For more information, refer to the [dotenv documentation](https://www.npmjs.com/package/dotenv).
+The [dotenv](https://www.npmjs.com/package/dotenv) npm package is used to load environment variables to the application for local development. 
