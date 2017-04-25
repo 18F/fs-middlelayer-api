@@ -67,44 +67,44 @@
             "individualIsCitizen": {
                 "default":false,
                 "fromIntake":true,
-                "store":["middleLayer:individual_is_citizen"],
+                "store":["middleLayer:individualIsCitizen"],
                 "type":"boolean"
             },
             "smallBusiness": {
                 "default":false,
                 "fromIntake":true,
-                "store":["middleLayer:small_business"],
+                "store":["middleLayer:smallBusiness"],
                 "type":"boolean"
             },
             "activityDescription": {
                 "basicField":"purpose",
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:activity_description", "basic:/application"],
+                "store":["middleLayer:activityDescription", "basic:/application"],
                 "type": "string"
             },
             "advertisingURL": {
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:advertising_url"],
+                "store":["middleLayer:advertisingURL"],
                 "type": "string"
             },
             "advertisingDescription": {
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:advertising_description"],
+                "store":["middleLayer:advertisingDescription"],
                 "type": "string"
             },
             "clientCharges": {
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:client_charges"],
+                "store":["middleLayer:clientCharges"],
                 "type": "string"
             },
             "experienceList": {
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:experience_list"],
+                "store":["middleLayer:experienceList"],
                 "type": "string"
             },
             "guideDocumentation": {
@@ -174,8 +174,8 @@
             },
             "formName":{
                 "basicField":"formName",
-                "default":"FS-2700-3f",
-                "store":["middleLayer:form_name", "basic:/application"],
+                "default":"FS-2700-4I",
+                "store":["middleLayer:formName", "basic:/application"],
                 "type":"string"
             }
         },
@@ -262,39 +262,39 @@
             "activityDescription": {
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:activity_description"],
+                "store":["middleLayer:activityDescription"],
                 "type": "string"
             },
             "locationDescription": {
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:location_description"],
+                "store":["middleLayer:locationDescription"],
                 "type": "string"
             },
             "startDateTime": {
                 "default":"",
                 "fromIntake":true,
                 "pattern":"^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T(0\\d|1\\d|2[0-3]):(0\\d|1\\d|2[0-3]):(0\\d|1\\d|2[0-3])Z$",
-                "store":["middleLayer:start_datetime"],
+                "store":["middleLayer:startDatetime"],
                 "type": "string"
             },
             "endDateTime": {
                 "default":"",
                 "fromIntake":true,
                 "pattern":"^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T(0\\d|1\\d|2[0-3]):(0\\d|1\\d|2[0-3]):(0\\d|1\\d|2[0-3])Z$",
-                "store":["middleLayer:end_datetime"],
+                "store":["middleLayer:endDatetime"],
                 "type": "string"
             },
             "numberParticipants": {
                 "default":0,
                 "fromIntake":true,
-                "store":["middleLayer:number_participants"],
+                "store":["middleLayer:numberParticipants"],
                 "type": "integer"
             },
             "formName":{
                 "basicField":"formName",
                 "default":"FS-2700-3b",
-                "store":["middleLayer:form_name", "basic:/application"],
+                "store":["middleLayer:formName", "basic:/application"],
                 "type":"string"
             }
         },
@@ -347,6 +347,7 @@
                 "basicField":"firstName",
                 "default":"",
                 "fromIntake":true,
+                "maxLength":255,
                 "store":["basic:/contact/person"],
                 "type": "string"
             },
@@ -354,6 +355,7 @@
                 "basicField":"lastName",
                 "default":"",
                 "fromIntake":true,
+                "maxLength":255,
                 "store":["basic:/contact/person"],
                 "type": "string"
             },

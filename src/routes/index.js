@@ -19,19 +19,13 @@ const router = express.Router();
 const include = require('include')(__dirname);
 
 const auth = require('./auth');
-const mocks = require('./mocks');
 const api = require('./api');
-const schema = require('./schema');
 
 const token = include('src/controllers/auth/token.js');
 const authorize = include('src/controllers/auth/authorize.js');
 
 //*******************************************************************
 // router
-
-router.use('/schema', schema);
-
-router.use('/mocks', mocks);
 
 router.use('/auth', auth);
 

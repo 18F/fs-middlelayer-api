@@ -21,30 +21,42 @@ const models = include('src/models');
 
 //*******************************************************************
 
+/**
+ * Saves information about file into DB
+ * @param  {Number}   applicationId - Id of application file is associated with
+ * @param  {Array}   uploadFile    - Information about file being saved
+ * @param  {Function} callback      - function to be called after trying to save file
+ */
 function saveFile(applicationId, uploadFile, callback){
 	models.files.create({
-		application_id: applicationId, 
-		file_type: uploadFile.filetypecode, 
-		file_path: uploadFile.keyname,
-		file_name: uploadFile.filename,
-		file_originalname: uploadFile.originalname,
-		file_ext: uploadFile.ext,
-		file_size: uploadFile.size,
-		file_mimetype: uploadFile.mimetype,
-		file_encoding: uploadFile.encoding
+		applicationId: applicationId, 
+		fileType: uploadFile.filetypecode, 
+		filePath: uploadFile.keyname,
+		fileName: uploadFile.filename,
+		fileOriginalname: uploadFile.originalname,
+		fileExt: uploadFile.ext,
+		fileSize: uploadFile.size,
+		fileMimetype: uploadFile.mimetype,
+		fileEncoding: uploadFile.encoding
 	})
 	.then(function(file) {
 		return callback(null, file);
 	})
 	.catch(function(err) {
+		console.error(err);
 		return callback(err, null);
 	});
 }
 
-const getFile = function(filePath, callback){
+/**
+ * Gets file info from DB
+ * @param  {String}   fp - Path to file in data store
+ * @param  {Function} callback - Function to call after getting info back from DB
+ */
+const getFile = function(fp, callback){
 
 	models.files.findOne({
-		where: {file_path: filePath} 
+		where: {filePath: fp} 
 	})
 	.then(function(file) {
 		return callback(null, file);
@@ -55,46 +67,53 @@ const getFile = function(filePath, callback){
 	});
 };
 
-const getFiles = function(applicationId, callback){
+/**
+ * Get info of multiple files from DB
+ * @param  {Number}   appId - application Id of files to get
+ * @param  {Function} callback      - Function to call after getting info back from DB
+ */
+const getFiles = function(appId, callback){
 
 	models.files.findAll({
-		where: {application_id: applicationId}
+		where: {applicationId: appId}
 	})
 	.then(function(files) {
 		return callback(null, files);
 	})
 	.catch(function(err) {
+		console.error(err);
 		return callback(err, null);
 	});
 };
 
-const getApplication = function(controlNumber, callback){
+/**
+ * Gets application info from DB
+ * @param  {Number}   cNum - control number of application to retreive
+ * @param  {Function} callback      - Function to call after getting info back from DB
+ */
+const getApplication = function(cNum, callback){
 
 	models.applications.findOne({
 		where: {
-			control_number: controlNumber
+			controlNumber: cNum
 		}
 	}).then(function(appl) {
 		if (appl){
-			if (appl.form_name === 'FS-2700-3f') {
-				getFiles(appl.id, function(fileErr, files) {
-					if (fileErr){
-						console.error(fileErr);
-						return callback(fileErr, null, null);
+			
+			getFiles(appl.id, function(fileErr, files) {
+				if (fileErr){
+					return callback(fileErr, null, null);
+				}
+				else {
+					if (files) {
+						return callback(null, appl, files);
 					}
 					else {
-						if (files) {
-							return callback(null, appl, files);
-						}
-						else {
-							return callback(null, appl, null);
-						}
+						return callback(null, appl, null);
 					}
-				});
-			}
-			else {
-				return callback(null, appl, null);
-			}
+				}
+			});
+
 		}
 		else {
 			return callback('no record found', null);
@@ -105,7 +124,12 @@ const getApplication = function(controlNumber, callback){
 	});
 };
 
-const saveApplication = function(controlNumber, toStore, callback) {
+/**
+ * Save application data to DB
+ * @param  {Object}   toStore       - object containing all of the fields to save to DB
+ * @param  {Function} callback      - Function to call after saving application to DB
+ */
+const saveApplication = function(toStore, callback) {
 	models.applications.create(toStore)
 	.then(function(appl) {
 		return callback(null, appl);

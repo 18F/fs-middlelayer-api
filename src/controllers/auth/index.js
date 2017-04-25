@@ -28,16 +28,16 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 passport.use(new Strategy(  
 
-	function(username, password, done) {
+	function(un, pw, done) {
 		
 		models.users.findOne({
-			where: {user_name: username} //eslint-disable-line camelcase
+			where: {userName: un}
 		}).then(function(user) {
 			if (user){
-				if (bcrypt.compareSync(password, user.pass_hash)){
+				if (bcrypt.compareSync(pw, user.passHash)){
 					done(null, {
-						id: user.user_name,
-						role: user.user_role,
+						id: user.userName,
+						role: user.userRole,
 						verified: true
 					});	
 				}
@@ -57,6 +57,12 @@ passport.use(new Strategy(
 
 //*******************************************************************
 
+/**
+ * Serializes user info
+ * @param  {Object}   req - Request object
+ * @param  {Object}   res - Response object
+ * @param  {Function} next - What to call after serializing user info
+ */
 const serialize = function(req, res, next) {  
 
 	req.user = {
@@ -66,6 +72,12 @@ const serialize = function(req, res, next) {
 	next();
 };
 
+/**
+ * Creates JWT to return to user
+ * @param  {Object}   req - Request object
+ * @param  {Object}   res - Response object
+ * @param  {Function} next - What to call after creating JWT
+ */
 const generate = function(req, res, next) {   
 	
 	req.token = jwt.sign({
@@ -75,6 +87,11 @@ const generate = function(req, res, next) {
 	next();
 };
 
+/**
+ * Responds to user request with token
+ * @param  {Object}   req - Request object
+ * @param  {Object}   res - Response object
+ */
 const respond = function(req, res) { 
 
 	res.status(200).json({

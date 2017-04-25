@@ -16,7 +16,7 @@
 const include = require('include')(__dirname);
 
 const request = require('supertest');
-const server = include('index.js');
+const server = include('src/index.js');
 
 //*******************************************************************
 

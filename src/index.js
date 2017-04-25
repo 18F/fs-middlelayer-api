@@ -24,10 +24,10 @@ const path = require('path');
 const fsr = require('file-stream-rotator');
 const mkdirp = require('mkdirp');
 const morgan = require('morgan');
-
 const bodyParser = require('body-parser');
+const moxai = require('moxai');
 
-const routes = require('./src/routes');
+const routes = require('./routes');
 
 //*******************************************************************
 // environment variables
@@ -49,7 +49,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 // **********************************************************
 // log
 
-const logDirectory = path.join(__dirname, '/log');
+const logDirectory = path.join(__dirname, '../log');
     
 mkdirp(logDirectory);
 
@@ -68,6 +68,15 @@ app.use(express.static('docs/api'));
 app.use('/docs', express.static('docs/api'));
 app.use('/docs/api', express.static('docs/api'));
 app.use('/docs/code', express.static('docs/code'));
+
+app.use('/api.json', express.static('src/api.json'));
+app.use('/docs/api.json', express.static('src/api.json'));
+app.use('/schema/api.json', express.static('src/api.json'));
+
+//*******************************************************************
+// mocks
+
+app.use('/mocks', moxai({'dir': '../mocks', 'file': 'basic'}));
 
 //*******************************************************************
 // routes

@@ -34,10 +34,19 @@ const validation = require('./validation.js');
 //*************************************************************
 // Helper Functions
 
+/** Gets info about an application and returns it.
+ * @param  {Object} pathData - All data from swagger for the path that has been run
+ * @return {Object} - Data from the basic API about an application 
+ */
 function getBasicRes(pathData){
 	return include(pathData.mockOutput);
 }
 
+/** Find the matching route in the routing schema for any request. If one is found, extract the useful information from it and return that information.
+ * @param  {Object} apiSchema - The whole routing schema, which contains the route used.
+ * @param  {String} reqPath - The path that was requested from the API
+ * @return {Object} Object describing the matching route, if any, in the routing schema. The path field contains the matched path listed in the routing schema. The tokens field contains all tokens, listed in the matched path. And the matches field contains the tokens with the values that have been given for them.
+ */
 function apiSchemaData(apiSchema, reqPath){
 
 	if (apiSchema) {
@@ -71,7 +80,17 @@ function getBody(req){
 	return inputPost;
 }
 
+/** Saves all information for a file upload to the DB and uploads the file to S3.
+ * @param  {Object} req - request object
+ * @param  {Object} res - response object
+ * @param  {Array} possbileFiles - list of all files that can be uploaded for this permit type
+ * @param  {Array} files - Files being uploaded and saved
+ * @param  {String} controlNumber - Control number of the application being processed
+ * @param  {Object} application - Body of application being submitted
+ * @param  {Function} callback - Function to be called after attempting to save the files.
+ */
 function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, application, callback){
+
 	const asyncTasks = [];
 
 	possbileFiles.forEach((fileConstraints)=>{
@@ -82,12 +101,19 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 			if (files[key]){
 				const fileInfo = validation.getFileInfo(files[key], fileConstraints);
 				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
-				db.saveFile(application.id, fileInfo, function(err){
+				store.uploadFile(fileInfo, function(err, data){
 					if (err){
-						return error.sendError(req, res, 500, `${fileInfo.filetype} failed to save`);
+						return error.sendError(req, res, 500, 'Cannot process request.');
 					}
 					else {
-						store.uploadFile(fileInfo, callback);
+						db.saveFile(application.id, fileInfo, function(err, fileInfo){
+							if (err){
+								return error.sendError(req, res, 500, 'Cannot process request.');
+							}
+							else {
+								return callback (null, fileInfo);
+							}
+						});	
 					}
 				});
 			}
@@ -109,11 +135,19 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 //*******************************************************************
 // controller functions
 
+/** Controller for GET routes with a control number and a file name
+ * @param  {Object} req - request object
+ * @param  {Object} res - response object
+ * @param  {Object} reqData - Object containing information about the request and the route requested
+ * @param  {String} reqData.path - Path being requested
+ * @param  {Array} reqData.tokens - Array of all tokens present in path being requested 
+ * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
+ * @param  {Object} reqData.schema - Schema of the route requested
+ */
 const getControlNumberFileName = function(req, res, reqData) {
 
 	const controlNumber = reqData.matches.controlNumber;
 	const fileName = reqData.matches.fileName;
-
 
 	const filePath = controlNumber + '/' + fileName;
 
@@ -131,7 +165,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 						error.sendError(req, res, 404, 'file not found');
 					}
 					else {
-						res.attachment(file.file_name);
+						res.attachment(file.fileName);
 						res.send(data.Body);	
 					}
 
@@ -145,6 +179,15 @@ const getControlNumberFileName = function(req, res, reqData) {
 	
 };
 
+/** Controller for GET routes with only a control number
+ * @param  {Object} req - request object
+ * @param  {Object} res - response object
+ * @param  {Object} reqData - Object containing information about the request and the route requested
+ * @param  {String} reqData.path - Path being requested
+ * @param  {Array} reqData.tokens - Array of all tokens present in path being requested 
+ * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
+ * @param  {Object} reqData.schema - Schema of the route requested
+ */
 const getControlNumber = function(req, res, reqData){
 	const pathData = reqData.schema;
 	const fileTypes = {
@@ -179,8 +222,8 @@ const getControlNumber = function(req, res, reqData){
 			else {
 				if (fileData){
 					fileData.forEach(function(file){
-						const fileType = fileTypes[file.file_type];
-						appl[fileType] = file.file_name;
+						const fileType = fileTypes[file.fileType];
+						appl[fileType] = file.fileName;
 					});
 				}
 				jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData.getTemplate);
@@ -196,7 +239,17 @@ const getControlNumber = function(req, res, reqData){
 
 //*************************************************************
 
+/** Controller for POST routes
+ * @param  {Object} req - request object
+ * @param  {Object} res - response object
+ * @param  {Object} reqData - Object containing information about the request and the route requested
+ * @param  {String} reqData.path - Path being requested
+ * @param  {Array} reqData.tokens - Array of all tokens present in path being requested 
+ * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
+ * @param  {Object} reqData.schema - Schema of the route requested
+ */
 const postApplication = function(req, res, reqData){
+
 	const pathData = reqData.schema;
 
 	const body = getBody(req);
@@ -222,30 +275,49 @@ const postApplication = function(req, res, reqData){
 		return error.sendError(req, res, 400, errorMessage, allErrors.errorArray);
 	}
 	else {
-		const toStoreInDB = db.getDataToStoreInDB(sch, body);
+		basic.postToBasic(req, res, sch, body)
+		.then((postObject)=>{
+			const toStoreInDB = db.getDataToStoreInDB(sch, body);
+			const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString(); //TODO: remove - used for mocks
+			toStoreInDB.controlNumber = controlNumber;
+			db.saveApplication(toStoreInDB, function(err, appl){
+				if (err){
+					return error.sendError(req, res, 500, err);
+				}
+				else {
+					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
+						if (err) {
+							return error.sendError(req, res, 500, err);
+						}
+						else {
 
-		const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString(); //TODO: remove - used for mocks
-		toStoreInDB.control_number = controlNumber;
-		db.saveApplication(controlNumber, toStoreInDB, function(err, appl){
-			if (err){
-				return error.sendError(req, res, 500, 'cannot process the request');
-			}
-			else {
-				saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
-					if (err) {
-						return error.sendError(req, res, 500, 'cannot process the request');
-					}
-					else {
-
-						basic.postToBasic(req, res, sch, body, controlNumber);
-						
-					}
-				});
-			}
+							const jsonResponse = {};
+							jsonResponse.success = true;
+							jsonResponse.api = 'FS ePermit API';
+							jsonResponse.type = 'controller';
+							jsonResponse.verb = req.method;
+							jsonResponse.src = 'json';
+							jsonResponse.route = req.originalUrl;
+							jsonResponse.controlNumber = controlNumber;
+							jsonResponse.basicPosts = postObject;
+							return res.json(jsonResponse);
+							
+						}
+					});
+				}
+			});
+		})
+		.catch((err)=>{
+			return error.sendError(req, res, 500, err);
 		});
 	}
 };
 
+/**
+ * Takes in request and calls functions based on what route was called
+ * @param  {Object} req - User request object
+ * @param  {Object} res - Response object
+ */
 const use = function(req, res){
 
 	const reqPath = `/${req.params[0]}`;

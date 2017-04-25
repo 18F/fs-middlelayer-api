@@ -18,7 +18,7 @@ const include = require('include')(__dirname);
 //*******************************************************************
 
 const request = require('supertest');
-const server = include('index.js');
+const server = include('src/index.js');
 const util = include('test/utility.js');
 
 const factory = require('unionized');
@@ -470,25 +470,6 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
 			.attach('operatingPlan', './test/data/test_operatingPlan.docx')
 			.expect('Content-Type', /json/)
-			.expect(200, done);
-
-	});
-
-	it('should return valid json for tempOutfitters POST request with apiRequest', function(done) {
-
-		request(server)
-			.post(testURL)
-			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfitterFactory.create()))
-			.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
-			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
-			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
-			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
-			.attach('operatingPlan', './test/data/test_operatingPlan.docx')
-			.expect('Content-Type', /json/)
-			.expect(function(res){
-				expect(res.body).to.have.property('apiRequest');
-			})	
 			.expect(200, done);
 
 	});
@@ -1169,7 +1150,7 @@ describe('tempOutfitters POST: file validated', function(){
 
 		it('should return valid json when guideDocumentation file uploaded of size 16 MB (size limit 25 MB)', function(done) {
 
-			this.timeout(10000);
+			this.timeout(60000);
 			
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
