@@ -1,4 +1,5 @@
-## Environment Variables
+# Environment Variables
+
 These are the environment variables that must be created on the Node.js server for the application to run:
 
 - `DATABASE_URL=postgres://<username>:<password>@<database hostname>:5432<database name>`
@@ -13,4 +14,4 @@ These are the environment variables that must be created on the Node.js server f
 - `AWS_SECRET_ACCESS_KEY=<AWS secret key>`
 - `AWS_REGION=<AWS region>`
 - `AWS_BUCKET_NAME=<AWS S3 bucket name>`
-- `BASICURL=<SUDS Basic API URL>`
+- `BASICURL=SUDS_API_URL`
