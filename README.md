@@ -64,7 +64,7 @@ Refer to application package and dependency trackers for additional dependency i
 - Infrastructure:
   - Runtime: Node.js >= 6.9.x
   - Engine: NPM >= 3.10.x
-  - Database: PostgreSQL >= 9.6.x
+  - Database: PostgreSQL >= 9.4.x
   - Storage: AWS S3
 - Application package:
   - [package.json](https://github.com/nci-ats/fs-middlelayer-api/blob/dev/package.json)

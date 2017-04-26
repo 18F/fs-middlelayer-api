@@ -11,7 +11,7 @@
             "areaCode": 541,
             "number": 8156141,
             "extension": "0",
-            "type": "BUSINESS"
+            "phoneType": "BUSINESS"
         },
         "emailAddress": "test@email.org",
         "mailingAddress": "ON ANW 0953",

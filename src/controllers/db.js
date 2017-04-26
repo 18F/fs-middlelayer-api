@@ -29,15 +29,15 @@ const models = include('src/models');
  */
 function saveFile(applicationId, uploadFile, callback){
 	models.files.create({
-		application_id: applicationId, 
-		file_type: uploadFile.filetypecode, 
-		file_path: uploadFile.keyname,
-		file_name: uploadFile.filename,
-		file_originalname: uploadFile.originalname,
-		file_ext: uploadFile.ext,
-		file_size: uploadFile.size,
-		file_mimetype: uploadFile.mimetype,
-		file_encoding: uploadFile.encoding
+		applicationId: applicationId, 
+		fileType: uploadFile.filetypecode, 
+		filePath: uploadFile.keyname,
+		fileName: uploadFile.filename,
+		fileOriginalname: uploadFile.originalname,
+		fileExt: uploadFile.ext,
+		fileSize: uploadFile.size,
+		fileMimetype: uploadFile.mimetype,
+		fileEncoding: uploadFile.encoding
 	})
 	.then(function(file) {
 		return callback(null, file);
@@ -50,13 +50,13 @@ function saveFile(applicationId, uploadFile, callback){
 
 /**
  * Gets file info from DB
- * @param  {String}   filePath - Path to file in S3
+ * @param  {String}   fp - Path to file in data store
  * @param  {Function} callback - Function to call after getting info back from DB
  */
-const getFile = function(filePath, callback){
+const getFile = function(fp, callback){
 
 	models.files.findOne({
-		where: {file_path: filePath} 
+		where: {filePath: fp} 
 	})
 	.then(function(file) {
 		return callback(null, file);
@@ -69,13 +69,13 @@ const getFile = function(filePath, callback){
 
 /**
  * Get info of multiple files from DB
- * @param  {Number}   applicationId - application Id of files to get
+ * @param  {Number}   appId - application Id of files to get
  * @param  {Function} callback      - Function to call after getting info back from DB
  */
-const getFiles = function(applicationId, callback){
+const getFiles = function(appId, callback){
 
 	models.files.findAll({
-		where: {application_id: applicationId}
+		where: {applicationId: appId}
 	})
 	.then(function(files) {
 		return callback(null, files);
@@ -88,36 +88,32 @@ const getFiles = function(applicationId, callback){
 
 /**
  * Gets application info from DB
- * @param  {Number}   controlNumber - control number of application to retreive
+ * @param  {Number}   cNum - control number of application to retreive
  * @param  {Function} callback      - Function to call after getting info back from DB
  */
-const getApplication = function(controlNumber, callback){
+const getApplication = function(cNum, callback){
 
 	models.applications.findOne({
 		where: {
-			control_number: controlNumber
+			controlNumber: cNum
 		}
 	}).then(function(appl) {
 		if (appl){
-			if (appl.form_name === 'FS-2700-3f') {
-				getFiles(appl.id, function(fileErr, files) {
-					if (fileErr){
-						console.error(fileErr);
-						return callback(fileErr, null, null);
+			
+			getFiles(appl.id, function(fileErr, files) {
+				if (fileErr){
+					return callback(fileErr, null, null);
+				}
+				else {
+					if (files) {
+						return callback(null, appl, files);
 					}
 					else {
-						if (files) {
-							return callback(null, appl, files);
-						}
-						else {
-							return callback(null, appl, null);
-						}
+						return callback(null, appl, null);
 					}
-				});
-			}
-			else {
-				return callback(null, appl, null);
-			}
+				}
+			});
+
 		}
 		else {
 			return callback('no record found', null);
@@ -130,7 +126,6 @@ const getApplication = function(controlNumber, callback){
 
 /**
  * Save application data to DB
- * @param  {Number}   controlNumber - control number of application to save
  * @param  {Object}   toStore       - object containing all of the fields to save to DB
  * @param  {Function} callback      - Function to call after saving application to DB
  */
