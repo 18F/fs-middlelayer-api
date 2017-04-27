@@ -328,7 +328,7 @@ const postApplication = function(req, res, reqData){
  * @param  {Object} req - User request object
  * @param  {Object} res - Response object
  */
-const use = function(req, res){
+const routeRequest = function(req, res){
 
 	const reqPath = `/${req.params[0]}`;
 	const reqMethod = req.method.toLowerCase();
@@ -394,5 +394,5 @@ const use = function(req, res){
 //*******************************************************************
 // exports
 
-module.exports.use = use;
+module.exports.routeRequest = routeRequest;
 
