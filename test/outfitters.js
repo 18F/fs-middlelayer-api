@@ -18,7 +18,7 @@ const include = require('include')(__dirname);
 //*******************************************************************
 
 const request = require('supertest');
-const server = include('index.js');
+const server = include('src/index.js');
 const util = include('test/utility.js');
 
 const factory = require('unionized');
@@ -76,7 +76,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field. Type is a required field. Temp Outfitter Fields is a required field. Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Client Charges is a required field.');
+					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Phone Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field. Type is a required field. Temp Outfitter Fields is a required field. Temp Outfitter Fields/Activity Description is a required field. Temp Outfitter Fields/Client Charges is a required field.');
 
 				})
 				.expect(400, done);
@@ -97,7 +97,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Phone Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Applicant Info/Org Type is a required field.');
 
 				})
 				.expect(400, done);
@@ -185,7 +185,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Type is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Phone Type is a required field.');
 
 				})
 				.expect(400, done);
@@ -234,12 +234,12 @@ describe('tempOutfitters POST: validate required fields present', function(){
 
 		});
 
-		it('should return valid json with a 400 status code for tempOutfitters POST request without a dayPhone/type', function(done) {
+		it('should return valid json with a 400 status code for tempOutfitters POST request without a dayPhone/phoneType', function(done) {
 
 			request(server)
 				.post(testURL)
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.type':undefined})))
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.phoneType':undefined})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
 				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
 				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
@@ -248,7 +248,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Type is a required field.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Phone Type is a required field.');
 
 				})
 				.expect(400, done);
@@ -474,25 +474,6 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	});
 
-	it('should return valid json for tempOutfitters POST request with apiRequest', function(done) {
-
-		request(server)
-			.post(testURL)
-			.set('x-access-token', token)
-			.field('body', JSON.stringify(tempOutfitterFactory.create()))
-			.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
-			.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
-			.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
-			.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
-			.attach('operatingPlan', './test/data/test_operatingPlan.docx')
-			.expect('Content-Type', /json/)
-			.expect(function(res){
-				expect(res.body).to.have.property('apiRequest');
-			})	
-			.expect(200, done);
-
-	});
-
 });
 
 describe('tempOutfitters POST: field type validated', function(){
@@ -596,12 +577,12 @@ describe('tempOutfitters POST: field type validated', function(){
 
 		});
 
-		it('should return valid json for invalid type, type', function(done) {
+		it('should return valid json for invalid type, phoneType', function(done) {
 
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.type':1})))
+				.field('body', JSON.stringify(tempOutfitterFactory.create({'applicantInfo.dayPhone.phoneType':1})))
 				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
 				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
 				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
@@ -610,7 +591,7 @@ describe('tempOutfitters POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Type is expected to be type \'string\'.');
+					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Phone Type is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -1169,7 +1150,7 @@ describe('tempOutfitters POST: file validated', function(){
 
 		it('should return valid json when guideDocumentation file uploaded of size 16 MB (size limit 25 MB)', function(done) {
 
-			this.timeout(10000);
+			this.timeout(60000);
 			
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')

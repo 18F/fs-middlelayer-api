@@ -18,7 +18,7 @@ const expect = chai.expect;
 
 const specialUses = {};
 
-specialUses.validate = require('../controllers/validation.js');
+specialUses.validate = require('../src/controllers/validation.js');
 
 const factory = require('unionized');
 const errorMessageFactory = factory.factory({'field': null, 'errorType': null, 'expectedFieldType': null, 'enumMessage': null, 'dependency':null});

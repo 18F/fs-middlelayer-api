@@ -1,3 +1,6 @@
+# DotEnv
+.env
+
 # Tests
 test
 tests
@@ -19,8 +22,10 @@ pids
 *.pid
 *.seed
 
-# Coverage directory used by tools like istanbul
+# Coverage, code docs and quality directories
 coverage
+quality
+lint
 
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
