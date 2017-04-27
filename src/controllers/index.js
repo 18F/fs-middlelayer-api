@@ -309,7 +309,8 @@ const postApplication = function(req, res, reqData){
 							jsonResponse.src = 'json';
 							jsonResponse.route = req.originalUrl;
 							jsonResponse.controlNumber = controlNumber;
-							jsonResponse.basicPosts = postObject;
+							//jsonResponse.basicPosts = postObject;
+							console.log(JSON.stringify(postObject, null, 4));
 							return res.json(jsonResponse);
 							
 						}
