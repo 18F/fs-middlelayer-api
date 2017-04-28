@@ -436,6 +436,7 @@ describe('tempOutfitters POST: validate required fields present', function(){
 describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 	
 	let token;
+	let postControlNumber;
 
 	before(function(done) {
 
@@ -447,11 +448,31 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		});
 	
 	});
+
+	it('should return valid json for tempOutfitters POST (controlNumber to be used in GET)', function(done) {
+			
+		this.timeout(5000);
+
+		request(server)
+			.post('/permits/applications/special-uses/commercial/temp-outfitters/')
+			.set('x-access-token', token)
+			.field('body', JSON.stringify(tempOutfitterFactory.create()))
+			.attach('insuranceCertificate', './test/data/test_file.doc')
+			.attach('goodStandingEvidence', './test/data/test_file.docx')
+			.attach('operatingPlan', './test/data/test_file.pdf')
+			.expect('Content-Type', /json/)
+			.expect(function(res){
+				postControlNumber = res.body.controlNumber;
+			})
+			.expect(200, done);
+
+	});
+
 	
 	it('should return valid json for tempOutfitters GET request for id', function(done) {
 
 		request(server)
-			.get(`${testURL}123456789/`)
+			.get(`${testURL}${postControlNumber}/`)
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
 			.expect(200, done);

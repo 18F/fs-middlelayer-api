@@ -369,6 +369,7 @@ describe('noncommercial POST: validate required fields present', function(){
 describe('API Routes: permits/special-uses/noncommercial', function(){
 	
 	let token;
+	let postControlNumber;
 
 	before(function(done) {
 
@@ -380,11 +381,25 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 		});
 	
 	});
+
+	it('should return valid json for noncommercial POST request (controlNumber to be used in GET)', function(done) {
+
+		request(server)
+			.post(testURL)
+			.set('x-access-token', token)
+			.send(noncommercialFactory.create())
+			.expect('Content-Type', /json/)
+			.expect(function(res){
+				postControlNumber = res.body.controlNumber;
+			})
+			.expect(200, done);
+
+	});
 	
 	it('should return valid json for noncommercial GET request for id', function(done) {
 
 		request(server)
-			.get(`${testURL}987654321/`)
+			.get(`${testURL}${postControlNumber}/`)
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
 			.expect(200, done);
