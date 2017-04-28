@@ -1,0 +1,65 @@
+{
+    "response": {
+        "success" : true,
+        "api": "FS ePermit API",
+        "type": "controller",
+        "verb": "get",
+        "src": "json",
+        "route": "permits/applications/special-uses/commercial/temp-outfitters"
+    },
+    "outfitters" : [
+      {
+        "accinstCn": "1095010356",
+        "region": 3,
+        "forest": 50552,
+        "district": 50552,
+        "authorizingOfficerName": "WILLIAM L.NOXON",
+        "authorizingOfficerTitle": null,
+        "applicant-info": {
+          "firstName": null,
+          "lastName": null,
+          "dayPhone": {
+            "areaCode": 541,
+            "number": 8156141,
+            "extension": 0,
+            "type": "BUSINESS"
+          },
+          "eveningPhone": {
+            "areaCode": 0,
+            "number": 0,
+            "extension": 0,
+            "type": null
+          },
+          "emailAddress": "test@email.org",
+          "mailingAddress": "ON ANW 0953",
+          "mailingCity": "ALBANY",
+          "mailingState": "OR",
+          "mailingZIP": 97321,
+          "organizationName": "COOLEY RIVER EXPEDITIONS",
+          "website": null,
+          "orgType": "Corporation"
+        },
+        "outfitters-fields":{
+          "insuranceCertificate": { 
+            "name":"insurance.pdf",
+            "src" : "/outfitters/insurance/1095010356.pdf"
+          },
+          "goodStandingEvidence": {
+            "name" : "proof_of_good_standing.pdf",
+            "src" : "/outfitters/good_standing/1095010356_1.pdf"
+          },
+          "operatingPlan": {
+            "name" : "op_plan.docx",
+            "src" : "/outfitters/operating_plan/1095010356_1.docx"
+          },
+          "activityDescription": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS",
+          "locationDescription": "string",
+          "startDateTime": "2013-01-12",
+          "endDateTime": "2013-01-19",
+          "PURPOSE": "PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS string 2013-01-12 2013-01-19",
+          "CR_EXEMPT": "N",
+          "FORM_NAME" : "FS-2700-4I"
+        }
+      }
+    ]
+}
