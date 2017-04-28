@@ -30,13 +30,12 @@ exclude_paths:
 - coverage/
 - test/
 - config/
-- mocks/
+- src/mocks/
 - lint/
 - docs/
 - api-docs/
 - code-docs/
-- migrations/
-- seeders/
+- dba/
 - "**/lang/"
 - "**/lib/"
 ecmaFeatures:

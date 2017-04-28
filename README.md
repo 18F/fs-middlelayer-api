@@ -50,6 +50,9 @@ This repository is being development under a task order of the Agile Blanket Pur
   - AWS_SECRET_ACCESS_KEY
   - AWS_REGION
   - AWS_BUCKET_NAME
+  - SUDS_API_URL
+    - To point at mocks, update this to be `http://localhost:${PORT}/mocks/basic`
+
 - Dotenv:
   - [Dotenv](https://www.npmjs.com/package/dotenv) is used which can load environment variables from a .env file into process.env
   - Example: PORT=8080
@@ -61,7 +64,7 @@ Refer to application package and dependency trackers for additional dependency i
 - Infrastructure:
   - Runtime: Node.js >= 6.9.x
   - Engine: NPM >= 3.10.x
-  - Database: PostgreSQL >= 9.6.x
+  - Database: PostgreSQL >= 9.4.x
   - Storage: AWS S3
 - Application package:
   - [package.json](https://github.com/nci-ats/fs-middlelayer-api/blob/dev/package.json)
