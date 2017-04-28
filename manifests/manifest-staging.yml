@@ -1,5 +1,6 @@
 ---
 applications:
-- name: fs-middlelayer-api
-  memory: 56M
+- name: fs-middlelayer-api-staging
+  buildpack: https://github.com/cloudfoundry/nodejs-buildpack
+  memory: 128M
   instances: 1
