@@ -12,6 +12,8 @@ global:
 cache:
   directories:
   - node_modules
+env:
+- PORT=21517 DATABASE_URL="postgres://postgres:@localhost/travis_ci_test" SUDS_API_URL="http://localhost:21517/mocks"
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
   - psql -U postgres -c "create extension postgis"

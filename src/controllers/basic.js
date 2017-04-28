@@ -140,6 +140,31 @@ function prepareBasicPost(sch, body){
 }
 
 /**
+ * Creates request for Basic API calls to create contact
+ * @param  {Object} res         - Response of previous request
+ * @param  {Object} postObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @param  {Object} fieldsObj   - Object containing post objects to be sent to basic api
+ * @param  {String} responseKey - Key in postObject for the response object of the previous request
+ * @param  {String} requestKey  - Key in postObject for the request object of this request
+ * @param  {String} requestPath - Path from basic API route this response needs to be sent to
+ * @return {Promise}            - Promise to be fulfilled
+ */
+function postRequest(res, postObject, fieldsObj, responseKey, requestKey, requestPath){
+	postObject[responseKey].response = res;
+	const cn = res.contCn;
+	const addressField = fieldsObj[requestKey];
+	addressField.contact = cn;
+	const addressURL = `${SUDS_API_URL}${requestPath}/`;
+	postObject[requestPath].request = addressField;
+	const createAddressOptions = {
+		method: 'POST',
+		uri: addressURL,
+		body: addressField,
+		json: true
+	};
+	return request(createAddressOptions);
+}
+/**
  * [createContact description]
  * @param  {Object} fieldsObj  Object containing post objects to be sent to basic api
  * @param  {boolean} person    Boolean indicating whether the contract being created is for a person or not
@@ -166,34 +191,10 @@ function createContact(fieldsObj, person, postObject){
 		};
 		request(createContactOptions)
 		.then(function(res){
-			postObject['/contact/personOrOrgcode'].response = res;
-			const cn = res.contCn;
-			const addressField = fieldsObj['/contact/address'];
-			addressField.contact = cn;
-			const addressURL = `${SUDS_API_URL}/contact-address/`;
-			postObject['/contact-address'].request = addressField;
-			const createAddressOptions = {
-				method: 'POST',
-				uri: addressURL,
-				body: addressField,
-				json: true
-			};
-			return request(createAddressOptions);
+			return postRequest(res, postObject, fieldsObj, '/contact/personOrOrgcode', '/contact/address', '/contact-address');
 		})
 		.then(function(res){
-			postObject['/contact-address'].response = res;
-			const cn = res.contact;
-			const phoneField = fieldsObj['/contact/phone'];
-			phoneField.contact = cn;
-			const phoneURL = `${SUDS_API_URL}/contact-phone/`;
-			postObject['/contact-phone'].request = phoneField;
-			const createPhoneOptions = {
-				method: 'POST',
-				uri: phoneURL,
-				body: phoneField,
-				json: true
-			};
-			return request(createPhoneOptions);
+			return postRequest(res, postObject, fieldsObj, '/contact-address', '/contact/phone', '/contact-phone');
 		})
 		.then(function(res){
 			postObject['/contact-phone'].response = res;

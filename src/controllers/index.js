@@ -18,6 +18,7 @@ const include = require('include')(__dirname);
 const async = require('async');
 const deref = require('deref');
 const matchstick = require('matchstick');
+const request = require('request-promise');
 
 const apiSchema = include('src/api.json');
 
@@ -32,14 +33,26 @@ const basic = require('./basic.js');
 const validation = require('./validation.js');
 
 //*************************************************************
+
+const SUDS_API_URL = process.env.SUDS_API_URL;
+
+//*************************************************************
 // Helper Functions
 
 /** Gets info about an application and returns it.
  * @param  {Object} pathData - All data from swagger for the path that has been run
  * @return {Object} - Data from the basic API about an application 
  */
-function getBasicRes(pathData){
-	return include(pathData.mockOutput);
+function getBasicRes(controlNumber){
+
+	const existingContactCheck = `${SUDS_API_URL}/application/${controlNumber}`;
+	const getContactOptions = {
+		method: 'GET',
+		uri: existingContactCheck,
+		qs:{},
+		json: true
+	};
+	return request(getContactOptions);
 }
 
 /** Find the matching route in the routing schema for any request. If one is found, extract the useful information from it and return that information.
@@ -198,42 +211,50 @@ const getControlNumber = function(req, res, reqData){
 		'opp': 'operatingPlan'
 	};
 
-	const basicData = getBasicRes(pathData);
+	let basicData = {};
+	getBasicRes(reqData.matches.controlNumber)
+	.then((appData)=>{
+		basicData = appData;
 
-	let jsonData = {};
+		let jsonData = {};
 
-	const controlNumber = reqData.matches.controlNumber;
+		const controlNumber = reqData.matches.controlNumber;
 
-	const jsonResponse = {};
-	jsonResponse.success = true;
-	jsonResponse.api = 'FS ePermit API';
-	jsonResponse.type = 'controller';
-	jsonResponse.verb = req.method;
-	jsonResponse.src = 'json';
-	jsonResponse.route = req.originalUrl;
+		const jsonResponse = {};
+		jsonResponse.success = true;
+		jsonResponse.api = 'FS ePermit API';
+		jsonResponse.type = 'controller';
+		jsonResponse.verb = req.method;
+		jsonResponse.src = 'json';
+		jsonResponse.route = req.originalUrl;
 
-	const cnData = basicData[1095010356];  // TODO: remove - used for mocks
+		const cnData = basicData;  // TODO: remove - used for mocks
 
-	if (basicData){
-		db.getApplication(controlNumber, function(err, appl, fileData){
-			if (err){
-				return error.sendError(req, res, 404, 'file not found');
-			}
-			else {
-				if (fileData){
-					fileData.forEach(function(file){
-						const fileType = fileTypes[file.fileType];
-						appl[fileType] = file.fileName;
-					});
+		if (basicData){
+			db.getApplication(controlNumber, function(err, appl, fileData){
+				if (err){
+					return error.sendError(req, res, 404, 'file not found');
 				}
-				jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData.getTemplate);
-				jsonData.controlNumber = controlNumber;// TODO: remove - used for mocks
-				const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
+				else {
+					if (fileData){
+						fileData.forEach(function(file){
+							const fileType = fileTypes[file.fileType];
+							appl[fileType] = file.fileName;
+						});
+					}
+					jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData['x-getTemplate']);
+					jsonData.controlNumber = controlNumber;// TODO: remove - used for mocks
+					const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
 
-				res.json(toReturn);
-			}
-		});
-	}
+					res.json(toReturn);
+				}
+			});
+		}
+	})
+	.catch((err)=>{
+		console.error(err);
+		return error.sendError(req, res, 500, 'Unable to process request.');
+	});
 
 };
 
@@ -356,7 +377,6 @@ const use = function(req, res){
 						};
 
 						if (reqMethod === 'get') {
-
 							if (apiTokens.includes('fileName')) {
 
 								getControlNumberFileName(req, res, reqData);

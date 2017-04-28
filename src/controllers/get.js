@@ -24,7 +24,6 @@ const jsf = require('json-schema-faker');
  * @param  {String} key - field in jsonData to populated
  */
 function getTopLevelField(intakeField, cnData, getSchema, jsonData, key){
-
 	switch (intakeField){
 	case 'none':
 		break;
