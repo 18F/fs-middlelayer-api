@@ -35,6 +35,11 @@ describe('Function Tests: validation.js ', function(){
 		.to.be.equal(false);
 	});
 
+	it('digitCheck should return true if input is not a number(\'1234\')', function(){
+		expect( validationJs.functions.digitCheck('1234', 3) )
+		.to.be.equal(true);
+	});
+
 	it('areaCodeFormat should return true with a valid input (123)', function(){
 		expect( validationJs.functions.areaCodeFormat(123) )
 		.to.be.equal(true);
@@ -58,6 +63,11 @@ describe('Function Tests: validation.js ', function(){
 	it('removeInstance should return just the property with an input (abc.xyz)', function(){
 		expect( validationJs.functions.removeInstance('abc.xyz') )
 		.to.be.equal('xyz');
+	});
+
+	it('removeInstance should return an empty string with an input (xyz)', function(){
+		expect( validationJs.functions.removeInstance('xyz') )
+		.to.be.equal('');
 	});
 
 	it('combinePropArgument should return instance and property', function(){
@@ -99,7 +109,6 @@ describe('Function Tests: validation.js ', function(){
 		expect( validationJs.functions.makeFieldReadable('firstName') )
 		.to.be.equal('First Name');
 	});
-	
 
 });
 
