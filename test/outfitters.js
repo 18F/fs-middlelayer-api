@@ -467,7 +467,6 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 			.expect(200, done);
 
 	});
-
 	
 	it('should return valid json for tempOutfitters GET request for id', function(done) {
 

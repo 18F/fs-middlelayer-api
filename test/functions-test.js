@@ -91,7 +91,7 @@ describe('Function Tests: validation.js ', function(){
 	});
 
 	it('concatErrors should return expected output', function(){
-		expect( validationJs.functions.concatErrors(['a','b']) )
+		expect( validationJs.functions.concatErrors(['a', 'b']) )
 		.to.be.equal('a b');
 	});
 
