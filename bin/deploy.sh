@@ -3,7 +3,7 @@ set -e
 export PATH=$HOME:$PATH
 curl -L -o $HOME/cf.tgz "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.22.2"
 tar xzvf $HOME/cf.tgz -C $HOME
-cf install-plugin -f -r CF-Community autopilot 
+cf install-plugin -f -r CF-Community autopilot
 
 API="https://api.fr.cloud.gov"
 ORG="gsa-acq-proto"
@@ -29,5 +29,5 @@ echo "Unknown space: $SPACE"
 exit
 fi
 
-cf login --a $API --u $CF_USERNAME --p $CF_PASSWORD --o $ORG -s $SPACE
+cf login -a $API -u $CF_USERNAME -p $CF_PASSWORD -o $ORG -s $SPACE
 cf zero-downtime-push $NAME -f $MANIFEST
