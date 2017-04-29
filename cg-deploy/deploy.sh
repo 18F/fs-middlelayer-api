@@ -16,12 +16,12 @@ fi
 
 if [ $SPACE = 'fs-api-prod' ]; then
   NAME="fs-middlelayer-api"
-  MANIFEST="../manifests/manifest.yml"
+  MANIFEST="./cg-deploy/manifests/manifest.yml"
   CF_USERNAME=$CF_USERNAME_PROD
   CF_PASSWORD=$CF_PASSWORD_PROD
 elif [ $SPACE = 'fs-api-staging' ]; then
-  NAME="fs-middlelayer-api"
-  MANIFEST="../manifests/manifest-staging.yml"
+  NAME="fs-middlelayer-api-staging"
+  MANIFEST="./cg-deploy/manifests/manifest-staging.yml"
   CF_USERNAME=$CF_USERNAME_DEV
   CF_PASSWORD=$CF_PASSWORD_DEV
 else
