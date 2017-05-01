@@ -5,5 +5,5 @@ applications:
   memory: 128M
   instances: 1
   services:
-    fs-api-s3
-    fs-api-db
+    - fs-api-s3
+    - fs-api-db
