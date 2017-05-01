@@ -113,7 +113,9 @@ These steps define the process for creating a new permit type using Example Perm
                 },
             
 
-          - `fromIntake` indicates whether the field will be directly populated with user input. If set to `false`, `madeOf` must be provided, giving the fields, or strings used to populate this field.
+          - `fromIntake` indicates whether the field will be directly populated with user input. If set to `false`, the API will populate this field using the strings and fields provided under `madeOf`.
+
+          - `store` describes where this field should be stored, either in the middlelayer DB or in the basic API. It can list multiple places to store this field
 
           Files:
           - `maxSize` is measured in megabytes
