@@ -206,6 +206,20 @@ function createContact(fieldsObj, person, postObject){
 	});
 }
 
+function createApplication(fieldsObj, contCN, postObject){
+	const createApplicationURL = `${SUDS_API_URL}/application/`;
+	fieldsObj['/application'].contCn = contCN;
+	const applicationPost = fieldsObj['/application'];
+	postObject['/application'].request = applicationPost;
+	const createApplicationOptions = {
+		method: 'POST',
+		uri: createApplicationURL,
+		body: applicationPost,
+		json: true
+	};
+	return request(createApplicationOptions);
+}
+
 /** Sends requests needed to create an application via the Basic API
  * @param  {Object} req - Request Object
  * @param  {Object} res - Response Object
@@ -214,7 +228,7 @@ function createContact(fieldsObj, person, postObject){
  */
 function postToBasic(req, res, sch, body){ //Should remove control number once we get from BASIC api
 
-	return new Promise(function(fulfill, reject){
+	return new Promise(function (fulfill, reject){
 
 		const postObject = {
 			'/contact/personOrOrgcode':{},
@@ -259,17 +273,7 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 			}
 		})
 		.then(function(contCN){
-			const createApplicationURL = `${SUDS_API_URL}/application/`;
-			fieldsObj['/application'].contCn = contCN;
-			const applicationPost = fieldsObj['/application'];
-			postObject['/application'].request = applicationPost;
-			const createApplicationOptions = {
-				method: 'POST',
-				uri: createApplicationURL,
-				body: applicationPost,
-				json: true
-			};
-			return request(createApplicationOptions);
+			return createApplication(fieldsObj, contCN, postObject);
 		})
 		.then(function(response){
 			postObject['/application'].response = response;
