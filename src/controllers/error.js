@@ -45,12 +45,9 @@ function logging(req, message){
 const sendError = function(req, res, code, message, errors){
 
 	const output = {
-		'response': {
-			'success' : false,
-			'api': 'FS ePermit API',
-			message,
-			errors
-		}
+		'status' : 'error',
+		message,
+		errors
 	};
 
 	logging(req, message);
