@@ -31,7 +31,7 @@ const store = require('./store.js');
 const db = require('./db.js');
 const basic = require('./basic.js');
 const validation = require('./validation.js');
-const util = require('../utility.js');
+const util = require('./utility.js');
 
 //*************************************************************
 
