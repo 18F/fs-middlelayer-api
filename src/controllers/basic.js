@@ -165,11 +165,11 @@ function postRequest(res, postObject, fieldsObj, responseKey, requestKey, reques
 	return request(createAddressOptions);
 }
 /**
- * [createContact description]
- * @param  {Object} fieldsObj  Object containing post objects to be sent to basic api
- * @param  {boolean} person    Boolean indicating whether the contract being created is for a person or not
- * @param  {Object} postObject Object used to save the request and response for each post to the basic api. Used for testing purposes.
- * @return {Promise}
+ * Calls basic API to create a contact in SUDS
+ * @param  {Object} fieldsObj  - Object containing post objects to be sent to basic api
+ * @param  {boolean} person    - Boolean indicating whether the contract being created is for a person or not
+ * @param  {Object} postObject - Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @return {Promise}		   - Promise to be fulfilled
  */
 function createContact(fieldsObj, person, postObject){
 	return new Promise(function(fulfill, reject){
@@ -206,6 +206,13 @@ function createContact(fieldsObj, person, postObject){
 	});
 }
 
+/**
+ * Calls basic API to create an application in SUDS
+ * @param  {Object} fieldsObj   - Object containing post objects to be sent to basic api
+ * @param  {Number} contCN      - Contact control number of contact associated with this application
+ * @param  {Object} postObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @return {Promise}            - Promise to be fulfilled
+ */
 function createApplication(fieldsObj, contCN, postObject){
 	const createApplicationURL = `${SUDS_API_URL}/application/`;
 	fieldsObj['/application'].contCn = contCN;
