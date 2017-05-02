@@ -105,12 +105,12 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
 				store.uploadFile(fileInfo, function(err, data){
 					if (err){
-						return error.sendError(req, res, 500, 'Cannot process request.');
+						return error.sendError(req, res, 500, 'unable to process request.');
 					}
 					else {
 						db.saveFile(application.id, fileInfo, function(err, fileInfo){
 							if (err){
-								return error.sendError(req, res, 500, 'Cannot process request.');
+								return error.sendError(req, res, 500, 'unable to process request.');
 							}
 							else {
 								return callback (null, fileInfo);
@@ -156,7 +156,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 	db.getFile(filePath, function (err, file){
 
 		if (err){
-			error.sendError(req, res, 500, 'cannot process the request');	
+			error.sendError(req, res, 500, 'unable to process request.');	
 		}
 		else {
 			if (file){
@@ -210,22 +210,22 @@ const getControlNumber = function(req, res, reqData){
 		const controlNumber = reqData.matches.controlNumber;
 
 		const jsonResponse = {};
-		jsonResponse.success = true;
-		jsonResponse.api = 'FS ePermit API';
-		jsonResponse.type = 'controller';
-		jsonResponse.verb = req.method;
-		jsonResponse.src = 'json';
-		jsonResponse.route = req.originalUrl;
+		
 
 		const cnData = basicData;  // TODO: remove - used for mocks
 
 		if (basicData){
+
 			db.getApplication(controlNumber, function(err, appl, fileData){
 				if (err){
-					return error.sendError(req, res, 404, 'file not found');
+					return error.sendError(req, res, 500, 'unable to process request.');
 				}
 				else {
-					if (fileData){
+					
+					if(!appl){
+						return error.sendError(req, res, 404, 'file not found.');		
+					}
+					else if (fileData){
 						fileData.forEach(function(file){
 							const fileType = fileTypes[file.fileType];
 							appl[fileType] = file.fileName;
@@ -233,7 +233,9 @@ const getControlNumber = function(req, res, reqData){
 					}
 					jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData['x-getTemplate']);
 					jsonData.controlNumber = controlNumber;// TODO: remove - used for mocks
-					const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
+
+					jsonResponse.status = 'success';
+					const toReturn = Object.assign({}, jsonResponse, jsonData);
 
 					res.json(toReturn);
 				}
@@ -242,7 +244,7 @@ const getControlNumber = function(req, res, reqData){
 	})
 	.catch((err)=>{
 		console.error(err);
-		return error.sendError(req, res, 500, 'Unable to process request.');
+		return error.sendError(req, res, 500, 'unable to process request.');
 	});
 
 };
@@ -292,24 +294,18 @@ const postApplication = function(req, res, reqData){
 			toStoreInDB.controlNumber = controlNumber;
 			db.saveApplication(toStoreInDB, function(err, appl){
 				if (err){
-					return error.sendError(req, res, 500, err);
+					return error.sendError(req, res, 500, 'unable to process request.');
 				}
 				else {
 					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
 						if (err) {
-							return error.sendError(req, res, 500, err);
+							return error.sendError(req, res, 500, 'unable to process request.');
 						}
 						else {
 
 							const jsonResponse = {};
-							jsonResponse.success = true;
-							jsonResponse.api = 'FS ePermit API';
-							jsonResponse.type = 'controller';
-							jsonResponse.verb = req.method;
-							jsonResponse.src = 'json';
-							jsonResponse.route = req.originalUrl;
+							jsonResponse.status = 'success';
 							jsonResponse.controlNumber = controlNumber;
-							//jsonResponse.basicPosts = postObject;
 							console.log(JSON.stringify(postObject, null, 4));
 							return res.json(jsonResponse);
 							
@@ -319,7 +315,7 @@ const postApplication = function(req, res, reqData){
 			});
 		})
 		.catch((err)=>{
-			return error.sendError(req, res, 500, err);
+			return error.sendError(req, res, 500, 'unable to process request.');
 		});
 	}
 };

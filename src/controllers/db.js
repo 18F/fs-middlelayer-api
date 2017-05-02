@@ -116,7 +116,7 @@ const getApplication = function(cNum, callback){
 
 		}
 		else {
-			return callback('no record found', null);
+			return callback(null, null, null);
 		}
 	}).catch(function (err) {
 		console.error(err);

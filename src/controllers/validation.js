@@ -776,6 +776,9 @@ function getFieldValidationErrors(body, pathData, derefSchema){
 	return processedFieldErrors;
 }
 
+module.exports.digitCheck = digitCheck;
+module.exports.areaCodeFormat = areaCodeFormat;
+module.exports.phoneNumberFormat = phoneNumberFormat;
 module.exports.removeInstance = removeInstance;
 module.exports.combinePropArgument = combinePropArgument;
 module.exports.makeErrorObj = makeErrorObj;
