@@ -34,7 +34,7 @@ This repository is being development under a task order of the Agile Blanket Pur
   - Use `npm run lint` for ESLint static code analysis. *Results in /lint folder.*
   - Use `npm run fix` for ESLint code fix.
   - Use `npm run dba` to run Sequelize migration and seeder.
-  - Use `npm run doc` to run JSDoc code documentation. *Results in /code-docs folder.*
+  - Use `npm run doc` to run [JSDoc](http://usejsdoc.org/) code documentation. *Results in `/docs/code` folder and accessed via `<application-URL>/docs/code`.*
 - Data
   - Files: Test files are stored in [test/data](https://github.com/nci-ats/fs-middlelayer-api/tree/dev/test/data) directory
   - Accounts: Test accounts are stored in environment variables
@@ -51,7 +51,7 @@ This repository is being development under a task order of the Agile Blanket Pur
   - AWS_REGION
   - AWS_BUCKET_NAME
   - SUDS_API_URL
-    - To point at mocks, update this to be `http://localhost:${PORT}/mocks/basic`
+    - To point at mocks, update this to be `http://localhost:${PORT}/mocks`
 
 - Dotenv:
   - [Dotenv](https://www.npmjs.com/package/dotenv) is used which can load environment variables from a .env file into process.env

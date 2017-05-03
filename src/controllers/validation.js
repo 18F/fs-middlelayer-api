@@ -389,6 +389,7 @@ function processErrors(errors, processedErrors, schema){
 /** Validates the fields in user input
  * @param  {Object} body - Input from user to be validated
  * @param  {Object} pathData - All data from swagger for the path that has been run
+ * @param  {Object} derefSchema - schema to be used for validating input
  * @return {Array} - Array of ValidationErrors from validation
  */
 function validateBody(body, pathData, derefSchema){
@@ -775,6 +776,9 @@ function getFieldValidationErrors(body, pathData, derefSchema){
 	return processedFieldErrors;
 }
 
+module.exports.digitCheck = digitCheck;
+module.exports.areaCodeFormat = areaCodeFormat;
+module.exports.phoneNumberFormat = phoneNumberFormat;
 module.exports.removeInstance = removeInstance;
 module.exports.combinePropArgument = combinePropArgument;
 module.exports.makeErrorObj = makeErrorObj;

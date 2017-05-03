@@ -84,7 +84,7 @@ router.use('/*', function(req, res, next){
 
 // api router to controller
 router.use('/*', postUploadFields, function(req, res, next){
-	controller.use(req, res);
+	controller.routeRequest(req, res);
 });
 
 //*******************************************************************

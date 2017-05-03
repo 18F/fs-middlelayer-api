@@ -61,7 +61,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Phone Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Type is a required field. Noncommercial Fields is a required field. Noncommercial Fields/Activity Description is a required field. Noncommercial Fields/Location Description is a required field. Noncommercial Fields/Start Date Time is a required field. Noncommercial Fields/End Date Time is a required field. Noncommercial Fields/Number Participants is a required field.');
+					expect(res.body.message).to.equal('Region is a required field. Forest is a required field. District is a required field. Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Phone Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field. Type is a required field. Noncommercial Fields is a required field. Noncommercial Fields/Activity Description is a required field. Noncommercial Fields/Location Description is a required field. Noncommercial Fields/Start Date Time is a required field. Noncommercial Fields/End Date Time is a required field. Noncommercial Fields/Number Participants is a required field.');
 
 				})
 				.expect(400, done);
@@ -76,7 +76,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.send(noncommercialFactory.create({applicantInfo : undefined}))
 				.expect('Content-Type', /json/)
 				.expect(function(res){
-					expect(res.body.response.message).to.equal('Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Phone Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field.');
+					expect(res.body.message).to.equal('Applicant Info is a required field. Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field. Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Phone Type is a required field. Applicant Info/Email Address is a required field. Applicant Info/Mailing Address is a required field. Applicant Info/Mailing City is a required field. Applicant Info/Mailing Zip is a required field. Applicant Info/Mailing State is a required field.');
 
 				})
 				.expect(400, done);
@@ -92,7 +92,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Noncommercial Fields is a required field. Noncommercial Fields/Activity Description is a required field. Noncommercial Fields/Location Description is a required field. Noncommercial Fields/Start Date Time is a required field. Noncommercial Fields/End Date Time is a required field. Noncommercial Fields/Number Participants is a required field.');
+					expect(res.body.message).to.equal('Noncommercial Fields is a required field. Noncommercial Fields/Activity Description is a required field. Noncommercial Fields/Location Description is a required field. Noncommercial Fields/Start Date Time is a required field. Noncommercial Fields/End Date Time is a required field. Noncommercial Fields/Number Participants is a required field.');
 
 				})
 				.expect(400, done);
@@ -112,7 +112,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/First Name is a required field.');
+					expect(res.body.message).to.equal('Applicant Info/First Name is a required field.');
 
 				})
 				.expect(400, done);
@@ -128,7 +128,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Last Name is a required field.');
+					expect(res.body.message).to.equal('Applicant Info/Last Name is a required field.');
 
 				})
 				.expect(400, done);
@@ -144,7 +144,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Phone Type is a required field.');
+					expect(res.body.message).to.equal('Applicant Info/Day Phone is a required field. Applicant Info/Day Phone/Area Code is a required field. Applicant Info/Day Phone/Number is a required field. Applicant Info/Day Phone/Phone Type is a required field.');
 
 				})
 				.expect(400, done);
@@ -160,7 +160,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Area Code is a required field.');
+					expect(res.body.message).to.equal('Applicant Info/Day Phone/Area Code is a required field.');
 
 				})
 				.expect(400, done);
@@ -176,7 +176,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Number is a required field.');
+					expect(res.body.message).to.equal('Applicant Info/Day Phone/Number is a required field.');
 
 				})
 				.expect(400, done);
@@ -192,7 +192,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Phone Type is a required field.');
+					expect(res.body.message).to.equal('Applicant Info/Day Phone/Phone Type is a required field.');
 
 				})
 				.expect(400, done);
@@ -208,7 +208,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Email Address is a required field.');
+					expect(res.body.message).to.equal('Applicant Info/Email Address is a required field.');
 
 				})
 				.expect(400, done);
@@ -224,7 +224,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Mailing Address is a required field.');
+					expect(res.body.message).to.equal('Applicant Info/Mailing Address is a required field.');
 
 				})
 				.expect(400, done);
@@ -240,7 +240,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Mailing City is a required field.');
+					expect(res.body.message).to.equal('Applicant Info/Mailing City is a required field.');
 
 				})
 				.expect(400, done);
@@ -256,7 +256,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Mailing State is a required field.');
+					expect(res.body.message).to.equal('Applicant Info/Mailing State is a required field.');
 
 				})
 				.expect(400, done);
@@ -272,7 +272,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip is a required field.');
+					expect(res.body.message).to.equal('Applicant Info/Mailing Zip is a required field.');
 
 				})
 				.expect(400, done);
@@ -291,7 +291,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Noncommercial Fields/Activity Description is a required field.');
+					expect(res.body.message).to.equal('Noncommercial Fields/Activity Description is a required field.');
 
 				})
 				.expect(400, done);
@@ -307,7 +307,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Noncommercial Fields/Location Description is a required field.');
+					expect(res.body.message).to.equal('Noncommercial Fields/Location Description is a required field.');
 
 				})
 				.expect(400, done);
@@ -323,7 +323,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Noncommercial Fields/Start Date Time is a required field.');
+					expect(res.body.message).to.equal('Noncommercial Fields/Start Date Time is a required field.');
 
 				})
 				.expect(400, done);
@@ -339,7 +339,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Noncommercial Fields/End Date Time is a required field.');
+					expect(res.body.message).to.equal('Noncommercial Fields/End Date Time is a required field.');
 
 				})
 				.expect(400, done);
@@ -355,7 +355,7 @@ describe('noncommercial POST: validate required fields present', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Noncommercial Fields/Number Participants is a required field.');
+					expect(res.body.message).to.equal('Noncommercial Fields/Number Participants is a required field.');
 
 				})
 				.expect(400, done);
@@ -369,6 +369,7 @@ describe('noncommercial POST: validate required fields present', function(){
 describe('API Routes: permits/special-uses/noncommercial', function(){
 	
 	let token;
+	let postControlNumber;
 
 	before(function(done) {
 
@@ -380,11 +381,25 @@ describe('API Routes: permits/special-uses/noncommercial', function(){
 		});
 	
 	});
+
+	it('should return valid json for noncommercial POST request (controlNumber to be used in GET)', function(done) {
+
+		request(server)
+			.post(testURL)
+			.set('x-access-token', token)
+			.send(noncommercialFactory.create())
+			.expect('Content-Type', /json/)
+			.expect(function(res){
+				postControlNumber = res.body.controlNumber;
+			})
+			.expect(200, done);
+
+	});
 	
 	it('should return valid json for noncommercial GET request for id', function(done) {
 
 		request(server)
-			.get(`${testURL}987654321/`)
+			.get(`${testURL}${postControlNumber}/`)
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
 			.expect(200, done);
@@ -430,7 +445,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/First Name is expected to be type \'string\'.');
+					expect(res.body.message).to.equal('Applicant Info/First Name is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -446,7 +461,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Last Name is expected to be type \'string\'.');
+					expect(res.body.message).to.equal('Applicant Info/Last Name is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -462,7 +477,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Area Code is expected to be type \'integer\'.');
+					expect(res.body.message).to.equal('Applicant Info/Day Phone/Area Code is expected to be type \'integer\'.');
 
 				})
 				.expect(400, done);
@@ -478,7 +493,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Number is expected to be type \'integer\'.');
+					expect(res.body.message).to.equal('Applicant Info/Day Phone/Number is expected to be type \'integer\'.');
 
 				})
 				.expect(400, done);
@@ -494,7 +509,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Phone Type is expected to be type \'string\'.');
+					expect(res.body.message).to.equal('Applicant Info/Day Phone/Phone Type is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -510,7 +525,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Email Address is expected to be type \'string\'.');
+					expect(res.body.message).to.equal('Applicant Info/Email Address is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -526,7 +541,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Mailing Address is expected to be type \'string\'.');
+					expect(res.body.message).to.equal('Applicant Info/Mailing Address is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -542,7 +557,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Mailing City is expected to be type \'string\'.');
+					expect(res.body.message).to.equal('Applicant Info/Mailing City is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -558,7 +573,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Mailing State is expected to be type \'string\'.');
+					expect(res.body.message).to.equal('Applicant Info/Mailing State is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -574,7 +589,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip is expected to be type \'string\'.');
+					expect(res.body.message).to.equal('Applicant Info/Mailing Zip is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -590,7 +605,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Noncommercial Fields/Activity Description is expected to be type \'string\'.');
+					expect(res.body.message).to.equal('Noncommercial Fields/Activity Description is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -606,7 +621,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Noncommercial Fields/Location Description is expected to be type \'string\'.');
+					expect(res.body.message).to.equal('Noncommercial Fields/Location Description is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -622,7 +637,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Noncommercial Fields/Start Date Time is expected to be type \'string\'.');
+					expect(res.body.message).to.equal('Noncommercial Fields/Start Date Time is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -638,7 +653,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Noncommercial Fields/End Date Time is expected to be type \'string\'.');
+					expect(res.body.message).to.equal('Noncommercial Fields/End Date Time is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -654,7 +669,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Noncommercial Fields/Number Participants is expected to be type \'integer\'.');
+					expect(res.body.message).to.equal('Noncommercial Fields/Number Participants is expected to be type \'integer\'.');
 
 				})
 				.expect(400, done);
@@ -674,7 +689,7 @@ describe('noncommercial POST: field type validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Extension is expected to be type \'string\'.');
+					expect(res.body.message).to.equal('Applicant Info/Day Phone/Extension is expected to be type \'string\'.');
 
 				})
 				.expect(400, done);
@@ -711,7 +726,7 @@ describe('noncommercial POST: format validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Area Code must be 3 digits.');
+					expect(res.body.message).to.equal('Applicant Info/Day Phone/Area Code must be 3 digits.');
 
 				})
 				.expect(400, done);
@@ -727,7 +742,7 @@ describe('noncommercial POST: format validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Day Phone/Number must be 7 digits.');
+					expect(res.body.message).to.equal('Applicant Info/Day Phone/Number must be 7 digits.');
 
 				})
 				.expect(400, done);
@@ -745,7 +760,7 @@ describe('noncommercial POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Applicant Info/Mailing State must be 2 letters.');
+				expect(res.body.message).to.equal('Applicant Info/Mailing State must be 2 letters.');
 
 			})
 			.expect(400, done);
@@ -761,7 +776,7 @@ describe('noncommercial POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Applicant Info/Mailing Zip must be 5 or 9 digits.');
+				expect(res.body.message).to.equal('Applicant Info/Mailing Zip must be 5 or 9 digits.');
 
 			})
 			.expect(400, done);
@@ -788,7 +803,7 @@ describe('noncommercial POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Region must be 2 digits.');
+				expect(res.body.message).to.equal('Region must be 2 digits.');
 
 			})
 			.expect(400, done);
@@ -804,7 +819,7 @@ describe('noncommercial POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Forest must be 2 digits.');
+				expect(res.body.message).to.equal('Forest must be 2 digits.');
 
 			})
 			.expect(400, done);
@@ -820,7 +835,7 @@ describe('noncommercial POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('District must be 2 digits.');
+				expect(res.body.message).to.equal('District must be 2 digits.');
 
 			})
 			.expect(400, done);
@@ -836,7 +851,7 @@ describe('noncommercial POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Noncommercial Fields/Start Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
+				expect(res.body.message).to.equal('Noncommercial Fields/Start Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
 
 			})
 			.expect(400, done);
@@ -852,7 +867,7 @@ describe('noncommercial POST: format validated', function(){
 			.expect('Content-Type', /json/)
 			.expect(function(res){
 
-				expect(res.body.response.message).to.equal('Noncommercial Fields/End Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
+				expect(res.body.message).to.equal('Noncommercial Fields/End Date Time must be in format \'YYYY-MM-DDThh:mm:ssZ\'.');
 
 			})
 			.expect(400, done);
@@ -887,7 +902,7 @@ describe('noncommercial POST: enum validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Type is not one of enum values: noncommercial,tempOutfitters.');
+					expect(res.body.message).to.equal('Type is not one of enum values: noncommercial,tempOutfitters.');
 
 				})
 				.expect(400, done);
@@ -903,7 +918,7 @@ describe('noncommercial POST: enum validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Org Type is not one of enum values: Individual,Corporation,Limited Liability Company,Partnership or Association,State Government or Agency,Local Government or Agency,Nonprofit.');
+					expect(res.body.message).to.equal('Applicant Info/Org Type is not one of enum values: Individual,Corporation,Limited Liability Company,Partnership or Association,State Government or Agency,Local Government or Agency,Nonprofit.');
 
 				})
 				.expect(400, done);
@@ -940,7 +955,7 @@ describe('noncommercial POST: pattern validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Applicant Info/Email Address must be in format \'email@email.service\'.');
+					expect(res.body.message).to.equal('Applicant Info/Email Address must be in format \'email@email.service\'.');
 
 				})
 				.expect(400, done);
@@ -975,7 +990,7 @@ describe('noncommercial POST: dependency validated', function(){
 				.expect('Content-Type', /json/)
 				.expect(function(res){
 
-					expect(res.body.response.message).to.equal('Having Applicant Info/Organization Name requires that Applicant Info/Org Type be provided.');
+					expect(res.body.message).to.equal('Having Applicant Info/Organization Name requires that Applicant Info/Org Type be provided.');
 
 				})
 				.expect(400, done);
