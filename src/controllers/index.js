@@ -31,6 +31,7 @@ const store = require('./store.js');
 const db = require('./db.js');
 const basic = require('./basic.js');
 const validation = require('./validation.js');
+const util = require('./utility.js');
 
 //*************************************************************
 
@@ -79,18 +80,6 @@ function apiSchemaData(apiSchema, reqPath){
 		}
 	}
 
-}
-
-/** If body passed in as string, converts it to a JSON object
- * @param  {Object} req - request object
- * @return {Object} - request body as a JSON Object
- */
-function getBody(req){
-	let inputPost = req.body;
-	if (inputPost.body) {
-		inputPost = JSON.parse(inputPost.body);
-	}
-	return inputPost;
 }
 
 /** Saves all information for a file upload to the DB and uploads the file to S3.
@@ -275,7 +264,7 @@ const postApplication = function(req, res, reqData){
 
 	const pathData = reqData.schema;
 
-	const body = getBody(req);
+	const body = util.getBody(req);
 	const derefFunc = deref();
 	const possbileFiles = [];
 
@@ -317,6 +306,7 @@ const postApplication = function(req, res, reqData){
 							const jsonResponse = {};
 							jsonResponse.status = 'success';
 							jsonResponse.controlNumber = controlNumber;
+							console.log(JSON.stringify(postObject, null, 4));
 							return res.json(jsonResponse);
 							
 						}
@@ -335,7 +325,7 @@ const postApplication = function(req, res, reqData){
  * @param  {Object} req - User request object
  * @param  {Object} res - Response object
  */
-const use = function(req, res){
+const routeRequest = function(req, res){
 
 	const reqPath = `/${req.params[0]}`;
 	const reqMethod = req.method.toLowerCase();
@@ -401,5 +391,5 @@ const use = function(req, res){
 //*******************************************************************
 // exports
 
-module.exports.use = use;
+module.exports.routeRequest = routeRequest;
 

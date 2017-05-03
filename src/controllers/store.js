@@ -14,23 +14,13 @@
 //*******************************************************************
 // required modules
 
-const AWS = require('aws-sdk');
+const config = require('./storeConfig.js');
 
 //*************************************************************
 // AWS
 
-const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
-const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
-const AWS_REGION = process.env.AWS_REGION;
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME;
-
-AWS.config.update({
-	accessKeyId: AWS_ACCESS_KEY_ID,
-	secretAccessKey: AWS_SECRET_ACCESS_KEY,
-	region: AWS_REGION
-});
-
-const s3 = new AWS.S3();
+const s3 = config.getStoreObject();
 
 //*************************************************************
 
