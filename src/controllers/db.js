@@ -159,7 +159,7 @@ function getFieldsToStore(schema, fieldsToStore, path, saveLocation){
 		case 'properties':
 			getFieldsToStore(schema.properties, fieldsToStore, `${path}`, saveLocation);
 			break;
-		default:
+		default: {
 			const store = schema[key].store;
 			let storeInMiddle = false;
 			if (store && schema[key].type !== 'file'){
@@ -183,6 +183,7 @@ function getFieldsToStore(schema, fieldsToStore, path, saveLocation){
 				getFieldsToStore(schema[key], fieldsToStore, `${path}.${key}`, saveLocation);
 			}
 			break;
+		}
 		}
 	});
 }
