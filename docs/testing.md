@@ -16,7 +16,7 @@ These two files contain unit testing test cases:
 API tests run the test case against the API routes.
 
 These three files contain the API testing test cases:
-- `test/authetnication.js`
+- `test/authentication.js`
 - `test/noncommercial.js`
 - `test/outfitters.js`
 
