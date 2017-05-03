@@ -210,7 +210,6 @@ const getControlNumber = function(req, res, reqData){
 		const controlNumber = reqData.matches.controlNumber;
 
 		const jsonResponse = {};
-		
 
 		const cnData = basicData;  // TODO: remove - used for mocks
 
@@ -222,7 +221,7 @@ const getControlNumber = function(req, res, reqData){
 				}
 				else {
 					
-					if(!appl){
+					if (!appl){
 						return error.sendError(req, res, 404, 'file not found.');		
 					}
 					else if (fileData){
