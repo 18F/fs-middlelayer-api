@@ -159,7 +159,7 @@
     "/permits/applications/special-uses/noncommercial/": {
       "post": {
         "x-validation":{
-          "$ref":"./controllers/validation.json#noncommercialApplication"
+          "$ref":"controllers/validation.json#noncommercialApplication"
         },
         "tags": [
           "Noncommercial Permit"
@@ -373,7 +373,7 @@
     "/permits/applications/special-uses/commercial/temp-outfitters/": {
       "post": {
         "x-validation":{
-          "$ref":"./controllers/validation.json#tempOutfitterApplication"
+          "$ref":"controllers/validation.json#tempOutfitterApplication"
         },
         "tags": [
           "Outfitter and Guide Permit"
