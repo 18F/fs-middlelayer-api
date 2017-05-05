@@ -3,11 +3,11 @@
 These steps define the process for creating a new permit type using Example Permit.
 
 1. Create Swagger Documentation.
-    1. Go to `src/api.json` and add the new `GET`, `PUT`, and `POST` route for the new Example Permit as shown below:
+    1. Go to the `src/api.json` swagger document file and add the new `GET`, `PUT`, and `POST` route for the new Example Permit as shown below:
 
         `/permits/applications/special-uses/commercial/example-permit/`
 
-    2. Add the relevant application form fields for these routes. </br>
+    2. Add the new permit form fields as properties to the API endpoints. </br>
         Example `GET` in `api.json`:
 
             /permits/applications/special-uses/commercial/example-permit{controlNumber}/: {
@@ -28,7 +28,7 @@ These steps define the process for creating a new permit type using Example Perm
         - `middleLayer/<fieldName>`
           - From the application table in middleLayer database, column name <fieldName>
         - `addresses/<fieldName>`
-          - From Basic API response, addresses array
+          - From Basic API response JSON; using the first element of the `addresses` array, `<fieldName>` is the key of the key value pair
         - `holders/<fieldName>`
           - From Basic API response, holders array
         - `phones/<fieldName>`
@@ -130,7 +130,7 @@ These steps define the process for creating a new permit type using Example Perm
           If the store contains one of the `basic` type options, `basicField` attribute must be included. This is the name of the field used to submit this data to the Basic API.
 
 2. Extend the schema, if necessary.
-    1. If there are any new form fields not supported by the current middle-layer  database, they can be added in the application table. To do this, go to `dba/migrations/ 02-create-applications.js` and update the sequelize migration script as needed. Also, update `src/models/applications.js` to include the new database fields.
+    1. If there are any new form fields not supported by the current middle-layer  database, they can be added in the application table. To do this, go to `dba/migrations/ 02-create-applications.js` and update the sequelize migration script as needed. Also, update `src/models/applications.js` to include the new database fields. This applies only if you are recreating the applications table. Please refer to the [Sequelize migrations documentation](http://docs.sequelizejs.com/en/latest/docs/migrations/) for information on altering an existing table.
     2. If there are routing changes, update `src/controllers/index.js`.
     3. If there are validation changes, update `src/controllers/validation.js`.
     4. If there are any changes on how the files are to be stored, update `src/controllers/store.js`.
