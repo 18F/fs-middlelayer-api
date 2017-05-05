@@ -51,7 +51,7 @@ This repository is being development under a task order of the Agile Blanket Pur
   - AWS_REGION
   - AWS_BUCKET_NAME
   - SUDS_API_URL
-    - To point at mocks, update this to be `http://localhost:${PORT}/mocks/basic`
+    - To use the moxai dependency and point at the mock API, update this to be `http://localhost:${PORT}/mocks/basic`
     - This application uses the [moxai node package](https://www.npmjs.com/package/moxai) as a placeholder mock API. The `/mocks/basic.json` file maintains the API endpoint schema.
     - The `controllers/index.js` file has random control number generation logic that should be removed when the mock API is replaced with the Basic API.
 
@@ -75,6 +75,10 @@ Refer to application package and dependency trackers for additional dependency i
   - [Gemnasium](https://gemnasium.com/github.com/nci-ats/fs-middlelayer-api/)
   - [VersionEye](https://www.versioneye.com/user/projects/58a669e7b4d2a20055fcb84c)
   - [Bithound](https://www.bithound.io/github/nci-ats/fs-middlelayer-api/feat%2Fswagger-ui/dependencies/npm)
+
+The Moxai package is a dependency for testing and was built specifically for this project. Moxai was published as an [independent package](https://www.npmjs.com/package/moxai) that can be used with any Express application. This application uses the moxai package as a placeholder mock API. The /mocks/basic.json file maintains the API endpoint schema. 
+
+The controllers/index.js file has random control number generation logic that should be removed when the mock API is replaced with the Basic API.
 
 ## Point of Contact and Notifications
 
