@@ -7,7 +7,7 @@ These steps define the process for creating a new permit type using Example Perm
 
         `/permits/applications/special-uses/commercial/example-permit/`
 
-    2. Add the new permit form fields as properties to the API endpoints. </br>
+    2. Create the GET endpoint for the new permit with the relevant application form fields in the Swagger document. </br>
         Example `GET` in `api.json`:
 
             /permits/applications/special-uses/commercial/example-permit{controlNumber}/: {
@@ -37,7 +37,8 @@ These steps define the process for creating a new permit type using Example Perm
           - From Basic API response, not in any array
 
 
-    3. Example `POST` in `api.json`:
+    3. Create the POST endpoint for the new permit with the relevant application form fields. </br>
+        Example `POST` in `api.json`:
 
             "/permits/applications/special-uses/commercial/example-permit/": {
                 "post": {
@@ -73,7 +74,8 @@ These steps define the process for creating a new permit type using Example Perm
                     "required": ["region","forest","district"...]
                 }
     
-      4. Example `POST` in `validation.json`:
+    4. The `validation.json` is a schema file for validating submitted data through `POST` routes.</br>
+        Example `POST` in `validation.json`:
 	   
                 "district": {
                     "default":"",
