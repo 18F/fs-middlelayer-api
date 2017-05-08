@@ -38,7 +38,7 @@ const token = function(req, res, next){
 		const claims = {
 			issuer: 'fs-epermit-api', 
 			subject: 'permit applications',
-			audience: 'fs-epermit-api api users'
+			audience: 'fs-epermit-api-intake-users'
 		};
 
 		jwt.verify(token, JWT_SECRET_KEY, claims, function(err, decoded) {

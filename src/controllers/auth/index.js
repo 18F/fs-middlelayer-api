@@ -87,7 +87,7 @@ const generate = function(req, res, next) {
 		jwtid: uuidV4(), 
 		issuer: 'fs-epermit-api', 
 		subject: 'permit applications',
-		audience: 'fs-epermit-api api users'
+		audience: 'fs-epermit-api-intake-users'
 	};
 	
 	req.token = jwt.sign({
