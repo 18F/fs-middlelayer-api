@@ -3,7 +3,7 @@
 These steps define the process for creating a new permit type using Example Permit.
 
 1. Create Swagger Documentation.
-    1. Go to the `src/api.json` swagger document file and add the new `GET`, `PUT`, and `POST` route for the new Example Permit as shown below:
+    1. Go to the `src/api.json` Swagger document file and add the new `GET`, `PUT`, and `POST` route for the new Example Permit as shown below:
 
         `/permits/applications/special-uses/commercial/example-permit/`
 
