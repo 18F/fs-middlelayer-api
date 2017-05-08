@@ -35,7 +35,13 @@ const token = function(req, res, next){
 	
 	if (token) {
 
-		jwt.verify(token, JWT_SECRET_KEY, function(err, decoded) {      
+		const claims = {
+			issuer: 'fs-epermit-api', 
+			subject: 'permit applications',
+			audience: 'fs-epermit-api api users'
+		};
+
+		jwt.verify(token, JWT_SECRET_KEY, claims, function(err, decoded) {
 			if (err) {
 				error.sendError(req, res, 401, 'Failed to authenticate token.');
 			} 

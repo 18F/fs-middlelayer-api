@@ -21,6 +21,7 @@ const bcrypt = require('bcrypt-nodejs');
 
 const models = include('src/models');
 const jwt = require('jsonwebtoken');
+const uuidV4 = require('uuid/v4');
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 //*******************************************************************
@@ -80,10 +81,20 @@ const serialize = function(req, res, next) {
  */
 const generate = function(req, res, next) {   
 	
+	const claims = {
+		expiresIn: 120 * 60, 
+		notBefore: 0,
+		jwtid: uuidV4(), 
+		issuer: 'fs-epermit-api', 
+		subject: 'permit applications',
+		audience: 'fs-epermit-api api users'
+	};
+	
 	req.token = jwt.sign({
 		id: req.user.id,
 		role: req.user.role
-	}, JWT_SECRET_KEY, { expiresIn: 120 * 60 });
+	}, JWT_SECRET_KEY, claims);
+
 	next();
 };
 
