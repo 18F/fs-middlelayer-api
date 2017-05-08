@@ -51,9 +51,7 @@ This repository is being development under a task order of the Agile Blanket Pur
   - AWS_REGION
   - AWS_BUCKET_NAME
   - SUDS_API_URL
-    - To use the moxai dependency and point at the mock API, update this to be `http://localhost:${PORT}/mocks/basic`
-    - This application uses the [moxai node package](https://www.npmjs.com/package/moxai) as a placeholder mock API. The `/mocks/basic.json` file maintains the API endpoint schema.
-    - The `controllers/index.js` file has random control number generation logic that should be removed when the mock API is replaced with the Basic API.
+    - To use the moxai dependency and point at the mock API, update this to be `http://localhost:${PORT}/mocks`.
 
 - Dotenv:
   - [Dotenv](https://www.npmjs.com/package/dotenv) is used which can load environment variables from a .env file into process.env
