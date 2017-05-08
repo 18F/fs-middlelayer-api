@@ -1,8 +1,8 @@
 # Travis CI
 
-Travis is configured using the `.travis.yml` file created in the core repository.
+[Travis CI](https://docs.travis-ci.com/) (continuous integration) is configured using the `.travis.yml` file created in the core repository.
 
-Travis CI is configured to build on each commit or on each pull request.
+Travis is triggered to build with every commit and pull request creation or merge.
 
 The build process includes the following steps:
 
@@ -12,4 +12,4 @@ The build process includes the following steps:
     2. `npm run lint`
     3. `istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive`
     4. `codecov`
-3. If the build is successful, Travis automatically deploys the build to Heroku. An `api_key` in `.travis.yml` directs the deployment to `fs-epermit-dev`. 
+3. A successful build on a PR merge triggers a branch-dependent deployment to cloud.gov or Heroku. An `api_key` in `.travis.yml` directs the deployment to `fs-epermit-dev`. 
