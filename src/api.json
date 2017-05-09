@@ -3,7 +3,7 @@
   "basePath":"/",
   "info": {
     "description": "This page is for developers. We built this site entirely off the APIs below and we want to share them with you.",
-    "version": "0.0.12",
+    "version": "0.0.13",
     "title": "API Documentation for Developers"
   },
   "tags": [
