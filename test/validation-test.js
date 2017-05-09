@@ -31,25 +31,7 @@ const testNoncommercialBody = require('./data/testInputNoncommercial.json');
 const tempOutfitterFactory = factory.factory(testTempOutfittersBody);
 const noncommercialFactory = factory.factory(testNoncommercialBody);
 
-//*******************************************************************
-// Validates input
-// Ensuring all required fields are present
-// All fields are the right type
-// All fields with patterns match those patterns
-// Fields with dependencies are checked
-// Fields with enum values
-// 
-// One test for these
-// 
-// File uploads working
-// Retreiving from S3 working
-// Saving to DB working
-// Retreiving from DB working
-// Authorization working
-
 before(function(){
-	console.log('process.env.npm_config_mock');
-	console.log(process.env.npm_config_mock);
 	if (process.env.npm_config_mock === 'Y'){
 		AWS.mock('S3', 'putObject', { ETag: '"82e8674bebaea2797c28872c9a38ad43"' });
 		AWS.mock('S3', 'getObject', testObjects.mockS3Get);
