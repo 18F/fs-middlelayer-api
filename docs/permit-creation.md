@@ -3,11 +3,11 @@
 These steps define the process for creating a new permit type using Example Permit.
 
 1. Create Swagger Documentation.
-    1. Go to `src/api.json` and add the new `GET`, `PUT`, and `POST` route for the new Example Permit as shown below:
+    1. Go to the `src/api.json` Swagger document file and add the new `GET`, `PUT`, and `POST` route for the new Example Permit as shown below:
 
         `/permits/applications/special-uses/commercial/example-permit/`
 
-    2. Add the relevant application form fields for these routes. </br>
+    2. Create the GET endpoint for the new permit with the relevant application form fields in the Swagger document. </br>
         Example `GET` in `api.json`:
 
             /permits/applications/special-uses/commercial/example-permit{controlNumber}/: {
@@ -26,18 +26,19 @@ These steps define the process for creating a new permit type using Example Perm
 
         Intake options include:
         - `middleLayer/<fieldName>`
-          - From the application table in middleLayer database, column name <fieldName>
+          - From the application table in middleLayer database, column name `<fieldName>`
         - `addresses/<fieldName>`
-          - From Basic API response, addresses array
+          - From Basic API response JSON; using the first element of the `addresses` array, `<fieldName>` is the key of the key value pair
         - `holders/<fieldName>`
-          - From Basic API response, holders array
+          - From Basic API response JSON; using the first element of the `holders` array, `<fieldName>` is the key of the key value pair
         - `phones/<fieldName>`
-          - From Basic API response, phones array
+          - From Basic API response JSON; using the first element of the `phones` array, `<fieldName>` is the key of the key value pair
         - `<fieldName>`
           - From Basic API response, not in any array
 
 
-    3. Example `POST` in `api.json`:
+    3. Create the POST endpoint for the new permit with the relevant application form fields. </br>
+        Example `POST` in `api.json`:
 
             "/permits/applications/special-uses/commercial/example-permit/": {
                 "post": {
@@ -73,7 +74,8 @@ These steps define the process for creating a new permit type using Example Perm
                     "required": ["region","forest","district"...]
                 }
     
-      4. Example `POST` in `validation.json`:
+    4. The `validation.json` is a schema file for validating submitted data through `POST` routes.</br>
+        Example `POST` in `validation.json`:
 	   
                 "district": {
                     "default":"",
@@ -113,7 +115,9 @@ These steps define the process for creating a new permit type using Example Perm
                 },
             
 
-          - `fromIntake` indicates whether the field will be directly populated with user input. If set to `false`, `madeOf` must be provided, giving the fields, or strings used to populate this field.
+          - `fromIntake` indicates whether the field will be directly populated with user input. If set to `false`, the API will populate this field using the strings and fields provided under `madeOf`.
+
+          - `store` describes where this field should be stored, either in the middlelayer DB or in the basic API. It can list multiple places to store this field
 
           Files:
           - `maxSize` is measured in megabytes
@@ -128,7 +132,7 @@ These steps define the process for creating a new permit type using Example Perm
           If the store contains one of the `basic` type options, `basicField` attribute must be included. This is the name of the field used to submit this data to the Basic API.
 
 2. Extend the schema, if necessary.
-    1. If there are any new form fields not supported by the current middle-layer  database, they can be added in the application table. To do this, go to `dba/migrations/ 02-create-applications.js` and update the sequelize migration script as needed. Also, update `src/models/applications.js` to include the new database fields.
+    1. If there are any new form fields not supported by the current middle-layer  database, they can be added in the application table. To do this, go to `dba/migrations/ 02-create-applications.js` and update the sequelize migration script as needed. Also, update `src/models/applications.js` to include the new database fields. This applies only if you are recreating the applications table. Please refer to the [Sequelize migrations documentation](http://docs.sequelizejs.com/en/latest/docs/migrations/) for information on altering an existing table.
     2. If there are routing changes, update `src/controllers/index.js`.
     3. If there are validation changes, update `src/controllers/validation.js`.
     4. If there are any changes on how the files are to be stored, update `src/controllers/store.js`.

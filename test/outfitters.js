@@ -280,3 +280,62 @@ describe('tempOutfitters GET: files validated', function(){
 		});
 	});
 });
+
+describe('tempOutfitters GET: zip file validated', function(){
+
+	let token;
+
+	let postControlNumber;
+
+	before(function(done) {
+
+		util.getToken(function(t){
+
+			token = t;
+			return done();
+
+		});
+
+	});
+	
+	describe('tempOutfitters GET/POST: post a new application with files, get that application, get files zipped ', function(){
+
+		it('should return valid json when application submitted with three required files', function(done) {
+			
+			this.timeout(5000);
+
+			request(server)
+				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfitterFactory.create()))
+				.attach('insuranceCertificate', './test/data/test_file.doc')
+				.attach('goodStandingEvidence', './test/data/test_file.docx')
+				.attach('operatingPlan', './test/data/test_file.pdf')
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+					postControlNumber = res.body.controlNumber;
+				})
+				.expect(200, done);
+
+		});
+	
+		it('should return valid zip when getting outfitters files using the controlNumber returned from POST', function(done) {
+
+			request(server)
+			.get(`${testURL}${postControlNumber}/files/`)
+			.set('x-access-token', token)
+			.expect(200)
+			.expect('Content-Type', 'application/zip')
+			.buffer()
+			.parse(binaryParser)
+			.end(function(err, res) {
+				if (err) 
+					return done(err);
+				
+				expect(200, done);
+				done();
+			});
+
+		});
+	});
+});

@@ -65,7 +65,7 @@ function apiSchemaData(apiSchema, reqPath){
 
 	if (apiSchema) {
 		for (const k in apiSchema.paths) {
-
+			
 			const ms = matchstick(k, 'template');
 			ms.match(reqPath);
 
@@ -200,51 +200,85 @@ const getControlNumber = function(req, res, reqData){
 		'opp': 'operatingPlan'
 	};
 
-	let basicData = {};
-	getBasicRes(reqData.matches.controlNumber)
-	.then((appData)=>{
-		basicData = appData;
+	const reqPath = `/${req.params[0]}`;
 
-		let jsonData = {};
+	if (reqPath.indexOf('/files') !== -1) {
+		let controlNumber = reqData.matches.controlNumber;
+		controlNumber = controlNumber.substr(0, controlNumber.length - 6);
 
-		const controlNumber = reqData.matches.controlNumber;
+		db.getApplication(controlNumber, function(err, appl, fileData){
 
-		const jsonResponse = {};
+			if (err) {
+				return error.sendError(req, res, 500, 'unable to process request.');	
+			}
 
-		const cnData = basicData;  // TODO: remove - used for mocks
+			else if (fileData){
 
-		if (basicData){
+				store.getFilesZip(controlNumber, fileData, res, function(err){
 
-			db.getApplication(controlNumber, function(err, appl, fileData){
-				if (err){
-					return error.sendError(req, res, 500, 'unable to process request.');
-				}
-				else {
-					
-					if (!appl){
-						return error.sendError(req, res, 404, 'file not found.');		
+					if (err){
+						error.sendError(req, res, 404, 'file not found');
+					}			
+
+				});	
+				
+			}
+			else {
+				error.sendError(req, res, 404, 'file not found');	
+			}
+	
+		});
+		
+	}
+	else {
+
+		let basicData = {};
+		getBasicRes(reqData.matches.controlNumber)
+		.then((appData)=>{
+			basicData = appData;
+
+			let jsonData = {};
+
+			const controlNumber = reqData.matches.controlNumber;
+
+			const jsonResponse = {};
+
+			const cnData = basicData;  // TODO: remove - used for mocks
+
+			if (basicData){
+
+				db.getApplication(controlNumber, function(err, appl, fileData){
+					if (err){
+						return error.sendError(req, res, 500, 'unable to process request.');
 					}
-					else if (fileData){
-						fileData.forEach(function(file){
-							const fileType = fileTypes[file.fileType];
-							appl[fileType] = file.fileName;
-						});
+					else {
+						
+						if (!appl){
+							return error.sendError(req, res, 404, 'file not found.');		
+						}
+						else if (fileData){
+							fileData.forEach(function(file){
+								const fileType = fileTypes[file.fileType];
+								appl[fileType] = file.fileName;
+							});
+						}
+						jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData['x-getTemplate']);
+						jsonData.controlNumber = controlNumber;// TODO: remove - used for mocks
+
+						jsonResponse.status = 'success';
+						const toReturn = Object.assign({}, jsonResponse, jsonData);
+
+						res.json(toReturn);
 					}
-					jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData['x-getTemplate']);
-					jsonData.controlNumber = controlNumber;// TODO: remove - used for mocks
+				});
+			}
+		})
+		.catch((err)=>{
+			console.error(err);
+			return error.sendError(req, res, 500, 'unable to process request.');
+		});
 
-					jsonResponse.status = 'success';
-					const toReturn = Object.assign({}, jsonResponse, jsonData);
-
-					res.json(toReturn);
-				}
-			});
-		}
-	})
-	.catch((err)=>{
-		console.error(err);
-		return error.sendError(req, res, 500, 'unable to process request.');
-	});
+	}
 
 };
 

@@ -61,6 +61,7 @@
   },
   "dependencies": {
     "async": "^2.2.0",
+    "aws-s3-zipper": "^1.0.1",
     "aws-sdk": "^2.32.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.1",
