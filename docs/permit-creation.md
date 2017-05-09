@@ -28,11 +28,11 @@ These steps define the process for creating a new permit type using Example Perm
         - `middleLayer/<fieldName>`
           - From the application table in middleLayer database, column name <fieldName>
         - `addresses/<fieldName>`
-          - From Basic API response JSON; using the first element of the `addresses` array, `<fieldName>` is the key of the key value pair
+          - From Basic API response JSON; using the first element of the `addresses` array, <fieldName> is the key of the key value pair
         - `holders/<fieldName>`
-          - From Basic API response, holders array
+          - From Basic API response JSON; using the first element of the `holders` array, <fieldName> is the key of the key value pair
         - `phones/<fieldName>`
-          - From Basic API response, phones array
+          - From Basic API response JSON; using the first element of the `phones` array, <fieldName> is the key of the key value pair
         - `<fieldName>`
           - From Basic API response, not in any array
 
