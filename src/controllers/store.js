@@ -31,7 +31,7 @@ const s3 = config.getStoreObject();
  */
 function uploadFile(fileInfo, callback){
 	const params = {
-		Bucket: config.getBucketName, 
+		Bucket: config.bucketName, 
 		Key: fileInfo.keyname,
 		Body: fileInfo.buffer,
 		ACL: 'private' 
@@ -59,7 +59,7 @@ function getFile(controlNumber, fileName, callback){
 	const filePath = `${controlNumber}/${fileName}`;
 
 	const getParams = {
-		Bucket: config.getBucketName, 
+		Bucket: config.bucketName, 
 		Key: filePath
 	};
 

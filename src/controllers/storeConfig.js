@@ -47,4 +47,4 @@ function getStoreObject(){
 
 module.exports.getStoreObject = getStoreObject;
 module.exports.getStoreConfig = getStoreConfig;
-module.exports.getBucketName = AWS_BUCKET_NAME;
+module.exports.bucketName = AWS_BUCKET_NAME;
