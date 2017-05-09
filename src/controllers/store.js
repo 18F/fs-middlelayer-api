@@ -20,7 +20,7 @@ const config = require('./storeConfig.js');
 // AWS
 
 const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME;
-const s3 = config.getStoreObject();
+const AWS = config.getStoreObject();
 
 //*************************************************************
 
@@ -30,6 +30,8 @@ const s3 = config.getStoreObject();
  * @param  {Function} callback - function to call after uploading
  */
 function uploadFile(fileInfo, callback){
+	const s3 = new AWS.S3();
+
 	const params = {
 		Bucket: AWS_BUCKET_NAME, 
 		Key: fileInfo.keyname,
@@ -42,7 +44,7 @@ function uploadFile(fileInfo, callback){
 			console.error(err);
 			return callback(err, null);
 		}
-		else {     
+		else {
 			return callback(null, data);
 		}      
 	});
@@ -55,7 +57,7 @@ function uploadFile(fileInfo, callback){
  * @param  {Function} callback      - function to call after file has been retreived, or error returned
  */
 function getFile(controlNumber, fileName, callback){
-
+	const s3 = new AWS.S3();
 	const filePath = `${controlNumber}/${fileName}`;
 
 	const getParams = {
