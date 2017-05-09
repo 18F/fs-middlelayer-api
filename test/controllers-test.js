@@ -167,6 +167,26 @@ describe('API Controllers: build error message', function(){
 		.to.be.equal('Insurance Certificate cannot be an empty file.');
 	
 	});
+
+	it('should return \'Insurance Certificate must be one of the following mime types: application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/msword, text/rtf, application/pdf.\'', function(){
+
+		expect( specialUses.validate.generateErrorMesage(errorFactory.create(
+			{
+				'errorArray[]':1,
+				'errorArray[0].field':'insuranceCertificate',
+				'errorArray[0].errorType':'invalidMime',
+				'errorArray[0].expectedFieldType':[
+					'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+					'application/msword',
+					'text/rtf',
+					'application/pdf'
+				]
+			}))
+		)
+		.to.be.equal('Insurance Certificate must be one of the following mime types: application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/msword, text/rtf, application/pdf.');
+	
+	});
+
 });
 
 //*******************************************************************

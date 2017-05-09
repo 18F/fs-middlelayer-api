@@ -128,6 +128,12 @@ describe('tempOutfitters POST: file validated', function(){
 			)
 			.to.be.equal(1);
 		});
+		it('should return errors for file that is the wrong mime type', function(){
+			expect (
+				specialUses.validate.validateFile(tempOutfitterObjects.file.uploadFile_invalid_mime, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate').length
+			)
+			.to.be.equal(1);
+		});
 
 		it('should return valid json missing single required file', function(done) {
 

@@ -1161,6 +1161,19 @@
                 },
                 "size": 2000000
             }
+        ],
+        "uploadFile_invalid_mime":[
+            {
+                "fieldname": "insuranceCertificate",
+                "originalname": "test_insuranceCertificate.docx",
+                "encoding": "7bit",
+                "mimetype": "text/plain",
+                "buffer": {
+                    "type": "Buffer",
+                    "data": []
+                },
+                "size": 15
+            }
         ]
     },
     "mockS3Get":{
