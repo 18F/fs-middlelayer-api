@@ -17,8 +17,8 @@ const include = require('include')(__dirname);
 
 //*******************************************************************
 
+const AWS = require('mock-aws');
 const request = require('supertest');
-const sinon = require('sinon');
 const server = include('src/index.js');
 const util = include('test/utility.js');
 
@@ -289,6 +289,10 @@ describe('tempOutfitters GET: zip file validated', function(){
 
 	before(function(done) {
 
+		if (process.env.npm_config_mock === 'Y'){
+			AWS.restore('S3');
+		}
+
 		util.getToken(function(t){
 
 			token = t;
@@ -296,6 +300,14 @@ describe('tempOutfitters GET: zip file validated', function(){
 
 		});
 
+	});
+
+	after(function(done){
+		if (process.env.npm_config_mock === 'Y'){
+			AWS.mock('S3', 'getObject', tempOutfitterObjects.mockS3Get);
+		}
+
+		return done();
 	});
 	
 	describe('tempOutfitters GET/POST: post a new application with files, get that application, get files zipped ', function(){
