@@ -1117,5 +1117,76 @@
                 }
             ]
         }
+    },
+    "file":{
+        "validationConstraints":{
+            "insuranceCertificate": {
+                "filetypecode": "inc",
+                "maxSize": 1,
+                "requiredFile": true,
+                "store": [
+                    "middleLayer:insuranceCertificate"
+                ],
+                "type": "file",
+                "validExtensions": [
+                    "pdf",
+                    "doc",
+                    "docx",
+                    "rtf"
+                ]
+            }
+        },
+        "uploadFile_empty":[
+            {
+                "fieldname": "insuranceCertificate",
+                "originalname": "test_insuranceCertificate.docx",
+                "encoding": "7bit",
+                "mimetype": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "buffer": {
+                    "type": "Buffer",
+                    "data": []
+                },
+                "size": 0
+            }
+        ],
+        "uploadFile_20MB":[
+            {
+                "fieldname": "insuranceCertificate",
+                "originalname": "test_insuranceCertificate.docx",
+                "encoding": "7bit",
+                "mimetype": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "buffer": {
+                    "type": "Buffer",
+                    "data": []
+                },
+                "size": 2000000
+            }
+        ]
+    },
+    "mockS3Get":{
+        "AcceptRanges": "bytes",
+        "LastModified": "2017-05-09T12:25:00.000Z",
+        "ContentLength": 13,
+        "ETag": "\"fa7d7e650b2cec68f302b31ba28235d8\"",
+        "ContentType": "application/octet-stream",
+        "Metadata": {},
+        "Body": {
+            "type": "Buffer",
+            "data": [
+                37,
+                80,
+                68,
+                70,
+                45,
+                49,
+                46,
+                51,
+                13,
+                37,
+                226,
+                227,
+                207
+            ]
+        }
     }
 }
