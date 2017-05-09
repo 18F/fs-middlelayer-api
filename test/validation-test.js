@@ -88,6 +88,12 @@ describe('outfitters validation ', function(){
 			)
 			.to.be.equal(1);
 		});
+		it('should report issues when neither tempOutfitterFields/advertising url nor tempOutfitterFields/advertising description is provided', function(){
+			expect (
+				specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.advertisingURL' : undefined, 'tempOutfitterFields.advertisingDescription' : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray.length
+			)
+			.to.be.equal(1);
+		});
 	});
 	describe('ensure fields are the right type', function(){
 		it('should report issues when when the wrong type of tempOutfitterFields/activity description is provided', function(){
@@ -394,9 +400,17 @@ describe('noncommercial validation', function(){
 		});
 	});
 	describe('ensure fields with a dependency are checked', function(){
-		it('should report issues for ', function(){
+		it('should report issues for orgName', function(){
 			expect (
 				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.organizationName' : 'theOrg'}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
+			)
+			.to.be.equal(1);
+		});
+	});
+	describe('ensure fields is right length', function(){
+		it('should report issues for invalid length', function(){
+			expect (
+				specialUses.validate.getFieldValidationErrors(noncommercialFactory.create({'applicantInfo.firstName' : 'Josdfsdfsdfsdasdasdhnaaaaaaaaaaaaasasasasasaasaaaaasahbsdbahsdbhasdbasbdbahsdbasbdbashdbashjdbashdbahsdbahsdbahsdbashdbahsdbhasdbashdbahjsdbhasbdahsbdhasbdhabsdhjabsdhjasbdhjasbdhjasbdjhasbdjahsbdahsbdahsdbahsdbahjsbdhjasbdahsdbasbdahsdbahsbdahsdbjhasbdahsbdhjasdbahbdbdbb'}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
 			)
 			.to.be.equal(1);
 		});
