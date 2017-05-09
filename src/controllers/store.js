@@ -20,7 +20,7 @@ const s3zipper = require ('aws-s3-zipper');
 //*************************************************************
 // AWS
 
-const s3 = config.getStoreObject();
+const AWS = config.getStoreObject();
 
 //*************************************************************
 
@@ -30,6 +30,8 @@ const s3 = config.getStoreObject();
  * @param  {Function} callback - function to call after uploading
  */
 function uploadFile(fileInfo, callback){
+	const s3 = new AWS.S3();
+
 	const params = {
 		Bucket: config.bucketName, 
 		Key: fileInfo.keyname,
@@ -42,7 +44,7 @@ function uploadFile(fileInfo, callback){
 			console.error(err);
 			return callback(err, null);
 		}
-		else {     
+		else {
 			return callback(null, data);
 		}      
 	});
@@ -55,7 +57,7 @@ function uploadFile(fileInfo, callback){
  * @param  {Function} callback      - function to call after file has been retreived, or error returned
  */
 function getFile(controlNumber, fileName, callback){
-
+	const s3 = new AWS.S3();
 	const filePath = `${controlNumber}/${fileName}`;
 
 	const getParams = {
@@ -79,8 +81,8 @@ function getFile(controlNumber, fileName, callback){
 /**
  * Retreives file from S3
  * @param  {Number}	  controlNumber - controlNumber of application files is associated with
- * @param  {Array}	  dbFiles - database file objects associated with that controlNumber.
- * @param  {Object}	  res - response object
+ * @param  {Array}    dbFiles       - database file objects associated with that controlNumber.
+ * @param  {Object}   res           - response object
  * @param  {Function} callback      - function to call after files have been retreived, or error returned
  */
 function getFilesZip(controlNumber, dbFiles, res, callback){

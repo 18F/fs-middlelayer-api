@@ -41,8 +41,7 @@ function getStoreConfig(){
 }
 
 function getStoreObject(){
-	const s3 = new AWS.S3();
-	return s3;
+	return AWS;
 }
 
 module.exports.getStoreObject = getStoreObject;
