@@ -20,7 +20,6 @@ const s3zipper = require ('aws-s3-zipper');
 //*************************************************************
 // AWS
 
-const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME;
 const s3 = config.getStoreObject();
 
 //*************************************************************
@@ -32,7 +31,7 @@ const s3 = config.getStoreObject();
  */
 function uploadFile(fileInfo, callback){
 	const params = {
-		Bucket: AWS_BUCKET_NAME, 
+		Bucket: config.bucketName, 
 		Key: fileInfo.keyname,
 		Body: fileInfo.buffer,
 		ACL: 'private' 
@@ -60,7 +59,7 @@ function getFile(controlNumber, fileName, callback){
 	const filePath = `${controlNumber}/${fileName}`;
 
 	const getParams = {
-		Bucket: AWS_BUCKET_NAME, 
+		Bucket: config.bucketName, 
 		Key: filePath
 	};
 
