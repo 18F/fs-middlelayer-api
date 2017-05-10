@@ -173,16 +173,19 @@ function postRequest(res, postObject, fieldsObj, responseKey, requestKey, reques
  */
 function createContact(fieldsObj, person, postObject){
 	return new Promise(function(fulfill, reject){
-		let contactField, createPersonOrOrgURL;
+		let contactField, createPersonOrOrgURL, responseKey;
 		if (person){
 			contactField = fieldsObj['/contact/person'];
 			createPersonOrOrgURL = `${SUDS_API_URL}/contact/person/`;
+			responseKey = '/contact/person';
+			postObject[responseKey].request = contactField;
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
 			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode/`;
+			responseKey = '/contact/orgcode';
+			postObject[responseKey].request = contactField;
 		}
-		postObject['/contact/personOrOrgcode'].request = contactField;
 		const createContactOptions = {
 			method: 'POST',
 			uri: createPersonOrOrgURL,
@@ -191,7 +194,7 @@ function createContact(fieldsObj, person, postObject){
 		};
 		request(createContactOptions)
 		.then(function(res){
-			return postRequest(res, postObject, fieldsObj, '/contact/personOrOrgcode', '/contact/address', '/contact-address');
+			return postRequest(res, postObject, fieldsObj, responseKey, '/contact/address', '/contact-address');
 		})
 		.then(function(res){
 			return postRequest(res, postObject, fieldsObj, '/contact-address', '/contact/phone', '/contact-phone');
@@ -238,7 +241,8 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 	return new Promise(function (fulfill, reject){
 
 		const postObject = {
-			'/contact/personOrOrgcode':{},
+			'/contact/person':{},
+			'/contact/orgcode':{},
 			'/contact-address':{},
 			'/contact-phone':{},
 			'/application':{}
