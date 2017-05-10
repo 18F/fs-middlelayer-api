@@ -33,9 +33,9 @@ const fileMimes = [
 
 /**
  * Checks to see whether input is a number with num digits. Will return true if digit is not a number as another validation piece will catch and handle that error.
- * @param  {Number} input - user input to be checked
- * @param  {Number} num   - number of digits input should consist of
- * @return {boolean}      - true if input has only num digits, otherwise false
+ * @param  {Number}  input - user input to be checked
+ * @param  {Number}  num   - number of digits input should consist of
+ * @return {boolean}       - true if input has only num digits, otherwise false
  */
 function digitCheck(input, num){
 
@@ -59,8 +59,8 @@ function digitCheck(input, num){
 
 /**
  * Checks that areacode is a valid area code
- * @param  {Number} input - user input to be validated
- * @return {boolean}      - whether or not input is a valid area code
+ * @param  {Number}  input - user input to be validated
+ * @return {boolean}       - whether or not input is a valid area code
  */
 function areaCodeFormat(input){
 
@@ -70,8 +70,8 @@ function areaCodeFormat(input){
 
 /**
  * Checks that number is a valid phone number
- * @param  {Number} input - user input to be validated
- * @return {boolean}      - whether or not input is a valid phone number
+ * @param  {Number}  input - user input to be validated
+ * @return {boolean}       - whether or not input is a valid phone number
  */
 function phoneNumberFormat(input){
 
@@ -82,7 +82,7 @@ function phoneNumberFormat(input){
 /**
  * Removes 'instance' from prop field of validation errors. Used to make fields human readable
  * 
- * @param {string} prop - Prop field from validation error
+ * @param  {string} prop - Prop field from validation error
  * @return {string}
  */
 function removeInstance(prop){
@@ -104,7 +104,7 @@ function removeInstance(prop){
  *
  * @param  {string} property - Upper field to combine
  * @param  {string} argument - Field where error is.
- * @return {string} - Concatination of property, '.', and argument
+ * @return {string}          - Concatination of property, '.', and argument
  */
 function combinePropArgument(property, argument){
 
@@ -126,12 +126,12 @@ function combinePropArgument(property, argument){
 /**
  * Creates error object which can be read by error message building function
  * 
- * @param {string} field - Field where error occured at
- * @param {string} errorType - Type of error returned
+ * @param {string} field             - Field where error occured at
+ * @param {string} errorType         - Type of error returned
  * @param {string} expectedFieldType - Type that the field is expected to be
- * @param {string} enumMessage - Enum message returned by validation
- * @param {string} dependency - Fields that are a dependeny of field
- * @param {array} anyOfFields - Array of strings of all field included in anyOf
+ * @param {string} enumMessage       - Enum message returned by validation
+ * @param {string} dependency        - Fields that are a dependeny of field
+ * @param {array} anyOfFields        - Array of strings of all field included in anyOf
  * 
  * @return Error object
  */
@@ -154,6 +154,10 @@ function makeErrorObj(field, errorType, expectedFieldType, enumMessage, dependen
 }
 
 let requiredFields = [];
+/**
+ * Checks for additional required fields if a missing field has sub fields, stores these fields in requiredFields
+ * @param  {Object} schema - schema to traverse in search for all required fields
+ */
 function checkForExtraRequired(schema){
 	const keys = schema.properties;
 	for (const key in keys){
@@ -189,9 +193,9 @@ function getAllRequired(schema){
 	});
 }
 /** Traverses through schema to find field specified. Once found it executes a function on that field in the schema.
- * @param  {Object} schema - schema to look for field in
- * @param  {Array} field - Array(String) containing the path to the field to find
- * @param  {Function} func - Function to be run on the schema of field
+ * @param  {Object}   schema - schema to look for field in
+ * @param  {Array}    field  - Array(String) containing the path to the field to find
+ * @param  {Function} func   - Function to be run on the schema of field
  */
 function findField(schema, field, func){
 	const fieldCopy = JSON.parse(JSON.stringify(field));
@@ -224,11 +228,11 @@ function findField(schema, field, func){
 
 /**
  * Handles errors where a required field is missing.
- * @param  {Object} output  			- Object used to keep track of any errors, will be outputted if any found
- * @param  {Array} output.errorArray  	- Array containing error objects which detail errors in schema
- * @param  {Array} result  				- Array of all errors from schema validator
- * @param  {Number} counter 			- Index of the current error
- * @param  {Object} schema  			- schema which input is being validated against
+ * @param  {Object} output           - Object used to keep track of any errors, will be outputted if any found
+ * @param  {Array} output.errorArray - Array containing error objects which detail errors in schema
+ * @param  {Array} result  	         - Array of all errors from schema validator
+ * @param  {Number} counter          - Index of the current error
+ * @param  {Object} schema           - schema which input is being validated against
  */
 function handleMissingError(output, result, counter, schema){
 
@@ -248,10 +252,10 @@ function handleMissingError(output, result, counter, schema){
 
 /**
  * Handles errors where a field is the wrong type.
- * @param  {Object} output  			- Object used to keep track of any errors, will be outputted if any found
- * @param  {Array} output.errorArray  	- Array containing error objects which detail errors in schema
- * @param  {Array} result  				- Array of all errors from schema validator
- * @param  {Number} counter 			- Index of the current error
+ * @param  {Object} output           - Object used to keep track of any errors, will be outputted if any found
+ * @param  {Array} output.errorArray - Array containing error objects which detail errors in schema
+ * @param  {Array} result  	         - Array of all errors from schema validator
+ * @param  {Number} counter          - Index of the current error
  */
 function handleTypeError(output, result, counter){
 
@@ -263,10 +267,10 @@ function handleTypeError(output, result, counter){
 
 /**
  * Handles errors where a field is formatted wrong.
- * @param  {Object} output  			- Object used to keep track of any errors, will be outputted if any found
- * @param  {Array} output.errorArray  	- Array containing error objects which detail errors in schema
- * @param  {Array} result  				- Array of all errors from schema validator
- * @param  {Number} counter 			- Index of the current error
+ * @param  {Object} output           - Object used to keep track of any errors, will be outputted if any found
+ * @param  {Array} output.errorArray - Array containing error objects which detail errors in schema
+ * @param  {Array} result  	         - Array of all errors from schema validator
+ * @param  {Number} counter          - Index of the current error
  */
 function handleFormatError(output, result, counter){
 
@@ -277,10 +281,10 @@ function handleFormatError(output, result, counter){
 
 /**
  * Handles errors where a field is not one of the enum values.
- * @param  {Object} output  			- Object used to keep track of any errors, will be outputted if any found
- * @param  {Array} output.errorArray  	- Array containing error objects which detail errors in schema
- * @param  {Array} result  				- Array of all errors from schema validator
- * @param  {Number} counter 			- Index of the current error
+ * @param  {Object} output            - Object used to keep track of any errors, will be outputted if any found
+ * @param  {Array}  output.errorArray - Array containing error objects which detail errors in schema
+ * @param  {Array}  result            - Array of all errors from schema validator
+ * @param  {Number} counter           - Index of the current error
  */
 function handleEnumError(output, result, counter){
 
@@ -291,8 +295,8 @@ function handleEnumError(output, result, counter){
 
 /**
  * Pulls the dependency of a certain field from the error message generated by the schema validator
- * @param  {Array} result  				- Array of all errors from schema validator
- * @param  {Number} counter 			- Index of the current error
+ * @param  {Array}  result  - Array of all errors from schema validator
+ * @param  {Number} counter - Index of the current error
  */
 function getDependency(result, counter){
 
@@ -304,10 +308,10 @@ function getDependency(result, counter){
 
 /**
  * Handles errors where a field has a dependency which is not provided.
- * @param  {Object} output  			- Object used to keep track of any errors, will be outputted if any found
- * @param  {Array} output.errorArray  	- Array containing error objects which detail errors in schema
- * @param  {Array} result  				- Array of all errors from schema validator
- * @param  {Number} counter 			- Index of the current error
+ * @param  {Object} output            - Object used to keep track of any errors, will be outputted if any found
+ * @param  {Array}  output.errorArray - Array containing error objects which detail errors in schema
+ * @param  {Array}  result            - Array of all errors from schema validator
+ * @param  {Number} counter           - Index of the current error
  */
 function handleDependencyError(output, result, counter){
 
@@ -322,10 +326,10 @@ function handleDependencyError(output, result, counter){
 /**
  * Creates error object for errors resulting from an anyOf section of the validation schema
  *
- * @param {Object} errorTracking - Error object containing all error to report and the error message to deliver.
- * @param {Array} errorTracking.errorArray - Array contain all errors to report to user.
- * @param {Array} result - Array of errors found during validation.
- * @param {Number} counter - Position in result that the current error being handled is.
+ * @param {Object} errorTracking            - Error object containing all error to report and the error message to deliver.
+ * @param {Array}  errorTracking.errorArray - Array contain all errors to report to user.
+ * @param {Array}  result                   - Array of errors found during validation.
+ * @param {Number} counter                  - Position in result that the current error being handled is.
  */
 function handleAnyOfError(errorTracking, result, counter){
 
@@ -341,7 +345,7 @@ function handleAnyOfError(errorTracking, result, counter){
 
 /** Get the schema to be used for validating user input
  * @param  {Object} pathData - All data from swagger for the path that has been run
- * @return {Object} schemas - fullSchema is the full validation schemas for all permit types. schemaToUse is the validation schema for this route
+ * @return {Object} schemas  - fullSchema is the full validation schemas for all permit types. schemaToUse is the validation schema for this route
  */
 function getValidationSchema(pathData){
 	const fileToGet = `src/${pathData['x-validation'].split('#')[0]}`;
@@ -387,12 +391,12 @@ function processErrors(errors, processedErrors, schema){
 }
 
 /** Validates the fields in user input
- * @param  {Object} body - Input from user to be validated
- * @param  {Object} pathData - All data from swagger for the path that has been run
- * @param  {Object} derefSchema - schema to be used for validating input
- * @return {Array} - Array of ValidationErrors from validation
+ * @param  {Object} body             - Input from user to be validated
+ * @param  {Object} pathData         - All data from swagger for the path that has been run
+ * @param  {Object} validationSchema - schema to be used for validating input, same as validation.json without refs
+ * @return {Array}                   - Array of ValidationErrors from validation
  */
-function validateBody(body, pathData, derefSchema){
+function validateBody(body, pathData, validationSchema){
 	const processedFieldErrors = {
 		errorArray:[]
 	};
@@ -408,7 +412,7 @@ function validateBody(body, pathData, derefSchema){
 	const val = v.validate(body, schemaToUse);
 	const error = val.errors;
 	if (error.length > 0){
-		processErrors(error, processedFieldErrors, derefSchema);
+		processErrors(error, processedFieldErrors, validationSchema);
 	}
 	return processedFieldErrors;
 }
@@ -457,7 +461,8 @@ function makePathReadable(input){
 }
 
 /**
- * [buildFormatErrorMessage description]
+ * Creates error message for format errors
+ * 
  * @param  {String} fullPath - path to field where error is at
  * @return {String}          - error message to be given to user
  */
@@ -509,10 +514,10 @@ function concatErrors(errorMessages){
 
 /**
  * Creates error messages for all file errors
- * @param {Object} output 			- Error object containing all error to report and the error message to deliver.
+ * @param {Object} output           - Error object containing all error to report and the error message to deliver.
  * @param {Array} output.errorArray - Array contain all errors to report to user.
- * @param  {Object} error   		- error object to be processed
- * @param  {Array} messages 		- Array of all error messages to be returned
+ * @param {Object} error            - error object to be processed
+ * @param {Array} messages          - Array of all error messages to be returned
  */
 function generateFileErrors(output, error, messages){
 	const reqFile = `${makePathReadable(error.field)} is a required file.`;
@@ -550,11 +555,11 @@ function generateFileErrors(output, error, messages){
 
 /**
  * Creates error messages for all field errors
- * @param {Object} output 			- Error object containing all error to report and the error message to deliver.
- * @param {Array} output.errorArray - Array contain all errors to report to user.
- * @param  {Object} error   		- error object to be processed
- * @param  {Array} messages 		- Array of all error messages to be returned
- * @return {String}       			- All field error messages concated together
+ * @param  {Object}  output            - Error object containing all error to report and the error message to deliver.
+ * @param  {Array}   output.errorArray - Array contain all errors to report to user.
+ * @param  {Object} error              - error object to be processed
+ * @param  {Array}  messages           - Array of all error messages to be returned
+ * @return {String}                    - All field error messages concated together
  */
 function generateErrorMesage(output){
 
@@ -612,7 +617,7 @@ function generateErrorMesage(output){
 /**
  * Checks schema for any files that could be provided.
  * @param  {Object} schema  - Schema for an application
- * @param  {Array} toCheck  - List of files to check for, and if present, validate
+ * @param  {Array}  toCheck - List of files to check for, and if present, validate
  */
 function checkForFilesInSchema(schema, toCheck){
 	const keys = Object.keys(schema);
@@ -642,7 +647,7 @@ function checkForFilesInSchema(schema, toCheck){
 
 /**
  * Gets basic information about a given file and returns it
- * @param  {Array} file         - Information about file, include the contents of it in hex
+ * @param  {Array}  file        - Information about file, include the contents of it in hex
  * @param  {Object} constraints - Description of how to validate file
  * @return {Object}             - basic information about file
  */
@@ -669,7 +674,7 @@ function getFileInfo(file, constraints){
 
 /**
  * Driving function for validating file
- * @param  {Array} uploadFile             - Information about file, include the contents of it in hex
+ * @param  {Array}  uploadFile            - Information about file, include the contents of it in hex
  * @param  {Object} validationConstraints - Description of how to validate file
  * @param  {String} fileName              - Name of file being validated
  * @return {Array}                        - Array of all error objects for this file
@@ -708,12 +713,12 @@ function validateFile(uploadFile, validationConstraints, fileName){
 
 /**
  * Checks the length of all fields with a maxLength field in schema
- * @param  {Object} schema              			- Section of the validation schema being used
- * @param  {Object} input               			- User input being validated
- * @param  {Object} processedFieldErrors 			- Current object containing errors
- * @param  {Array} processedFieldErrors.errorArray 	- Array of all errors found so far
- * @param  {String} path                			- Path to field being checked
- * @return {Array}                      			- Array of error objects representing all errors found so far
+ * @param  {Object} schema                          - Section of the validation schema being used
+ * @param  {Object} input                           - User input being validated
+ * @param  {Object} processedFieldErrors            - Current object containing errors
+ * @param  {Array}  processedFieldErrors.errorArray - Array of all errors found so far
+ * @param  {String} path                            - Path to field being checked
+ * @return {Array}                                  - Array of error objects representing all errors found so far
  */
 function checkFieldLengths(schema, input, processedFieldErrors, path){
 	const keys = Object.keys(schema);
@@ -763,15 +768,15 @@ function checkFieldLengths(schema, input, processedFieldErrors, path){
 
 /**
  * Drives validation of fields
- * @param  {Object} body        - User input
- * @param  {Object} pathData    - information about path
- * @param  {Object} derefSchema - schema to be used for validating input
- * @return {Array}              - Array of error objects for every error with fields
+ * @param  {Object} body             - User input
+ * @param  {Object} pathData         - information about path
+ * @param  {Object} validationSchema - schema to be used for validating input, same as validation.json without refs
+ * @return {Array}                   - Array of error objects for every error with fields
  */
-function getFieldValidationErrors(body, pathData, derefSchema){
+function getFieldValidationErrors(body, pathData, validationSchema){
 
-	let processedFieldErrors = validateBody(body, pathData, derefSchema);
-	processedFieldErrors = checkFieldLengths(derefSchema, body, processedFieldErrors, '');
+	let processedFieldErrors = validateBody(body, pathData, validationSchema);
+	processedFieldErrors = checkFieldLengths(validationSchema, body, processedFieldErrors, '');
 
 	return processedFieldErrors;
 }
