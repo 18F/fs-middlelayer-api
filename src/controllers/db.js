@@ -213,6 +213,22 @@ function getDataToStoreInDB(schema, body){
 	return output;
 }
 
+/**
+ * Save user data to DB
+ * @param  {Object}   user       - user object containing fields to save in DB
+ * @param  {Function} callback      - Function to call after saving user to DB
+ */
+const saveUser = function(user, callback) {
+	models.users.create(user)
+	.then(function(usr) {
+		return callback(null, usr);
+	})
+	.catch(function(err) {
+		console.error(err);
+		return callback(err, null);
+	});
+};
+
 module.exports.getDataToStoreInDB = getDataToStoreInDB;
 module.exports.getFieldsToStore = getFieldsToStore;
 module.exports.saveFile = saveFile;
@@ -220,3 +236,4 @@ module.exports.getFile = getFile;
 module.exports.getFiles = getFiles;
 module.exports.getApplication = getApplication;
 module.exports.saveApplication = saveApplication;
+module.exports.saveUser = saveUser;
