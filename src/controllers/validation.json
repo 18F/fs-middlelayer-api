@@ -444,7 +444,7 @@
                 "basicField":"securityId",
                 "default":"",
                 "fromIntake":false,
-                "madeOf":["region","forest","district"],
+                "madeOf":["region","forest"],
                 "store":["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
                 "type" : "string"
             },
@@ -483,7 +483,8 @@
                 "basicField":"contact",
                 "default":"",
                 "fromIntake":false,
-                "store":["basic:/contact/phone", "basic:/contact/address", "basic:/contact/person"],
+                "store":["basic:/contact/phone", "basic:/contact/address"],
+                "type" : "string"
                 "type" : "string"
             }
         },
