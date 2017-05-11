@@ -8,7 +8,7 @@
 	"tags": [
 	],
 	"paths": {
-		"/contact/person/{lastname}/": {
+		"/contact/lastname/{lastname}": {
 			"get": {
 				"tags": [
 					"Contact Person"
@@ -48,7 +48,7 @@
 				}
 			}
 		},
-		"/contact/person/": {
+		"/contact/person": {
 			"post": {
 				"tags": [
 					"Contact Person"
@@ -76,7 +76,7 @@
 				}
 			}
 		},
-		"/contact/orgcode/{orgname}/": {
+		"/contact/orgcode/{orgname}": {
 			"get": {
 				"tags": [
 					"Contact Organization"
@@ -116,7 +116,7 @@
 				}
 			}
 		},
-		"/contact/orgcode/": {
+		"/contact/orgcode": {
 			"post": {
 				"tags": [
 					"Contact Organization"
@@ -147,7 +147,7 @@
 				}
 			}
 		},
-		"/contact-address/": {
+		"/contact-address": {
 			"post": {
 				"tags": [
 					"Contact Address"
@@ -178,7 +178,7 @@
 				}
 			}
 		},
-		"/contact-phone/": {
+		"/contact-phone": {
 			"post": {
 				"tags": [
 					"Contact Phone"
@@ -207,7 +207,7 @@
 				}
 			}
 		},
-		"/application/": {
+		"/application": {
 			"post": {
 				"tags": [
 					"Application"
