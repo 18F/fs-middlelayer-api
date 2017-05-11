@@ -154,7 +154,7 @@ function postRequest(res, postObject, fieldsObj, responseKey, requestKey, reques
 	const cn = res.contCn;
 	const addressField = fieldsObj[requestKey];
 	addressField.contact = cn;
-	const addressURL = `${SUDS_API_URL}${requestPath}/`;
+	const addressURL = `${SUDS_API_URL}${requestPath}`;
 	postObject[requestPath].request = addressField;
 	const createAddressOptions = {
 		method: 'POST',
@@ -176,13 +176,13 @@ function createContact(fieldsObj, person, postObject){
 		let contactField, createPersonOrOrgURL, responseKey;
 		if (person){
 			contactField = fieldsObj['/contact/person'];
-			createPersonOrOrgURL = `${SUDS_API_URL}/contact/person/`;
+			createPersonOrOrgURL = `${SUDS_API_URL}/contact/person`;
 			responseKey = '/contact/person';
 			postObject[responseKey].request = contactField;
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
-			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode/`;
+			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode`;
 			responseKey = '/contact/orgcode';
 			postObject[responseKey].request = contactField;
 		}
@@ -217,7 +217,7 @@ function createContact(fieldsObj, person, postObject){
  * @return {Promise}            - Promise to be fulfilled
  */
 function createApplication(fieldsObj, contCN, postObject){
-	const createApplicationURL = `${SUDS_API_URL}/application/`;
+	const createApplicationURL = `${SUDS_API_URL}/application`;
 	fieldsObj['/application'].contCn = contCN;
 	const applicationPost = fieldsObj['/application'];
 	postObject['/application'].request = applicationPost;
@@ -254,18 +254,18 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 			fieldsObj[key] = post[key];
 		});
 
-		const org = (body.applicantInfo.orgType && body.applicantInfo.orgType !== 'Individual');
+		const person = (!body.applicantInfo.orgType && body.applicantInfo.orgType === 'Individual');
 		let existingContactCheck;
-		if (org){
+		if (person){
+			const lastName = body.applicantInfo.lastName;
+			existingContactCheck = `${SUDS_API_URL}/contact/lastName/${lastName}`;
+		}
+		else {
 			let orgName = body.applicantInfo.organizationName;
 			if (!orgName){
 				orgName = 'abc';
 			}
-			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}/`;
-		}
-		else {
-			const lastName = body.applicantInfo.lastName;
-			existingContactCheck = `${SUDS_API_URL}/contact/person/${lastName}/`;
+			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}`;
 		}
 		
 		const getContactOptions = {
