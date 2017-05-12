@@ -31,6 +31,7 @@ const store = require('./store.js');
 const db = require('./db.js');
 const basic = require('./basic.js');
 const validation = require('./validation.js');
+const util = require('./utility.js');
 
 //*************************************************************
 
@@ -64,7 +65,7 @@ function apiSchemaData(apiSchema, reqPath){
 
 	if (apiSchema) {
 		for (const k in apiSchema.paths) {
-
+			
 			const ms = matchstick(k, 'template');
 			ms.match(reqPath);
 
@@ -79,18 +80,6 @@ function apiSchemaData(apiSchema, reqPath){
 		}
 	}
 
-}
-
-/** If body passed in as string, converts it to a JSON object
- * @param  {Object} req - request object
- * @return {Object} - request body as a JSON Object
- */
-function getBody(req){
-	let inputPost = req.body;
-	if (inputPost.body) {
-		inputPost = JSON.parse(inputPost.body);
-	}
-	return inputPost;
 }
 
 /** Saves all information for a file upload to the DB and uploads the file to S3.
@@ -116,12 +105,12 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
 				store.uploadFile(fileInfo, function(err, data){
 					if (err){
-						return error.sendError(req, res, 500, 'Cannot process request.');
+						return error.sendError(req, res, 500, 'unable to process request.');
 					}
 					else {
 						db.saveFile(application.id, fileInfo, function(err, fileInfo){
 							if (err){
-								return error.sendError(req, res, 500, 'Cannot process request.');
+								return error.sendError(req, res, 500, 'unable to process request.');
 							}
 							else {
 								return callback (null, fileInfo);
@@ -167,7 +156,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 	db.getFile(filePath, function (err, file){
 
 		if (err){
-			error.sendError(req, res, 500, 'cannot process the request');	
+			error.sendError(req, res, 500, 'unable to process request.');	
 		}
 		else {
 			if (file){
@@ -211,50 +200,85 @@ const getControlNumber = function(req, res, reqData){
 		'opp': 'operatingPlan'
 	};
 
-	let basicData = {};
-	getBasicRes(reqData.matches.controlNumber)
-	.then((appData)=>{
-		basicData = appData;
+	const reqPath = `/${req.params[0]}`;
 
-		let jsonData = {};
+	if (reqPath.indexOf('/files') !== -1) {
+		let controlNumber = reqData.matches.controlNumber;
+		controlNumber = controlNumber.substr(0, controlNumber.length - 6);
 
-		const controlNumber = reqData.matches.controlNumber;
+		db.getApplication(controlNumber, function(err, appl, fileData){
 
-		const jsonResponse = {};
-		jsonResponse.success = true;
-		jsonResponse.api = 'FS ePermit API';
-		jsonResponse.type = 'controller';
-		jsonResponse.verb = req.method;
-		jsonResponse.src = 'json';
-		jsonResponse.route = req.originalUrl;
+			if (err) {
+				return error.sendError(req, res, 500, 'unable to process request.');	
+			}
 
-		const cnData = basicData;  // TODO: remove - used for mocks
+			else if (fileData){
 
-		if (basicData){
-			db.getApplication(controlNumber, function(err, appl, fileData){
-				if (err){
-					return error.sendError(req, res, 404, 'file not found');
-				}
-				else {
-					if (fileData){
-						fileData.forEach(function(file){
-							const fileType = fileTypes[file.fileType];
-							appl[fileType] = file.fileName;
-						});
+				store.getFilesZip(controlNumber, fileData, res, function(err){
+
+					if (err){
+						error.sendError(req, res, 404, 'file not found');
+					}			
+
+				});	
+				
+			}
+			else {
+				error.sendError(req, res, 404, 'file not found');	
+			}
+	
+		});
+		
+	}
+	else {
+
+		let basicData = {};
+		getBasicRes(reqData.matches.controlNumber)
+		.then((appData)=>{
+			basicData = appData;
+
+			let jsonData = {};
+
+			const controlNumber = reqData.matches.controlNumber;
+
+			const jsonResponse = {};
+
+			const cnData = basicData;  // TODO: remove - used for mocks
+
+			if (basicData){
+
+				db.getApplication(controlNumber, function(err, appl, fileData){
+					if (err){
+						return error.sendError(req, res, 500, 'unable to process request.');
 					}
-					jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData['x-getTemplate']);
-					jsonData.controlNumber = controlNumber;// TODO: remove - used for mocks
-					const toReturn = Object.assign({}, {response:jsonResponse}, jsonData);
+					else {
+						
+						if (!appl){
+							return error.sendError(req, res, 404, 'file not found.');		
+						}
+						else if (fileData){
+							fileData.forEach(function(file){
+								const fileType = fileTypes[file.fileType];
+								appl[fileType] = file.fileName;
+							});
+						}
+						jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData['x-getTemplate']);
+						jsonData.controlNumber = controlNumber;// TODO: remove - used for mocks
 
-					res.json(toReturn);
-				}
-			});
-		}
-	})
-	.catch((err)=>{
-		console.error(err);
-		return error.sendError(req, res, 500, 'Unable to process request.');
-	});
+						jsonResponse.status = 'success';
+						const toReturn = Object.assign({}, jsonResponse, jsonData);
+
+						res.json(toReturn);
+					}
+				});
+			}
+		})
+		.catch((err)=>{
+			console.error(err);
+			return error.sendError(req, res, 500, 'unable to process request.');
+		});
+
+	}
 
 };
 
@@ -273,7 +297,7 @@ const postApplication = function(req, res, reqData){
 
 	const pathData = reqData.schema;
 
-	const body = getBody(req);
+	const body = util.getBody(req);
 	const derefFunc = deref();
 	const possbileFiles = [];
 
@@ -303,24 +327,19 @@ const postApplication = function(req, res, reqData){
 			toStoreInDB.controlNumber = controlNumber;
 			db.saveApplication(toStoreInDB, function(err, appl){
 				if (err){
-					return error.sendError(req, res, 500, err);
+					return error.sendError(req, res, 500, 'unable to process request.');
 				}
 				else {
 					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
 						if (err) {
-							return error.sendError(req, res, 500, err);
+							return error.sendError(req, res, 500, 'unable to process request.');
 						}
 						else {
 
 							const jsonResponse = {};
-							jsonResponse.success = true;
-							jsonResponse.api = 'FS ePermit API';
-							jsonResponse.type = 'controller';
-							jsonResponse.verb = req.method;
-							jsonResponse.src = 'json';
-							jsonResponse.route = req.originalUrl;
+							jsonResponse.status = 'success';
 							jsonResponse.controlNumber = controlNumber;
-							jsonResponse.basicPosts = postObject;
+							console.log(JSON.stringify(postObject, null, 4));
 							return res.json(jsonResponse);
 							
 						}
@@ -329,7 +348,7 @@ const postApplication = function(req, res, reqData){
 			});
 		})
 		.catch((err)=>{
-			return error.sendError(req, res, 500, err);
+			return error.sendError(req, res, 500, 'unable to process request.');
 		});
 	}
 };
@@ -339,7 +358,7 @@ const postApplication = function(req, res, reqData){
  * @param  {Object} req - User request object
  * @param  {Object} res - Response object
  */
-const use = function(req, res){
+const routeRequest = function(req, res){
 
 	const reqPath = `/${req.params[0]}`;
 	const reqMethod = req.method.toLowerCase();
@@ -405,5 +424,5 @@ const use = function(req, res){
 //*******************************************************************
 // exports
 
-module.exports.use = use;
+module.exports.routeRequest = routeRequest;
 

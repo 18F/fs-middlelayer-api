@@ -1,6 +1,6 @@
 {
   "name": "fs-middlelayer-api",
-  "version": "0.0.11",
+  "version": "0.0.13",
   "description": "US Forest Service ePermit Middlelayer API",
   "engines": {
     "node": "6.10.2",
@@ -10,6 +10,7 @@
   "scripts": {
     "start": "node src/index.js",
     "test": "mocha test --recursive",
+    "test:mock": "npm --mock=Y run test",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive",
     "lint": "npm-run-all -c -s lint:es lint:es:out lint:md",
     "lint:es": "eslint . -f stylish || exit 0",
@@ -52,6 +53,7 @@
     "istanbul": "^0.4.5",
     "markdownlint-cli": "^0.2.0",
     "mocha": "^3.2.0",
+    "mock-aws": "^1.2.3",
     "npm-run-all": "^4.0.2",
     "sequelize-cli": "^2.6.0",
     "supertest": "^3.0.0",
@@ -59,6 +61,7 @@
   },
   "dependencies": {
     "async": "^2.2.0",
+    "aws-s3-zipper": "^1.0.1",
     "aws-sdk": "^2.32.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.1",

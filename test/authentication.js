@@ -25,6 +25,9 @@ const expect = chai.expect;
 const factory = require('unionized');
 const loginFactory = factory.factory({'username': null, 'password': null});
 
+const noncommercialInput = include('test/data/testInputNoncommercial.json');
+const noncommercialFactory = factory.factory(noncommercialInput);
+
 //*******************************************************************
 
 describe('authentication validation', function() {
@@ -48,16 +51,17 @@ describe('authentication validation', function() {
 			.expect(200, done);
 	});
 
-	it('should return valid json with 403 when no token provided for a noncommercial GET request', function(done) {
+	it('should return valid json with 403 when no token provided for a noncommercial POST request', function(done) {
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/1234567890')
+			.post('/permits/applications/special-uses/noncommercial/')
+			.send(noncommercialFactory.create())
 			.expect('Content-Type', /json/)
 			.expect(403, done);
 	});
 
 	it('should return valid json with 401 when an invalid token provided for a noncommercial GET request', function(done) {
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/1234567890')
+			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', 'invalid-token')
 			.expect('Content-Type', /json/)
 			.expect(401, done);
@@ -78,8 +82,9 @@ describe('autherization with a token with admin role', function() {
 
 	it('should return valid json with 200 for a noncommercial GET request', function(done) {
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/123456789/')
+			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)
+			.send(noncommercialFactory.create())
 			.expect('Content-Type', /json/)
 			.expect(200, done);
 	});
