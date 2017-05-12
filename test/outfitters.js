@@ -338,7 +338,7 @@ describe('tempOutfitters GET: zip file validated', function(){
 		});
 	
 		it('should return valid zip when getting outfitters files using the controlNumber returned from POST', function(done) {
-
+                        this.timeout(5000);
 			request(server)
 			.get(`${testURL}${postControlNumber}/files/`)
 			.set('x-access-token', token)
