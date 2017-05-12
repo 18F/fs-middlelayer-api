@@ -10,7 +10,7 @@
                         "$ref": "tempOutfitterApplicantInfo"
                     },
                     "type": {
-                        "type": "string", 
+                        "type": "string",
                         "default": "tempOutfitters",
                         "enum":[
                             "noncommercial",
@@ -221,7 +221,7 @@
         "type": "object",
         "allOf":[
             {"$ref":"applicantInfoBase"},
-            { 
+            {
                 "properties": {
                     "organizationName": {
                         "basicField":"contName",
@@ -293,9 +293,15 @@
             },
             "formName":{
                 "basicField":"formName",
-                "default":"FS-2700-3b",
+                "default":"FS-2700-3B",
                 "store":["middleLayer:formName", "basic:/application"],
                 "type":"string"
+            },
+            "fullDescription":{
+              "basicField": "purpose",
+              "default": "No description supplied",
+              "fromIntake":false,
+              "madeOf":["activityDescription","locationDescription","startDateTime","endDateTime"]
             }
         },
         "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime", "numberParticipants"]
@@ -304,21 +310,21 @@
         "id": "/phoneNumber",
         "type": "object",
         "properties": {
-            "areaCode": { 
+            "areaCode": {
                 "basicField":"areaCode",
-                "default":0,
+                "default":"0",
                 "fromIntake":true,
                 "format": "areaCodeFormat",
                 "store":["basic:/contact/phone"],
-                "type": "integer"
+                "type": "string"
             },
             "number": {
                 "basicField":"phoneNumber",
-                "default":0,
+                "default":"0",
                 "fromIntake":true,
                 "format": "phoneNumberFormat",
                 "store":["basic:/contact/phone"],
-                "type": "integer"
+                "type": "string"
             },
             "extension": {
                 "basicField":"extension",
@@ -444,7 +450,7 @@
                 "basicField":"securityId",
                 "default":"",
                 "fromIntake":false,
-                "madeOf":["region","forest","district"],
+                "madeOf":["region","forest"],
                 "store":["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
                 "type" : "string"
             },
@@ -465,7 +471,7 @@
                 "type" : "string"
             },
             "ePermitID":{
-                "basicField":"ePermitID",
+                "basicField":"epermitId",
                 "default":"",
                 "fromIntake":false,
                 "madeOf":["region","forest","00000"],
@@ -479,12 +485,20 @@
                 "store":["basic:/application"],
                 "type" : "integer"
             },
-            "contCN":{
-                "basicField":"contact",
+            "contact":{
+                "basicField":"contCN",
                 "default":"",
                 "fromIntake":false,
-                "store":["basic:/contact/phone", "basic:/contact/address", "basic:/contact/person"],
+                "store":["basic:/contact/phone", "basic:/contact/address"],
                 "type" : "string"
+            },
+            "contID":{
+            	"basicField":"contId",
+            	"default":"",
+            	"fromIntake":false,
+            	"madeOf":[],
+            	"store":["basic:/contact/person", "basic:/contact/organization"],
+            	"type" : "string"
             }
         },
         "required": ["region", "forest", "district"]

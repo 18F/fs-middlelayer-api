@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -42,23 +42,33 @@ function getAutoPopulatedFields(basicFields){
  * @param  {Object} body - user input
  * @return {Array} - created values
  */
-function buildAutoPopulatedFields(toBuild, body){
-	const output = {};
-	toBuild.forEach((field)=>{
-		const key = Object.keys(field)[0];
-		let fieldValue = '';
-		field[key].madeOf.forEach((component)=>{
-			if (body[component]){
-				fieldValue = `${fieldValue}${body[component]}`;
-			}
-			else {
-				fieldValue = `${fieldValue}${component}`;
-			}
-		});
-		output[key] = fieldValue;
-	});
-	return output;
-}
+ function buildAutoPopulatedFields(toBuild, body){
+ 	const output = {};
+ 	toBuild.forEach((field)=>{
+ 		const key = Object.keys(field)[0];
+ 		let fieldValue = '';
+ 		if (key === 'contID'){
+ 			if (body.applicantInfo.orgType === 'Individual' || !body.applicantInfo.orgType){
+ 				fieldValue = `${body.applicantInfo.lastName.toUpperCase()},${body.applicantInfo.firstName.toUpperCase()}`;
+ 			}
+ 			else {
+ 				fieldValue = body.applicantInfo.organizationName.toUpperCase();
+ 			}
+ 		}
+ 		else {
+ 			field[key].madeOf.forEach((component)=>{
+ 				if (body[component]){
+ 					fieldValue = `${fieldValue}${body[component]}`;
+ 				}
+ 				else {
+ 					fieldValue = `${fieldValue}${component}`;
+ 				}
+ 			});
+ 		}
+ 		output[key] = fieldValue;
+ 	});
+ 	return output;
+ }
 /**
  * Gets the data from all fields that are to be send to the basic API, also builds post object, used to pass data to basic api
  * @param  {Array} fields - All fields in object form which will be sent to basicAPI
@@ -128,7 +138,7 @@ function getBasicFields(fields, body, autoPopValues){
 /** Takes fields to be stored, creates post objects and populated with user input
  * @param  {Object} sch - validation schema for this request
  * @param  {Object} body - user input
- * @return {Array} - All post objects 
+ * @return {Array} - All post objects
  */
 function prepareBasicPost(sch, body){
 	const otherFields = [];
@@ -176,11 +186,11 @@ function createContact(fieldsObj, person, postObject){
 		let contactField, createPersonOrOrgURL;
 		if (person){
 			contactField = fieldsObj['/contact/person'];
-			createPersonOrOrgURL = `${SUDS_API_URL}/contact/person/`;
+			createPersonOrOrgURL = `${SUDS_API_URL}/contact/person`;
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
-			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode/`;
+			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode`;
 		}
 		postObject['/contact/personOrOrgcode'].request = contactField;
 		const createContactOptions = {
@@ -214,7 +224,7 @@ function createContact(fieldsObj, person, postObject){
  * @return {Promise}            - Promise to be fulfilled
  */
 function createApplication(fieldsObj, contCN, postObject){
-	const createApplicationURL = `${SUDS_API_URL}/application/`;
+	const createApplicationURL = `${SUDS_API_URL}/application`;
 	fieldsObj['/application'].contCn = contCN;
 	const applicationPost = fieldsObj['/application'];
 	postObject['/application'].request = applicationPost;
@@ -230,7 +240,7 @@ function createApplication(fieldsObj, contCN, postObject){
 /** Sends requests needed to create an application via the Basic API
  * @param  {Object} req - Request Object
  * @param  {Object} res - Response Object
- * @param  {Object} sch - Schema object 
+ * @param  {Object} sch - Schema object
  * @param  {Object} body - User input
  */
 function postToBasic(req, res, sch, body){ //Should remove control number once we get from BASIC api
@@ -261,9 +271,9 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 		}
 		else {
 			const lastName = body.applicantInfo.lastName;
-			existingContactCheck = `${SUDS_API_URL}/contact/person/${lastName}/`;
+			existingContactCheck = `${SUDS_API_URL}/contact/lastname/${lastName}/`;
 		}
-		
+
 		const getContactOptions = {
 			method: 'GET',
 			uri: existingContactCheck,
