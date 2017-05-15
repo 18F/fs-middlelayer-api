@@ -337,7 +337,7 @@
                 "basicField":"areaCode",
                 "default":"",
                 "fromIntake":true,
-                "format": "areaCodeFormat",
+                "pattern":"^[0-9]{3}$",
                 "store":["basic:/contact/phone"],
                 "type": "string"
             },
@@ -345,7 +345,7 @@
                 "basicField":"phoneNumber",
                 "default":"",
                 "fromIntake":true,
-                "format": "phoneNumberFormat",
+                "pattern":"^[0-9]{7}$",
                 "store":["basic:/contact/phone"],
                 "type": "string"
             },

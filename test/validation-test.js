@@ -255,13 +255,13 @@ describe('noncommercial validation', function(){
 		});
 		it('should report issues when the wrong type of applicantInfo/day phone/area code is provided', function(){
 			expect (
-				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode' : '123'}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
+				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode' : 123}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
 			)
 			.to.be.equal(1);
 		});
 		it('should report issues when the wrong type of applicantInfo/day phone/number is provided', function(){
 			expect (
-				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.number' : '123'}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
+				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.number' : 123}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
 			)
 			.to.be.equal(1);
 		});
@@ -318,13 +318,13 @@ describe('noncommercial validation', function(){
 		
 		it('should report issues when the wrong format of applicantInfo/day phone/area code is provided', function(){
 			expect (
-				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode' : 12}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
+				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode' : '12'}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
 			)
 			.to.be.equal(1);
 		});
 		it('should report issues when the wrong format of applicantInfo/day phone/number is provided', function(){
 			expect (
-				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode' : 12}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
+				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode' : '12'}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
 			)
 			.to.be.equal(1);
 		});
