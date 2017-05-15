@@ -105,11 +105,13 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
 				store.uploadFile(fileInfo, function(err, data){
 					if (err){
+						console.error(err);
 						return error.sendError(req, res, 500, 'unable to process request.');
 					}
 					else {
 						db.saveFile(application.id, fileInfo, function(err, fileInfo){
 							if (err){
+								console.error(err);
 								return error.sendError(req, res, 500, 'unable to process request.');
 							}
 							else {
@@ -156,6 +158,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 	db.getFile(filePath, function (err, file){
 
 		if (err){
+			console.error(err);
 			error.sendError(req, res, 500, 'unable to process request.');	
 		}
 		else {
@@ -164,6 +167,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 				store.getFile(controlNumber, fileName, function(err, data){
 
 					if (err){
+						console.error(err);
 						error.sendError(req, res, 404, 'file not found');
 					}
 					else {
@@ -209,6 +213,7 @@ const getControlNumber = function(req, res, reqData){
 		db.getApplication(controlNumber, function(err, appl, fileData){
 
 			if (err) {
+				console.error(err);
 				return error.sendError(req, res, 500, 'unable to process request.');	
 			}
 
@@ -249,6 +254,7 @@ const getControlNumber = function(req, res, reqData){
 
 				db.getApplication(controlNumber, function(err, appl, fileData){
 					if (err){
+						console.error(err);
 						return error.sendError(req, res, 500, 'unable to process request.');
 					}
 					else {
@@ -327,11 +333,13 @@ const postApplication = function(req, res, reqData){
 			toStoreInDB.controlNumber = controlNumber;
 			db.saveApplication(toStoreInDB, function(err, appl){
 				if (err){
+					console.error(err);
 					return error.sendError(req, res, 500, 'unable to process request.');
 				}
 				else {
 					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
 						if (err) {
+							console.error(err);
 							return error.sendError(req, res, 500, 'unable to process request.');
 						}
 						else {
@@ -348,6 +356,7 @@ const postApplication = function(req, res, reqData){
 			});
 		})
 		.catch((err)=>{
+			console.error(err);
 			return error.sendError(req, res, 500, 'unable to process request.');
 		});
 	}
