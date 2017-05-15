@@ -66,10 +66,6 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	before(function(done) {
 
-		if (process.env.npm_config_mock === 'Y'){
-			AWS.restore('S3');
-		}
-
 		models.users.sync({ force: false });
 		const salt = bcrypt.genSaltSync(10);
 		const hash = bcrypt.hashSync(adminPassword, salt);
@@ -98,10 +94,6 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	after(function(done) {
 
-		if (process.env.npm_config_mock === 'Y'){
-			AWS.mock('S3', 'getObject', tempOutfitterObjects.mockS3Get);
-		}
-		
 		db.deleteUser(adminUsername, function(err){
 			if (err){
 				return false;
@@ -295,7 +287,62 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		});
 	});
 
-	describe('tempOutfitters GET/POST zip file validation: post a new application with files, get that application, get files zipped ', function(){
+});
+describe('tempOutfitters GET/POST zip file validation: ', function(){
+
+	let token;
+	let postControlNumber;
+
+	before(function(done) {
+
+		if (process.env.npm_config_mock === 'Y'){
+			AWS.restore('S3');
+		}
+
+		models.users.sync({ force: false });
+		const salt = bcrypt.genSaltSync(10);
+		const hash = bcrypt.hashSync(adminPassword, salt);
+
+		const adminUser = {
+			userName: adminUsername, 
+			passHash: hash, 
+			userRole: 'admin'
+		};
+
+		db.saveUser(adminUser, function(err, usr){
+			if (err){
+				return false;
+			}
+			else {
+				
+				util.getToken(adminUsername, adminPassword, function(t){
+					token = t;
+					return done();
+				});
+					
+			}
+		});
+	
+	});
+
+	after(function(done) {
+
+		if (process.env.npm_config_mock === 'Y'){
+			AWS.mock('S3', 'getObject', tempOutfitterObjects.mockS3Get);
+		}
+		
+		db.deleteUser(adminUsername, function(err){
+			if (err){
+				return false;
+			}
+			else {
+				return done();
+			}
+		});
+		
+	});
+
+	describe('post a new application with files, get that application, get files zipped', function(){ 
 
 		it('should return valid json when application submitted with three required files', function(done) {
 			
@@ -315,7 +362,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 				.expect(200, done);
 
 		});
-	
+
 		it('should return valid zip when getting outfitters files using the controlNumber returned from POST', function(done) {
 
 			this.timeout(5000);
@@ -336,6 +383,5 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 			});
 
 		});
-	});
-
+	});	
 });
