@@ -293,7 +293,7 @@
             },
             "formName":{
                 "basicField":"formName",
-                "default":"FS-2700-3b",
+                "default":"FS-2700-3B",
                 "store":["middleLayer:formName", "basic:/application"],
                 "type":"string"
             }
