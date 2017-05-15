@@ -20,14 +20,14 @@ const server = include('src/index.js');
 
 //*******************************************************************
 
-function getToken(callback){
+function getToken(username, password, callback){
 
 	let token; 
 
 	request(server)
 		.post('/auth')
 		.set('Accept', 'application/json')
-		.send({ 'username': process.env.ADMINROLE_USER, 'password': process.env.ADMINROLE_PWD })
+		.send({ 'username': username, 'password': password })
 		.expect('Content-Type', /json/)
 		.expect(200)
 		.end(function(err, res) {
