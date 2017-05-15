@@ -32,54 +32,6 @@ const fileMimes = [
 ];
 
 /**
- * Checks to see whether input is a number with num digits. Will return true if digit is not a number as another validation piece will catch and handle that error.
- * @param  {Number}  input - user input to be checked
- * @param  {Number}  num   - number of digits input should consist of
- * @return {boolean}       - true if input has only num digits, otherwise false
- */
-function digitCheck(input, num){
-
-	let valid = true;
-	
-	if (typeof input === 'number'){
-
-		const inputStr = input + '';
-
-		if (!inputStr.match(new RegExp(`^[0-9]{${num}}$`))){
-
-			valid = false;
-
-		}
-
-	}
-
-	return valid;
-
-}
-
-/**
- * Checks that areacode is a valid area code
- * @param  {Number}  input - user input to be validated
- * @return {boolean}       - whether or not input is a valid area code
- */
-function areaCodeFormat(input){
-
-	return digitCheck(input, 3);
-
-}
-
-/**
- * Checks that number is a valid phone number
- * @param  {Number}  input - user input to be validated
- * @return {boolean}       - whether or not input is a valid phone number
- */
-function phoneNumberFormat(input){
-
-	return digitCheck(input, 7);
-
-}
-
-/**
  * Removes 'instance' from prop field of validation errors. Used to make fields human readable
  * 
  * @param  {string} prop - Prop field from validation error
@@ -407,8 +359,6 @@ function validateBody(body, pathData, validationSchema){
 	for (key in applicationSchema){
 		v.addSchema(applicationSchema[key], key);
 	}
-	v.customFormats.areaCodeFormat = areaCodeFormat;
-	v.customFormats.phoneNumberFormat = phoneNumberFormat;
 	const val = v.validate(body, schemaToUse);
 	const error = val.errors;
 	if (error.length > 0){
@@ -781,9 +731,6 @@ function getFieldValidationErrors(body, pathData, validationSchema){
 	return processedFieldErrors;
 }
 
-module.exports.digitCheck = digitCheck;
-module.exports.areaCodeFormat = areaCodeFormat;
-module.exports.phoneNumberFormat = phoneNumberFormat;
 module.exports.removeInstance = removeInstance;
 module.exports.combinePropArgument = combinePropArgument;
 module.exports.makeErrorObj = makeErrorObj;
