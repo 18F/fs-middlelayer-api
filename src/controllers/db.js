@@ -229,6 +229,29 @@ const saveUser = function(user, callback) {
 	});
 };
 
+/**
+ * Delete user from DB
+ * @param  {String}   username       - username to be deleted from DB
+ * @param  {Function} callback      - Function to call after deleting user from DB
+ */
+const deleteUser = function(username, callback) {
+	models.users.destroy({
+		where: {
+			userName: username
+		}
+	}).then(function(rowDeleted){
+		if (rowDeleted === 1){
+			return callback(null);
+		}
+		else {
+			return callback('row could not be be deleted');	
+		}
+	}, function(err){
+		console.error(err); 
+		return callback(err);
+	});
+};
+
 module.exports.getDataToStoreInDB = getDataToStoreInDB;
 module.exports.getFieldsToStore = getFieldsToStore;
 module.exports.saveFile = saveFile;
@@ -237,3 +260,4 @@ module.exports.getFiles = getFiles;
 module.exports.getApplication = getApplication;
 module.exports.saveApplication = saveApplication;
 module.exports.saveUser = saveUser;
+module.exports.deleteUser = deleteUser;

@@ -29,6 +29,12 @@ const testURL = '/permits/applications/special-uses/commercial/temp-outfitters/'
 
 const chai = require('chai');
 const expect = chai.expect;
+const bcrypt = require('bcrypt-nodejs');
+const db = include('src/controllers/db.js');
+const models = include('src/models');
+
+const adminUsername = 'admin' + (Math.floor((Math.random() * 1000000) + 1)).toString();
+const adminPassword = 'pwd' + (Math.floor((Math.random() * 1000000) + 1)).toString();
 
 const specialUses = {};
 
@@ -56,16 +62,55 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 	
 	let token;
 	let postControlNumber;
+	let postFileName;
 
 	before(function(done) {
 
-		util.getToken(function(t){
+		if (process.env.npm_config_mock === 'Y'){
+			AWS.restore('S3');
+		}
 
-			token = t;
-			return done();
+		models.users.sync({ force: false });
+		const salt = bcrypt.genSaltSync(10);
+		const hash = bcrypt.hashSync(adminPassword, salt);
 
+		const adminUser = {
+			userName: adminUsername, 
+			passHash: hash, 
+			userRole: 'admin'
+		};
+
+		db.saveUser(adminUser, function(err, usr){
+			if (err){
+				return false;
+			}
+			else {
+				
+				util.getToken(adminUsername, adminPassword, function(t){
+					token = t;
+					return done();
+				});
+					
+			}
 		});
 	
+	});
+
+	after(function(done) {
+
+		if (process.env.npm_config_mock === 'Y'){
+			AWS.mock('S3', 'getObject', tempOutfitterObjects.mockS3Get);
+		}
+		
+		db.deleteUser(adminUsername, function(err){
+			if (err){
+				return false;
+			}
+			else {
+				return done();
+			}
+		});
+		
 	});
 
 	it('should return valid json for tempOutfitters POST (controlNumber to be used in GET)', function(done) {
@@ -97,24 +142,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	});
 
-});
-
-describe('tempOutfitters POST: file validated', function(){
-
-	let token;
-
-	before(function(done) {
-
-		util.getToken(function(t){
-
-			token = t;
-			return done();
-
-		});
-
-	});
-	
-	describe('tempOutfitters POST: required files checks', function(){
+	describe('tempOutfitters POST files:', function(){
 
 		it('should return errors for file that is too large', function(){
 			expect (
@@ -206,27 +234,8 @@ describe('tempOutfitters POST: file validated', function(){
 		});
 
 	});
-});
 
-describe('tempOutfitters GET: files validated', function(){
-
-	let token;
-
-	let postControlNumber;
-	let postFileName;
-
-	before(function(done) {
-
-		util.getToken(function(t){
-
-			token = t;
-			return done();
-
-		});
-
-	});
-	
-	describe('tempOutfitters GET/POST: post a new application with files, get that application, get file', function(){
+	describe('tempOutfitters GET/POST files: post a new application with files, get that application, get file', function(){
 
 		it('should return valid json when application submitted with three required files', function(done) {
 			
@@ -285,38 +294,8 @@ describe('tempOutfitters GET: files validated', function(){
 
 		});
 	});
-});
 
-describe('tempOutfitters GET: zip file validated', function(){
-
-	let token;
-
-	let postControlNumber;
-
-	before(function(done) {
-
-		if (process.env.npm_config_mock === 'Y'){
-			AWS.restore('S3');
-		}
-
-		util.getToken(function(t){
-
-			token = t;
-			return done();
-
-		});
-
-	});
-
-	after(function(done){
-		if (process.env.npm_config_mock === 'Y'){
-			AWS.mock('S3', 'getObject', tempOutfitterObjects.mockS3Get);
-		}
-
-		return done();
-	});
-	
-	describe('tempOutfitters GET/POST: post a new application with files, get that application, get files zipped ', function(){
+	describe('tempOutfitters GET/POST zip file validation: post a new application with files, get that application, get files zipped ', function(){
 
 		it('should return valid json when application submitted with three required files', function(done) {
 			
@@ -339,6 +318,8 @@ describe('tempOutfitters GET: zip file validated', function(){
 	
 		it('should return valid zip when getting outfitters files using the controlNumber returned from POST', function(done) {
 
+			this.timeout(5000);
+			
 			request(server)
 			.get(`${testURL}${postControlNumber}/files/`)
 			.set('x-access-token', token)
@@ -356,4 +337,5 @@ describe('tempOutfitters GET: zip file validated', function(){
 
 		});
 	});
+
 });
