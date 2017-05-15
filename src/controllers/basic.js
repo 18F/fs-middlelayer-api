@@ -75,9 +75,9 @@ function getAutoPopulatedFields(basicFields){
 
 /**
  * Given a path seperated by periods, return the field specified if it exists, else false.
- * @param  {String} path - String made of the path to the desired field, must be seperated by periods
- * @param  {Object} body - Object representing the user input
- * @return {[type]}      [description]
+ * @param  {String} path                  - String made of the path to the desired field, must be seperated by periods
+ * @param  {Object} body                  - Object representing the user input
+ * @return {Boolean|String|Number|Object} - Contents of the field specified or false
  */
 function getFieldFromBody(path, body){
 	const pathParts = path.split('.');
