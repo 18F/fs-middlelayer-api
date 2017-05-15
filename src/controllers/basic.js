@@ -22,8 +22,43 @@ const db = require('./db.js');
 const SUDS_API_URL = process.env.SUDS_API_URL;
 
 //*******************************************************************
+// AUTO-POPULATE FUNCTIONS
+/**
+ * Concats all indexs of input
+ * @param  {Array} input - Array of strings to be joined together
+ * @return {String}      - Single string made up of all indicies of input 
+ */
+function concat(input){
+	const output = input.join('');
+	return output;
+}
 
-/** Finds basic API fields are to be auto-populated
+/**
+ * Ensures all characters of input are upper case then joins them
+ * @param  {Array} input - Array of strings to be joined together
+ * @return {String}      - Single string made up of all indicies of input 
+ */
+function contId(input){
+	return concat(
+		input.map((i)=>{
+			return i.toUpperCase();
+		})
+	);
+}
+
+//*******************************************************************
+
+/**
+ * Returns wheather application is for an individual.
+ * @param  {Object}  body - User input
+ * @return {Boolean}      - Whether application is for an individual
+ */
+function isAppFromPerson(body){
+	const output = (!body.applicantInfo.orgType || body.applicantInfo.orgType === 'Individual');
+	return output;
+}
+
+/** Finds basic API fields which are to be auto-populated
  * @param  {Array} basicFields - Fields(Objects) which are stored in SUDS
  * @return {Array} - Fields(Objects) which are to be auto-populated
  */
@@ -37,25 +72,69 @@ function getAutoPopulatedFields(basicFields){
 	});
 	return autoPop;
 }
-/** Given list of fields which must be auto-populate, returns values to store
- * @param  {Array} - Array of objects representing Fields which need to be auto-populated
- * @param  {Object} body - user input
- * @return {Array} - created values
+
+/**
+ * Given a path seperated by periods, return the field specified if it exists, else false.
+ * @param  {String} path - String made of the path to the desired field, must be seperated by periods
+ * @param  {Object} body - Object representing the user input
+ * @return {[type]}      [description]
  */
-function buildAutoPopulatedFields(toBuild, body){
+function getFieldFromBody(path, body){
+	const pathParts = path.split('.');
+	pathParts.forEach((pathPart)=>{
+		body = body[pathPart];
+	});
+	if (body){
+		return body;
+	}
+	else {
+		return false;
+	}
+}
+/** Given list of fields which must be auto-populate, returns values to store
+ * @param  {Array} fieldsToBuild - Array of objects representing Fields which need to be auto-populated
+ * @param  {Object} body   - user input
+ * @return {Array}         - created values
+ */
+function buildAutoPopulatedFields(fieldsToBuild, body){
 	const output = {};
-	toBuild.forEach((field)=>{
+	fieldsToBuild.forEach((field)=>{
 		const key = Object.keys(field)[0];
-		let fieldValue = '';
-		field[key].madeOf.forEach((component)=>{
-			if (body[component]){
-				fieldValue = `${fieldValue}${body[component]}`;
+		const fieldMakeUp = [];
+		let autoPopulatedFieldValue = '';
+		field[key].madeOf.fields.forEach((madeOfField)=>{
+			if (madeOfField.fromBody){
+				const fieldValue = getFieldFromBody(madeOfField.field, body);
+				if (fieldValue){
+					fieldMakeUp.push(fieldValue);
+				}
+				else {
+					console.error(`${madeOfField.field} does not exist`);
+				}
 			}
 			else {
-				fieldValue = `${fieldValue}${component}`;
+				fieldMakeUp.push(madeOfField.value);
 			}
 		});
-		output[key] = fieldValue;
+		switch (field[key].madeOf.function){
+		case 'concat':
+			autoPopulatedFieldValue = concat(fieldMakeUp);
+			break;
+		case 'contId':
+			if (isAppFromPerson(body)){
+				if (fieldMakeUp.length > 3){
+					fieldMakeUp.pop();
+				}
+				autoPopulatedFieldValue = contId(fieldMakeUp);
+			}
+			else {
+				const toUse = [];
+				toUse.push(fieldMakeUp.pop());
+				autoPopulatedFieldValue = contId(toUse);
+			}
+			break;
+		}
+		output[key] = autoPopulatedFieldValue;
 	});
 	return output;
 }
@@ -254,11 +333,11 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 			fieldsObj[key] = post[key];
 		});
 
-		const person = (!body.applicantInfo.orgType && body.applicantInfo.orgType === 'Individual');
+		const person = isAppFromPerson(body);
 		let existingContactCheck;
 		if (person){
 			const lastName = body.applicantInfo.lastName;
-			existingContactCheck = `${SUDS_API_URL}/contact/lastName/${lastName}`;
+			existingContactCheck = `${SUDS_API_URL}/contact/lastname/${lastName}`;
 		}
 		else {
 			let orgName = body.applicantInfo.organizationName;
@@ -277,10 +356,10 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 		request(getContactOptions)
 		.then(function(res){
 			if (res.contCN){
-				Promise.resolve(res.contCN);
+				Promise.resolve(res.contCn);
 			}
 			else {
-				return createContact(fieldsObj, true, postObject);
+				return createContact(fieldsObj, person, postObject);
 			}
 		})
 		.then(function(contCN){
