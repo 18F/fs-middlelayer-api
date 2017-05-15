@@ -579,6 +579,33 @@
                 "fromIntake":false,
                 "store":["basic:/contact/phone", "basic:/contact/address"],
                 "type" : "string"
+            },
+            "contId":{
+                "basicField":"contId",
+                "default":"",
+                "fromIntake":false,
+                "madeOf":{
+                    "fields":[
+                        {
+                            "fromBody":true,
+                            "field":"applicantInfo.lastName"
+                        },
+                        {
+                            "fromBody":false,
+                            "value":","
+                        },
+                        {
+                            "fromBody":true,
+                            "field":"applicantInfo.firstName"
+                        },
+                        {
+                            "fromBody":true,
+                            "field":"applicantInfo.organizationName"
+                        }
+                    ],
+                    "function":"contId"
+                },
+                "store":["basic:/contact/person", "basic:/contact/organization"],
                 "type" : "string"
             }
         },
