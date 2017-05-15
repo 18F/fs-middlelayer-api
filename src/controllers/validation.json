@@ -478,7 +478,19 @@
                 "basicField":"securityId",
                 "default":"",
                 "fromIntake":false,
-                "madeOf":["region","forest"],
+                "madeOf":{
+                    "fields":[
+                        {
+                            "fromBody":true,
+                            "field":"region"
+                        },
+                        {
+                            "fromBody":true,
+                            "field":"forest"
+                        }
+                    ],
+                    "function":"concat"
+                },
                 "store":["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
                 "type" : "string"
             },
@@ -486,7 +498,23 @@
                 "basicField":"managingOrg",
                 "default":"",
                 "fromIntake":false,
-                "madeOf":["region","forest","district"],
+                "madeOf":{
+                    "fields":[
+                        {
+                            "fromBody":true,
+                            "field":"region"
+                        },
+                        {
+                            "fromBody":true,
+                            "field":"forest"
+                        },
+                        {
+                            "fromBody":true,
+                            "field":"district"
+                        }
+                    ],
+                    "function":"concat"
+                },
                 "store":["basic:/application"],
                 "type" : "string"
             },
@@ -494,7 +522,23 @@
                 "basicField":"adminOrg",
                 "default":"",
                 "fromIntake":false,
-                "madeOf":["region","forest","district"],
+                "madeOf":{
+                    "fields":[
+                        {
+                            "fromBody":true,
+                            "field":"region"
+                        },
+                        {
+                            "fromBody":true,
+                            "field":"forest"
+                        },
+                        {
+                            "fromBody":true,
+                            "field":"district"
+                        }
+                    ],
+                    "function":"concat"
+                },
                 "store":["basic:/application"],
                 "type" : "string"
             },
@@ -502,7 +546,23 @@
                 "basicField":"epermitId",
                 "default":"",
                 "fromIntake":false,
-                "madeOf":["region","forest","00000"],
+                "madeOf":{
+                    "fields":[
+                        {
+                            "fromBody":true,
+                            "field":"region"
+                        },
+                        {
+                            "fromBody":true,
+                            "field":"forest"
+                        },
+                        {
+                            "fromBody":false,
+                            "value":"00000"
+                        }
+                    ],
+                    "function":"concat"
+                },
                 "store":["basic:/application"],
                 "type" : "string"
             },
