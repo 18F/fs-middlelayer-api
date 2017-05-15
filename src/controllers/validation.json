@@ -294,6 +294,7 @@
             "formName":{
                 "basicField":"formName",
                 "default":"FS-2700-3B",
+                "fromIntake":false,
                 "store":["middleLayer:formName", "basic:/application"],
                 "type":"string"
             },
@@ -334,19 +335,19 @@
         "properties": {
             "areaCode": { 
                 "basicField":"areaCode",
-                "default":0,
+                "default":"",
                 "fromIntake":true,
                 "format": "areaCodeFormat",
                 "store":["basic:/contact/phone"],
-                "type": "integer"
+                "type": "string"
             },
             "number": {
                 "basicField":"phoneNumber",
-                "default":0,
+                "default":"",
                 "fromIntake":true,
                 "format": "phoneNumberFormat",
                 "store":["basic:/contact/phone"],
-                "type": "integer"
+                "type": "string"
             },
             "extension": {
                 "basicField":"extension",

@@ -8,8 +8,8 @@
         "firstName": "John",
         "lastName": "Doe",
         "dayPhone": {
-            "areaCode": 202,
-            "number": 5551234,
+            "areaCode": "202",
+            "number": "5551234",
             "extension": "0",
             "phoneType": "BUSINESS"
         },
