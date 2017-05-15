@@ -296,6 +296,34 @@
                 "default":"FS-2700-3B",
                 "store":["middleLayer:formName", "basic:/application"],
                 "type":"string"
+            },
+            "purpose":{
+                "basicField":"purpose",
+                "default":"",
+                "fromIntake":false,
+                "madeOf":{
+                    "fields":[
+                        {
+                            "fromBody":true,
+                            "field":"noncommercialFields.activityDescription"
+                        },
+                        {
+                            "fromBody":true,
+                            "field":"noncommercialFields.locationDescription"
+                        },
+                        {
+                            "fromBody":true,
+                            "field":"noncommercialFields.startDateTime"
+                        },
+                        {
+                            "fromBody":true,
+                            "field":"noncommercialFields.endDateTime"
+                        }
+                    ],
+                    "function":"concat"
+                },
+                "store":["basic:/application"],
+                "type":"string"  
             }
         },
         "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime", "numberParticipants"]
@@ -411,6 +439,11 @@
                 "fromIntake":true,
                 "store":["middleLayer:website"],
                 "type": "string"
+            },
+            "countryName":{
+                "default":"United States of America",
+                "store":["basic:/contact/address"],
+                "type": "string"
             }
         },
         "required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState"]
@@ -464,8 +497,8 @@
                 "store":["basic:/application"],
                 "type" : "string"
             },
-            "ePermitID":{
-                "basicField":"ePermitID",
+            "epermitId":{
+                "basicField":"epermitId",
                 "default":"",
                 "fromIntake":false,
                 "madeOf":["region","forest","00000"],
