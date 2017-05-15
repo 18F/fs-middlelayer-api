@@ -683,7 +683,7 @@ function checkFieldLengths(schema, input, processedFieldErrors, path){
 		case 'properties':
 			checkFieldLengths(schema.properties, input, processedFieldErrors, path);
 			break;
-		default:
+		default:{
 			let field;
 			if (path === ''){
 				field = `${key}`;
@@ -712,7 +712,47 @@ function checkFieldLengths(schema, input, processedFieldErrors, path){
 			}
 			break;
 		}
+		}
 	});
+	return processedFieldErrors;
+}
+
+function checkForIndividualIsCitizen(input, processedFieldErrors){
+	if (input.tempOutfitterFields){
+		if (!input.applicantInfo.orgType || input.applicantInfo.orgType === 'Individual'){
+			if ((typeof input.tempOutfitterFields.individualIsCitizen) !== 'boolean'){
+				processedFieldErrors.errorArray.push(makeErrorObj('tempOutfitterFields.individualIsCitizen', 'missing'));
+			}
+		}
+	}
+	return processedFieldErrors;
+}
+
+function checkForSmallBusiness(input, processedFieldErrors){
+	if (input.tempOutfitterFields){
+		if (input.applicantInfo.orgType && input.applicantInfo.orgType !== 'Individual'){
+			if ((typeof input.tempOutfitterFields.smallBusiness) !== 'boolean'){
+				processedFieldErrors.errorArray.push(makeErrorObj('tempOutfitterFields.smallBusiness', 'missing'));
+			}
+		}
+	}
+	return processedFieldErrors;
+}
+
+function checkForOrgName(input, processedFieldErrors){
+	if (input.applicantInfo.orgType && input.applicantInfo.orgType !== 'Individual'){
+		if (!input.applicantInfo.organizationName || input.applicantInfo.organizationName.length <= 0){
+			processedFieldErrors.errorArray.push(makeErrorObj('applicantInfo.organizationName', 'missing'));
+		}
+	}
+	return processedFieldErrors;
+}
+
+function additionalValidation(schema, input, processedFieldErrors){
+	processedFieldErrors = checkFieldLengths(schema, input, processedFieldErrors, '');
+	processedFieldErrors = checkForOrgName(input, processedFieldErrors);
+	processedFieldErrors = checkForIndividualIsCitizen(input, processedFieldErrors);
+	processedFieldErrors = checkForSmallBusiness(input, processedFieldErrors);
 	return processedFieldErrors;
 }
 
@@ -726,7 +766,7 @@ function checkFieldLengths(schema, input, processedFieldErrors, path){
 function getFieldValidationErrors(body, pathData, validationSchema){
 
 	let processedFieldErrors = validateBody(body, pathData, validationSchema);
-	processedFieldErrors = checkFieldLengths(validationSchema, body, processedFieldErrors, '');
+	processedFieldErrors = additionalValidation(validationSchema, body, processedFieldErrors, '');
 
 	return processedFieldErrors;
 }
