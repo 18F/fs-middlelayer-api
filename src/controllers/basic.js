@@ -176,11 +176,11 @@ function createContact(fieldsObj, person, postObject){
 		let contactField, createPersonOrOrgURL;
 		if (person){
 			contactField = fieldsObj['/contact/person'];
-			createPersonOrOrgURL = `${SUDS_API_URL}/contact/person/`;
+			createPersonOrOrgURL = `${SUDS_API_URL}/contact/person`;
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
-			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode/`;
+			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode`;
 		}
 		postObject['/contact/personOrOrgcode'].request = contactField;
 		const createContactOptions = {
@@ -257,11 +257,11 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 			if (!orgName){
 				orgName = 'abc';
 			}
-			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}/`;
+			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}`;
 		}
 		else {
 			const lastName = body.applicantInfo.lastName;
-			existingContactCheck = `${SUDS_API_URL}/contact/person/${lastName}/`;
+			existingContactCheck = `${SUDS_API_URL}/contact/lastname/${lastName}`;
 		}
 		
 		const getContactOptions = {
