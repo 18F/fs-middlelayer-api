@@ -49,7 +49,7 @@ function contId(input){
 //*******************************************************************
 
 /**
- * Returns wheather application is for an individual.
+ * Returns whether application is for an individual.
  * @param  {Object}  body - User input
  * @return {Boolean}      - Whether application is for an individual
  */
@@ -103,7 +103,7 @@ function buildAutoPopulatedFields(fieldsToBuild, body){
 		const fieldMakeUp = [];
 		let autoPopulatedFieldValue = '';
 		field[key].madeOf.fields.forEach((madeOfField)=>{
-			if (madeOfField.fromBody){
+			if (madeOfField.fromIntake){
 				const fieldValue = getFieldFromBody(madeOfField.field, body);
 				if (fieldValue){
 					fieldMakeUp.push(fieldValue);

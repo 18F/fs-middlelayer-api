@@ -305,19 +305,19 @@
                 "madeOf":{
                     "fields":[
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"noncommercialFields.activityDescription"
                         },
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"noncommercialFields.locationDescription"
                         },
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"noncommercialFields.startDateTime"
                         },
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"noncommercialFields.endDateTime"
                         }
                     ],
@@ -481,11 +481,11 @@
                 "madeOf":{
                     "fields":[
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"region"
                         },
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"forest"
                         }
                     ],
@@ -501,15 +501,15 @@
                 "madeOf":{
                     "fields":[
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"region"
                         },
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"forest"
                         },
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"district"
                         }
                     ],
@@ -525,15 +525,15 @@
                 "madeOf":{
                     "fields":[
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"region"
                         },
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"forest"
                         },
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"district"
                         }
                     ],
@@ -549,15 +549,15 @@
                 "madeOf":{
                     "fields":[
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"region"
                         },
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"forest"
                         },
                         {
-                            "fromBody":false,
+                            "fromIntake":false,
                             "value":"00000"
                         }
                     ],
@@ -587,19 +587,19 @@
                 "madeOf":{
                     "fields":[
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"applicantInfo.lastName"
                         },
                         {
-                            "fromBody":false,
+                            "fromIntake":false,
                             "value":","
                         },
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"applicantInfo.firstName"
                         },
                         {
-                            "fromBody":true,
+                            "fromIntake":true,
                             "field":"applicantInfo.organizationName"
                         }
                     ],
