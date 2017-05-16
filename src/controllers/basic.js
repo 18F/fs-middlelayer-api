@@ -283,7 +283,12 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 			return createApplication(fieldsObj, contCN, postObject);
 		})
 		.then(function(response){
-			postObject['/application'].response = response;
+			const applResponse  = response;
+			if (SUDS_API_URL.endsWith('/mocks')){
+				const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString();
+				applResponse.accinstCn = controlNumber;
+			}
+			postObject['/application'].response = applResponse;
 			fulfill(postObject);
 		})
 		.catch(function(err){
