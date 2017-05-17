@@ -230,7 +230,13 @@ function prepareBasicPost(sch, body){
  */
 function postRequest(res, postObject, fieldsObj, responseKey, requestKey, requestPath){
 	postObject[responseKey].response = res;
-	const cn = res.contCn;
+	let cn = '';
+	if (requestPath === '/contact-address'){
+		cn = res.contCn;
+	}
+	else {
+		cn = res.contact;
+	}
 	const addressField = fieldsObj[requestKey];
 	addressField.contact = cn;
 	const addressURL = `${SUDS_API_URL}${requestPath}`;
