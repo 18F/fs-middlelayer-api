@@ -221,7 +221,7 @@
         "type": "object",
         "allOf":[
             {"$ref":"applicantInfoBase"},
-            { 
+            {
                 "properties": {
                     "organizationName": {
                         "basicField":"contName",
@@ -335,7 +335,7 @@
         "properties": {
             "areaCode": { 
                 "basicField":"areaCode",
-                "default":"",
+                "default":"0",
                 "fromIntake":true,
                 "pattern":"^[0-9]{3}$",
                 "store":["basic:/contact/phone"],
@@ -343,7 +343,7 @@
             },
             "number": {
                 "basicField":"phoneNumber",
-                "default":"",
+                "default":"0",
                 "fromIntake":true,
                 "pattern":"^[0-9]{7}$",
                 "store":["basic:/contact/phone"],
@@ -442,6 +442,7 @@
                 "type": "string"
             },
             "countryName":{
+                "basicField":"countryName",
                 "default":"United States of America",
                 "store":["basic:/contact/address"],
                 "type": "string"
@@ -573,8 +574,8 @@
                 "store":["basic:/application"],
                 "type" : "integer"
             },
-            "contCN":{
-                "basicField":"contact",
+            "contact":{
+                "basicField":"contCN",
                 "default":"",
                 "fromIntake":false,
                 "store":["basic:/contact/phone", "basic:/contact/address"],
