@@ -32,6 +32,7 @@ const db = require('./db.js');
 const basic = require('./basic.js');
 const validation = require('./validation.js');
 const util = require('./utility.js');
+const DuplicateContactsError = require('./duplicateContactsError.js');
 
 //*************************************************************
 
@@ -329,7 +330,7 @@ const postApplication = function(req, res, reqData){
 		basic.postToBasic(req, res, sch, body)
 		.then((postObject)=>{
 			const toStoreInDB = db.getDataToStoreInDB(sch, body);
-			const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString(); //TODO: remove - used for mocks
+			const controlNumber = postObject.POST['/application'].response.accinstCn;
 			toStoreInDB.controlNumber = controlNumber;
 			db.saveApplication(toStoreInDB, function(err, appl){
 				if (err){
@@ -356,8 +357,19 @@ const postApplication = function(req, res, reqData){
 			});
 		})
 		.catch((err)=>{
+
 			console.error(err);
-			return error.sendError(req, res, 500, 'unable to process request.');
+			if (err instanceof DuplicateContactsError){
+				if (err.duplicateContacts){
+					return error.sendError(req, res, 400, err.duplicateContacts.length + ' duplicate contacts found.', err.duplicateContacts);		
+				}
+				else {
+					return error.sendError(req, res, 400, 'duplicate contacts found.');	
+				}
+			}
+			else {
+				return error.sendError(req, res, 500, 'unable to process request.');	
+			}
 		});
 	}
 };

@@ -575,7 +575,7 @@
                 "type" : "integer"
             },
             "contact":{
-                "basicField":"contCN",
+                "basicField":"contact",
                 "default":"",
                 "fromIntake":false,
                 "store":["basic:/contact/phone", "basic:/contact/address"],
