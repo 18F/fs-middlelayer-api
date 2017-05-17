@@ -256,10 +256,10 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 		let contId;
 		if (org){
 			let orgName = body.applicantInfo.organizationName;
-			contId = orgName.toUpperCase();
 			if (!orgName){
-				orgName = 'abc';
+				orgName = '';
 			}
+			contId = orgName.toUpperCase();
 			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}`;
 		}
 		else {
