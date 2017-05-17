@@ -221,15 +221,15 @@ function prepareBasicPost(sch, body){
 /**
  * Creates request for Basic API calls to create contact
  * @param  {Object} res         - Response of previous request
- * @param  {Object} postObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @param  {Object} httpCallsObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @param  {Object} fieldsObj   - Object containing post objects to be sent to basic api
- * @param  {String} responseKey - Key in postObject for the response object of the previous request
- * @param  {String} requestKey  - Key in postObject for the request object of this request
+ * @param  {String} responseKey - Key in httpCallsObject for the response object of the previous request
+ * @param  {String} requestKey  - Key in httpCallsObject for the request object of this request
  * @param  {String} requestPath - Path from basic API route this response needs to be sent to
  * @return {Promise}            - Promise to be fulfilled
  */
-function postRequest(res, postObject, fieldsObj, responseKey, requestKey, requestPath){
-	postObject[responseKey].response = res;
+function postRequest(res, httpCallsObject, fieldsObj, responseKey, requestKey, requestPath){
+	httpCallsObject.POST[responseKey].response = res;
 	let cn = '';
 	if (requestPath === '/contact-address'){
 		cn = res.contCn;
@@ -240,7 +240,7 @@ function postRequest(res, postObject, fieldsObj, responseKey, requestKey, reques
 	const addressField = fieldsObj[requestKey];
 	addressField.contact = cn;
 	const addressURL = `${SUDS_API_URL}${requestPath}`;
-	postObject[requestPath].request = addressField;
+	httpCallsObject.POST[requestPath].request = addressField;
 	const createAddressOptions = {
 		method: 'POST',
 		uri: addressURL,
@@ -253,23 +253,23 @@ function postRequest(res, postObject, fieldsObj, responseKey, requestKey, reques
  * Calls basic API to create a contact in SUDS
  * @param  {Object} fieldsObj  - Object containing post objects to be sent to basic api
  * @param  {boolean} person    - Boolean indicating whether the contract being created is for a person or not
- * @param  {Object} postObject - Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @param  {Object} httpCallsObject - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @return {Promise}		   - Promise to be fulfilled
  */
-function createContact(fieldsObj, person, postObject){
+function createContact(fieldsObj, person, httpCallsObject){
 	return new Promise(function(fulfill, reject){
 		let contactField, createPersonOrOrgURL, responseKey;
 		if (person){
 			contactField = fieldsObj['/contact/person'];
 			createPersonOrOrgURL = `${SUDS_API_URL}/contact/person`;
 			responseKey = '/contact/person';
-			postObject[responseKey].request = contactField;
+			httpCallsObject.POST[responseKey].request = contactField;
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
 			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode`;
 			responseKey = '/contact/orgcode';
-			postObject[responseKey].request = contactField;
+			httpCallsObject.POST[responseKey].request = contactField;
 		}
 		const createContactOptions = {
 			method: 'POST',
@@ -279,13 +279,13 @@ function createContact(fieldsObj, person, postObject){
 		};
 		request(createContactOptions)
 		.then(function(res){
-			return postRequest(res, postObject, fieldsObj, responseKey, '/contact/address', '/contact-address');
+			return postRequest(res, httpCallsObject, fieldsObj, responseKey, '/contact/address', '/contact-address');
 		})
 		.then(function(res){
-			return postRequest(res, postObject, fieldsObj, '/contact-address', '/contact/phone', '/contact-phone');
+			return postRequest(res, httpCallsObject, fieldsObj, '/contact-address', '/contact/phone', '/contact-phone');
 		})
 		.then(function(res){
-			postObject['/contact-phone'].response = res;
+			httpCallsObject.POST['/contact-phone'].response = res;
 			fulfill(res.contact);
 		})
 		.catch(function(err){
@@ -298,14 +298,14 @@ function createContact(fieldsObj, person, postObject){
  * Calls basic API to create an application in SUDS
  * @param  {Object} fieldsObj   - Object containing post objects to be sent to basic api
  * @param  {Number} contCN      - Contact control number of contact associated with this application
- * @param  {Object} postObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @param  {Object} httpCallsObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @return {Promise}            - Promise to be fulfilled
  */
-function createApplication(fieldsObj, contCN, postObject){
+function createApplication(fieldsObj, contCN, httpCallsObject){
 	const createApplicationURL = `${SUDS_API_URL}/application`;
 	fieldsObj['/application'].contCn = contCN;
 	const applicationPost = fieldsObj['/application'];
-	postObject['/application'].request = applicationPost;
+	httpCallsObject.POST['/application'].request = applicationPost;
 	const createApplicationOptions = {
 		method: 'POST',
 		uri: createApplicationURL,
@@ -325,12 +325,18 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 
 	return new Promise(function (fulfill, reject){
 
-		const postObject = {
-			'/contact/person':{},
-			'/contact/orgcode':{},
-			'/contact-address':{},
-			'/contact-phone':{},
-			'/application':{}
+		const httpCallsObject = {
+			'GET':{
+				'/contact/lastname/{lastName}':{},
+				'/contact/orgcode/{orgCode}':{}
+			},
+			'POST':{
+				'/contact/person':{},
+				'/contact/orgcode':{},
+				'/contact-address':{},
+				'/contact-phone':{},
+				'/application':{}
+			}
 		};
 		const fieldsToPost = prepareBasicPost(sch, body);
 		const fieldsObj = {};
@@ -351,6 +357,7 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 				orgName = 'abc';
 			}
 			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}`;
+			httpCallsObject.GET['/contact/orgcode/{orgCode}'].request = {'orgCode':orgName};
 		}
 
 		const getContactOptions = {
@@ -361,21 +368,27 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 		};
 		request(getContactOptions)
 		.then(function(res){
-			return new Promise(function(resolve){
-				if (res.contCn){
+			if (person){
+				httpCallsObject.GET['/contact/lastname/{lastName}'].response = res;
+			}
+			else {
+				httpCallsObject.GET['/contact/orgcode/{orgCode}'].response = res;
+			}
+			if (res.contCn){
+				return new Promise(function(resolve){
 					resolve(res.contCn);
-				}
-				else {
-					return createContact(fieldsObj, person, postObject);
-				}
-			});
+				});
+			}
+			else {
+				return createContact(fieldsObj, person, httpCallsObject);
+			}
 		})
 		.then(function(contCn){
-			return createApplication(fieldsObj, contCn, postObject);
+			return createApplication(fieldsObj, contCn, httpCallsObject);
 		})
 		.then(function(response){
-			postObject['/application'].response = response;
-			fulfill(postObject);
+			httpCallsObject.POST['/application'].response = response;
+			fulfill(httpCallsObject);
 		})
 		.catch(function(err){
 			reject(err);
