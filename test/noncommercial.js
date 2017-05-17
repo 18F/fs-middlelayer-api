@@ -103,7 +103,7 @@ describe('Integration tests - noncommercial', function(){
 
 	});
 
-	it('should return valid json for noncommercial POST request (uses existing contact using Basic API)', function(done) {
+	it('should return valid json for noncommercial POST request (contact search - uses existing contact)', function(done) {
 		let noncommercialInput = noncommercialFactory.create();
 		noncommercialInput.applicantInfo.firstName = 'Fname';
 		noncommercialInput.applicantInfo.lastName = 'Lname';
@@ -113,6 +113,19 @@ describe('Integration tests - noncommercial', function(){
 			.send(noncommercialInput)
 			.expect('Content-Type', /json/)
 			.expect(200, done);
+
+	});
+
+	it('should return valid json with 400 status for noncommercial POST request (contact search - duplicate contacts error)', function(done) {
+		let noncommercialInput = noncommercialFactory.create();
+		noncommercialInput.applicantInfo.organizationName = 'Temp Organization';
+		noncommercialInput.applicantInfo.orgType = 'Corporation';
+		request(server)
+			.post(testURL)
+			.set('x-access-token', token)
+			.send(noncommercialInput)
+			.expect('Content-Type', /json/)
+			.expect(400, done);
 
 	});
 
