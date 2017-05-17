@@ -361,15 +361,17 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 		};
 		request(getContactOptions)
 		.then(function(res){
-			if (res.contCn){
-				Promise.resolve(res.contCn);
-			}
-			else {
-				return createContact(fieldsObj, person, postObject);
-			}
+			return new Promise(function(resolve){
+				if (res.contCn){
+					resolve(res.contCn);
+				}
+				else {
+					return createContact(fieldsObj, person, postObject);
+				}
+			});
 		})
-		.then(function(contCN){
-			return createApplication(fieldsObj, contCN, postObject);
+		.then(function(contCn){
+			return createApplication(fieldsObj, contCn, postObject);
 		})
 		.then(function(response){
 			postObject['/application'].response = response;
