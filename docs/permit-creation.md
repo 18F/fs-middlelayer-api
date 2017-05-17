@@ -42,9 +42,7 @@ These steps define the process for creating a new permit type using Example Perm
 
             "/permits/applications/special-uses/commercial/example-permit/": {
                 "post": {
-                    "x-validation":{
-                        "$ref":"validation.json#examplePermit"
-                    },
+                    "x-validation":"validation.json#examplePermit",
                     "parameters": [          
                         {
                             "in": "formData",
@@ -96,7 +94,23 @@ These steps define the process for creating a new permit type using Example Perm
                     "basicField":"securityId",
                     "default":"",
                     "fromIntake":false,
-                    "madeOf":["region","forest","district"],
+                    "madeOf":{
+                        "fields":[
+                            {
+                                "fromIntake":true,
+                                "field":"region"
+                            },
+                            {
+                                "fromIntake":true,
+                                "field":"forest"
+                            },
+                            {
+                                "fromIntake":false,
+                                "value":"123"
+                            }
+                        ],
+                        "function":"concat"
+                    },
                     "store":["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
                     "type" : "string"
                 },
@@ -118,6 +132,14 @@ These steps define the process for creating a new permit type using Example Perm
           - `fromIntake` indicates whether the field will be directly populated with user input. If set to `false`, the API will populate this field using the strings and fields provided under `madeOf`.
 
           - `store` describes where this field should be stored, either in the middlelayer DB or in the basic API. It can list multiple places to store this field
+
+          - `madeOf` describes how to auto-populate the field, if fromIntake is false. 
+            - `fields` lists the fields, and values which are to be used when auto-populating the field.
+                - `fromIntake` indicates whether this piece of the field is from the intake module or not
+                    - If `fromIntake` is true, `field` is expected in the same object, specifying the field where this part of the field should come from.
+                    - If `fromIntake` is false, `value` is expected in the same object, specifying what value is to be used in this part of the field.
+                -`function` describes the function that should be used on an array of all indicies of `fields`, current options are `concat` and `contId`. 
+                    - To add an option for this field, create a function in basic.js which takes an array as input and outputs a string. Then update the `buildAutoPopulatedFields` function in basic.js by adding a case to the switch/case statement for the name of the newly created function and then a call to that function inside the case statement.
 
           Files:
           - `maxSize` is measured in megabytes

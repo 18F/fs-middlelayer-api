@@ -184,7 +184,7 @@
 				}
 			}
 		},
-		"/contact-address/": {
+		"/contact-address": {
 			"post": {
 				"tags": [
 					"Contact Address"
@@ -215,7 +215,7 @@
 				}
 			}
 		},
-		"/contact-phone/": {
+		"/contact-phone": {
 			"post": {
 				"tags": [
 					"Contact Phone"
@@ -244,7 +244,7 @@
 				}
 			}
 		},
-		"/application/": {
+		"/application": {
 			"post": {
 				"tags": [
 					"Application"

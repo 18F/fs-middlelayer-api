@@ -23,8 +23,54 @@ const DuplicateContactsError = require('./duplicateContactsError.js');
 const SUDS_API_URL = process.env.SUDS_API_URL;
 
 //*******************************************************************
+// AUTO-POPULATE FUNCTIONS
+/**
+ * Concats all indexs of input
+ * @param  {Array} input - Array of strings to be joined together
+ * @return {String}      - Single string made up of all indicies of input 
+ */
+function concat(input){
+	const output = input.join('');
+	return output;
+}
 
-/** Finds basic API fields are to be auto-populated
+/**
+ * Ensures all characters of input are upper case then joins them
+ * @param  {Array} input - Array of strings to be joined together
+ * @return {String}      - Single string made up of all indicies of input 
+ */
+function contId(input){
+	return concat(
+		input.map((i)=>{
+			return i.toUpperCase();
+		})
+	);
+}
+
+/**
+ * Adds UNIX timestamp and then joins all elements of input
+ * @param  {Array} input - Array of strings to be joined together
+ * @return {String}      - Single string made up of all indicies of input 
+ */
+function ePermitId(input){
+	const timeStamp = + new Date();
+	input.push(timeStamp);
+	return concat(input);
+}
+
+//*******************************************************************
+
+/**
+ * Returns whether application is for an individual.
+ * @param  {Object}  body - User input
+ * @return {Boolean}      - Whether application is for an individual
+ */
+function isAppFromPerson(body){
+	const output = (!body.applicantInfo.orgType || body.applicantInfo.orgType === 'Individual');
+	return output;
+}
+
+/** Finds basic API fields which are to be auto-populated
  * @param  {Array} basicFields - Fields(Objects) which are stored in SUDS
  * @return {Array} - Fields(Objects) which are to be auto-populated
  */
@@ -38,25 +84,72 @@ function getAutoPopulatedFields(basicFields){
 	});
 	return autoPop;
 }
-/** Given list of fields which must be auto-populate, returns values to store
- * @param  {Array} - Array of objects representing Fields which need to be auto-populated
- * @param  {Object} body - user input
- * @return {Array} - created values
+
+/**
+ * Given a path seperated by periods, return the field specified if it exists, else false.
+ * @param  {String} path                  - String made of the path to the desired field, must be seperated by periods
+ * @param  {Object} body                  - Object representing the user input
+ * @return {Boolean|String|Number|Object} - Contents of the field specified or false
  */
-function buildAutoPopulatedFields(toBuild, body){
+function getFieldFromBody(path, body){
+	const pathParts = path.split('.');
+	pathParts.forEach((pathPart)=>{
+		body = body[pathPart];
+	});
+	if (body){
+		return body;
+	}
+	else {
+		return false;
+	}
+}
+/** Given list of fields which must be auto-populate, returns values to store
+ * @param  {Array} fieldsToBuild - Array of objects representing Fields which need to be auto-populated
+ * @param  {Object} body   - user input
+ * @return {Array}         - created values
+ */
+function buildAutoPopulatedFields(fieldsToBuild, body){
 	const output = {};
-	toBuild.forEach((field)=>{
+	fieldsToBuild.forEach((field)=>{
 		const key = Object.keys(field)[0];
-		let fieldValue = '';
-		field[key].madeOf.forEach((component)=>{
-			if (body[component]){
-				fieldValue = `${fieldValue}${body[component]}`;
+		const fieldMakeUp = [];
+		let autoPopulatedFieldValue = '';
+		field[key].madeOf.fields.forEach((madeOfField)=>{
+			if (madeOfField.fromIntake){
+				const fieldValue = getFieldFromBody(madeOfField.field, body);
+				if (fieldValue){
+					fieldMakeUp.push(fieldValue);
+				}
+				else {
+					console.error(`${madeOfField.field} does not exist`);
+				}
 			}
 			else {
-				fieldValue = `${fieldValue}${component}`;
+				fieldMakeUp.push(madeOfField.value);
 			}
 		});
-		output[key] = fieldValue;
+		switch (field[key].madeOf.function){
+		case 'concat':
+			autoPopulatedFieldValue = concat(fieldMakeUp);
+			break;
+		case 'contId':
+			if (isAppFromPerson(body)){
+				if (fieldMakeUp.length > 3){
+					fieldMakeUp.pop();
+				}
+				autoPopulatedFieldValue = contId(fieldMakeUp);
+			}
+			else {
+				const toUse = [];
+				toUse.push(fieldMakeUp.pop());
+				autoPopulatedFieldValue = contId(toUse);
+			}
+			break;
+		case 'ePermitId':
+			autoPopulatedFieldValue = ePermitId(fieldMakeUp);
+			break;
+		}
+		output[key] = autoPopulatedFieldValue;
 	});
 	return output;
 }
@@ -143,20 +236,26 @@ function prepareBasicPost(sch, body){
 /**
  * Creates request for Basic API calls to create contact
  * @param  {Object} res         - Response of previous request
- * @param  {Object} postObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @param  {Object} apiCallsObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @param  {Object} fieldsObj   - Object containing post objects to be sent to basic api
- * @param  {String} responseKey - Key in postObject for the response object of the previous request
- * @param  {String} requestKey  - Key in postObject for the request object of this request
+ * @param  {String} responseKey - Key in apiCallsObject for the response object of the previous request
+ * @param  {String} requestKey  - Key in apiCallsObject for the request object of this request
  * @param  {String} requestPath - Path from basic API route this response needs to be sent to
  * @return {Promise}            - Promise to be fulfilled
  */
-function postRequest(res, postObject, fieldsObj, responseKey, requestKey, requestPath){
-	postObject[responseKey].response = res;
-	const cn = res.contCn;
+function postRequest(res, apiCallsObject, fieldsObj, responseKey, requestKey, requestPath){
+	apiCallsObject.POST[responseKey].response = res;
+	let cn = '';
+	if (requestPath === '/contact-address'){
+		cn = res.contCn;
+	}
+	else {
+		cn = res.contact;
+	}
 	const addressField = fieldsObj[requestKey];
 	addressField.contact = cn;
-	const addressURL = `${SUDS_API_URL}${requestPath}/`;
-	postObject[requestPath].request = addressField;
+	const addressURL = `${SUDS_API_URL}${requestPath}`;
+	apiCallsObject.POST[requestPath].request = addressField;
 	const createAddressOptions = {
 		method: 'POST',
 		uri: addressURL,
@@ -169,21 +268,24 @@ function postRequest(res, postObject, fieldsObj, responseKey, requestKey, reques
  * Calls basic API to create a contact in SUDS
  * @param  {Object} fieldsObj  - Object containing post objects to be sent to basic api
  * @param  {boolean} person    - Boolean indicating whether the contract being created is for a person or not
- * @param  {Object} postObject - Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @param  {Object} apiCallsObject - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @return {Promise}		   - Promise to be fulfilled
  */
-function createContact(fieldsObj, person, postObject){
+function createContact(fieldsObj, person, apiCallsObject){
 	return new Promise(function(fulfill, reject){
-		let contactField, createPersonOrOrgURL;
+		let contactField, createPersonOrOrgURL, responseKey;
 		if (person){
 			contactField = fieldsObj['/contact/person'];
 			createPersonOrOrgURL = `${SUDS_API_URL}/contact/person`;
+			responseKey = '/contact/person';
+			apiCallsObject.POST[responseKey].request = contactField;
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
 			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode`;
+			responseKey = '/contact/orgcode';
+			apiCallsObject.POST[responseKey].request = contactField;
 		}
-		postObject['/contact/personOrOrgcode'].request = contactField;
 		const createContactOptions = {
 			method: 'POST',
 			uri: createPersonOrOrgURL,
@@ -192,13 +294,13 @@ function createContact(fieldsObj, person, postObject){
 		};
 		request(createContactOptions)
 		.then(function(res){
-			return postRequest(res, postObject, fieldsObj, '/contact/personOrOrgcode', '/contact/address', '/contact-address');
+			return postRequest(res, apiCallsObject, fieldsObj, responseKey, '/contact/address', '/contact-address');
 		})
 		.then(function(res){
-			return postRequest(res, postObject, fieldsObj, '/contact-address', '/contact/phone', '/contact-phone');
+			return postRequest(res, apiCallsObject, fieldsObj, '/contact-address', '/contact/phone', '/contact-phone');
 		})
 		.then(function(res){
-			postObject['/contact-phone'].response = res;
+			apiCallsObject.POST['/contact-phone'].response = res;
 			fulfill(res.contact);
 		})
 		.catch(function(err){
@@ -211,14 +313,14 @@ function createContact(fieldsObj, person, postObject){
  * Calls basic API to create an application in SUDS
  * @param  {Object} fieldsObj   - Object containing post objects to be sent to basic api
  * @param  {Number} contCN      - Contact control number of contact associated with this application
- * @param  {Object} postObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @param  {Object} apiCallsObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @return {Promise}            - Promise to be fulfilled
  */
-function createApplication(fieldsObj, contCN, postObject){
-	const createApplicationURL = `${SUDS_API_URL}/application/`;
+function createApplication(fieldsObj, contCN, apiCallsObject){
+	const createApplicationURL = `${SUDS_API_URL}/application`;
 	fieldsObj['/application'].contCn = contCN;
 	const applicationPost = fieldsObj['/application'];
-	postObject['/application'].request = applicationPost;
+	apiCallsObject.POST['/application'].request = applicationPost;
 	const createApplicationOptions = {
 		method: 'POST',
 		uri: createApplicationURL,
@@ -228,21 +330,37 @@ function createApplication(fieldsObj, contCN, postObject){
 	return request(createApplicationOptions);
 }
 
+function getContId(fieldsObj, person){
+	if (person){
+		return fieldsObj['/contact/person'].contId;
+	}
+	else {
+		return fieldsObj['/contact/organization'].contId;
+	}
+}
+
 /** Sends requests needed to create an application via the Basic API
  * @param  {Object} req - Request Object
  * @param  {Object} res - Response Object
- * @param  {Object} sch - Schema object 
+ * @param  {Object} sch - Schema object
  * @param  {Object} body - User input
  */
 function postToBasic(req, res, sch, body){ //Should remove control number once we get from BASIC api
 
 	return new Promise(function (fulfill, reject){
 
-		const postObject = {
-			'/contact/personOrOrgcode':{},
-			'/contact-address':{},
-			'/contact-phone':{},
-			'/application':{}
+		const apiCallsObject = {
+			'GET':{
+				'/contact/lastname/{lastName}':{},
+				'/contact/orgcode/{orgCode}':{}
+			},
+			'POST':{
+				'/contact/person':{},
+				'/contact/orgcode':{},
+				'/contact-address':{},
+				'/contact-phone':{},
+				'/application':{}
+			}
 		};
 		const fieldsToPost = prepareBasicPost(sch, body);
 		const fieldsObj = {};
@@ -251,21 +369,17 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 			fieldsObj[key] = post[key];
 		});
 
-		const org = (body.applicantInfo.orgType && body.applicantInfo.orgType !== 'Individual');
+		const person = isAppFromPerson(body);
 		let existingContactCheck;
-		let contId;
-		if (org){
-			let orgName = body.applicantInfo.organizationName;
-			if (!orgName){
-				orgName = '';
-			}
-			contId = orgName.toUpperCase();
-			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}`;
-		}
-		else {
-			contId = body.applicantInfo.lastName.toUpperCase() + ', ' + body.applicantInfo.firstName.toUpperCase();
+		if (person){
 			const lastName = body.applicantInfo.lastName;
 			existingContactCheck = `${SUDS_API_URL}/contact/lastname/${lastName}`;
+			apiCallsObject.GET['/contact/lastname/{lastName}'].request = {'lastName':lastName};
+		}
+		else {
+			const orgName = body.applicantInfo.organizationName;
+			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}`;
+			apiCallsObject.GET['/contact/orgcode/{orgCode}'].request = {'orgCode':orgName};
 		}
 		const getContactOptions = {
 			method: 'GET',
@@ -275,12 +389,21 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 		};
 		request(getContactOptions)
 		.then(function(res){
+			if (person){
+				apiCallsObject.GET['/contact/lastname/{lastName}'].response = res;
+			}
+			else {
+				apiCallsObject.GET['/contact/orgcode/{orgCode}'].response = res;
+			}
+			const contId = getContId(fieldsObj, person);
 			if (res.length === 1  && res[0].contCn){
 				if (contId === res[0].contId){
-					return Promise.resolve(res[0].conCn);	
+					return new Promise(function(resolve){
+						resolve(res[0].contCn);	
+					});
 				}
 				else {
-					return createContact(fieldsObj, true, postObject);
+					return createContact(fieldsObj, person, apiCallsObject);
 				}
 			}
 			else if (res.length > 1){
@@ -297,21 +420,23 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 				});
 
 				if (duplicateContacts.length === 0){
-					return createContact(fieldsObj, true, postObject);
+					return createContact(fieldsObj, true, apiCallsObject);
 				}
 				else if (duplicateContacts.length === 1){
-					return tmpContCn;
+					return new Promise(function(resolve){
+						resolve(tmpContCn);	
+					});
 				}
 				else {
 					throw new DuplicateContactsError(duplicateContacts);
 				}
 			}
 			else {
-				return createContact(fieldsObj, true, postObject);
+				return createContact(fieldsObj, person, apiCallsObject);
 			}
 		})
-		.then(function(contCN){
-			return createApplication(fieldsObj, contCN, postObject);
+		.then(function(contCn){
+			return createApplication(fieldsObj, contCn, apiCallsObject);
 		})
 		.then(function(response){
 			const applResponse  = response;
@@ -319,8 +444,8 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 				const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString();
 				applResponse.accinstCn = controlNumber;
 			}
-			postObject['/application'].response = applResponse;
-			fulfill(postObject);
+			apiCallsObject.POST['/application'].response = applResponse;
+			fulfill(apiCallsObject);
 		})
 		.catch(function(err){
 			reject(err);
