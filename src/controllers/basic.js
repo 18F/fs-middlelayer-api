@@ -19,6 +19,7 @@ const request = require('request-promise');
 // other files
 
 const db = require('./db.js');
+const DuplicateContactsError = require('./duplicateContactsError.js');
 const SUDS_API_URL = process.env.SUDS_API_URL;
 
 //*******************************************************************
@@ -252,18 +253,20 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 
 		const org = (body.applicantInfo.orgType && body.applicantInfo.orgType !== 'Individual');
 		let existingContactCheck;
+		let contId;
 		if (org){
 			let orgName = body.applicantInfo.organizationName;
+			contId = orgName.toUpperCase();
 			if (!orgName){
 				orgName = 'abc';
 			}
 			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}`;
 		}
 		else {
+			contId = body.applicantInfo.lastName.toUpperCase() + ', ' + body.applicantInfo.firstName.toUpperCase();
 			const lastName = body.applicantInfo.lastName;
 			existingContactCheck = `${SUDS_API_URL}/contact/lastname/${lastName}`;
 		}
-		
 		const getContactOptions = {
 			method: 'GET',
 			uri: existingContactCheck,
@@ -272,8 +275,31 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 		};
 		request(getContactOptions)
 		.then(function(res){
-			if (res.contCN){
-				Promise.resolve(res.contCN);
+			if (res.length === 1  && res[0].contCn){
+				return Promise.resolve(res[0].conCn);
+			}
+			else if (res.length > 1){
+
+				const matchingContacts = res;
+				const duplicateContacts = [];
+				let tmpContCn;
+
+				matchingContacts.forEach((contact)=>{
+					if (contId === contact.contId){
+						duplicateContacts.push(contact);
+						tmpContCn = contact.contCn;
+					}					
+				});
+
+				if (duplicateContacts.length === 0){
+					return createContact(fieldsObj, true, postObject);
+				}
+				else if (duplicateContacts.length === 1){
+					return tmpContCn;
+				}
+				else {
+					throw new DuplicateContactsError(duplicateContacts);
+				}
 			}
 			else {
 				return createContact(fieldsObj, true, postObject);

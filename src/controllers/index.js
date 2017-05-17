@@ -32,6 +32,7 @@ const db = require('./db.js');
 const basic = require('./basic.js');
 const validation = require('./validation.js');
 const util = require('./utility.js');
+const DuplicateContactsError = require('./duplicateContactsError.js');
 
 //*************************************************************
 
@@ -348,8 +349,19 @@ const postApplication = function(req, res, reqData){
 			});
 		})
 		.catch((err)=>{
+
 			console.error('basic.postToBasic err = ' + err);
-			return error.sendError(req, res, 500, 'unable to process request.');
+			if (err instanceof DuplicateContactsError){
+				if (err.duplicateContacts){
+					return error.sendError(req, res, 400, err.duplicateContacts.length + ' duplicate contacts found.', err.duplicateContacts);		
+				}
+				else {
+					return error.sendError(req, res, 400, 'duplicate contacts found.');	
+				}
+			}
+			else {
+				return error.sendError(req, res, 500, 'unable to process request.');	
+			}
 		});
 	}
 };
