@@ -353,10 +353,7 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 			httpCallsObject.GET['/contact/lastname/{lastName}'].request = {'lastName':lastName};
 		}
 		else {
-			let orgName = body.applicantInfo.organizationName;
-			if (!orgName){
-				orgName = 'abc';
-			}
+			const orgName = body.applicantInfo.organizationName;
 			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}`;
 			httpCallsObject.GET['/contact/orgcode/{orgCode}'].request = {'orgCode':orgName};
 		}
