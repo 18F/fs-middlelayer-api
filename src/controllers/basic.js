@@ -318,7 +318,7 @@ function createApplication(fieldsObj, contCN, postObject){
 /** Sends requests needed to create an application via the Basic API
  * @param  {Object} req - Request Object
  * @param  {Object} res - Response Object
- * @param  {Object} sch - Schema object 
+ * @param  {Object} sch - Schema object
  * @param  {Object} body - User input
  */
 function postToBasic(req, res, sch, body){ //Should remove control number once we get from BASIC api
@@ -352,7 +352,7 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 			}
 			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}`;
 		}
-		
+
 		const getContactOptions = {
 			method: 'GET',
 			uri: existingContactCheck,
