@@ -18,6 +18,7 @@
         "mailingCity": "Washington",
         "mailingState": "DC",
         "mailingZIP": "12345",
+        "organizationName": "temp org",
         "orgType": "Limited Liability Company"
     },
     "type": "tempOutfitters",

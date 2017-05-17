@@ -19,6 +19,7 @@ const request = require('request-promise');
 // other files
 
 const db = require('./db.js');
+const DuplicateContactsError = require('./duplicateContactsError.js');
 const SUDS_API_URL = process.env.SUDS_API_URL;
 
 //*******************************************************************
@@ -176,11 +177,11 @@ function createContact(fieldsObj, person, postObject){
 		let contactField, createPersonOrOrgURL;
 		if (person){
 			contactField = fieldsObj['/contact/person'];
-			createPersonOrOrgURL = `${SUDS_API_URL}/contact/person/`;
+			createPersonOrOrgURL = `${SUDS_API_URL}/contact/person`;
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
-			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode/`;
+			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode`;
 		}
 		postObject['/contact/personOrOrgcode'].request = contactField;
 		const createContactOptions = {
@@ -252,18 +253,20 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 
 		const org = (body.applicantInfo.orgType && body.applicantInfo.orgType !== 'Individual');
 		let existingContactCheck;
+		let contId;
 		if (org){
 			let orgName = body.applicantInfo.organizationName;
 			if (!orgName){
-				orgName = 'abc';
+				orgName = '';
 			}
-			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}/`;
+			contId = orgName.toUpperCase();
+			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}`;
 		}
 		else {
+			contId = body.applicantInfo.lastName.toUpperCase() + ', ' + body.applicantInfo.firstName.toUpperCase();
 			const lastName = body.applicantInfo.lastName;
-			existingContactCheck = `${SUDS_API_URL}/contact/person/${lastName}/`;
+			existingContactCheck = `${SUDS_API_URL}/contact/lastname/${lastName}`;
 		}
-		
 		const getContactOptions = {
 			method: 'GET',
 			uri: existingContactCheck,
@@ -272,8 +275,36 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 		};
 		request(getContactOptions)
 		.then(function(res){
-			if (res.contCN){
-				Promise.resolve(res.contCN);
+			if (res.length === 1  && res[0].contCn){
+				if (contId === res[0].contId){
+					return Promise.resolve(res[0].conCn);	
+				}
+				else {
+					return createContact(fieldsObj, true, postObject);
+				}
+			}
+			else if (res.length > 1){
+
+				const matchingContacts = res;
+				const duplicateContacts = [];
+				let tmpContCn;
+
+				matchingContacts.forEach((contact)=>{
+					if (contId === contact.contId){
+						duplicateContacts.push(contact);
+						tmpContCn = contact.contCn;
+					}					
+				});
+
+				if (duplicateContacts.length === 0){
+					return createContact(fieldsObj, true, postObject);
+				}
+				else if (duplicateContacts.length === 1){
+					return tmpContCn;
+				}
+				else {
+					throw new DuplicateContactsError(duplicateContacts);
+				}
 			}
 			else {
 				return createContact(fieldsObj, true, postObject);
@@ -283,7 +314,12 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 			return createApplication(fieldsObj, contCN, postObject);
 		})
 		.then(function(response){
-			postObject['/application'].response = response;
+			const applResponse  = response;
+			if (SUDS_API_URL.endsWith('/mocks')){
+				const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString();
+				applResponse.accinstCn = controlNumber;
+			}
+			postObject['/application'].response = applResponse;
 			fulfill(postObject);
 		})
 		.catch(function(err){

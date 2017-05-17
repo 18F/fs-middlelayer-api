@@ -103,6 +103,19 @@ describe('Integration tests - noncommercial', function(){
 
 	});
 
+	it('should return valid json for noncommercial POST request (uses existing contact using Basic API)', function(done) {
+		let noncommercialInput = noncommercialFactory.create();
+		noncommercialInput.applicantInfo.firstName = 'Fname';
+		noncommercialInput.applicantInfo.lastName = 'Lname';
+		request(server)
+			.post(testURL)
+			.set('x-access-token', token)
+			.send(noncommercialInput)
+			.expect('Content-Type', /json/)
+			.expect(200, done);
+
+	});
+
 	it('should return valid json for noncommercial POST request (controlNumber to be used in GET)', function(done) {
 
 		request(server)
