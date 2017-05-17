@@ -562,7 +562,7 @@
                             "value":"00000"
                         }
                     ],
-                    "function":"concat"
+                    "function":"ePermitId"
                 },
                 "store":["basic:/application"],
                 "type" : "string"

@@ -47,6 +47,17 @@ function contId(input){
 	);
 }
 
+/**
+ * Adds UNIX timestamp and then joins all elements of input
+ * @param  {Array} input - Array of strings to be joined together
+ * @return {String}      - Single string made up of all indicies of input 
+ */
+function ePermitId(input){
+	const timeStamp = + new Date();
+	input.push(timeStamp);
+	return concat(input);
+}
+
 //*******************************************************************
 
 /**
@@ -133,6 +144,9 @@ function buildAutoPopulatedFields(fieldsToBuild, body){
 				toUse.push(fieldMakeUp.pop());
 				autoPopulatedFieldValue = contId(toUse);
 			}
+			break;
+		case 'ePermitId':
+			autoPopulatedFieldValue = ePermitId(fieldMakeUp);
 			break;
 		}
 		output[key] = autoPopulatedFieldValue;
