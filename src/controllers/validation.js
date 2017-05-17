@@ -799,3 +799,6 @@ module.exports.checkForFilesInSchema = checkForFilesInSchema;
 module.exports.getFileInfo = getFileInfo;
 module.exports.validateFile = validateFile;
 module.exports.getFieldValidationErrors = getFieldValidationErrors;
+module.exports.checkForSmallBusiness = checkForSmallBusiness;
+module.exports.checkForIndividualIsCitizen = checkForIndividualIsCitizen;
+module.exports.checkForOrgName = checkForOrgName;
