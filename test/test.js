@@ -21,12 +21,18 @@ const util = require('./utility.js');
 
 const chai = require('chai');
 const expect = chai.expect;
+const factory = require('unionized');
+
+const testURL = '/permits/applications/special-uses/noncommercial/';
+const noncommercialInput = include('test/data/testInputNoncommercial.json');
+const noncommercialFactory = factory.factory(noncommercialInput);
 
 //*******************************************************************
 
 describe('FS ePermit API', function() {
 
 	let token;
+	let postControlNumber;
 
 	before(function(done) {
 
@@ -57,11 +63,25 @@ describe('FS ePermit API', function() {
 			.expect(404, done);
 	
 	});
+
+	it('should return valid json for noncommercial POST (controlNumber to be used in GET)', function(done) {
+
+		request(server)
+			.post('/permits/applications/special-uses/noncommercial/')
+			.set('x-access-token', token)
+			.send(noncommercialFactory.create())
+			.expect('Content-Type', /json/)
+			.expect(function(res){
+				postControlNumber = res.body.controlNumber;
+			})
+			.expect(200, done);
+
+	});
 	
 	it('should not have x-powered-by header', function(done) {
 
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/987654321/')
+			.get(`${testURL}${postControlNumber}/`)
 			.set('x-access-token', token)
 			.expect(function(res) {
 
@@ -75,7 +95,7 @@ describe('FS ePermit API', function() {
 	it('should have cors support', function(done) {
 
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/987654321/')
+			.get(`${testURL}${postControlNumber}/`)
 			.set('x-access-token', token)
 			.expect(function(res) {
 
@@ -89,7 +109,7 @@ describe('FS ePermit API', function() {
 	it('should have cache-control set', function(done) {
 
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/987654321/')
+			.get(`${testURL}${postControlNumber}/`)
 			.set('x-access-token', token)
 			.expect(function(res) {
 
@@ -103,7 +123,7 @@ describe('FS ePermit API', function() {
 	it('should have pragma set', function(done) {
 
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/987654321/')
+			.get(`${testURL}${postControlNumber}/`)
 			.set('x-access-token', token)
 			.expect(function(res) {
 
@@ -117,7 +137,7 @@ describe('FS ePermit API', function() {
 	it('should have x-xss-protection set', function(done) {
 
 		request(server)
-			.get('/permits/applications/special-uses/noncommercial/987654321/')
+			.get(`${testURL}${postControlNumber}/`)
 			.set('x-access-token', token)
 			.expect(function(res) {
 				
