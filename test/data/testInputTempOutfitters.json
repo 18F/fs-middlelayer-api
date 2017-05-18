@@ -8,8 +8,8 @@
         "firstName": "John",
         "lastName": "Doe",
         "dayPhone": {
-            "areaCode": 202,
-            "number": 5551234,
+            "areaCode": "202",
+            "number": "5551234",
             "extension": "0",
             "phoneType": "BUSINESS"
         },
@@ -18,7 +18,8 @@
         "mailingCity": "Washington",
         "mailingState": "DC",
         "mailingZIP": "12345",
-        "orgType": "Limited Liability Company"
+        "orgType": "Limited Liability Company",
+        "organizationName":"ABC Company"
     },
     "type": "tempOutfitters",
     "tempOutfitterFields": {

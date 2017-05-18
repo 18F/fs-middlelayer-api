@@ -1,9 +1,8 @@
 {
   "swagger": "2.0",
-  "basePath":"/",
   "info": {
     "description": "This page is for developers. We built this site entirely off the APIs below and we want to share them with you.",
-    "version": "0.0.13",
+    "version": "0.0.14",
     "title": "API Documentation for Developers"
   },
   "tags": [
@@ -158,9 +157,7 @@
     },
     "/permits/applications/special-uses/noncommercial/": {
       "post": {
-        "x-validation":{
-          "$ref":"controllers/validation.json#noncommercialApplication"
-        },
+        "x-validation":"controllers/validation.json#noncommercialApplication",
         "tags": [
           "Noncommercial Permit"
         ],
@@ -424,9 +421,7 @@
     },
     "/permits/applications/special-uses/commercial/temp-outfitters/": {
       "post": {
-        "x-validation":{
-          "$ref":"controllers/validation.json#tempOutfitterApplication"
-        },
+        "x-validation":"controllers/validation.json#tempOutfitterApplication",
         "tags": [
           "Outfitter and Guide Permit"
         ],

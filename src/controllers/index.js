@@ -32,6 +32,7 @@ const db = require('./db.js');
 const basic = require('./basic.js');
 const validation = require('./validation.js');
 const util = require('./utility.js');
+const DuplicateContactsError = require('./duplicateContactsError.js');
 
 //*************************************************************
 
@@ -105,11 +106,13 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
 				store.uploadFile(fileInfo, function(err, data){
 					if (err){
+						console.error(err);
 						return error.sendError(req, res, 500, 'unable to process request.');
 					}
 					else {
 						db.saveFile(application.id, fileInfo, function(err, fileInfo){
 							if (err){
+								console.error(err);
 								return error.sendError(req, res, 500, 'unable to process request.');
 							}
 							else {
@@ -156,6 +159,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 	db.getFile(filePath, function (err, file){
 
 		if (err){
+			console.error(err);
 			error.sendError(req, res, 500, 'unable to process request.');	
 		}
 		else {
@@ -164,6 +168,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 				store.getFile(controlNumber, fileName, function(err, data){
 
 					if (err){
+						console.error(err);
 						error.sendError(req, res, 404, 'file not found');
 					}
 					else {
@@ -209,6 +214,7 @@ const getControlNumber = function(req, res, reqData){
 		db.getApplication(controlNumber, function(err, appl, fileData){
 
 			if (err) {
+				console.error(err);
 				return error.sendError(req, res, 500, 'unable to process request.');	
 			}
 
@@ -249,6 +255,7 @@ const getControlNumber = function(req, res, reqData){
 
 				db.getApplication(controlNumber, function(err, appl, fileData){
 					if (err){
+						console.error(err);
 						return error.sendError(req, res, 500, 'unable to process request.');
 					}
 					else {
@@ -323,15 +330,17 @@ const postApplication = function(req, res, reqData){
 		basic.postToBasic(req, res, sch, body)
 		.then((postObject)=>{
 			const toStoreInDB = db.getDataToStoreInDB(sch, body);
-			const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString(); //TODO: remove - used for mocks
+			const controlNumber = postObject.POST['/application'].response.accinstCn;
 			toStoreInDB.controlNumber = controlNumber;
 			db.saveApplication(toStoreInDB, function(err, appl){
 				if (err){
+					console.error(err);
 					return error.sendError(req, res, 500, 'unable to process request.');
 				}
 				else {
 					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
 						if (err) {
+							console.error(err);
 							return error.sendError(req, res, 500, 'unable to process request.');
 						}
 						else {
@@ -348,7 +357,19 @@ const postApplication = function(req, res, reqData){
 			});
 		})
 		.catch((err)=>{
-			return error.sendError(req, res, 500, 'unable to process request.');
+
+			console.error(err);
+			if (err instanceof DuplicateContactsError){
+				if (err.duplicateContacts){
+					return error.sendError(req, res, 400, err.duplicateContacts.length + ' duplicate contacts found.', err.duplicateContacts);		
+				}
+				else {
+					return error.sendError(req, res, 400, 'duplicate contacts found.');	
+				}
+			}
+			else {
+				return error.sendError(req, res, 500, 'unable to process request.');	
+			}
 		});
 	}
 };

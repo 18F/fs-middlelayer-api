@@ -1,9 +1,7 @@
 {
     "outfitters":{
         "pathData":{
-            "x-validation": {
-                "$ref":"controllers/validation.json#tempOutfitterApplication"
-            },
+            "x-validation":"controllers/validation.json#tempOutfitterApplication",
             "tags": [
                 "Outfitter and Guide Permit"
             ],
@@ -627,9 +625,7 @@
     },
     "noncommercial":{
         "pathData":{
-            "x-validation": {
-                "$ref":"controllers/validation.json#noncommercialApplication"
-            },
+            "x-validation": "controllers/validation.json#noncommercialApplication",
             "tags": [
                 "Noncommercial Permit"
             ],
