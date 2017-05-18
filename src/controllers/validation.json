@@ -556,10 +556,6 @@
                         {
                             "fromIntake":true,
                             "field":"forest"
-                        },
-                        {
-                            "fromIntake":false,
-                            "value":"00000"
                         }
                     ],
                     "function":"ePermitId"
