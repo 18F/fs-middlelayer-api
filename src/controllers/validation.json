@@ -589,7 +589,7 @@
                         },
                         {
                             "fromIntake":false,
-                            "value":","
+                            "value":", "
                         },
                         {
                             "fromIntake":true,
