@@ -1,6 +1,6 @@
 {
   "name": "fs-middlelayer-api",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "dependencies": {
     "abbrev": {
       "version": "1.0.9",
