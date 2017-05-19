@@ -345,8 +345,6 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 	describe('post a new application with files, get that application, get files zipped', function(){ 
 
 		it('should return valid json when application submitted with three required files', function(done) {
-			
-			this.timeout(5000);
 
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
