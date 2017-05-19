@@ -155,42 +155,41 @@ function buildAutoPopulatedFields(fieldsToBuild, body){
 }
 /**
  * Gets the data from all fields that are to be send to the basic API, also builds post object, used to pass data to basic api
- * @param  {Array} fields - All fields in object form which will be sent to basicAPI
+ * @param  {Array} fieldsToBasic - All fields in object form which will be sent to basicAPI
  * @param  {Object} body - user input
  * @param  {Object} autoPopValues - All values which have been auto-populated
  * @return {Array} - Array of post objects
  */
-function getBasicFields(fields, body, autoPopValues){
-	const requests = [], postObjs = [];
-	fields.forEach((field)=>{
+function getBasicFields(fieldsToBasic, body, autoPopValues){
+	const postObjs = {}, requestsObj = {};
+	fieldsToBasic.forEach((field)=>{
 		const key = Object.keys(field)[0];
 		const whereToStore = field[key].store;
+		//whereToStore is where the field needs to be stored, either basic or middlelayer
 		whereToStore.forEach((location)=>{
 			const requestToUse = location.split(':')[1];
 			if (location.split(':')[0] === 'basic'){
 				let postObjExists = false;
-				requests.forEach((request)=>{
-					const requestKey = Object.keys(request)[0];
-					if (requestKey === requestToUse){
+				for (const request in requestsObj){
+					if (request === requestToUse){
 						postObjExists = true;
-						request[requestToUse][key] = field[key];
+						requestsObj[requestToUse][key] = field[key];
 					}
-				});
+				}
 				if (!postObjExists){
-					const obj = {};
-					obj[requestToUse] = {};
-					obj[requestToUse][key] = field[key];
-					requests.push(obj);
+					requestsObj[requestToUse] = {};
+					requestsObj[requestToUse][key] = field[key];
 				}
 			}
 		});
 	});
-	requests.forEach((request)=>{
-		const key = Object.keys(request)[0];
+	//requestsObj contains objects, labeled as each request that may be sent to the basic API, containing the fields 
+	//which need to be included in that request
+	for (const request in requestsObj){
 		const obj = {};
-		obj[key] = {};
-		Object.keys(request[key]).forEach((fieldKey)=>{
-			const field = request[key][fieldKey];
+		obj[request] = {};
+		for (const fieldKey in requestsObj[request]){
+			const field = requestsObj[request][fieldKey];
 			const fieldPath = fieldKey;
 			const splitPath = fieldPath.split('.');
 			let bodyField = body;
@@ -203,26 +202,26 @@ function getBasicFields(fields, body, autoPopValues){
 						bodyField = field.default;
 					}
 				});
-				obj[key][field.basicField] = bodyField;
+				obj[request][field.basicField] = bodyField;
 			}
 			else {
 				if (autoPopValues[fieldKey]){
-					obj[key][field.basicField] = autoPopValues[fieldKey];
+					obj[request][field.basicField] = autoPopValues[fieldKey];
 				}
 				else {
-					obj[key][field.basicField] = field.default;
+					obj[request][field.basicField] = field.default;
 				}
 			}
-		});
-		postObjs.push(obj);
-	});
+		}
+		postObjs[request] = obj[request];
+	}
 	return postObjs;
 }
 
 /** Takes fields to be stored, creates post objects and populated with user input
  * @param  {Object} sch - validation schema for this request
  * @param  {Object} body - user input
- * @return {Array} - All post objects 
+ * @return {Object} - All post objects 
  */
 function prepareBasicPost(sch, body){
 	const otherFields = [];
@@ -362,12 +361,7 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 				'/application':{}
 			}
 		};
-		const fieldsToPost = prepareBasicPost(sch, body);
-		const fieldsObj = {};
-		fieldsToPost.forEach((post)=>{
-			const key = Object.keys(post)[0];
-			fieldsObj[key] = post[key];
-		});
+		const fieldsObj = prepareBasicPost(sch, body);
 
 		const person = isAppFromPerson(body);
 		let existingContactCheck;
