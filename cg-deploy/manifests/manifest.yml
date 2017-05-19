@@ -1,0 +1,9 @@
+---
+applications:
+- name: fs-middlelayer-api
+  buildpack: https://github.com/cloudfoundry/nodejs-buildpack
+  memory: 128M
+  instances: 1
+  services:
+    - fs-api-s3
+    - fs-api-db

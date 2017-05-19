@@ -39,13 +39,13 @@ deploy:
     on:
       repo: nci-ats/fs-middlelayer-api
   - provider: script
-    script: "./bin/deploy.sh fs-api-prod"
+    script: "./cg-deploy/deploy.sh fs-api-prod"
     skip_cleanup: true
     on:
       repo: 18F/fs-middlelayer-api
       branch: master
   - provider: script
-    script: "./bin/deploy.sh fs-api-staging"
+    script: "./cg-deploy/deploy.sh fs-api-staging"
     skip_cleanup: true
     on:
       repo: 18F/fs-middlelayer-api
