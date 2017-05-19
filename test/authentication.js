@@ -135,7 +135,7 @@ describe('authentication validation', function() {
 			.expect(401, done);
 	});
 
-	it('should return valid json with 200 for a noncommercial GET request when using admin role autherization', function(done) {
+	it('should return valid json with 200 for a noncommercial POST request when using admin role autherization', function(done) {
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)

@@ -239,7 +239,7 @@ const getControlNumber = function(req, res, reqData){
 	else {
 
 		let basicData = {};
-		getBasicRes(reqData.matches.controlNumber)
+		basic.getFromBasic(req, res, reqData.matches.controlNumber)
 		.then((appData)=>{
 			basicData = appData;
 
