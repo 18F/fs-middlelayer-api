@@ -346,7 +346,7 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 
 		it('should return valid json when application submitted with three required files', function(done) {
 			
-			this.timeout(5000);
+			this.timeout(10000);
 
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
@@ -366,7 +366,7 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 		it('should return valid zip when getting outfitters files using the controlNumber returned from POST', function(done) {
 
 			this.timeout(10000);
-			
+
 			request(server)
 			.get(`${testURL}${postControlNumber}/files/`)
 			.set('x-access-token', token)

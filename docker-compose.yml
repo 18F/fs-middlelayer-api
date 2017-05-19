@@ -1,0 +1,19 @@
+version: '3.1'
+services:
+  postgres:
+    image: postgres
+    expose:
+      - '5432'
+    networks:
+      - private
+  web:
+    build: .
+    command: npm start
+    ports:
+     - "8080:8080"
+    volumes:
+     - .:/code
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL=postgres://postgres:@db:5432

@@ -1,9 +1,9 @@
 set -e
 
 export PATH=$HOME:$PATH
-travis_retry curl -L -o $HOME/cf.tgz "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.15.0"
+curl -L -o $HOME/cf.tgz "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.22.2"
 tar xzvf $HOME/cf.tgz -C $HOME
-cf install-plugin autopilot -f -r CF-Community
+cf install-plugin -f -r CF-Community autopilot
 
 API="https://api.fr.cloud.gov"
 ORG="gsa-acq-proto"
@@ -16,12 +16,12 @@ fi
 
 if [ $SPACE = 'fs-api-prod' ]; then
   NAME="fs-middlelayer-api"
-  MANIFEST="../manifests/manifest.yml"
+  MANIFEST="./cg-deploy/manifests/manifest.yml"
   CF_USERNAME=$CF_USERNAME_PROD
   CF_PASSWORD=$CF_PASSWORD_PROD
 elif [ $SPACE = 'fs-api-staging' ]; then
-  NAME="fs-middlelayer-api"
-  MANIFEST="../manifests/manifest-staging.yml"
+  NAME="fs-middlelayer-api-staging"
+  MANIFEST="./cg-deploy/manifests/manifest-staging.yml"
   CF_USERNAME=$CF_USERNAME_DEV
   CF_PASSWORD=$CF_PASSWORD_DEV
 else
@@ -29,5 +29,5 @@ echo "Unknown space: $SPACE"
 exit
 fi
 
-cf login --a $API --u $CF_USERNAME --p $CF_PASSWORD --o $ORG -s $SPACE
+cf login -a $API -u $CF_USERNAME -p $CF_PASSWORD -o $ORG -s $SPACE
 cf zero-downtime-push $NAME -f $MANIFEST

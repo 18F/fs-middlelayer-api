@@ -3,8 +3,8 @@
   "version": "0.0.14",
   "description": "US Forest Service ePermit Middlelayer API",
   "engines": {
-    "node": "6.9.x",
-    "npm": "3.10.x"
+    "node": "6.10.2",
+    "npm": "3.10.0"
   },
   "main": "src/index.js",
   "scripts": {
@@ -17,8 +17,8 @@
     "lint:es:out": "eslint . -o ./lint/eslint.html -f html || exit 0",
     "lint:es:fix": "eslint . --fix || exit 0",
     "lint:md": "markdownlint ./docs ./README.md || exit 0",
-    "dba": "sequelize db:migrate && sequelize db:seed:all",
-    "doc": "jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -R README.md -r .",
+    "dba": "./node_modules/.bin/sequelize db:migrate && ./node_modules/.bin/sequelize db:seed:all",
+    "doc": "./node_modules/.bin/jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -R README.md -r .",
     "postinstall": "npm run doc"
   },
   "repository": {
