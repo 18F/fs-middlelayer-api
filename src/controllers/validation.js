@@ -717,6 +717,12 @@ function checkFieldLengths(schema, input, processedFieldErrors, path){
 	return processedFieldErrors;
 }
 
+/**
+ * Checks that individualIsCitizen field is present if application is a temp-outfitters application and it is for an individual
+ * @param  {Object} input                - User input
+ * @param  {Object} processedFieldErrors - Object containing all errors from the validation process
+ * @return {Object}                      - processedFieldErrors with any errors from this validation step added to it
+ */
 function checkForIndividualIsCitizen(input, processedFieldErrors){
 	if (input.tempOutfitterFields && input.applicantInfo){
 		if (!input.applicantInfo.orgType || input.applicantInfo.orgType === 'Individual'){
@@ -728,6 +734,12 @@ function checkForIndividualIsCitizen(input, processedFieldErrors){
 	return processedFieldErrors;
 }
 
+/**
+ * Checks that smallBusiness field is present if application is a temp-outfitters application and it is not for an individual
+ * @param  {Object} input                - User input
+ * @param  {Object} processedFieldErrors - Object containing all errors from the validation process
+ * @return {Object}                      - processedFieldErrors with any errors from this validation step added to it
+ */
 function checkForSmallBusiness(input, processedFieldErrors){
 	if (input.tempOutfitterFields && input.applicantInfo){
 		if (input.applicantInfo.orgType && input.applicantInfo.orgType !== 'Individual'){
@@ -739,6 +751,12 @@ function checkForSmallBusiness(input, processedFieldErrors){
 	return processedFieldErrors;
 }
 
+/**
+ * Checks that organizationName field is present if application is not for an individual
+ * @param  {Object} input                - User input
+ * @param  {Object} processedFieldErrors - Object containing all errors from the validation process
+ * @return {Object}                      - processedFieldErrors with any errors from this validation step added to it
+ */
 function checkForOrgName(input, processedFieldErrors){
 	if (input.applicantInfo){
 		if (input.applicantInfo.orgType && input.applicantInfo.orgType !== 'Individual'){
@@ -750,8 +768,15 @@ function checkForOrgName(input, processedFieldErrors){
 	return processedFieldErrors;
 }
 
-function additionalValidation(schema, input, processedFieldErrors){
-	processedFieldErrors = checkFieldLengths(schema, input, processedFieldErrors, '');
+/**
+ * Additional validation checks that can't be defined in the validation schema
+ * @param  {Object} validationSchema     - schema to be used for validating input, same as validation.json without refs
+ * @param  {Object} input                - User input
+ * @param  {Object} processedFieldErrors - Object containing an array of error objects for every error with fields
+ * @return {Object}                      - processedFieldErrors with any errors from these validation steps added to it
+ */
+function additionalValidation(validationSchema, input, processedFieldErrors){
+	processedFieldErrors = checkFieldLengths(validationSchema, input, processedFieldErrors, '');
 	processedFieldErrors = checkForOrgName(input, processedFieldErrors);
 	processedFieldErrors = checkForIndividualIsCitizen(input, processedFieldErrors);
 	processedFieldErrors = checkForSmallBusiness(input, processedFieldErrors);
@@ -763,7 +788,7 @@ function additionalValidation(schema, input, processedFieldErrors){
  * @param  {Object} body             - User input
  * @param  {Object} pathData         - information about path
  * @param  {Object} validationSchema - schema to be used for validating input, same as validation.json without refs
- * @return {Array}                   - Array of error objects for every error with fields
+ * @return {Object}                  - Object containing an array of error objects for every error with fields
  */
 function getFieldValidationErrors(body, pathData, validationSchema){
 

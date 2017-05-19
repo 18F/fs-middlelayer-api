@@ -158,7 +158,7 @@ function buildAutoPopulatedFields(fieldsToBuild, body){
  * @param  {Array} fieldsToBasic - All fields in object form which will be sent to basicAPI
  * @param  {Object} body - user input
  * @param  {Object} autoPopValues - All values which have been auto-populated
- * @return {Array} - Array of post objects
+ * @return {Object} - Array of post objects
  */
 function getBasicFields(fieldsToBasic, body, autoPopValues){
 	const postObjs = {}, requestsObj = {};
@@ -329,6 +329,12 @@ function createApplication(fieldsObj, contCN, apiCallsObject){
 	return request(createApplicationOptions);
 }
 
+/**
+ * Gets the contId to be used if a contact is created so it can be compared to the results of the contact GET request
+ * @param  {Object} fieldsObj - Object containing post objects to be sent to basic api
+ * @param  {Boolean} person   - Whether the application is for a person or not
+ * @return {String}           - ContId for this application
+ */
 function getContId(fieldsObj, person){
 	if (person){
 		return fieldsObj['/contact/person'].contId;
