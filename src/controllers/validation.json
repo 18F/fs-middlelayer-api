@@ -562,8 +562,8 @@
                 "store":["basic:/application"],
                 "type" : "integer"
             },
-            "contact":{
-                "basicField":"contact",
+            "contCn":{
+                "basicField":"contCn",
                 "default":"",
                 "fromIntake":false,
                 "store":["basic:/contact/phone", "basic:/contact/address"],
