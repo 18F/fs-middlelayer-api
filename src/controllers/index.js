@@ -18,7 +18,6 @@ const include = require('include')(__dirname);
 const async = require('async');
 const deref = require('deref');
 const matchstick = require('matchstick');
-const request = require('request-promise');
 
 const apiSchema = include('src/api.json');
 
@@ -33,10 +32,6 @@ const basic = require('./basic.js');
 const validation = require('./validation.js');
 const util = require('./utility.js');
 const DuplicateContactsError = require('./duplicateContactsError.js');
-
-//*************************************************************
-
-const SUDS_API_URL = process.env.SUDS_API_URL;
 
 //*************************************************************
 // Helper Functions
