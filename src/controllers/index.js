@@ -45,17 +45,20 @@ function apiSchemaData(apiSchema, reqPath){
 
 	if (apiSchema) {
 		for (const k in apiSchema.paths) {
-			
-			const ms = matchstick(k, 'template');
-			ms.match(reqPath);
 
-			if ( ms.match(reqPath) ) { 
+			if (apiSchema.paths.hasOwnProperty(k)){
 
-				return {
-					path: k,
-					tokens: ms.tokens,
-					matches: ms.matches
-				};
+				const ms = matchstick(k, 'template');
+				ms.match(reqPath);
+
+				if ( ms.match(reqPath) ) { 
+
+					return {
+						path: k,
+						tokens: ms.tokens,
+						matches: ms.matches
+					};
+				}	
 			}
 		}
 	}
