@@ -420,7 +420,7 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 				});
 
 				if (duplicateContacts.length === 0){
-					return createContact(fieldsObj, true, apiCallsObject);
+					return createContact(fieldsObj, person, apiCallsObject);
 				}
 				else if (duplicateContacts.length === 1){
 					return new Promise(function(resolve){
