@@ -281,7 +281,7 @@ function createContact(fieldsObj, person, apiCallsObject){
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
-			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode`;
+			createPersonOrOrgURL = `${SUDS_API_URL}/contact/organization`;
 			responseKey = '/contact/orgcode';
 			apiCallsObject.POST[responseKey].request = contactField;
 		}
