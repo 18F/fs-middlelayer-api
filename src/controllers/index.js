@@ -228,7 +228,7 @@ const getControlNumber = function(req, res, reqData){
 
 			const jsonResponse = {};
 
-			const cnData = basicData;  // TODO: remove - used for mocks
+			const cnData = basicData;
 
 			if (basicData){
 
@@ -249,7 +249,7 @@ const getControlNumber = function(req, res, reqData){
 							});
 						}
 						jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData['x-getTemplate']);
-						jsonData.controlNumber = controlNumber;// TODO: remove - used for mocks
+						jsonData.controlNumber = controlNumber;
 
 						jsonResponse.status = 'success';
 						const toReturn = Object.assign({}, jsonResponse, jsonData);
