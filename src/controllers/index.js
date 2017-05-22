@@ -18,7 +18,6 @@ const include = require('include')(__dirname);
 const async = require('async');
 const deref = require('deref');
 const matchstick = require('matchstick');
-const request = require('request-promise');
 
 const apiSchema = include('src/api.json');
 
@@ -35,27 +34,7 @@ const util = require('./utility.js');
 const DuplicateContactsError = require('./duplicateContactsError.js');
 
 //*************************************************************
-
-const SUDS_API_URL = process.env.SUDS_API_URL;
-
-//*************************************************************
 // Helper Functions
-
-/** Gets info about an application and returns it.
- * @param  {Object} pathData - All data from swagger for the path that has been run
- * @return {Object} - Data from the basic API about an application 
- */
-function getBasicRes(controlNumber){
-
-	const existingContactCheck = `${SUDS_API_URL}/application/${controlNumber}`;
-	const getContactOptions = {
-		method: 'GET',
-		uri: existingContactCheck,
-		qs:{},
-		json: true
-	};
-	return request(getContactOptions);
-}
 
 /** Find the matching route in the routing schema for any request. If one is found, extract the useful information from it and return that information.
  * @param  {Object} apiSchema - The whole routing schema, which contains the route used.
@@ -239,7 +218,7 @@ const getControlNumber = function(req, res, reqData){
 	else {
 
 		let basicData = {};
-		getBasicRes(reqData.matches.controlNumber)
+		basic.getFromBasic(req, res, reqData.matches.controlNumber)
 		.then((appData)=>{
 			basicData = appData;
 

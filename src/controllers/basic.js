@@ -18,6 +18,7 @@ const request = require('request-promise');
 //*******************************************************************
 // other files
 
+const error = require('./error.js');
 const db = require('./db.js');
 const DuplicateContactsError = require('./duplicateContactsError.js');
 const SUDS_API_URL = process.env.SUDS_API_URL;
@@ -339,6 +340,40 @@ function getContId(fieldsObj, person){
 	}
 }
 
+/** Gets info about an application and returns it.
+ * @param  {Object} req - Request Object
+ * @param  {Object} res - Response Object
+ * @param  {Object} pathData - All data from swagger for the path that has been run
+ * @return {Object} - Data from the basic API about an application 
+ */
+function getFromBasic(req, res, controlNumber){
+
+	return new Promise(function (fulfill, reject){
+
+		const applicationCheck = `${SUDS_API_URL}/application/${controlNumber}`;
+		const getApplicationOptions = {
+			method: 'GET',
+			uri: applicationCheck,
+			qs:{},
+			json: true
+		};
+		
+		request(getApplicationOptions)
+		.then(function(response){
+			return fulfill(response);
+		})
+		.catch(function(err){
+			if (err.statusCode && err.statusCode === 404){
+				console.error(err);
+				return error.sendError(req, res, 500, 'error returned from Basic API.');	
+			}
+			else {
+				reject(err);		
+			}	
+		});
+	});
+}
+
 /** Sends requests needed to create an application via the Basic API
  * @param  {Object} req - Request Object
  * @param  {Object} res - Response Object
@@ -448,7 +483,13 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 			fulfill(apiCallsObject);
 		})
 		.catch(function(err){
-			reject(err);
+			if (err.statusCode && err.statusCode === 404){
+				console.error(err);
+				return error.sendError(req, res, 500, 'error returned from Basic API.');	
+			}
+			else {
+				reject(err);		
+			}	
 		});
 
 	});
@@ -456,3 +497,4 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 }
 
 module.exports.postToBasic = postToBasic;
+module.exports.getFromBasic = getFromBasic;
