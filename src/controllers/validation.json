@@ -508,10 +508,6 @@
                         {
                             "fromIntake":true,
                             "field":"forest"
-                        },
-                        {
-                            "fromIntake":true,
-                            "field":"district"
                         }
                     ],
                     "function":"concat"
@@ -532,10 +528,6 @@
                         {
                             "fromIntake":true,
                             "field":"forest"
-                        },
-                        {
-                            "fromIntake":true,
-                            "field":"district"
                         }
                     ],
                     "function":"concat"
