@@ -18,7 +18,7 @@
 
 A repository for the development of an API to support the public facing ePermit system to connect to the related Forest Service database, the Special Use Data System (SUDS) located in the National Resource Management System.
 
-This repository is being development under a task order of the Agile Blanket Purchase Agreement.
+This repository is being developed under a task order of the Agile Blanket Purchase Agreement.
 
 ## Setup
 
@@ -77,6 +77,8 @@ Refer to application package and dependency trackers for additional dependency i
 The Moxai package is a dependency for testing and was built specifically for this project. Moxai was published as an [independent package](https://www.npmjs.com/package/moxai) that can be used with any Express application. This application uses the moxai package as a placeholder mock API. The /mocks/basic.json file maintains the API endpoint schema. 
 
 The controllers/index.js file has random control number generation logic that should be removed when the mock API is replaced with the Basic API.
+
+If the swagger is checked against a swagger validator it will report that it is invalid. We are allowing the swagger to stay invalid because we felt it would be more valuable for developers to have an example data model for temp-outfitter permits, rather than have every part of the swagger be valid.
 
 ## Point of Contact and Notifications
 
