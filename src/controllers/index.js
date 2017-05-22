@@ -41,22 +41,6 @@ const SUDS_API_URL = process.env.SUDS_API_URL;
 //*************************************************************
 // Helper Functions
 
-/** Gets info about an application and returns it.
- * @param  {Object} pathData - All data from swagger for the path that has been run
- * @return {Object} - Data from the basic API about an application 
- */
-function getBasicRes(controlNumber){
-
-	const existingContactCheck = `${SUDS_API_URL}/application/${controlNumber}`;
-	const getContactOptions = {
-		method: 'GET',
-		uri: existingContactCheck,
-		qs:{},
-		json: true
-	};
-	return request(getContactOptions);
-}
-
 /** Find the matching route in the routing schema for any request. If one is found, extract the useful information from it and return that information.
  * @param  {Object} apiSchema - The whole routing schema, which contains the route used.
  * @param  {String} reqPath - The path that was requested from the API
