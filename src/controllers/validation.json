@@ -566,7 +566,7 @@
                 "basicField":"contCn",
                 "default":"",
                 "fromIntake":false,
-                "store":["basic:/contact/phone", "basic:/contact/address"],
+                "store":["basic:/contact/phone", "basic:/contact/address", "basic:/application"],
                 "type" : "string"
             },
             "contId":{

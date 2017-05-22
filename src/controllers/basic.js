@@ -293,7 +293,7 @@ function createContact(fieldsObj, person, apiCallsObject){
 		})
 		.then(function(res){
 			apiCallsObject.POST['/contact-phone'].response = res;
-			fulfill(res.contact);
+			fulfill(res.contCn);
 		})
 		.catch(function(err){
 			reject(err);
@@ -400,7 +400,6 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 				}
 			}
 			else if (res.length > 1){
-
 				const matchingContacts = res;
 				const duplicateContacts = [];
 				let tmpContCn;
