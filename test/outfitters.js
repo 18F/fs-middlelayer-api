@@ -260,7 +260,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 		});
 
-		it('should return valid json when getting outfitters files using the controlNumber and fileName returned from POST', function(done) {
+		it('should return valid file when getting outfitters files using the controlNumber and fileName returned from POST', function(done) {
 
 			request(server)
 			.get(`${testURL}${postControlNumber}/files/${postFileName}`)
@@ -284,6 +284,14 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 				done();
 			});
 
+		});
+
+		it('should return valid json (404) when getting files using the controlNumber and invalid fileName', function(done) {
+
+			request(server)
+			.get(`${testURL}${postControlNumber}/files/fileNotAvailable.pdf`)
+			.set('x-access-token', token)
+			.expect(404, done);
 		});
 	});
 
