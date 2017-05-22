@@ -48,11 +48,11 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "codeclimate-test-reporter": "^0.4.0",
-    "codecov": "^1.0.1",
+    "codecov": "^2.2.0",
     "eslint": "^3.19.0",
     "istanbul": "^0.4.5",
-    "markdownlint-cli": "^0.2.0",
-    "minimist": "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz",
+    "markdownlint-cli": "^0.3.1",
+    "minimist": "^0.0.8",
     "mocha": "^3.2.0",
     "mock-aws": "^1.2.3",
     "npm-run-all": "^4.0.2",
@@ -79,7 +79,6 @@
     "json-schema-faker": "^0.5.0-rc3",
     "jsonschema": "^1.1.1",
     "jsonwebtoken": "^7.3.0",
-    "lodash": "^4.17.4",
     "matchstick": "^1.2.1",
     "mkdirp": "^0.5.1",
     "morgan": "^1.8.1",
@@ -88,12 +87,10 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
-    "pg": "^6.1.4",
-    "request": "^2.81.0",
     "request-promise": "^4.2.0",
     "sequelize": "^3.30.2",
-    "url": "https://registry.npmjs.org/url/-/url-0.10.3.tgz",
-    "util": "https://registry.npmjs.org/util/-/util-0.10.3.tgz",
-    "uuid": "https://registry.npmjs.org/uuid/-/uuid-3.0.1.tgz"
+    "url": "^0.10.3",
+    "util": "^0.10.3",
+    "uuid": "^3.0.1"
   }
 }
