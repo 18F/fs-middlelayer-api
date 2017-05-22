@@ -33,7 +33,7 @@
             {
                 "properties": {
                     "organizationName": {
-                        "basicField":"contName",
+                        "basicField":"orgCode",
                         "default":"",
                         "fromIntake":true,
                         "store":["basic:/contact/organization"],
@@ -224,7 +224,7 @@
             {
                 "properties": {
                     "organizationName": {
-                        "basicField":"contName",
+                        "basicField":"orgCode",
                         "default":"",
                         "fromIntake":true,
                         "store":["basic:/contact/organization"],
