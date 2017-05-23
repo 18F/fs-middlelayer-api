@@ -18,6 +18,7 @@ const request = require('request-promise');
 //*******************************************************************
 // other files
 
+const error = require('./error.js');
 const db = require('./db.js');
 const DuplicateContactsError = require('./duplicateContactsError.js');
 const SUDS_API_URL = process.env.SUDS_API_URL;
@@ -155,74 +156,77 @@ function buildAutoPopulatedFields(fieldsToBuild, body){
 }
 /**
  * Gets the data from all fields that are to be send to the basic API, also builds post object, used to pass data to basic api
- * @param  {Array} fields - All fields in object form which will be sent to basicAPI
+ * @param  {Array} fieldsToBasic - All fields in object form which will be sent to basicAPI
  * @param  {Object} body - user input
  * @param  {Object} autoPopValues - All values which have been auto-populated
- * @return {Array} - Array of post objects
+ * @return {Object} - Array of post objects
  */
-function getBasicFields(fields, body, autoPopValues){
-	const requests = [], postObjs = [];
-	fields.forEach((field)=>{
+function getBasicFields(fieldsToBasic, body, autoPopValues){
+	const postObjs = {}, requestsObj = {};
+	fieldsToBasic.forEach((field)=>{
 		const key = Object.keys(field)[0];
 		const whereToStore = field[key].store;
+		//whereToStore is where the field needs to be stored, either basic or middlelayer
 		whereToStore.forEach((location)=>{
 			const requestToUse = location.split(':')[1];
 			if (location.split(':')[0] === 'basic'){
 				let postObjExists = false;
-				requests.forEach((request)=>{
-					const requestKey = Object.keys(request)[0];
-					if (requestKey === requestToUse){
+				for (const request in requestsObj){
+					if (request === requestToUse){
 						postObjExists = true;
-						request[requestToUse][key] = field[key];
+						requestsObj[requestToUse][key] = field[key];
 					}
-				});
+				}
 				if (!postObjExists){
-					const obj = {};
-					obj[requestToUse] = {};
-					obj[requestToUse][key] = field[key];
-					requests.push(obj);
+					requestsObj[requestToUse] = {};
+					requestsObj[requestToUse][key] = field[key];
 				}
 			}
 		});
 	});
-	requests.forEach((request)=>{
-		const key = Object.keys(request)[0];
-		const obj = {};
-		obj[key] = {};
-		Object.keys(request[key]).forEach((fieldKey)=>{
-			const field = request[key][fieldKey];
-			const fieldPath = fieldKey;
-			const splitPath = fieldPath.split('.');
-			let bodyField = body;
-			if (field.fromIntake){
-				splitPath.forEach((sp)=>{
-					if (bodyField[sp]){
-						bodyField = bodyField[sp];
+	//requestsObj contains objects, labeled as each request that may be sent to the basic API, containing the fields 
+	//which need to be included in that request
+	for (const request in requestsObj){
+		if (requestsObj.hasOwnProperty(request)){
+			const obj = {};
+			obj[request] = {};
+			for (const fieldKey in requestsObj[request]){
+				if (requestsObj[request].hasOwnProperty(fieldKey)){
+					const field = requestsObj[request][fieldKey];
+					const fieldPath = fieldKey;
+					const splitPath = fieldPath.split('.');
+					let bodyField = body;
+					if (field.fromIntake){
+						splitPath.forEach((sp)=>{
+							if (bodyField[sp]){
+								bodyField = bodyField[sp];
+							}
+							else {
+								bodyField = field.default;
+							}
+						});
+						obj[request][field.basicField] = bodyField;
 					}
 					else {
-						bodyField = field.default;
+						if (autoPopValues[fieldKey]){
+							obj[request][field.basicField] = autoPopValues[fieldKey];
+						}
+						else {
+							obj[request][field.basicField] = field.default;
+						}
 					}
-				});
-				obj[key][field.basicField] = bodyField;
-			}
-			else {
-				if (autoPopValues[fieldKey]){
-					obj[key][field.basicField] = autoPopValues[fieldKey];
-				}
-				else {
-					obj[key][field.basicField] = field.default;
 				}
 			}
-		});
-		postObjs.push(obj);
-	});
+			postObjs[request] = obj[request];
+		}
+	}
 	return postObjs;
 }
 
 /** Takes fields to be stored, creates post objects and populated with user input
  * @param  {Object} sch - validation schema for this request
  * @param  {Object} body - user input
- * @return {Array} - All post objects 
+ * @return {Object} - All post objects 
  */
 function prepareBasicPost(sch, body){
 	const otherFields = [];
@@ -245,15 +249,8 @@ function prepareBasicPost(sch, body){
  */
 function postRequest(res, apiCallsObject, fieldsObj, responseKey, requestKey, requestPath){
 	apiCallsObject.POST[responseKey].response = res;
-	let cn = '';
-	if (requestPath === '/contact-address'){
-		cn = res.contCn;
-	}
-	else {
-		cn = res.contact;
-	}
 	const addressField = fieldsObj[requestKey];
-	addressField.contact = cn;
+	addressField.contCn = res.contCn;
 	const addressURL = `${SUDS_API_URL}${requestPath}`;
 	apiCallsObject.POST[requestPath].request = addressField;
 	const createAddressOptions = {
@@ -282,7 +279,7 @@ function createContact(fieldsObj, person, apiCallsObject){
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
-			createPersonOrOrgURL = `${SUDS_API_URL}/contact/orgcode`;
+			createPersonOrOrgURL = `${SUDS_API_URL}/contact/organization`;
 			responseKey = '/contact/orgcode';
 			apiCallsObject.POST[responseKey].request = contactField;
 		}
@@ -301,7 +298,7 @@ function createContact(fieldsObj, person, apiCallsObject){
 		})
 		.then(function(res){
 			apiCallsObject.POST['/contact-phone'].response = res;
-			fulfill(res.contact);
+			fulfill(res.contCn);
 		})
 		.catch(function(err){
 			reject(err);
@@ -330,6 +327,12 @@ function createApplication(fieldsObj, contCN, apiCallsObject){
 	return request(createApplicationOptions);
 }
 
+/**
+ * Gets the contId to be used if a contact is created so it can be compared to the results of the contact GET request
+ * @param  {Object} fieldsObj - Object containing post objects to be sent to basic api
+ * @param  {Boolean} person   - Whether the application is for a person or not
+ * @return {String}           - ContId for this application
+ */
 function getContId(fieldsObj, person){
 	if (person){
 		return fieldsObj['/contact/person'].contId;
@@ -337,6 +340,40 @@ function getContId(fieldsObj, person){
 	else {
 		return fieldsObj['/contact/organization'].contId;
 	}
+}
+
+/** Gets info about an application and returns it.
+ * @param  {Object} req - Request Object
+ * @param  {Object} res - Response Object
+ * @param  {Object} pathData - All data from swagger for the path that has been run
+ * @return {Object} - Data from the basic API about an application 
+ */
+function getFromBasic(req, res, controlNumber){
+
+	return new Promise(function (fulfill, reject){
+
+		const applicationCheck = `${SUDS_API_URL}/application/${controlNumber}`;
+		const getApplicationOptions = {
+			method: 'GET',
+			uri: applicationCheck,
+			qs:{},
+			json: true
+		};
+		
+		request(getApplicationOptions)
+		.then(function(response){
+			return fulfill(response);
+		})
+		.catch(function(err){
+			if (err.statusCode && err.statusCode === 404){
+				console.error(err);
+				return error.sendError(req, res, 500, 'error returned from Basic API.');	
+			}
+			else {
+				reject(err);		
+			}	
+		});
+	});
 }
 
 /** Sends requests needed to create an application via the Basic API
@@ -362,12 +399,7 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 				'/application':{}
 			}
 		};
-		const fieldsToPost = prepareBasicPost(sch, body);
-		const fieldsObj = {};
-		fieldsToPost.forEach((post)=>{
-			const key = Object.keys(post)[0];
-			fieldsObj[key] = post[key];
-		});
+		const fieldsObj = prepareBasicPost(sch, body);
 
 		const person = isAppFromPerson(body);
 		let existingContactCheck;
@@ -407,7 +439,6 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 				}
 			}
 			else if (res.length > 1){
-
 				const matchingContacts = res;
 				const duplicateContacts = [];
 				let tmpContCn;
@@ -420,7 +451,7 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 				});
 
 				if (duplicateContacts.length === 0){
-					return createContact(fieldsObj, true, apiCallsObject);
+					return createContact(fieldsObj, person, apiCallsObject);
 				}
 				else if (duplicateContacts.length === 1){
 					return new Promise(function(resolve){
@@ -448,7 +479,13 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 			fulfill(apiCallsObject);
 		})
 		.catch(function(err){
-			reject(err);
+			if (err.statusCode && err.statusCode === 404){
+				console.error(err);
+				return error.sendError(req, res, 500, 'error returned from Basic API.');	
+			}
+			else {
+				reject(err);		
+			}	
 		});
 
 	});
@@ -456,3 +493,4 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 }
 
 module.exports.postToBasic = postToBasic;
+module.exports.getFromBasic = getFromBasic;

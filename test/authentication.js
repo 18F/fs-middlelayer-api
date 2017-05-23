@@ -119,6 +119,14 @@ describe('authentication validation', function() {
 			.expect(200, done);
 	});
 
+	it('should return valid json with a 401 status code for a valid username but invalid password', function(done) {
+		request(server)
+			.post('/auth')
+			.set('Accept', 'application/json')
+			.send(loginFactory.create({username: adminUsername, password: 'invalidPwd'}))
+			.expect(401, done);
+	});
+
 	it('should return valid json with 403 when no token provided for a noncommercial POST request', function(done) {
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
@@ -135,7 +143,7 @@ describe('authentication validation', function() {
 			.expect(401, done);
 	});
 
-	it('should return valid json with 200 for a noncommercial GET request when using admin role autherization', function(done) {
+	it('should return valid json with 200 for a noncommercial POST request when using admin role autherization', function(done) {
 		request(server)
 			.post('/permits/applications/special-uses/noncommercial/')
 			.set('x-access-token', token)

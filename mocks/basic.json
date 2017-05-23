@@ -153,7 +153,7 @@
 				}
 			}
 		},
-		"/contact/orgcode": {
+		"/contact/organization": {
 			"post": {
 				"tags": [
 					"Contact Organization"
@@ -205,7 +205,7 @@
 								"cityName": "Washington",
 								"stateCode": "DC",
 								"postalCode": "12345",
-								"contact": "987654321",
+								"contCn": "987654321",
 								"createdDate": "2016-06-04",								
 								"programArea": "SUDS",
 								"securityId": "0102"								
@@ -231,7 +231,7 @@
       					"examples": {
         					"application/json": {
         						"areaCode": "555",
-								"contact": "987654321",
+								"contCn": "987654321",
 								"createdDate": "2016-06-04",
 								"phoneNumber": "555-1234",
 								"phoneNumberType": "MOBILE",

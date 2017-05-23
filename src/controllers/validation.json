@@ -33,7 +33,7 @@
             {
                 "properties": {
                     "organizationName": {
-                        "basicField":"contName",
+                        "basicField":"orgCode",
                         "default":"",
                         "fromIntake":true,
                         "store":["basic:/contact/organization"],
@@ -224,7 +224,7 @@
             {
                 "properties": {
                     "organizationName": {
-                        "basicField":"contName",
+                        "basicField":"orgCode",
                         "default":"",
                         "fromIntake":true,
                         "store":["basic:/contact/organization"],
@@ -508,10 +508,6 @@
                         {
                             "fromIntake":true,
                             "field":"forest"
-                        },
-                        {
-                            "fromIntake":true,
-                            "field":"district"
                         }
                     ],
                     "function":"concat"
@@ -532,10 +528,6 @@
                         {
                             "fromIntake":true,
                             "field":"forest"
-                        },
-                        {
-                            "fromIntake":true,
-                            "field":"district"
                         }
                     ],
                     "function":"concat"
@@ -570,11 +562,11 @@
                 "store":["basic:/application"],
                 "type" : "integer"
             },
-            "contact":{
-                "basicField":"contact",
+            "contCn":{
+                "basicField":"contCn",
                 "default":"",
                 "fromIntake":false,
-                "store":["basic:/contact/phone", "basic:/contact/address"],
+                "store":["basic:/contact/phone", "basic:/contact/address", "basic:/application"],
                 "type" : "string"
             },
             "contId":{
