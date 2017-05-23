@@ -186,34 +186,38 @@ function getBasicFields(fieldsToBasic, body, autoPopValues){
 	//requestsObj contains objects, labeled as each request that may be sent to the basic API, containing the fields 
 	//which need to be included in that request
 	for (const request in requestsObj){
-		const obj = {};
-		obj[request] = {};
-		for (const fieldKey in requestsObj[request]){
-			const field = requestsObj[request][fieldKey];
-			const fieldPath = fieldKey;
-			const splitPath = fieldPath.split('.');
-			let bodyField = body;
-			if (field.fromIntake){
-				splitPath.forEach((sp)=>{
-					if (bodyField[sp]){
-						bodyField = bodyField[sp];
+		if (requestsObj.hasOwnProperty(request)){
+			const obj = {};
+			obj[request] = {};
+			for (const fieldKey in requestsObj[request]){
+				if (requestsObj[request].hasOwnProperty(fieldKey)){
+					const field = requestsObj[request][fieldKey];
+					const fieldPath = fieldKey;
+					const splitPath = fieldPath.split('.');
+					let bodyField = body;
+					if (field.fromIntake){
+						splitPath.forEach((sp)=>{
+							if (bodyField[sp]){
+								bodyField = bodyField[sp];
+							}
+							else {
+								bodyField = field.default;
+							}
+						});
+						obj[request][field.basicField] = bodyField;
 					}
 					else {
-						bodyField = field.default;
+						if (autoPopValues[fieldKey]){
+							obj[request][field.basicField] = autoPopValues[fieldKey];
+						}
+						else {
+							obj[request][field.basicField] = field.default;
+						}
 					}
-				});
-				obj[request][field.basicField] = bodyField;
-			}
-			else {
-				if (autoPopValues[fieldKey]){
-					obj[request][field.basicField] = autoPopValues[fieldKey];
-				}
-				else {
-					obj[request][field.basicField] = field.default;
 				}
 			}
+			postObjs[request] = obj[request];
 		}
-		postObjs[request] = obj[request];
 	}
 	return postObjs;
 }
