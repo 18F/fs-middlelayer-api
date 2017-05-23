@@ -86,35 +86,35 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 			if (files[key]){
 				const fileInfo = validation.getFileInfo(files[key], fileConstraints);
 				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
-				store.uploadFile(fileInfo, function(err, data){
+				store.uploadFile(fileInfo, function(err){
 					if (err){
 						console.error(err);
 						return error.sendError(req, res, 500, 'unable to process request.');
 					}
 					else {
-						db.saveFile(application.id, fileInfo, function(err, fileInfo){
+						db.saveFile(application.id, fileInfo, function(err){
 							if (err){
 								console.error(err);
 								return error.sendError(req, res, 500, 'unable to process request.');
 							}
 							else {
-								return callback (null, fileInfo);
+								return callback (null);
 							}
 						});	
 					}
 				});
 			}
 			else {
-				return callback (null, null);
+				return callback (null);
 			}
 		});
 	});
 	async.parallel(asyncTasks, function(err, data){
 		if (err){
-			return callback(err, null);
+			return callback (err);
 		}
 		else {
-			return callback(null, data);
+			return callback (null);
 		}
 	});
 }
@@ -320,7 +320,7 @@ const postApplication = function(req, res, reqData){
 					return error.sendError(req, res, 500, 'unable to process request.');
 				}
 				else {
-					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
+					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err){
 						if (err) {
 							console.error(err);
 							return error.sendError(req, res, 500, 'unable to process request.');

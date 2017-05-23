@@ -40,12 +40,13 @@ function uploadFile(fileInfo, callback){
 	};
 
 	s3.putObject(params, function(err, data) {
+		console.log('data='+JSON.stringify(data));
 		if (err) {
 			console.error(err);
-			return callback(err, null);
+			return callback(err);
 		}
 		else {
-			return callback(null, data);
+			return callback(null);
 		}      
 	});
 }

@@ -40,11 +40,11 @@ function saveFile(applicationId, uploadFile, callback){
 		fileEncoding: uploadFile.encoding
 	})
 	.then(function(file) {
-		return callback(null, file);
+		return callback(null);
 	})
 	.catch(function(err) {
 		console.error(err);
-		return callback(err, null);
+		return callback(err);
 	});
 }
 
