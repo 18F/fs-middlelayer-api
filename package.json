@@ -52,7 +52,7 @@
     "eslint": "^3.19.0",
     "istanbul": "^0.4.5",
     "markdownlint-cli": "^0.3.1",
-    "minimist": "^0.0.8",
+    "minimist": "^1.2.0",
     "mocha": "^3.2.0",
     "mock-aws": "^1.2.3",
     "npm-run-all": "^4.0.2",
@@ -87,9 +87,10 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
+    "pg": "^6.2.2",
     "request-promise": "^4.2.0",
     "sequelize": "^3.30.2",
-    "url": "^0.10.3",
+    "url": "^0.11.0",
     "util": "^0.10.3",
     "uuid": "^3.0.1"
   }
