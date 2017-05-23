@@ -39,7 +39,7 @@ function uploadFile(fileInfo, callback){
 		ACL: 'private' 
 	};
 
-	s3.putObject(params, function(err, data) {
+	s3.putObject(params, function(err) {
 		if (err) {
 			console.error(err);
 			return callback(err);
