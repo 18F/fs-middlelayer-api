@@ -195,7 +195,9 @@ function handleMissingError(output, result, counter, schema){
 	output.errorArray.push(makeErrorObj(field, 'missing'));
 	findField(schema, field.split('.'), getAllRequired);
 	for (const i in requiredFields){
-		requiredFields[i] = `${field}.${requiredFields[i]}`;
+		if (requiredFields.hasOwnProperty(i)) {
+			requiredFields[i] = `${field}.${requiredFields[i]}`;
+		}
 	}
 	requiredFields.forEach((requiredField)=>{
 		output.errorArray.push(makeErrorObj(requiredField, 'missing'));
@@ -357,7 +359,9 @@ function validateBody(body, pathData, validationSchema){
 	const schemaToUse = schema.schemaToUse;
 	let key;
 	for (key in applicationSchema){
-		v.addSchema(applicationSchema[key], key);
+		if (applicationSchema.hasOwnProperty(key)) {
+			v.addSchema(applicationSchema[key], key);
+		}
 	}
 	const val = v.validate(body, schemaToUse);
 	const error = val.errors;

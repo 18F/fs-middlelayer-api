@@ -39,12 +39,12 @@ function saveFile(applicationId, uploadFile, callback){
 		fileMimetype: uploadFile.mimetype,
 		fileEncoding: uploadFile.encoding
 	})
-	.then(function(file) {
-		return callback(null, file);
+	.then(function() {
+		return callback(null);
 	})
 	.catch(function(err) {
 		console.error(err);
-		return callback(err, null);
+		return callback(err);
 	});
 }
 

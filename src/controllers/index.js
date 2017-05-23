@@ -45,17 +45,20 @@ function apiSchemaData(apiSchema, reqPath){
 
 	if (apiSchema) {
 		for (const k in apiSchema.paths) {
-			
-			const ms = matchstick(k, 'template');
-			ms.match(reqPath);
 
-			if ( ms.match(reqPath) ) { 
+			if (apiSchema.paths.hasOwnProperty(k)){
 
-				return {
-					path: k,
-					tokens: ms.tokens,
-					matches: ms.matches
-				};
+				const ms = matchstick(k, 'template');
+				ms.match(reqPath);
+
+				if ( ms.match(reqPath) ) { 
+
+					return {
+						path: k,
+						tokens: ms.tokens,
+						matches: ms.matches
+					};
+				}	
 			}
 		}
 	}
@@ -83,35 +86,35 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 			if (files[key]){
 				const fileInfo = validation.getFileInfo(files[key], fileConstraints);
 				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
-				store.uploadFile(fileInfo, function(err, data){
+				store.uploadFile(fileInfo, function(err){
 					if (err){
 						console.error(err);
 						return error.sendError(req, res, 500, 'unable to process request.');
 					}
 					else {
-						db.saveFile(application.id, fileInfo, function(err, fileInfo){
+						db.saveFile(application.id, fileInfo, function(err){
 							if (err){
 								console.error(err);
 								return error.sendError(req, res, 500, 'unable to process request.');
 							}
 							else {
-								return callback (null, fileInfo);
+								return callback (null);
 							}
 						});	
 					}
 				});
 			}
 			else {
-				return callback (null, null);
+				return callback (null);
 			}
 		});
 	});
 	async.parallel(asyncTasks, function(err, data){
 		if (err){
-			return callback(err, null);
+			return callback (err);
 		}
 		else {
-			return callback(null, data);
+			return callback (null);
 		}
 	});
 }
@@ -228,7 +231,7 @@ const getControlNumber = function(req, res, reqData){
 
 			const jsonResponse = {};
 
-			const cnData = basicData;  // TODO: remove - used for mocks
+			const cnData = basicData;
 
 			if (basicData){
 
@@ -249,7 +252,7 @@ const getControlNumber = function(req, res, reqData){
 							});
 						}
 						jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData['x-getTemplate']);
-						jsonData.controlNumber = controlNumber;// TODO: remove - used for mocks
+						jsonData.controlNumber = controlNumber;
 
 						jsonResponse.status = 'success';
 						const toReturn = Object.assign({}, jsonResponse, jsonData);
@@ -317,7 +320,7 @@ const postApplication = function(req, res, reqData){
 					return error.sendError(req, res, 500, 'unable to process request.');
 				}
 				else {
-					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
+					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err){
 						if (err) {
 							console.error(err);
 							return error.sendError(req, res, 500, 'unable to process request.');
