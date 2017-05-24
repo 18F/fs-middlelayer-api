@@ -105,7 +105,8 @@
             "locationDescription": {"default":"", "intake":"middleLayer/locationDescription"},
             "startDateTime": {"default":"", "intake":"middleLayer/startDatetime"},
             "endDateTime": {"default":"", "intake":"middleLayer/endDatetime"},
-            "numberParticipants": {"default":0, "intake":"middleLayer/numberParticipants"}
+            "numberParticipants": {"default":0, "intake":"middleLayer/numberParticipants"},
+            "numberSpectators": {"default":0, "intake":"middleLayer/numberSpectators"}
           }
         },
         "tags": [
