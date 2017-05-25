@@ -1,6 +1,6 @@
 # Swagger UI Accessibility Issues
 
-This table provides the accessibility issues found in an audit of the Swagger UI documentation created for the Forest Service Middle-Layer ePermit API. These issues are excerpted from the [full accessibility report](accessibility_report.pdf). That report provides comprehensive results of testing the API documentation against the Web Content Accessibility Standards (WCAG) 2.0, levels A and AA, adopted by the U.S. Access Board as standards for Section 508 compliance. 
+This table provides the accessibility issues found in an audit of the Swagger UI documentation created for the Forest Service Middle-Layer ePermit API. These issues are excerpted from the [full accessibility report](accessibility_report.pdf). That report provides comprehensive results of testing the Swagger 2.0 API documentation against the Web Content Accessibility Standards (WCAG) 2.0, levels A and AA, adopted by the U.S. Access Board as standards for Section 508 compliance. 
 
 The table below references the relevant WCAG 2.0 standards by number and includes their corresponding descriptions, abbreviated in some cases. The issues describe the associated accessibility barrier (i.e., the standards nonconformance) found in testing.  
 
