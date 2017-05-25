@@ -291,6 +291,12 @@
                 "store":["middleLayer:numberParticipants"],
                 "type": "integer"
             },
+            "numberSpectators": {
+                "default":0,
+                "fromIntake":true,
+                "store":["middleLayer:numberSpectators"],
+                "type": "integer"
+            },
             "formName":{
                 "basicField":"formName",
                 "default":"FS-2700-3B",
@@ -305,20 +311,76 @@
                 "madeOf":{
                     "fields":[
                         {
+                            "fromIntake":false,
+                            "value":"Activity Description: "
+                        },
+                        {
                             "fromIntake":true,
                             "field":"noncommercialFields.activityDescription"
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":". "
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":"Location Description: "
                         },
                         {
                             "fromIntake":true,
                             "field":"noncommercialFields.locationDescription"
                         },
                         {
+                            "fromIntake":false,
+                            "value":". "
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":"Start Date Time: "
+                        },
+                        {
                             "fromIntake":true,
                             "field":"noncommercialFields.startDateTime"
                         },
                         {
+                            "fromIntake":false,
+                            "value":". "
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":"End Date Time: "
+                        },
+                        {
                             "fromIntake":true,
                             "field":"noncommercialFields.endDateTime"
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":". "
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":"Number Participants: "
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"noncommercialFields.numberParticipants"
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":". "
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":"Number Spectators: "
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"noncommercialFields.numberSpectators"
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":"."
                         }
                     ],
                     "function":"concat"
