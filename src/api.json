@@ -76,8 +76,8 @@
           "adminOrg": {"default":"", "intake":"adminOrg"},
           "applicantInfo": {
             "contactControlNumber":{"default":"", "intake":"addresses/contCn"},
-            "firstName": {"default":"", "intake":"holders/firstName"},
-            "lastName": {"default":"", "intake":"holders/lastName"},
+            "firstName": {"default":"", "intake":"firstName"},
+            "lastName": {"default":"", "intake":"lastName"},
             "dayPhone": {
                 "areaCode": {"default":0, "intake":"phones/areaCode"},
                 "number": {"default":0, "intake":"phones/phoneNumber"},
@@ -98,7 +98,7 @@
             "mailingZIP": {"default":"", "intake":"addresses/postalCode"},
             "organizationName": {"default":"", "intake":"addresses/contName"},
             "website": {"default":"", "intake":"middleLayer/website"},
-            "orgType": {"default":"", "intake":"holders/orgType"}
+            "orgType": {"default":"", "intake":"orgType"}
           },
           "noncommercialFields": {
             "activityDescription": {"default":"", "intake":"middleLayer/activityDescription"},
@@ -217,8 +217,8 @@
           "adminOrg": {"default":"", "intake":"adminOrg"},
           "applicantInfo": {
             "contactControlNumber":{"default":"", "intake":"addresses/contCn"},
-            "firstName": {"default":"", "intake":"holders/firstName"},
-            "lastName": {"default":"", "intake":"holders/lastName"},
+            "firstName": {"default":"", "intake":"firstName"},
+            "lastName": {"default":"", "intake":"lastName"},
             "dayPhone": {
               "areaCode": {"default":0, "intake":"phones/areaCode"},
               "number": {"default":0, "intake":"phones/phoneNumber"},
@@ -239,7 +239,7 @@
             "mailingZIP": {"default":0, "intake":"addresses/postalCode"},
             "organizationName": {"default":"", "intake":"addresses/contName"},
             "website": {"default":"", "intake":"middleLayer/website"},
-            "orgType": {"default":"", "intake":"holders/orgType"}
+            "orgType": {"default":"", "intake":"orgType"}
           },
           "tempOutfitterFields": {
             "individualIsCitizen": {"default":false, "intake":"middleLayer/individualIsCitizen"},
