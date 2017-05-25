@@ -44,9 +44,16 @@ function getTopLevelField(intakeField, cnData, getSchema, jsonData, key){
  */
 function getSubLevelField(cnData, getSchema, key, jsonData){
 
-	const addressData = cnData.addresses[0];
-	const phoneData = cnData.phones[0];
-	const holderData = cnData.holders[0];
+	let addressData, phoneData, holderData;
+	if (cnData.addresses){
+		addressData = cnData.addresses[0];
+	}
+	if (cnData.phones){
+		phoneData = cnData.phones[0];
+	}
+	if (cnData.holders){
+		holderData = cnData.holders[0];
+	}
 	const path = getSchema[key].intake.split('/');
 	let data;
 	switch (path[0]){
@@ -60,7 +67,7 @@ function getSubLevelField(cnData, getSchema, key, jsonData){
 		data = addressData;
 		break;
 	}
-	if (data.hasOwnProperty(path[1])){
+	if (data && data.hasOwnProperty(path[1])){
 		jsonData[key] = data[path[1]];
 	}
 
