@@ -29,6 +29,9 @@ code-docs
 # DB related setup
 dba
 
+# Command line operations
+cmd
+
 # Mock API
 src/mocks
 src/routes/mocks/**
