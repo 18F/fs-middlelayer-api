@@ -588,7 +588,8 @@
        "locationDescription": {  "type": "string"},
        "startDateTime": { "type": "string"},
        "endDateTime": { "type": "string"},
-       "numberParticipants" : { "type": "integer"}
+       "numberParticipants" : { "type": "integer"},
+       "numberSpectators" : { "type": "integer"}
       },
       "required": ["activityDescription","locationDescription","startDateTime","endDateTime","numberParticipants"],
       "xml": {
