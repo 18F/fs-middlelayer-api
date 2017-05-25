@@ -31,8 +31,7 @@ deploy:
     api_key:
       secure: UcbT1SQYR5lFlAAwTszr7QXVRp4ofKXeIsNzDmrfqu4P96fb+H3iD3ikxP+5SAtEkCYPN8xnaHE0H2V+fk4+1TTUruPIlXtGdCKTlxjTz2I3oqB4Qb1THeqYUbmSlK6pRh83bvr8Nl0WgEtnd8uzERroL+srWYNSH8A6mvsaO/TGADEnrUFo9pp7uTtgyVj/MLrKn/7xQJsLtyPHUMHSY8cvDv9TZLiUkA/9gFvFI8DPVD4whQBFHc+iOWYOCBN3QGrAS3lDwLvFSZm4nR5XE/AiFTLkVnYHQnYcf3DiQooWjdrWqwzNumpbRhDA0ybMNBHwY3+qFl6eObnhpubvCNMRQjYlZ5On5DdUXKX3AB2YoVKues6D4Na30agafRHM8RNal9Tgcj/mHxtN/lNMlA2gZgyLSaTN/VTbSYE+rildnnfqGY6+zJhPoza3r3C3IGwThhJB6su2YhQi9GqRlX4XtwjKJOQDJy2TTEhzjA5n5qqKHM9wdvoeSkjxpGN5gQThhcci60MFKy5Zys0N9hOdbOQWm48rUbCYI3eC75QiCCER29D9EUGTAVWN+x7Gp6LBsGpbaXOuTihxTBwV8DMI13T9GhCIRKtL47G6HZ/2N34WXqISCVpZjw+fLYsAw9YtYNX2fneCDa879u8f+Jqae5inLe/qulAk8PTzEY4=
     run:
-      - "sequelize db:migrate"
-      - "sequelize db:seed:all"
+      - "npm run dba"
     app:
       master: fs-epermit-st
       dev: fs-epermit-dev

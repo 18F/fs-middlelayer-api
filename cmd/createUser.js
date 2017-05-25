@@ -14,9 +14,10 @@
 //*******************************************************************
 // required modules
 require('dotenv').config();
+const include = require('include')(__dirname);
 const minimist = require('minimist');
 const bcrypt = require('bcrypt-nodejs');
-const db = require('./db.js');
+const db = include('src/controllers/db.js');
 
 //*************************************************************
 
