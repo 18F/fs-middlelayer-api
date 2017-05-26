@@ -109,7 +109,7 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 			}
 		});
 	});
-	async.parallel(asyncTasks, function(err, data){
+	async.parallel(asyncTasks, function(err){
 		if (err){
 			return callback (err);
 		}
