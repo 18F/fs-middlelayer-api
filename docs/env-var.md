@@ -12,7 +12,9 @@ These are the environment variables that must be created on the Node.js server f
 - `AWS_BUCKET_NAME=<AWS S3 bucket name>`
 - `SUDS_API_URL=<SUDS Basic API URL>`
 
-## Required for Testing Only
+## Creating API User Accounts Using Environment Variables
+
+User accounts will be created only if these variable are present:
 
 - `ADMINROLE_USER=<admin role account username>`
 - `ADMINROLE_PWD=<admin role account password>`
