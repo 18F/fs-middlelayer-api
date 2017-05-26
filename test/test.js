@@ -16,12 +16,18 @@
 const include = require('include')(__dirname);
 const request = require('supertest');
 const server = include('src/index.js');
+const factory = require('unionized');
 
 const util = require('./utility.js');
 
 const chai = require('chai');
 const expect = chai.expect;
-const factory = require('unionized');
+const bcrypt = require('bcrypt-nodejs');
+const db = include('src/controllers/db.js');
+const models = include('src/models');
+
+const adminUsername = 'admin' + (Math.floor((Math.random() * 1000000) + 1)).toString();
+const adminPassword = 'pwd' + (Math.floor((Math.random() * 1000000) + 1)).toString();
 
 const testURL = '/permits/applications/special-uses/noncommercial/';
 const noncommercialInput = include('test/data/testInputNoncommercial.json');
@@ -36,13 +42,43 @@ describe('FS ePermit API', function() {
 
 	before(function(done) {
 
-		util.getToken(function(t){
+		models.users.sync({ force: false });
+		const salt = bcrypt.genSaltSync(10);
+		const hash = bcrypt.hashSync(adminPassword, salt);
 
-			token = t;
-			return done();
+		const adminUser = {
+			userName: adminUsername, 
+			passHash: hash, 
+			userRole: 'admin'
+		};
 
+		db.saveUser(adminUser, function(err, usr){
+			if (err){
+				return false;
+			}
+			else {
+				
+				util.getToken(adminUsername, adminPassword, function(t){
+					token = t;
+					return done();
+				});
+					
+			}
 		});
 	
+	});
+
+	after(function(done) {
+		
+		db.deleteUser(adminUsername, function(err){
+			if (err){
+				return false;
+			}
+			else {
+				return done();
+			}
+		});
+		
 	});
 	
 	it('should return html format if web page', function(done) {
