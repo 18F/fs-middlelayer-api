@@ -51,9 +51,6 @@ function getSubLevelField(cnData, getSchema, key, jsonData){
 	if (cnData.phones){
 		phoneData = cnData.phones[0];
 	}
-	if (cnData.holders){
-		holderData = cnData.holders[0];
-	}
 	const path = getSchema[key].intake.split('/');
 	let data;
 	switch (path[0]){
