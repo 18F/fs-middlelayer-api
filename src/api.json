@@ -522,13 +522,17 @@
         "orgType":{
           "type":"string",
           "enum":[
-            "Individual",
+            "Association",
             "Corporation",
-            "Limited Liability Company",
-            "Partnership or Association",
-            "State Government or Agency",
-            "Local Government or Agency",
-            "Nonprofit"
+            "Education",
+            "Federal Government",
+            "State Government",
+            "Local Govt",
+            "Married Common Property",
+            "Limited Liability Company (LLC)",
+            "Limited Liability Partnership (LLP)",
+            "Person",
+            "Trust"
           ]
         }
       },
@@ -556,13 +560,17 @@
           "type":"string",
           "description":"Organization Type",
           "enum":[
-            "Individual",
+            "Association",
             "Corporation",
-            "Limited Liability Company",
-            "Partnership or Association",
-            "State Government or Agency",
-            "Local Government or Agency",
-            "Nonprofit"
+            "Education",
+            "Federal Government",
+            "State Government",
+            "Local Govt",
+            "Married Common Property",
+            "Limited Liability Company (LLC)",
+            "Limited Liability Partnership (LLP)",
+            "Person",
+            "Trust"
           ]
         }
       },
