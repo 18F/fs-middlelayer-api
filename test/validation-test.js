@@ -96,7 +96,7 @@ describe('outfitters validation ', function(){
 		});
 		it('should report issues when no tempOutfitterFields/individual is citizen is provided', function(){
 			expect (
-				specialUses.validate.checkForIndividualIsCitizen(tempOutfitterFactory.create({'applicantInfo.orgType':'Individual', 'tempOutfitterFields.individualIsCitizen' : undefined}), { errorArray: [] }).errorArray.length
+				specialUses.validate.checkForIndividualIsCitizen(tempOutfitterFactory.create({'applicantInfo.orgType':'Person', 'tempOutfitterFields.individualIsCitizen' : undefined}), { errorArray: [] }).errorArray.length
 			)
 			.to.be.equal(1);
 		});

@@ -415,13 +415,17 @@
                                         "orgType": {
                                             "description": "Organization Type",
                                             "enum": [
-                                                "Individual",
+                                                "Association",
                                                 "Corporation",
-                                                "Limited Liability Company",
-                                                "Partnership or Association",
-                                                "State Government or Agency",
-                                                "Local Government or Agency",
-                                                "Nonprofit"
+                                                "Education",
+                                                "Federal Government",
+                                                "State Government",
+                                                "Local Govt",
+                                                "Married Common Property",
+                                                "Limited Liability Company (LLC)",
+                                                "Limited Liability Partnership (LLP)",
+                                                "Person",
+                                                "Trust"
                                             ],
                                             "fromIntake": true,
                                             "store": [
@@ -1009,13 +1013,17 @@
                                             "default": "",
                                             "description": "Organization Type",
                                             "enum": [
-                                                "Individual",
+                                                "Association",
                                                 "Corporation",
-                                                "Limited Liability Company",
-                                                "Partnership or Association",
-                                                "State Government or Agency",
-                                                "Local Government or Agency",
-                                                "Nonprofit"
+                                                "Education",
+                                                "Federal Government",
+                                                "State Government",
+                                                "Local Govt",
+                                                "Married Common Property",
+                                                "Limited Liability Company (LLC)",
+                                                "Limited Liability Partnership (LLP)",
+                                                "Person",
+                                                "Trust"
                                             ],
                                             "fromIntake": true,
                                             "store": [
