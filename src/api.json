@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "This page is for developers. We built this site entirely off the APIs below and we want to share them with you.",
-    "version": "0.0.15",
+    "version": "0.0.16",
     "title": "API Documentation for Developers"
   },
   "tags": [
