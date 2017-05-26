@@ -33,7 +33,7 @@
             {
                 "properties": {
                     "organizationName": {
-                        "basicField":"contName",
+                        "basicField":"orgCode",
                         "default":"",
                         "fromIntake":true,
                         "store":["basic:/contact/organization"],
@@ -221,10 +221,10 @@
         "type": "object",
         "allOf":[
             {"$ref":"applicantInfoBase"},
-            { 
+            {
                 "properties": {
                     "organizationName": {
-                        "basicField":"contName",
+                        "basicField":"orgCode",
                         "default":"",
                         "fromIntake":true,
                         "store":["basic:/contact/organization"],
@@ -274,14 +274,14 @@
             "startDateTime": {
                 "default":"",
                 "fromIntake":true,
-                "pattern":"^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T(0\\d|1\\d|2[0-3]):(0\\d|1\\d|2[0-3]):(0\\d|1\\d|2[0-3])Z$",
+                "pattern":"^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T(0\\d|1\\d|2[0-3]):([0-5]\\d):([0-5]\\d)Z$",
                 "store":["middleLayer:startDatetime"],
                 "type": "string"
             },
             "endDateTime": {
                 "default":"",
                 "fromIntake":true,
-                "pattern":"^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T(0\\d|1\\d|2[0-3]):(0\\d|1\\d|2[0-3]):(0\\d|1\\d|2[0-3])Z$",
+                "pattern":"^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T(0\\d|1\\d|2[0-3]):([0-5]\\d):([0-5]\\d)Z$",
                 "store":["middleLayer:endDatetime"],
                 "type": "string"
             },
@@ -293,9 +293,38 @@
             },
             "formName":{
                 "basicField":"formName",
-                "default":"FS-2700-3b",
+                "default":"FS-2700-3B",
+                "fromIntake":false,
                 "store":["middleLayer:formName", "basic:/application"],
                 "type":"string"
+            },
+            "purpose":{
+                "basicField":"purpose",
+                "default":"",
+                "fromIntake":false,
+                "madeOf":{
+                    "fields":[
+                        {
+                            "fromIntake":true,
+                            "field":"noncommercialFields.activityDescription"
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"noncommercialFields.locationDescription"
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"noncommercialFields.startDateTime"
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"noncommercialFields.endDateTime"
+                        }
+                    ],
+                    "function":"concat"
+                },
+                "store":["basic:/application"],
+                "type":"string"  
             }
         },
         "required": ["activityDescription", "locationDescription", "startDateTime", "endDateTime", "numberParticipants"]
@@ -306,19 +335,19 @@
         "properties": {
             "areaCode": { 
                 "basicField":"areaCode",
-                "default":0,
+                "default":"0",
                 "fromIntake":true,
-                "format": "areaCodeFormat",
+                "pattern":"^[0-9]{3}$",
                 "store":["basic:/contact/phone"],
-                "type": "integer"
+                "type": "string"
             },
             "number": {
                 "basicField":"phoneNumber",
-                "default":0,
+                "default":"0",
                 "fromIntake":true,
-                "format": "phoneNumberFormat",
+                "pattern":"^[0-9]{7}$",
                 "store":["basic:/contact/phone"],
-                "type": "integer"
+                "type": "string"
             },
             "extension": {
                 "basicField":"extension",
@@ -411,6 +440,12 @@
                 "fromIntake":true,
                 "store":["middleLayer:website"],
                 "type": "string"
+            },
+            "countryName":{
+                "basicField":"countryName",
+                "default":"United States of America",
+                "store":["basic:/contact/address"],
+                "type": "string"
             }
         },
         "required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState"]
@@ -444,7 +479,19 @@
                 "basicField":"securityId",
                 "default":"",
                 "fromIntake":false,
-                "madeOf":["region","forest","district"],
+                "madeOf":{
+                    "fields":[
+                        {
+                            "fromIntake":true,
+                            "field":"region"
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"forest"
+                        }
+                    ],
+                    "function":"concat"
+                },
                 "store":["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
                 "type" : "string"
             },
@@ -452,7 +499,19 @@
                 "basicField":"managingOrg",
                 "default":"",
                 "fromIntake":false,
-                "madeOf":["region","forest","district"],
+                "madeOf":{
+                    "fields":[
+                        {
+                            "fromIntake":true,
+                            "field":"region"
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"forest"
+                        }
+                    ],
+                    "function":"concat"
+                },
                 "store":["basic:/application"],
                 "type" : "string"
             },
@@ -460,15 +519,39 @@
                 "basicField":"adminOrg",
                 "default":"",
                 "fromIntake":false,
-                "madeOf":["region","forest","district"],
+                "madeOf":{
+                    "fields":[
+                        {
+                            "fromIntake":true,
+                            "field":"region"
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"forest"
+                        }
+                    ],
+                    "function":"concat"
+                },
                 "store":["basic:/application"],
                 "type" : "string"
             },
-            "ePermitID":{
-                "basicField":"ePermitID",
+            "epermitId":{
+                "basicField":"epermitId",
                 "default":"",
                 "fromIntake":false,
-                "madeOf":["region","forest","00000"],
+                "madeOf":{
+                    "fields":[
+                        {
+                            "fromIntake":true,
+                            "field":"region"
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"forest"
+                        }
+                    ],
+                    "function":"ePermitId"
+                },
                 "store":["basic:/application"],
                 "type" : "string"
             },
@@ -479,11 +562,39 @@
                 "store":["basic:/application"],
                 "type" : "integer"
             },
-            "contCN":{
-                "basicField":"contact",
+            "contCn":{
+                "basicField":"contCn",
                 "default":"",
                 "fromIntake":false,
-                "store":["basic:/contact/phone", "basic:/contact/address", "basic:/contact/person"],
+                "store":["basic:/contact/phone", "basic:/contact/address", "basic:/application"],
+                "type" : "string"
+            },
+            "contId":{
+                "basicField":"contId",
+                "default":"",
+                "fromIntake":false,
+                "madeOf":{
+                    "fields":[
+                        {
+                            "fromIntake":true,
+                            "field":"applicantInfo.lastName"
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":", "
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"applicantInfo.firstName"
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"applicantInfo.organizationName"
+                        }
+                    ],
+                    "function":"contId"
+                },
+                "store":["basic:/contact/person", "basic:/contact/organization"],
                 "type" : "string"
             }
         },
