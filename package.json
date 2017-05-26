@@ -87,7 +87,6 @@
     "pg": "^6.1.4",
     "request": "^2.81.0",
     "request-promise": "^4.2.0",
-    "sequelize": "^3.30.2",
-    "sequelize-cli": "^2.6.0"
+    "sequelize": "^3.30.2"
   }
 }
