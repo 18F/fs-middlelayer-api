@@ -82,15 +82,21 @@ describe('outfitters validation ', function(){
 			)
 			.to.be.equal(1);
 		});
-		it('should report issues when no tempOutfitterFields/client charges is provided', function(){
+		it('should report issues when neither tempOutfitterFields/advertising url nor tempOutfitterFields/advertising description is provided', function(){
 			expect (
-				specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.clientCharges' : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray.length
+				specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.advertisingURL' : undefined, 'tempOutfitterFields.advertisingDescription' : undefined}), outfittersObjects.pathData, { errorArray: [] }).errorArray.length
 			)
 			.to.be.equal(1);
 		});
-		it('should report issues when neither tempOutfitterFields/advertising url nor tempOutfitterFields/advertising description is provided', function(){
+		it('should report issues when no tempOutfitterFields/small business is provided', function(){
 			expect (
-				specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.advertisingURL' : undefined, 'tempOutfitterFields.advertisingDescription' : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray.length
+				specialUses.validate.checkForSmallBusiness(tempOutfitterFactory.create({'tempOutfitterFields.smallBusiness' : undefined}), { errorArray: [] }).errorArray.length
+			)
+			.to.be.equal(1);
+		});
+		it('should report issues when no tempOutfitterFields/individual is citizen is provided', function(){
+			expect (
+				specialUses.validate.checkForIndividualIsCitizen(tempOutfitterFactory.create({'applicantInfo.orgType':'Individual', 'tempOutfitterFields.individualIsCitizen' : undefined}), { errorArray: [] }).errorArray.length
 			)
 			.to.be.equal(1);
 		});
@@ -197,6 +203,12 @@ describe('noncommercial validation', function(){
 			)
 			.to.be.equal(1);
 		});
+		it('should report issues when no organization name is provided', function(){
+			expect (
+				specialUses.validate.checkForOrgName(noncommercialFactory.create({'applicantInfo.orgType' : 'Corporation'}), { errorArray: [] }).errorArray.length
+			)
+			.to.be.equal(1);
+		});
 		it('should report issues when no type is provided', function(){
 			expect (
 				specialUses.validate.validateBody(noncommercialFactory.create({'type' : undefined}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
@@ -255,13 +267,13 @@ describe('noncommercial validation', function(){
 		});
 		it('should report issues when the wrong type of applicantInfo/day phone/area code is provided', function(){
 			expect (
-				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode' : '123'}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
+				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode' : 123}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
 			)
 			.to.be.equal(1);
 		});
 		it('should report issues when the wrong type of applicantInfo/day phone/number is provided', function(){
 			expect (
-				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.number' : '123'}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
+				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.number' : 123}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
 			)
 			.to.be.equal(1);
 		});
@@ -318,13 +330,13 @@ describe('noncommercial validation', function(){
 		
 		it('should report issues when the wrong format of applicantInfo/day phone/area code is provided', function(){
 			expect (
-				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode' : 12}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
+				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode' : '12'}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
 			)
 			.to.be.equal(1);
 		});
 		it('should report issues when the wrong format of applicantInfo/day phone/number is provided', function(){
 			expect (
-				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode' : 12}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
+				specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode' : '12'}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray.length
 			)
 			.to.be.equal(1);
 		});
