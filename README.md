@@ -39,7 +39,7 @@ This repository is being developed under a task order of the Agile Blanket Purch
     - To use the moxai dependency and point at the mock API, update this to be `http://localhost:${PORT}/mocks`.
 
 - API user account:
-  - To create an API user account, run `node src/controllers/createUser.js -u <username> -p <password> -r <userrole>`. The user role is either 'user' or 'admin'.
+  - To create an API user account, run `node cmd/createUser.js -u <username> -p <password> -r <userrole>`. The user role is either 'user' or 'admin'.
 
 - Dotenv:
   - [Dotenv](https://www.npmjs.com/package/dotenv) is used which can load environment variables from a .env file into process.env
