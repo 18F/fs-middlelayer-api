@@ -30,6 +30,14 @@ const testTempOutfittersBody = require('./data/testInputTempOutfitters.json');
 const testNoncommercialBody = require('./data/testInputNoncommercial.json');
 const tempOutfitterFactory = factory.factory(testTempOutfittersBody);
 const noncommercialFactory = factory.factory(testNoncommercialBody);
+const errorFactory = factory.factory({
+	field: undefined,
+	errorType: undefined,
+	expectedFieldType: undefined,
+	enumMessage: undefined,
+	dependency: undefined,
+	anyOfFields: undefined
+});
 
 before(function(){
 	if (process.env.npm_config_mock === 'Y'){
@@ -47,72 +55,117 @@ after(function(){
 describe('outfitters validation ', function(){
 	describe('ensure field is present', function(){
 		it('should report issues when no body is provided', function(){
-			expect (
-				specialUses.validate.validateBody({}, outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray.length
-			)
-			.to.be.equal(20);
+			const actual = specialUses.validate.validateBody({}, outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray;
+			const expected = [
+				errorFactory.create({field: 'region', errorType: 'missing'}),
+				errorFactory.create({field: 'forest', errorType: 'missing'}),
+				errorFactory.create({field: 'district', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.firstName', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.lastName', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.dayPhone', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.dayPhone.areaCode', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.dayPhone.number', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.dayPhone.phoneType', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.emailAddress', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.mailingAddress', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.mailingCity', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.mailingZIP', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.mailingState', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.orgType', errorType: 'missing'}),
+				errorFactory.create({field: 'type', errorType: 'missing'}),
+				errorFactory.create({field: 'tempOutfitterFields', errorType: 'missing'}),
+				errorFactory.create({field: 'tempOutfitterFields.activityDescription', errorType: 'missing'}),
+				errorFactory.create({field: 'tempOutfitterFields.clientCharges', errorType: 'missing'})
+			];
+			expect (actual).to.eql(expected);
 		});
 		it('should report issues when no applicantInfo object is provided', function(){
-			expect (
-				specialUses.validate.validateBody(tempOutfitterFactory.create({applicantInfo : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray.length
-			)
-			.to.be.equal(13);
+			const actual = specialUses.validate.validateBody(tempOutfitterFactory.create({applicantInfo : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray;
+			const expected = [
+				errorFactory.create({field: 'applicantInfo', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.firstName', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.lastName', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.dayPhone', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.dayPhone.areaCode', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.dayPhone.number', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.dayPhone.phoneType', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.emailAddress', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.mailingAddress', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.mailingCity', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.mailingZIP', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.mailingState', errorType: 'missing'}),
+				errorFactory.create({field: 'applicantInfo.orgType', errorType: 'missing'})
+			];
+			expect (actual).to.eql(expected);
 		});
 		it('should report issues when no tempOutfitterFields object is provided', function(){
-			expect (
-				specialUses.validate.validateBody(tempOutfitterFactory.create({tempOutfitterFields : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray.length
-			)
-			.to.be.equal(3);
+			const actual = specialUses.validate.validateBody(tempOutfitterFactory.create({tempOutfitterFields : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray;
+			const expected = [
+				errorFactory.create({field: 'tempOutfitterFields', errorType: 'missing'}),
+				errorFactory.create({field: 'tempOutfitterFields.activityDescription', errorType: 'missing'}),
+				errorFactory.create({field: 'tempOutfitterFields.clientCharges', errorType: 'missing'})
+			];
+			expect (actual).to.eql(expected);
 		});
 		it('should report issues when no applicantInfo/org type is provided', function(){
-			expect (
-				specialUses.validate.validateBody(tempOutfitterFactory.create({'applicantInfo.orgType' : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray.length
-			)
-			.to.be.equal(1);
+			const actual = specialUses.validate.validateBody(tempOutfitterFactory.create({'applicantInfo.orgType' : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray;
+			const expected = [
+				errorFactory.create({field: 'applicantInfo.orgType', errorType: 'missing'})
+			];
+			expect (actual).to.eql(expected);
 		});
 		it('should report issues when no tempOutfitterFields/activity description is provided', function(){
-			expect (
-				specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.activityDescription' : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray.length
-			)
-			.to.be.equal(1);
+			const actual = specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.activityDescription' : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray;
+			const expected = [
+				errorFactory.create({field: 'tempOutfitterFields.activityDescription', errorType: 'missing'})
+			];
+			expect (actual).to.eql(expected);
 		});
 		it('should report issues when no tempOutfitterFields/client charges is provided', function(){
-			expect (
-				specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.clientCharges' : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray.length
-			)
-			.to.be.equal(1);
+			const actual = specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.clientCharges' : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray;
+			const expected = [
+				errorFactory.create({field: 'tempOutfitterFields.clientCharges', errorType: 'missing'})
+			];
+			expect (actual).to.eql(expected);
 		});
 		it('should report issues when neither tempOutfitterFields/advertising url nor tempOutfitterFields/advertising description is provided', function(){
-			expect (
-				specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.advertisingURL' : undefined, 'tempOutfitterFields.advertisingDescription' : undefined}), outfittersObjects.pathData, { errorArray: [] }).errorArray.length
-			)
-			.to.be.equal(1);
+			const actual = specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.advertisingURL' : undefined, 'tempOutfitterFields.advertisingDescription' : undefined}), outfittersObjects.pathData, { errorArray: [] }).errorArray;
+			const expected = [
+				{errorType: 'anyOf', anyOfFields:['tempOutfitterFields.advertisingURL', 'tempOutfitterFields.advertisingDescription']}
+			];
+			expect (actual).to.eql(expected);
 		});
 		it('should report issues when no tempOutfitterFields/small business is provided', function(){
-			expect (
-				specialUses.validate.checkForSmallBusiness(tempOutfitterFactory.create({'tempOutfitterFields.smallBusiness' : undefined}), { errorArray: [] }).errorArray.length
-			)
-			.to.be.equal(1);
+			
+			const actual = specialUses.validate.checkForSmallBusiness(tempOutfitterFactory.create({'tempOutfitterFields.smallBusiness' : undefined}), { errorArray: [] }).errorArray;
+			const expected = [
+				errorFactory.create({field: 'tempOutfitterFields.smallBusiness', errorType: 'missing'})
+			];
+			expect (actual).to.eql(expected);
 		});
 		it('should report issues when no tempOutfitterFields/individual is citizen is provided', function(){
-			expect (
-				specialUses.validate.checkForIndividualIsCitizen(tempOutfitterFactory.create({'applicantInfo.orgType':'Individual', 'tempOutfitterFields.individualIsCitizen' : undefined}), { errorArray: [] }).errorArray.length
-			)
-			.to.be.equal(1);
+			const actual = specialUses.validate.checkForIndividualIsCitizen(tempOutfitterFactory.create({'applicantInfo.orgType':'Individual', 'tempOutfitterFields.individualIsCitizen' : undefined}), { errorArray: [] }).errorArray;
+			const expected = [
+				errorFactory.create({field: 'tempOutfitterFields.individualIsCitizen', errorType: 'missing'})
+			];
+			expect (actual).to.eql(expected);
 		});
 	});
 	describe('ensure fields are the right type', function(){
 		it('should report issues when when the wrong type of tempOutfitterFields/activity description is provided', function(){
-			expect (
-				specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.activityDescription' : 123}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray.length
-			)
-			.to.be.equal(1);
+			const actual = specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.activityDescription' : 123}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray;
+			const expected = [
+				errorFactory.create({field: 'tempOutfitterFields.activityDescription', errorType: 'type', expectedFieldType:'string'})
+			];
+			expect (actual).to.eql(expected);
 		});
 		it('should report issues when when the wrong type of tempOutfitterFields/client charges is provided', function(){
-			expect (
-				specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.clientCharges' : 500}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray.length
-			)
-			.to.be.equal(1);
+			const actual = specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.clientCharges' : 500}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray;
+			const expected = [
+				errorFactory.create({field: 'tempOutfitterFields.clientCharges', errorType: 'type', expectedFieldType:'string'})
+			];
+			expect (actual).to.eql(expected);
 		});
 	});
 });
