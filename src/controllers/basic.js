@@ -67,7 +67,7 @@ function ePermitId(input){
  * @return {Boolean}      - Whether application is for an individual
  */
 function isAppFromPerson(body){
-	const output = (!body.applicantInfo.orgType || body.applicantInfo.orgType === 'Individual');
+	const output = (!body.applicantInfo.orgType || body.applicantInfo.orgType.toUpperCase() === 'PERSON');
 	return output;
 }
 
