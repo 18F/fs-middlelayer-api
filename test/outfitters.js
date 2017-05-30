@@ -117,7 +117,10 @@ function mockZip(){
 		return callback(null, 'hi');
 	});
 }
-function unmockZip(){}
+function unmockZip(){
+	s3zipper.prototype.getFiles.restore();
+	s3zipper.prototype.streamZipDataTo.restore();
+}
 
 //*******************************************************************
 
