@@ -259,7 +259,7 @@
 						"description": "Success",
       					"examples": {
         					"application/json": {
-        						"accinstCn": "/[a-z][1-9]{1}[0-9]{9}/",
+        						"accinstCn": "/[1-9]{1}[0-9]{9}/",
 								"epermitId": "0102000001",
 								"sudsId": "0102000001",
 								"securityId": "0102",
@@ -268,13 +268,13 @@
 								"purpose": "Permit Purpose",
 								"formName": "FS-2700-4I",
 								"formDesc": "Outfitting & Guiding Special Use Permit",
-								"holderCombKey": "123456789-987654321",
-								"contCn": "987654321",
-								"contId": "1234",
-								"contName": "Jane Roe",
+								"holderCombKey": "/[1-9]{9}-[1-9]{9}/",
+								"contCn": "/[1-9]{1}[0-9]{9}/",
+								"contId": "/[1-9]{4}/",
+								"contName": "/[A-Z]{1}[a-z]{2,7} [A-Z]{1}[a-z]{2,7}/",
 								"contactType": "PERSON",
-								"firstName": "Jane",
-								"lastName": "Roe",
+								"firstName": "/[A-Z]{1}[a-z]{2,7}/",
+								"lastName": "/[A-Z]{1}[a-z]{2,7}/",
 								"personPrefix": "MS",
 								"crExemptInd": "N"
         					}
