@@ -382,7 +382,7 @@ function getFromBasic(req, res, controlNumber){
  * @param  {Object} sch - Schema object
  * @param  {Object} body - User input
  */
-function postToBasic(req, res, sch, body){ //Should remove control number once we get from BASIC api
+function postToBasic(req, res, sch, body){
 
 	return new Promise(function (fulfill, reject){
 
@@ -471,10 +471,6 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 		})
 		.then(function(response){
 			const applResponse  = response;
-			if (SUDS_API_URL.endsWith('/mocks')){
-				const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString();
-				applResponse.accinstCn = controlNumber;
-			}
 			apiCallsObject.POST['/application'].response = applResponse;
 			fulfill(apiCallsObject);
 		})

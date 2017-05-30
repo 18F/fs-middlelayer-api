@@ -76,7 +76,7 @@ app.use('/schema/api.json', express.static('src/api.json'));
 //*******************************************************************
 // mocks
 
-app.use('/mocks', moxai({'dir': '../mocks', 'file': 'basic'}));
+app.use('/mocks', moxai({'dir': '../mocks', 'file': 'basic', 'random': true}));
 
 //*******************************************************************
 // routes
