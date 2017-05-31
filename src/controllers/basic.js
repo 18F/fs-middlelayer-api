@@ -20,44 +20,9 @@ const request = require('request-promise');
 
 const error = require('./error.js');
 const db = require('./db.js');
+const autoPopulate = require('./autoPopulate.js');
 const DuplicateContactsError = require('./duplicateContactsError.js');
 const SUDS_API_URL = process.env.SUDS_API_URL;
-
-//*******************************************************************
-// AUTO-POPULATE FUNCTIONS
-/**
- * Concats all indexs of input
- * @param  {Array} input - Array of strings to be joined together
- * @return {String}      - Single string made up of all indicies of input 
- */
-function concat(input){
-	const output = input.join('');
-	return output;
-}
-
-/**
- * Ensures all characters of input are upper case then joins them
- * @param  {Array} input - Array of strings to be joined together
- * @return {String}      - Single string made up of all indicies of input 
- */
-function contId(input){
-	return concat(
-		input.map((i)=>{
-			return i.toUpperCase();
-		})
-	);
-}
-
-/**
- * Adds UNIX timestamp and then joins all elements of input
- * @param  {Array} input - Array of strings to be joined together
- * @return {String}      - Single string made up of all indicies of input 
- */
-function ePermitId(input){
-	const timeStamp = + new Date();
-	input.push(timeStamp);
-	return concat(input);
-}
 
 //*******************************************************************
 
@@ -131,23 +96,23 @@ function buildAutoPopulatedFields(fieldsToBuild, body){
 		});
 		switch (field[key].madeOf.function){
 		case 'concat':
-			autoPopulatedFieldValue = concat(fieldMakeUp);
+			autoPopulatedFieldValue = autoPopulate.concat(fieldMakeUp);
 			break;
 		case 'contId':
 			if (isAppFromPerson(body)){
 				if (fieldMakeUp.length > 3){
 					fieldMakeUp.pop();
 				}
-				autoPopulatedFieldValue = contId(fieldMakeUp);
+				autoPopulatedFieldValue = autoPopulate.contId(fieldMakeUp);
 			}
 			else {
 				const toUse = [];
 				toUse.push(fieldMakeUp.pop());
-				autoPopulatedFieldValue = contId(toUse);
+				autoPopulatedFieldValue = autoPopulate.contId(toUse);
 			}
 			break;
 		case 'ePermitId':
-			autoPopulatedFieldValue = ePermitId(fieldMakeUp);
+			autoPopulatedFieldValue = autoPopulate.ePermitId(fieldMakeUp);
 			break;
 		}
 		output[key] = autoPopulatedFieldValue;
