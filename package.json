@@ -1,6 +1,6 @@
 {
   "name": "fs-middlelayer-api",
-  "version": "0.0.16",
+  "version": "1.0.0",
   "description": "US Forest Service ePermit Middlelayer API",
   "engines": {
     "node": "6.10.2",
