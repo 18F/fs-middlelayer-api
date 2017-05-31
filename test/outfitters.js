@@ -17,7 +17,6 @@ const include = require('include')(__dirname);
 
 //*******************************************************************
 
-const AWS = require('mock-aws');
 const request = require('supertest');
 const server = include('src/index.js');
 const util = include('test/utility.js');
