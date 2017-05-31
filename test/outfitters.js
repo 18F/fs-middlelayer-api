@@ -114,7 +114,7 @@ function mockZip(){
 	sinon.stub(s3zipper.prototype, 'streamZipDataTo').callsFake(function(params, callback){
 		console.log('replaced streamZipDataTo');
 		params.pipe.json('');
-		return callback(null, 'hi');
+		return callback(null, 'result');
 	});
 }
 function unmockZip(){
