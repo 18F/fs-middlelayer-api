@@ -142,7 +142,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 			userRole: 'admin'
 		};
 
-		db.saveUser(adminUser, function(err, usr){
+		db.saveUser(adminUser, function(err){
 			if (err){
 				return false;
 			}
@@ -342,7 +342,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 			})
 			.buffer()
 			.parse(binaryParser)
-			.end(function(err, res) {
+			.end(function(err) {
 				if (err) 
 					return done(err);
 				
@@ -383,7 +383,7 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 			userRole: 'admin'
 		};
 
-		db.saveUser(adminUser, function(err, usr){
+		db.saveUser(adminUser, function(err){
 			if (err){
 				return false;
 			}
@@ -456,7 +456,7 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 			})
 			.buffer()
 			.parse(binaryParser)
-			.end(function(err, res) {
+			.end(function(err) {
 				if (err) 
 					return done(err);
 				

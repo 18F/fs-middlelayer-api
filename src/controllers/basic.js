@@ -67,7 +67,7 @@ function ePermitId(input){
  * @return {Boolean}      - Whether application is for an individual
  */
 function isAppFromPerson(body){
-	const output = (!body.applicantInfo.orgType || body.applicantInfo.orgType === 'Individual');
+	const output = (!body.applicantInfo.orgType || body.applicantInfo.orgType.toUpperCase() === 'PERSON');
 	return output;
 }
 
@@ -367,7 +367,11 @@ function getFromBasic(req, res, controlNumber){
 		.catch(function(err){
 			if (err.statusCode && err.statusCode === 404){
 				console.error(err);
-				return error.sendError(req, res, 500, 'error returned from Basic API.');	
+				return error.sendError(req, res, 503, 'underlying service unavailable.');	
+			}
+			else if (err.error && err.error.code === 'ETIMEDOUT') {
+				console.error(err);
+				return error.sendError(req, res, 504, 'underlying service has timed out.');	
 			}
 			else {
 				reject(err);		
@@ -382,7 +386,7 @@ function getFromBasic(req, res, controlNumber){
  * @param  {Object} sch - Schema object
  * @param  {Object} body - User input
  */
-function postToBasic(req, res, sch, body){ //Should remove control number once we get from BASIC api
+function postToBasic(req, res, sch, body){
 
 	return new Promise(function (fulfill, reject){
 
@@ -471,17 +475,17 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 		})
 		.then(function(response){
 			const applResponse  = response;
-			if (SUDS_API_URL.endsWith('/mocks')){
-				const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString();
-				applResponse.accinstCn = controlNumber;
-			}
 			apiCallsObject.POST['/application'].response = applResponse;
 			fulfill(apiCallsObject);
 		})
 		.catch(function(err){
 			if (err.statusCode && err.statusCode === 404){
 				console.error(err);
-				return error.sendError(req, res, 500, 'error returned from Basic API.');	
+				return error.sendError(req, res, 503, 'underlying service unavailable.');	
+			}
+			else if (err.error && err.error.code === 'ETIMEDOUT') {
+				console.error(err);
+				return error.sendError(req, res, 504, 'underlying service has timed out.');	
 			}
 			else {
 				reject(err);		

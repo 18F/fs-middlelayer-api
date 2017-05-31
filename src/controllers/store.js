@@ -134,7 +134,7 @@ function getFilesZip(controlNumber, dbFiles, res, callback){
 				pipe: res,
 				recursive: true
 			},
-				function (err, result) {
+				function (err) {
 					if (err){
 						console.error(err);
 						return callback(err);

@@ -26,6 +26,25 @@ This repository is being developed under a task order of the Agile Blanket Purch
 2. Run `npm install` to install application and all dependencies.
 3. Run `npm start` to start Node.js server.
 
+## Configuration
+
+- Environment variables:
+  - PORT | Default: 8000
+  - DATABASE_URL | Format: postgres://user:password@host:port/database
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - AWS_REGION
+  - AWS_BUCKET_NAME
+  - SUDS_API_URL
+    - To use the moxai dependency and point at the mock API, update this to be `http://localhost:${PORT}/mocks`.
+
+- API user account:
+  - To create an API user account, run `node cmd/createUser.js -u <username> -p <password> -r <userrole>`. The user role is either 'user' or 'admin'.
+
+- Dotenv:
+  - [Dotenv](https://www.npmjs.com/package/dotenv) is used which can load environment variables from a .env file into process.env
+  - Example: PORT=8080
+
 ## How to Test
 
 - Scripts
@@ -40,22 +59,6 @@ This repository is being developed under a task order of the Agile Blanket Purch
   - Accounts: Test accounts are stored in environment variables
     - ADMINROLE_USER, ADMINROLE_PWD, ADMINROLE_HASH
     - USERROLE_USER, USERROLE_PWD, USERROLE_HASH
-
-## Configuration
-
-- Environment variables:
-  - PORT | Default: 8000
-  - DATABASE_URL | Format: postgres://user:password@host:port/database
-  - AWS_ACCESS_KEY_ID
-  - AWS_SECRET_ACCESS_KEY
-  - AWS_REGION
-  - AWS_BUCKET_NAME
-  - SUDS_API_URL
-    - To use the moxai dependency and point at the mock API, update this to be `http://localhost:${PORT}/mocks`.
-
-- Dotenv:
-  - [Dotenv](https://www.npmjs.com/package/dotenv) is used which can load environment variables from a .env file into process.env
-  - Example: PORT=8080
 
 ## Dependencies
 

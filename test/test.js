@@ -52,7 +52,7 @@ describe('FS ePermit API', function() {
 			userRole: 'admin'
 		};
 
-		db.saveUser(adminUser, function(err, usr){
+		db.saveUser(adminUser, function(err){
 			if (err){
 				return false;
 			}

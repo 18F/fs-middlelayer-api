@@ -145,7 +145,7 @@ describe('outfitters validation ', function(){
 			expect (actual).to.eql(expected);
 		});
 		it('should report issues when no tempOutfitterFields/individual is citizen is provided', function(){
-			const actual = specialUses.validate.checkForIndividualIsCitizen(tempOutfitterFactory.create({'applicantInfo.orgType':'Individual', 'tempOutfitterFields.individualIsCitizen' : undefined}), { errorArray: [] }).errorArray;
+			const actual = specialUses.validate.checkForIndividualIsCitizen(tempOutfitterFactory.create({'applicantInfo.orgType':'Person', 'tempOutfitterFields.individualIsCitizen' : undefined}), { errorArray: [] }).errorArray;
 			const expected = [
 				errorFactory.create({field: 'tempOutfitterFields.individualIsCitizen', errorType: 'missing'})
 			];
@@ -521,7 +521,7 @@ describe('noncommercial validation', function(){
 				{
 					field: 'applicantInfo.orgType',
 					errorType: 'enum', 
-					enumMessage: 'is not one of enum values: Individual,Corporation,Limited Liability Company,Partnership or Association,State Government or Agency,Local Government or Agency,Nonprofit',
+					enumMessage: 'is not one of enum values: Association,Corporation,Education,Federal Government,State Government,Local Govt,Married Common Property,Limited Liability Company (LLC),Limited Liability Partnership (LLP),Person,Trust',
 					anyOfFields: undefined,
 					dependency: undefined
 				}
