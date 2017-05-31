@@ -138,8 +138,8 @@ These steps define the process for creating a new permit type using Example Perm
                 - `fromIntake` indicates whether this piece of the field is from the intake module or not
                     - If `fromIntake` is true, `field` is expected in the same object, specifying the field where this part of the field should come from.
                     - If `fromIntake` is false, `value` is expected in the same object, specifying what value is to be used in this part of the field.
-                -`function` describes the function that should be used on an array of all indicies of `fields`, current options are `concat` and `contId`. 
-                    - To add an option for this field, create a function in src/controllers/basic.js which takes an array as input and outputs a string. Then update the `buildAutoPopulatedFields` function in basic.js by adding a case to the switch/case statement for the name of the newly created function and then a call to that function inside the case statement.
+                -`function` describes the function that should be used on an array of all indicies of `fields`, current options are `concat`, `ePermitId`, and `contId`. 
+                    - To add an option for this field, create a function in src/controllers/autoPopulate.js which takes an array as input and outputs a string. Next export that function at the end of the file like the existing functions. Then update the `buildAutoPopulatedFields` function in src/controllers/basic.js by adding a case to the switch/case statement for the name of the newly created function and then a call to that function inside the case statement.
 
           Files:
           - `maxSize` is measured in megabytes
