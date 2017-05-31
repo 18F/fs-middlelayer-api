@@ -402,7 +402,6 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 	after(function(done) {
 
 		if (process.env.npm_config_mock === 'Y'){
-			AWS.mock('S3', 'getObject', tempOutfitterObjects.mockS3Get);
 			unmockZip();
 		}
 		
