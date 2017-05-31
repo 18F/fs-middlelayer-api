@@ -59,7 +59,7 @@ describe('Integration tests - noncommercial', function(){
 			userRole: 'admin'
 		};
 
-		db.saveUser(adminUser, function(err, usr){
+		db.saveUser(adminUser, function(err){
 			if (err){
 				return false;
 			}
@@ -104,7 +104,7 @@ describe('Integration tests - noncommercial', function(){
 	});
 
 	it('should return valid json for noncommercial POST request (contact search - uses existing contact)', function(done) {
-		let noncommercialInput = noncommercialFactory.create();
+		const noncommercialInput = noncommercialFactory.create();
 		noncommercialInput.applicantInfo.firstName = 'Fname';
 		noncommercialInput.applicantInfo.lastName = 'Lname';
 		request(server)
@@ -117,7 +117,7 @@ describe('Integration tests - noncommercial', function(){
 	});
 
 	it('should return valid json with 400 status for noncommercial POST request (contact search - duplicate contacts error)', function(done) {
-		let noncommercialInput = noncommercialFactory.create();
+		const noncommercialInput = noncommercialFactory.create();
 		noncommercialInput.applicantInfo.organizationName = 'Temp Organization';
 		noncommercialInput.applicantInfo.orgType = 'Corporation';
 		request(server)

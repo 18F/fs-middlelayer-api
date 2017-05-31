@@ -4,7 +4,7 @@ Security testing for this application was performed using OWASP ZAP 2.6 on Mac O
 
 Testing of this URL resulted in a single alert: "Web Browser XSS Protection Not Enabled." This alert should be disregarded, however. Helmet, an npm package used with this application, uses the cross-site scripting (abbreviated "XSS") flag if it is safe to do so. However, as the [Helmet documentation](https://helmetjs.github.io/docs/xss-filter/) explains, this "header causes some even worse security vulnerabilities in older versions of Internet Explorer, so it’s wise to disable it there." In other words, the header's absence, which OWASP ZAP has flagged, is necessary for security. We have also inspected the issue in modern browsers and verified that the XSS flag is properly set.
 
-The full results of the OWASP ZAP vulnerability test are provided below for reference. They are also available in [this screenshot](https://github.com/nci-ats/fs-middlelayer-api/blob/feat/reports/docs/security_screenshot.png). 
+The full results of the OWASP ZAP vulnerability test are provided below for reference. They are also available in [this screenshot](security_screenshot.png). 
 
 ## ZAP Scanning Report
 

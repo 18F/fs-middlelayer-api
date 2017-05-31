@@ -20,7 +20,8 @@ module.exports = function(sequelize, DataTypes) {
 		clientCharges: { type: DataTypes.STRING(255), field: 'client_charges' },
 		experienceList: { type: DataTypes.STRING(255), field: 'experience_list' },
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'created' },
-		updatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'updated' }
+		updatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'updated' },
+		numberSpectators: { type: DataTypes.INTEGER, field: 'number_spectators' }
 	}, {
 		timestamps  : true
 	}, {
