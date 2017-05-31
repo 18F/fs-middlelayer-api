@@ -367,7 +367,11 @@ function getFromBasic(req, res, controlNumber){
 		.catch(function(err){
 			if (err.statusCode && err.statusCode === 404){
 				console.error(err);
-				return error.sendError(req, res, 500, 'error returned from Basic API.');	
+				return error.sendError(req, res, 503, 'underlying service unavailable.');	
+			}
+			else if (err.error && err.error.code === 'ETIMEDOUT') {
+				console.error(err);
+				return error.sendError(req, res, 504, 'underlying service has timed out.');	
 			}
 			else {
 				reject(err);		
@@ -477,7 +481,11 @@ function postToBasic(req, res, sch, body){
 		.catch(function(err){
 			if (err.statusCode && err.statusCode === 404){
 				console.error(err);
-				return error.sendError(req, res, 500, 'error returned from Basic API.');	
+				return error.sendError(req, res, 503, 'underlying service unavailable.');	
+			}
+			else if (err.error && err.error.code === 'ETIMEDOUT') {
+				console.error(err);
+				return error.sendError(req, res, 504, 'underlying service has timed out.');	
 			}
 			else {
 				reject(err);		
