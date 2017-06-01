@@ -40,7 +40,7 @@ const adminPassword = 'pwd' + (Math.floor((Math.random() * 1000000) + 1)).toStri
 
 const specialUses = {};
 
-specialUses.validate = require('../src/controllers/validation.js');
+specialUses.fileValidate = require('../src/controllers/fileValidation.js');
 
 //*******************************************************************
 //Mock Input
@@ -203,19 +203,19 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 		it('should return errors for file that is too large', function(){
 			expect (
-				specialUses.validate.validateFile(tempOutfitterObjects.file.uploadFile_20MB, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate').length
+				specialUses.fileValidate.validateFile(tempOutfitterObjects.file.uploadFile_20MB, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate').length
 			)
 			.to.be.equal(1);
 		});
 		it('should return errors for file that is too small', function(){
 			expect (
-				specialUses.validate.validateFile(tempOutfitterObjects.file.uploadFile_empty, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate').length
+				specialUses.fileValidate.validateFile(tempOutfitterObjects.file.uploadFile_empty, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate').length
 			)
 			.to.be.equal(1);
 		});
 		it('should return errors for file that is the wrong mime type', function(){
 			expect (
-				specialUses.validate.validateFile(tempOutfitterObjects.file.uploadFile_invalid_mime, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate').length
+				specialUses.fileValidate.validateFile(tempOutfitterObjects.file.uploadFile_invalid_mime, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate').length
 			)
 			.to.be.equal(1);
 		});

@@ -30,6 +30,7 @@ const store = require('./store.js');
 const db = require('./db.js');
 const basic = require('./basic.js');
 const validation = require('./validation.js');
+const fileValidation = require('./fileValidation.js');
 const util = require('./utility.js');
 const DuplicateContactsError = require('./errors/duplicateContactsError.js');
 
@@ -84,7 +85,7 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 
 			const key = Object.keys(fileConstraints)[0];
 			if (files[key]){
-				const fileInfo = validation.getFileInfo(files[key], fileConstraints);
+				const fileInfo = fileValidation.getFileInfo(files[key], fileConstraints);
 				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
 				store.uploadFile(fileInfo, function(err){
 					if (err){
@@ -295,12 +296,12 @@ const postApplication = function(req, res, reqData){
 	const allErrors = validation.getFieldValidationErrors(body, pathData, sch);
 	
 	//Files to validate are in possbileFiles
-	validation.checkForFilesInSchema(sch, possbileFiles);
+	fileValidation.checkForFilesInSchema(sch, possbileFiles);
 
 	if (possbileFiles.length !== 0){
 		possbileFiles.forEach((fileConstraints)=>{
 			const key = Object.keys(fileConstraints)[0];
-			const fileValidationErrors = validation.validateFile(req.files[key], fileConstraints, key);
+			const fileValidationErrors = fileValidation.validateFile(req.files[key], fileConstraints, key);
 			allErrors.errorArray = allErrors.errorArray.concat(fileValidationErrors);
 		});
 	}
