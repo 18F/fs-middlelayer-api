@@ -20,6 +20,7 @@ const include = require('include')(__dirname);
 // other files
 
 const errors = require('./errors/patternErrorMessages.json');
+const fileValidation = require('./fileValidation.js');
 
 const v = new Validator();
 
@@ -459,47 +460,6 @@ function concatErrors(errorMessages){
 }
 
 /**
- * Creates error messages for all file errors
- * @param {Object} output           - Error object containing all error to report and the error message to deliver.
- * @param {Array} output.errorArray - Array contain all errors to report to user.
- * @param {Object} error            - error object to be processed
- * @param {Array} messages          - Array of all error messages to be returned
- */
-function generateFileErrors(output, error, messages){
-	const reqFile = `${makePathReadable(error.field)} is a required file.`;
-	const small = `${makePathReadable(error.field)} cannot be an empty file.`;
-	const large = `${makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
-	let invExt, invMime;
-	if (typeof(error.expectedFieldType) !== 'undefined' && error.expectedFieldType.constructor === Array){
-		invExt = `${makePathReadable(error.field)} must be one of the following extensions: ${error.expectedFieldType.join(', ')}.`;
-		invMime = `${makePathReadable(error.field)} must be one of the following mime types: ${error.expectedFieldType.join(', ')}.`;
-	}
-
-	switch (error.errorType){
-	case 'requiredFileMissing':
-		messages.push(reqFile);
-		error.message = reqFile;
-		break;
-	case 'invalidExtension':
-		messages.push(invExt);
-		error.message = invExt;
-		break;
-	case 'invalidMime':
-		messages.push(invMime);
-		error.message = invMime;
-		break;
-	case 'invalidSizeSmall':
-		messages.push(small);
-		error.message = small;
-		break;
-	case 'invalidSizeLarge':
-		messages.push(large);
-		error.message = large;
-		break;
-	}
-}
-
-/**
  * Creates error messages for all field errors
  * @param  {Object}  output            - Error object containing all error to report and the error message to deliver.
  * @param  {Array}   output.errorArray - Array contain all errors to report to user.
@@ -551,7 +511,7 @@ function generateErrorMesage(output){
 			error.message = length;
 			break;
 		default:
-			generateFileErrors(output, error, messages);
+			fileValidation.generateFileErrors(output, error, messages);
 			break;
 		}
 	});
@@ -717,7 +677,6 @@ module.exports.makePathReadable = makePathReadable;
 module.exports.buildFormatErrorMessage = buildFormatErrorMessage;
 module.exports.makeAnyOfMessage = makeAnyOfMessage;
 module.exports.concatErrors = concatErrors;
-module.exports.generateFileErrors = generateFileErrors;
 module.exports.generateErrorMesage = generateErrorMesage;
 module.exports.getFieldValidationErrors = getFieldValidationErrors;
 module.exports.checkForSmallBusiness = checkForSmallBusiness;

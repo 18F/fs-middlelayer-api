@@ -124,6 +124,48 @@ function validateFile(uploadFile, validationConstraints, fileName){
 	
 }
 
+/**
+ * Creates error messages for all file errors
+ * @param {Object} output           - Error object containing all error to report and the error message to deliver.
+ * @param {Array} output.errorArray - Array contain all errors to report to user.
+ * @param {Object} error            - error object to be processed
+ * @param {Array} messages          - Array of all error messages to be returned
+ */
+function generateFileErrors(output, error, messages){
+	const reqFile = `${validation.makePathReadable(error.field)} is a required file.`;
+	const small = `${validation.makePathReadable(error.field)} cannot be an empty file.`;
+	const large = `${validation.makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
+	let invExt, invMime;
+	if (typeof(error.expectedFieldType) !== 'undefined' && error.expectedFieldType.constructor === Array){
+		invExt = `${validation.makePathReadable(error.field)} must be one of the following extensions: ${error.expectedFieldType.join(', ')}.`;
+		invMime = `${validation.makePathReadable(error.field)} must be one of the following mime types: ${error.expectedFieldType.join(', ')}.`;
+	}
+
+	switch (error.errorType){
+	case 'requiredFileMissing':
+		messages.push(reqFile);
+		error.message = reqFile;
+		break;
+	case 'invalidExtension':
+		messages.push(invExt);
+		error.message = invExt;
+		break;
+	case 'invalidMime':
+		messages.push(invMime);
+		error.message = invMime;
+		break;
+	case 'invalidSizeSmall':
+		messages.push(small);
+		error.message = small;
+		break;
+	case 'invalidSizeLarge':
+		messages.push(large);
+		error.message = large;
+		break;
+	}
+}
+
 module.exports.getFileInfo = getFileInfo;
 module.exports.checkForFilesInSchema = checkForFilesInSchema;
 module.exports.validateFile = validateFile;
+module.exports.generateFileErrors = generateFileErrors;
