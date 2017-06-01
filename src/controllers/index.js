@@ -89,13 +89,13 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 				store.uploadFile(fileInfo, function(err){
 					if (err){
 						console.error(err);
-						return error.sendError(req, res, 500, 'unable to process request.');
+						return error.sendError(req, res, 500, 'error while storing files in data store.');
 					}
 					else {
 						db.saveFile(application.id, fileInfo, function(err){
 							if (err){
 								console.error(err);
-								return error.sendError(req, res, 500, 'unable to process request.');
+								return error.sendError(req, res, 500, 'error while saving file information to the database.');
 							}
 							else {
 								return callback (null);
@@ -142,7 +142,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 
 		if (err){
 			console.error(err);
-			error.sendError(req, res, 500, 'unable to process request.');	
+			error.sendError(req, res, 500, 'error while getting file from data store.');	
 		}
 		else {
 			if (file){
@@ -151,7 +151,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 
 					if (err){
 						console.error(err);
-						error.sendError(req, res, 404, 'file not found');
+						error.sendError(req, res, 404, 'file not found in the database.');
 					}
 					else {
 						res.attachment(file.fileName);
@@ -161,7 +161,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 				});
 			}
 			else {
-				error.sendError(req, res, 404, 'file not found');
+				error.sendError(req, res, 404, 'file not found in the data store.');
 			}
 		}
 	});
@@ -197,7 +197,7 @@ const getControlNumber = function(req, res, reqData){
 
 			if (err) {
 				console.error(err);
-				return error.sendError(req, res, 500, 'unable to process request.');	
+				return error.sendError(req, res, 500, 'error while getting application from the database.');	
 			}
 
 			else if (fileData){
@@ -205,14 +205,14 @@ const getControlNumber = function(req, res, reqData){
 				store.getFilesZip(controlNumber, fileData, res, function(err){
 
 					if (err){
-						error.sendError(req, res, 404, 'file not found');
+						error.sendError(req, res, 404, 'file not found in data store.');
 					}			
 
 				});	
 				
 			}
 			else {
-				error.sendError(req, res, 404, 'file not found');	
+				error.sendError(req, res, 404, 'file not found in the database.');	
 			}
 	
 		});
@@ -238,12 +238,12 @@ const getControlNumber = function(req, res, reqData){
 				db.getApplication(controlNumber, function(err, appl, fileData){
 					if (err){
 						console.error(err);
-						return error.sendError(req, res, 500, 'unable to process request.');
+						return error.sendError(req, res, 500, 'error while getting application from the database.');
 					}
 					else {
 						
 						if (!appl){
-							return error.sendError(req, res, 404, 'file not found.');		
+							return error.sendError(req, res, 404, 'application not found in the database.');		
 						}
 						else if (fileData){
 							fileData.forEach(function(file){
@@ -317,13 +317,13 @@ const postApplication = function(req, res, reqData){
 			db.saveApplication(toStoreInDB, function(err, appl){
 				if (err){
 					console.error(err);
-					return error.sendError(req, res, 500, 'unable to process request.');
+					return error.sendError(req, res, 500, 'error while saving application in the database.');
 				}
 				else {
 					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err){
 						if (err) {
 							console.error(err);
-							return error.sendError(req, res, 500, 'unable to process request.');
+							return error.sendError(req, res, 500, 'error while uploading files.');
 						}
 						else {
 
