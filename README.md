@@ -55,7 +55,7 @@ This repository is being developed under a task order of the Agile Blanket Purch
   - Use `npm run dba` to run Sequelize migration and seeder.
   - Use `npm run doc` to run [JSDoc](http://usejsdoc.org/) code documentation. *Results in `/docs/code` folder and accessed via `<application-URL>/docs/code`.*
 - Data
-  - Files: Test files are stored in [test/data](https://github.com/nci-ats/fs-middlelayer-api/tree/dev/test/data) directory
+  - Files: Test files are stored in [test/data](test/data) directory
   - Accounts: Test accounts are stored in environment variables
     - ADMINROLE_USER, ADMINROLE_PWD, ADMINROLE_HASH
     - USERROLE_USER, USERROLE_PWD, USERROLE_HASH
@@ -77,7 +77,7 @@ Refer to application package and dependency trackers for additional dependency i
   - [VersionEye](https://www.versioneye.com/user/projects/58a669e7b4d2a20055fcb84c)
   - [Bithound](https://www.bithound.io/github/nci-ats/fs-middlelayer-api/feat%2Fswagger-ui/dependencies/npm)
 
-The Moxai package is a dependency for testing and was built specifically for this project. Moxai was published as an [independent package](https://www.npmjs.com/package/moxai) that can be used with any Express application. This application uses the moxai package as a placeholder mock API. The /mocks/basic.json file maintains the API endpoint schema. 
+The [Moxai package](https://www.npmjs.com/package/moxai) is a dependency for testing and was built specifically for this project. Moxai was published as an [independent package](https://www.npmjs.com/package/moxai) that can be used with any Express application. This application uses the moxai package as a placeholder mock API. The [/mocks/basic.json file](mocks/basic.json) maintains the API endpoint schema. 
 
 The controllers/index.js file has random control number generation logic that should be removed when the mock API is replaced with the Basic API.
 
