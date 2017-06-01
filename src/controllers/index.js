@@ -24,14 +24,14 @@ const apiSchema = include('src/api.json');
 //*******************************************************************
 // other files
 
-const error = require('./error.js');
+const error = require('./errors/error.js');
 const get = require('./get.js');
 const store = require('./store.js');
 const db = require('./db.js');
 const basic = require('./basic.js');
 const validation = require('./validation.js');
 const util = require('./utility.js');
-const DuplicateContactsError = require('./duplicateContactsError.js');
+const DuplicateContactsError = require('./errors/duplicateContactsError.js');
 
 //*************************************************************
 // Helper Functions

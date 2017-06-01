@@ -20,7 +20,7 @@ const include = require('include')(__dirname);
 //*******************************************************************
 // other files
 
-const errors = require('./patternErrorMessages.json');
+const errors = require('./errors/patternErrorMessages.json');
 
 const v = new Validator();
 
