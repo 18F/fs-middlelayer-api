@@ -458,8 +458,8 @@
                 "store":["basic:/contact/person"],
                 "type": "string"
             },
-            "dayPhone": { "$ref": "phoneNumber" },
             "eveningPhone": { "$ref": "phoneNumber" },
+            "dayPhone": { "$ref": "phoneNumber" },
             "emailAddress": {
                 "basicField":"email",
                 "default":"",
