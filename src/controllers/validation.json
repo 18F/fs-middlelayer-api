@@ -42,13 +42,17 @@
                     "orgType":{
                         "description":"Organization Type",
                         "enum":[
-                            "Individual",
+                            "Association",
                             "Corporation",
-                            "Limited Liability Company",
-                            "Partnership or Association",
-                            "State Government or Agency",
-                            "Local Government or Agency",
-                            "Nonprofit"
+                            "Education",
+                            "Federal Government",
+                            "State Government",
+                            "Local Govt",
+                            "Married Common Property",
+                            "Limited Liability Company (LLC)",
+                            "Limited Liability Partnership (LLP)",
+                            "Person",
+                            "Trust"
                         ],
                         "fromIntake":true,
                         "store":["basic:/contact/organization"],
@@ -235,13 +239,17 @@
                         "default":"",
                         "description":"Organization Type",
                         "enum":[
-                            "Individual",
+                            "Association",
                             "Corporation",
-                            "Limited Liability Company",
-                            "Partnership or Association",
-                            "State Government or Agency",
-                            "Local Government or Agency",
-                            "Nonprofit"
+                            "Education",
+                            "Federal Government",
+                            "State Government",
+                            "Local Govt",
+                            "Married Common Property",
+                            "Limited Liability Company (LLC)",
+                            "Limited Liability Partnership (LLP)",
+                            "Person",
+                            "Trust"
                         ],
                         "fromIntake":true,
                         "store":["basic:/contact/organization"],
@@ -291,6 +299,12 @@
                 "store":["middleLayer:numberParticipants"],
                 "type": "integer"
             },
+            "numberSpectators": {
+                "default":0,
+                "fromIntake":true,
+                "store":["middleLayer:numberSpectators"],
+                "type": "integer"
+            },
             "formName":{
                 "basicField":"formName",
                 "default":"FS-2700-3B",
@@ -305,20 +319,76 @@
                 "madeOf":{
                     "fields":[
                         {
+                            "fromIntake":false,
+                            "value":"Activity Description: "
+                        },
+                        {
                             "fromIntake":true,
                             "field":"noncommercialFields.activityDescription"
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":". "
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":"Location Description: "
                         },
                         {
                             "fromIntake":true,
                             "field":"noncommercialFields.locationDescription"
                         },
                         {
+                            "fromIntake":false,
+                            "value":". "
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":"Start Date Time: "
+                        },
+                        {
                             "fromIntake":true,
                             "field":"noncommercialFields.startDateTime"
                         },
                         {
+                            "fromIntake":false,
+                            "value":". "
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":"End Date Time: "
+                        },
+                        {
                             "fromIntake":true,
                             "field":"noncommercialFields.endDateTime"
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":". "
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":"Number Participants: "
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"noncommercialFields.numberParticipants"
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":". "
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":"Number Spectators: "
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"noncommercialFields.numberSpectators"
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":"."
                         }
                     ],
                     "function":"concat"
@@ -388,8 +458,8 @@
                 "store":["basic:/contact/person"],
                 "type": "string"
             },
-            "dayPhone": { "$ref": "phoneNumber" },
             "eveningPhone": { "$ref": "phoneNumber" },
+            "dayPhone": { "$ref": "phoneNumber" },
             "emailAddress": {
                 "basicField":"email",
                 "default":"",
