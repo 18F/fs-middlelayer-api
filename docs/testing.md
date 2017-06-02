@@ -22,4 +22,4 @@ These three files contain the API testing test cases:
 
 ## Functional Testing
 
-Functional testing is managed through [HipTest](https://hiptest.net/). Manual testing scenarios walk testers through a series of steps to verify that the application functions as expected. Each test maps to acceptance criteria for a corresponding user story. Testers can execute multiple runs for a given set of scenarios, and HipTest keeps a record of all test run results.  
+Functional testing is managed through [HipTest](https://hiptest.net/). [Manual testing scenarios](testing_scenarios.xlsx) walk testers through a series of steps to verify that the application functions as expected. Each test maps to acceptance criteria for a corresponding user story. Testers can execute multiple runs for a given set of scenarios, and HipTest keeps a record of all test run results.  
