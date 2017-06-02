@@ -76,7 +76,7 @@ Refer to application package and dependency trackers for additional dependency i
 
 The [Moxai package](https://www.npmjs.com/package/moxai) is a dependency for testing and was built specifically for this project. Moxai was published as an independent package that can be used with any Express application. This application uses the moxai package as a placeholder mock API. The [/mocks/basic.json file](mocks/basic.json) maintains the API endpoint schema. 
 
-If the swagger is checked against a swagger validator it will report that it is invalid. We are allowing the swagger to stay invalid because we felt it would be more valuable for developers to have an example data model for temp-outfitter permits, rather than have every part of the swagger be valid.
+It is known that the [api.json](src/api.json) file is not strictly valid per the OpenAPI Specification. If this is checked against a validator it will report that it is invalid. We are allowing this to stay invalid because we felt it would be more valuable for developers to have an example data model for permits, rather than have every part of the specification be valid.
 
 ## Point of Contact and Notifications
 
