@@ -56,9 +56,6 @@ This repository is being developed under a task order of the Agile Blanket Purch
   - Use `npm run doc` to run [JSDoc](http://usejsdoc.org/) code documentation. *Results in `/docs/code` folder and accessed via `<application-URL>/docs/code`.*
 - Data
   - Files: Test files are stored in [test/data](test/data) directory
-  - Accounts: Test accounts are stored in environment variables
-    - ADMINROLE_USER, ADMINROLE_PWD, ADMINROLE_HASH
-    - USERROLE_USER, USERROLE_PWD, USERROLE_HASH
 
 ## Dependencies
 
