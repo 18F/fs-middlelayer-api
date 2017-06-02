@@ -39,7 +39,7 @@ This repository is being developed under a task order of the Agile Blanket Purch
     - To use the moxai dependency and point at the mock API, update this to be `http://localhost:${PORT}/mocks`.
 
 - API user account:
-  - To create an API user account, run `node cmd/createUser.js -u <username> -p <password> -r <userrole>`. The user role is either 'user' or 'admin'.
+  - To create an API user account, run `node cmd/createUser.js -u <username> -p <password> -r <userrole>`. The user role is either 'user' or 'admin'. The ‘admin’ role has permission to access all routes, but the ‘user’ role does not currently have permission to access any routes.
 
 - Dotenv:
   - [Dotenv](https://www.npmjs.com/package/dotenv) is used which can load environment variables from a .env file into process.env
@@ -55,10 +55,7 @@ This repository is being developed under a task order of the Agile Blanket Purch
   - Use `npm run dba` to run Sequelize migration and seeder.
   - Use `npm run doc` to run [JSDoc](http://usejsdoc.org/) code documentation. *Results in `/docs/code` folder and accessed via `<application-URL>/docs/code`.*
 - Data
-  - Files: Test files are stored in [test/data](https://github.com/nci-ats/fs-middlelayer-api/tree/dev/test/data) directory
-  - Accounts: Test accounts are stored in environment variables
-    - ADMINROLE_USER, ADMINROLE_PWD, ADMINROLE_HASH
-    - USERROLE_USER, USERROLE_PWD, USERROLE_HASH
+  - Files: Test files are stored in [test/data](test/data) directory
 
 ## Dependencies
 
@@ -77,9 +74,7 @@ Refer to application package and dependency trackers for additional dependency i
   - [VersionEye](https://www.versioneye.com/user/projects/58a669e7b4d2a20055fcb84c)
   - [Bithound](https://www.bithound.io/github/nci-ats/fs-middlelayer-api/feat%2Fswagger-ui/dependencies/npm)
 
-The Moxai package is a dependency for testing and was built specifically for this project. Moxai was published as an [independent package](https://www.npmjs.com/package/moxai) that can be used with any Express application. This application uses the moxai package as a placeholder mock API. The /mocks/basic.json file maintains the API endpoint schema. 
-
-The controllers/index.js file has random control number generation logic that should be removed when the mock API is replaced with the Basic API.
+The [Moxai package](https://www.npmjs.com/package/moxai) is a dependency for testing and was built specifically for this project. Moxai was published as an independent package that can be used with any Express application. This application uses the moxai package as a placeholder mock API. The [/mocks/basic.json file](mocks/basic.json) maintains the API endpoint schema. 
 
 If the swagger is checked against a swagger validator it will report that it is invalid. We are allowing the swagger to stay invalid because we felt it would be more valuable for developers to have an example data model for temp-outfitter permits, rather than have every part of the swagger be valid.
 

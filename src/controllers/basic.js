@@ -18,10 +18,10 @@ const request = require('request-promise');
 //*******************************************************************
 // other files
 
-const error = require('./error.js');
+const error = require('./errors/error.js');
 const db = require('./db.js');
 const autoPopulate = require('./autoPopulate.js');
-const DuplicateContactsError = require('./duplicateContactsError.js');
+const DuplicateContactsError = require('./errors/duplicateContactsError.js');
 const SUDS_API_URL = process.env.SUDS_API_URL;
 
 //*******************************************************************
