@@ -1,9 +1,13 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Non-Object Property",
-    "description": "A property listed under validation.json that is not type object",
+    "description": "A property listed under validation.json",
     "type": "object",
     "properties":{
+    	"allOf":{
+    		"description":"Only used for properties of type object. Used for validation purposes to require that all of the fields listed be provided.",
+    		"type":"object"
+    	},
     	"basicField":{
     		"description":"Describes what the name of the field should be when sent to the basic API. Only required if the field will be sent to the basic API, if the field will be stored in just the DB or no where at all, this field will be ignored.",
     		"type":"string"
@@ -11,6 +15,10 @@
     	"default":{
     		"description":"Value to be used and stored wherever the field is used and stored, if there is no value provided by the intake module.",
     		"type":["number", "string", "boolean"]
+    	},
+    	"dependencies":{
+    		"description":"Only used for properties of type object. Used for validation to ensure that if a given field is present, that the field listed in the value is provided as well.",
+    		"type":"object"
     	},
     	"filetypecode":{
     		"description":"Only used if type is 'file'. Lists the filetypecode that will be store in the DB for this file.",
