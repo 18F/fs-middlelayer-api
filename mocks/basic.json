@@ -8,7 +8,7 @@
 	"tags": [
 	],
 	"paths": {
-		"/contact/person/{lastname}/": {
+		"/contact/lastname/{lastname}": {
 			"get": {
 				"tags": [
 					"Contact Person"
@@ -31,24 +31,37 @@
 					"200": {
 						"description": "Success",
       					"examples": {
-        					"application/json": {
-        						"contCn": "987654321",
-								"contId": "1234",
-								"contName": "Jane Roe",
+        					"application/json": [
+        					{
+        						"contCn": "100000001",
+								"contId": "LNAME, FNAME",
+								"contName": "fname lname",
 								"contactType": "PERSON",
-								"firstName": "Jane",
-								"lastName": "Roe",
+								"firstName": "Fname",
+								"lastName": "Lname",
 								"orgCode": null,
 								"orgType": null,
 								"personPrefix": "MS",
-								"securityId": "0000"
-        					}
+								"securityId": "112233"
+        					},
+        					{
+        						"contCn": "100000002",
+								"contId": "LNAME2, FNAME2",
+								"contName": "fname2 lname2",
+								"contactType": "PERSON",
+								"firstName": "Fname2",
+								"lastName": "Lname2",
+								"orgCode": null,
+								"orgType": null,
+								"personPrefix": "MS",
+								"securityId": "112221"
+        					}]
          				}
 					}
 				}
 			}
 		},
-		"/contact/person/": {
+		"/contact/person": {
 			"post": {
 				"tags": [
 					"Contact Person"
@@ -76,7 +89,7 @@
 				}
 			}
 		},
-		"/contact/orgcode/{orgname}/": {
+		"/contact/orgcode/{orgname}": {
 			"get": {
 				"tags": [
 					"Contact Organization"
@@ -99,9 +112,9 @@
 					"200": {
 						"description": "Success",
       					"examples": {
-        					"application/json": {
-        						"contCn": "987654321",
-								"contId": "1234",
+        					"application/json": [{
+        						"contCn": "200000001",
+								"contId": "TEMP ORGANIZATION",
 								"contName": "Acme",
 								"contactType": "ORGANIZATION",
 								"firstName": null,
@@ -109,14 +122,38 @@
 								"orgCode": "INC",
 								"orgType": "CORPORATION",
 								"personPrefix": null,
-								"securityId": null
-        					}
+								"securityId": "110022"
+        					},
+        					{
+        						"contCn": "200000002",
+								"contId": "TEMP ORGANIZATION2",
+								"contName": "Acme",
+								"contactType": "ORGANIZATION",
+								"firstName": null,
+								"lastName": null,
+								"orgCode": "INC",
+								"orgType": "CORPORATION",
+								"personPrefix": null,
+								"securityId": "112230"
+        					},
+        					{
+        						"contCn": "200000003",
+								"contId": "TEMP ORGANIZATION",
+								"contName": "Acme",
+								"contactType": "ORGANIZATION",
+								"firstName": null,
+								"lastName": null,
+								"orgCode": "INC",
+								"orgType": "CORPORATION",
+								"personPrefix": null,
+								"securityId": "110024"
+        					}]
          				}
 					}
 				}
 			}
 		},
-		"/contact/orgcode/": {
+		"/contact/organization": {
 			"post": {
 				"tags": [
 					"Contact Organization"
@@ -147,7 +184,7 @@
 				}
 			}
 		},
-		"/contact-address/": {
+		"/contact-address": {
 			"post": {
 				"tags": [
 					"Contact Address"
@@ -168,7 +205,7 @@
 								"cityName": "Washington",
 								"stateCode": "DC",
 								"postalCode": "12345",
-								"contact": "987654321",
+								"contCn": "987654321",
 								"createdDate": "2016-06-04",								
 								"programArea": "SUDS",
 								"securityId": "0102"								
@@ -178,7 +215,7 @@
 				}
 			}
 		},
-		"/contact-phone/": {
+		"/contact-phone": {
 			"post": {
 				"tags": [
 					"Contact Phone"
@@ -194,7 +231,7 @@
       					"examples": {
         					"application/json": {
         						"areaCode": "555",
-								"contact": "987654321",
+								"contCn": "987654321",
 								"createdDate": "2016-06-04",
 								"phoneNumber": "555-1234",
 								"phoneNumberType": "MOBILE",
@@ -207,7 +244,7 @@
 				}
 			}
 		},
-		"/application/": {
+		"/application": {
 			"post": {
 				"tags": [
 					"Application"

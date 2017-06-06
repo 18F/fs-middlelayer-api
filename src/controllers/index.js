@@ -18,7 +18,6 @@ const include = require('include')(__dirname);
 const async = require('async');
 const deref = require('deref');
 const matchstick = require('matchstick');
-const request = require('request-promise');
 
 const apiSchema = include('src/api.json');
 
@@ -32,29 +31,10 @@ const db = require('./db.js');
 const basic = require('./basic.js');
 const validation = require('./validation.js');
 const util = require('./utility.js');
-
-//*************************************************************
-
-const SUDS_API_URL = process.env.SUDS_API_URL;
+const DuplicateContactsError = require('./duplicateContactsError.js');
 
 //*************************************************************
 // Helper Functions
-
-/** Gets info about an application and returns it.
- * @param  {Object} pathData - All data from swagger for the path that has been run
- * @return {Object} - Data from the basic API about an application 
- */
-function getBasicRes(controlNumber){
-
-	const existingContactCheck = `${SUDS_API_URL}/application/${controlNumber}`;
-	const getContactOptions = {
-		method: 'GET',
-		uri: existingContactCheck,
-		qs:{},
-		json: true
-	};
-	return request(getContactOptions);
-}
 
 /** Find the matching route in the routing schema for any request. If one is found, extract the useful information from it and return that information.
  * @param  {Object} apiSchema - The whole routing schema, which contains the route used.
@@ -65,17 +45,20 @@ function apiSchemaData(apiSchema, reqPath){
 
 	if (apiSchema) {
 		for (const k in apiSchema.paths) {
-			
-			const ms = matchstick(k, 'template');
-			ms.match(reqPath);
 
-			if ( ms.match(reqPath) ) { 
+			if (apiSchema.paths.hasOwnProperty(k)){
 
-				return {
-					path: k,
-					tokens: ms.tokens,
-					matches: ms.matches
-				};
+				const ms = matchstick(k, 'template');
+				ms.match(reqPath);
+
+				if ( ms.match(reqPath) ) { 
+
+					return {
+						path: k,
+						tokens: ms.tokens,
+						matches: ms.matches
+					};
+				}	
 			}
 		}
 	}
@@ -103,33 +86,35 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 			if (files[key]){
 				const fileInfo = validation.getFileInfo(files[key], fileConstraints);
 				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
-				store.uploadFile(fileInfo, function(err, data){
+				store.uploadFile(fileInfo, function(err){
 					if (err){
+						console.error(err);
 						return error.sendError(req, res, 500, 'unable to process request.');
 					}
 					else {
-						db.saveFile(application.id, fileInfo, function(err, fileInfo){
+						db.saveFile(application.id, fileInfo, function(err){
 							if (err){
+								console.error(err);
 								return error.sendError(req, res, 500, 'unable to process request.');
 							}
 							else {
-								return callback (null, fileInfo);
+								return callback (null);
 							}
 						});	
 					}
 				});
 			}
 			else {
-				return callback (null, null);
+				return callback (null);
 			}
 		});
 	});
 	async.parallel(asyncTasks, function(err, data){
 		if (err){
-			return callback(err, null);
+			return callback (err);
 		}
 		else {
-			return callback(null, data);
+			return callback (null);
 		}
 	});
 }
@@ -156,6 +141,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 	db.getFile(filePath, function (err, file){
 
 		if (err){
+			console.error(err);
 			error.sendError(req, res, 500, 'unable to process request.');	
 		}
 		else {
@@ -164,6 +150,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 				store.getFile(controlNumber, fileName, function(err, data){
 
 					if (err){
+						console.error(err);
 						error.sendError(req, res, 404, 'file not found');
 					}
 					else {
@@ -209,6 +196,7 @@ const getControlNumber = function(req, res, reqData){
 		db.getApplication(controlNumber, function(err, appl, fileData){
 
 			if (err) {
+				console.error(err);
 				return error.sendError(req, res, 500, 'unable to process request.');	
 			}
 
@@ -233,7 +221,7 @@ const getControlNumber = function(req, res, reqData){
 	else {
 
 		let basicData = {};
-		getBasicRes(reqData.matches.controlNumber)
+		basic.getFromBasic(req, res, reqData.matches.controlNumber)
 		.then((appData)=>{
 			basicData = appData;
 
@@ -243,12 +231,13 @@ const getControlNumber = function(req, res, reqData){
 
 			const jsonResponse = {};
 
-			const cnData = basicData;  // TODO: remove - used for mocks
+			const cnData = basicData;
 
 			if (basicData){
 
 				db.getApplication(controlNumber, function(err, appl, fileData){
 					if (err){
+						console.error(err);
 						return error.sendError(req, res, 500, 'unable to process request.');
 					}
 					else {
@@ -263,7 +252,7 @@ const getControlNumber = function(req, res, reqData){
 							});
 						}
 						jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData['x-getTemplate']);
-						jsonData.controlNumber = controlNumber;// TODO: remove - used for mocks
+						jsonData.controlNumber = controlNumber;
 
 						jsonResponse.status = 'success';
 						const toReturn = Object.assign({}, jsonResponse, jsonData);
@@ -302,7 +291,7 @@ const postApplication = function(req, res, reqData){
 	const possbileFiles = [];
 
 	const schema = validation.getValidationSchema(pathData);
-	const sch = derefFunc(schema.schemaToUse, [schema.fullSchema]);
+	const sch = derefFunc(schema.schemaToUse, [schema.fullSchema], true);
 	const allErrors = validation.getFieldValidationErrors(body, pathData, sch);
 	
 	//Files to validate are in possbileFiles
@@ -323,15 +312,17 @@ const postApplication = function(req, res, reqData){
 		basic.postToBasic(req, res, sch, body)
 		.then((postObject)=>{
 			const toStoreInDB = db.getDataToStoreInDB(sch, body);
-			const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString(); //TODO: remove - used for mocks
+			const controlNumber = postObject.POST['/application'].response.accinstCn;
 			toStoreInDB.controlNumber = controlNumber;
 			db.saveApplication(toStoreInDB, function(err, appl){
 				if (err){
+					console.error(err);
 					return error.sendError(req, res, 500, 'unable to process request.');
 				}
 				else {
-					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err, data){
+					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err){
 						if (err) {
+							console.error(err);
 							return error.sendError(req, res, 500, 'unable to process request.');
 						}
 						else {
@@ -348,7 +339,19 @@ const postApplication = function(req, res, reqData){
 			});
 		})
 		.catch((err)=>{
-			return error.sendError(req, res, 500, 'unable to process request.');
+
+			console.error(err);
+			if (err instanceof DuplicateContactsError){
+				if (err.duplicateContacts){
+					return error.sendError(req, res, 400, err.duplicateContacts.length + ' duplicate contacts found.', err.duplicateContacts);		
+				}
+				else {
+					return error.sendError(req, res, 400, 'duplicate contacts found.');	
+				}
+			}
+			else {
+				return error.sendError(req, res, 500, 'unable to process request.');	
+			}
 		});
 	}
 };
