@@ -86,7 +86,6 @@ function getFile(controlNumber, fileName, callback){
  * @param  {Function} callback      - function to call after files have been retreived, or error returned
  */
 function getFilesZip(controlNumber, dbFiles, res, callback){
-
 	const zipper = new s3zipper(config.getStoreConfig());
 
 	const filePath = `${controlNumber}`;
@@ -107,7 +106,6 @@ function getFilesZip(controlNumber, dbFiles, res, callback){
 		return callback(err);
 	}
 	else {
-			
 		if (fileResult.files.length === 0 ){
 			return callback('files not found');
 		}
@@ -136,7 +134,7 @@ function getFilesZip(controlNumber, dbFiles, res, callback){
 				pipe: res,
 				recursive: true
 			},
-				function (err, result) {
+				function (err) {
 					if (err){
 						console.error(err);
 						return callback(err);

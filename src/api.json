@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "description": "This page is for developers. We built this site entirely off the APIs below and we want to share them with you.",
-    "version": "0.0.15",
+    "version": "1.0.1",
     "title": "API Documentation for Developers"
   },
   "tags": [
@@ -76,8 +76,8 @@
           "adminOrg": {"default":"", "intake":"adminOrg"},
           "applicantInfo": {
             "contactControlNumber":{"default":"", "intake":"addresses/contCn"},
-            "firstName": {"default":"", "intake":"holders/firstName"},
-            "lastName": {"default":"", "intake":"holders/lastName"},
+            "firstName": {"default":"", "intake":"firstName"},
+            "lastName": {"default":"", "intake":"lastName"},
             "dayPhone": {
                 "areaCode": {"default":0, "intake":"phones/areaCode"},
                 "number": {"default":0, "intake":"phones/phoneNumber"},
@@ -98,14 +98,15 @@
             "mailingZIP": {"default":"", "intake":"addresses/postalCode"},
             "organizationName": {"default":"", "intake":"addresses/contName"},
             "website": {"default":"", "intake":"middleLayer/website"},
-            "orgType": {"default":"", "intake":"holders/orgType"}
+            "orgType": {"default":"", "intake":"orgType"}
           },
           "noncommercialFields": {
             "activityDescription": {"default":"", "intake":"middleLayer/activityDescription"},
             "locationDescription": {"default":"", "intake":"middleLayer/locationDescription"},
             "startDateTime": {"default":"", "intake":"middleLayer/startDatetime"},
             "endDateTime": {"default":"", "intake":"middleLayer/endDatetime"},
-            "numberParticipants": {"default":0, "intake":"middleLayer/numberParticipants"}
+            "numberParticipants": {"default":0, "intake":"middleLayer/numberParticipants"},
+            "numberSpectators": {"default":0, "intake":"middleLayer/numberSpectators"}
           }
         },
         "tags": [
@@ -217,8 +218,8 @@
           "adminOrg": {"default":"", "intake":"adminOrg"},
           "applicantInfo": {
             "contactControlNumber":{"default":"", "intake":"addresses/contCn"},
-            "firstName": {"default":"", "intake":"holders/firstName"},
-            "lastName": {"default":"", "intake":"holders/lastName"},
+            "firstName": {"default":"", "intake":"firstName"},
+            "lastName": {"default":"", "intake":"lastName"},
             "dayPhone": {
               "areaCode": {"default":0, "intake":"phones/areaCode"},
               "number": {"default":0, "intake":"phones/phoneNumber"},
@@ -239,7 +240,7 @@
             "mailingZIP": {"default":0, "intake":"addresses/postalCode"},
             "organizationName": {"default":"", "intake":"addresses/contName"},
             "website": {"default":"", "intake":"middleLayer/website"},
-            "orgType": {"default":"", "intake":"holders/orgType"}
+            "orgType": {"default":"", "intake":"orgType"}
           },
           "tempOutfitterFields": {
             "individualIsCitizen": {"default":false, "intake":"middleLayer/individualIsCitizen"},
@@ -521,13 +522,17 @@
         "orgType":{
           "type":"string",
           "enum":[
-            "Individual",
+            "Association",
             "Corporation",
-            "Limited Liability Company",
-            "Partnership or Association",
-            "State Government or Agency",
-            "Local Government or Agency",
-            "Nonprofit"
+            "Education",
+            "Federal Government",
+            "State Government",
+            "Local Govt",
+            "Married Common Property",
+            "Limited Liability Company (LLC)",
+            "Limited Liability Partnership (LLP)",
+            "Person",
+            "Trust"
           ]
         }
       },
@@ -555,13 +560,17 @@
           "type":"string",
           "description":"Organization Type",
           "enum":[
-            "Individual",
+            "Association",
             "Corporation",
-            "Limited Liability Company",
-            "Partnership or Association",
-            "State Government or Agency",
-            "Local Government or Agency",
-            "Nonprofit"
+            "Education",
+            "Federal Government",
+            "State Government",
+            "Local Govt",
+            "Married Common Property",
+            "Limited Liability Company (LLC)",
+            "Limited Liability Partnership (LLP)",
+            "Person",
+            "Trust"
           ]
         }
       },
@@ -590,7 +599,8 @@
        "locationDescription": {  "type": "string"},
        "startDateTime": { "type": "string"},
        "endDateTime": { "type": "string"},
-       "numberParticipants" : { "type": "integer"}
+       "numberParticipants" : { "type": "integer"},
+       "numberSpectators" : { "type": "integer"}
       },
       "required": ["activityDescription","locationDescription","startDateTime","endDateTime","numberParticipants"],
       "xml": {
