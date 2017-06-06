@@ -62,12 +62,12 @@ describe('authentication validation', function() {
 			userRole: 'user'
 		};
 
-		db.saveUser(adminUser, function(err, usr){
+		db.saveUser(adminUser, function(err){
 			if (err){
 				return false;
 			}
 			else {
-				db.saveUser(userUser, function(err, usr){
+				db.saveUser(userUser, function(err){
 					if (!err){
 						util.getToken(adminUsername, adminPassword, function(t){
 							token = t; 

@@ -1,6 +1,6 @@
 # Authentication Process
 
-When a user enters a username and password in the `/auth` route, that information is verified against the `Users` table in the middle-layer database. This table contains the usernames and their encrypted password. Once the user is authenticated, the application sends back a token that can be used for any of the API routes. The token is valid for two hours.
+When a user enters a username and password in the `/auth` route, that information is verified against the `Users` table in the middle-layer database. This table contains the usernames and their encrypted password. Once the user is authenticated, the application sends back a token that can be used for any of the API routes. The token is valid for two hours. Note that only userrole ‘admin’ has permission to access all routes; userrole ‘user’ does not currently have permission to access any routes.
 
 ## How It Works
 

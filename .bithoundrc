@@ -41,15 +41,15 @@
     "**/extjs/resources/**",
     "**/extjs/src/**",
     "**/extjs/welcome/**",
-    "**/docs/lang/**",
-    "**/docs/lib/**",
-    "bower_components/**"
-	"lint/**"
-	"docs/**"
-	"api-docs**"
-	"code-docs/**"
-	"mocks/**"
-	"config/**"
+    "**/bower_components/**",
+	"**/lint/**",
+    "**/coverage/**",
+	"**/docs/api/lang/**",
+    "**/docs/api/lib/**",
+	"**/mocks/**",
+    "**/bin/**",
+    "**/manifests/**",
+	"**/config/**"
   ],
   "test": [
     "**/test/**",

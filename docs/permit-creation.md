@@ -138,8 +138,8 @@ These steps define the process for creating a new permit type using Example Perm
                 - `fromIntake` indicates whether this piece of the field is from the intake module or not
                     - If `fromIntake` is true, `field` is expected in the same object, specifying the field where this part of the field should come from.
                     - If `fromIntake` is false, `value` is expected in the same object, specifying what value is to be used in this part of the field.
-                -`function` describes the function that should be used on an array of all indicies of `fields`, current options are `concat` and `contId`. 
-                    - To add an option for this field, create a function in basic.js which takes an array as input and outputs a string. Then update the `buildAutoPopulatedFields` function in basic.js by adding a case to the switch/case statement for the name of the newly created function and then a call to that function inside the case statement.
+                -`function` describes the function that should be used on an array of all indicies of `fields`, current options are `concat`, `ePermitId`, and `contId`. 
+                    - To add an option for this field, create a function in `src/controllers/autoPopulate.js` which takes an array as input and outputs a string. Next export that function at the end of the file like the existing functions. Then update the `buildAutoPopulatedFields` function in `src/controllers/basic.js` by adding a case to the switch/case statement for the name of the newly created function and then a call to that function inside the case statement.
 
           Files:
           - `maxSize` is measured in megabytes
@@ -154,8 +154,8 @@ These steps define the process for creating a new permit type using Example Perm
           If the store contains one of the `basic` type options, `basicField` attribute must be included. This is the name of the field used to submit this data to the Basic API.
 
 2. Extend the schema, if necessary.
-    1. If there are any new form fields not supported by the current middle-layer  database, they can be added in the application table. To do this, go to `dba/migrations/ 02-create-applications.js` and update the sequelize migration script as needed. Also, update `src/models/applications.js` to include the new database fields. This applies only if you are recreating the applications table. Please refer to the [Sequelize migrations documentation](http://docs.sequelizejs.com/en/latest/docs/migrations/) for information on altering an existing table.
+    1. If there are any new form fields not supported by the current middle-layer database, they can be added in the application table. To do this, create a new migration file (e.g., `06-alter-applications.js`) with the sequelize alter table script and save it under `dba/migrations/`. Also, update `src/models/applications.js` to include the new database fields. Please refer to the [Sequelize migrations documentation](http://docs.sequelizejs.com/en/latest/docs/migrations/) for information on altering an existing table.
     2. If there are routing changes, update `src/controllers/index.js`.
-    3. If there are validation changes, update `src/controllers/validation.js`.
+    3. If there are validation changes, update `src/controllers/validation.js` and/or `src/controllers/fileValidation.js` as needed.
     4. If there are any changes on how the files are to be stored, update `src/controllers/store.js`.
     5. If there are any changes on how the requests are made to Basic API, update `src/controllers/basic.js`.
