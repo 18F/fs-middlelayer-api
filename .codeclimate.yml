@@ -37,6 +37,7 @@ exclude_paths:
 - api-docs/
 - code-docs/
 - dba/
+- cmd/
 - "**/lang/"
 - "**/lib/"
 ecmaFeatures:

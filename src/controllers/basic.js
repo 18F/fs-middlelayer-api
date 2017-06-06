@@ -18,46 +18,11 @@ const request = require('request-promise');
 //*******************************************************************
 // other files
 
-const error = require('./error.js');
+const error = require('./errors/error.js');
 const db = require('./db.js');
-const DuplicateContactsError = require('./duplicateContactsError.js');
+const autoPopulate = require('./autoPopulate.js');
+const DuplicateContactsError = require('./errors/duplicateContactsError.js');
 const SUDS_API_URL = process.env.SUDS_API_URL;
-
-//*******************************************************************
-// AUTO-POPULATE FUNCTIONS
-/**
- * Concats all indexs of input
- * @param  {Array} input - Array of strings to be joined together
- * @return {String}      - Single string made up of all indicies of input 
- */
-function concat(input){
-	const output = input.join('');
-	return output;
-}
-
-/**
- * Ensures all characters of input are upper case then joins them
- * @param  {Array} input - Array of strings to be joined together
- * @return {String}      - Single string made up of all indicies of input 
- */
-function contId(input){
-	return concat(
-		input.map((i)=>{
-			return i.toUpperCase();
-		})
-	);
-}
-
-/**
- * Adds UNIX timestamp and then joins all elements of input
- * @param  {Array} input - Array of strings to be joined together
- * @return {String}      - Single string made up of all indicies of input 
- */
-function ePermitId(input){
-	const timeStamp = + new Date();
-	input.push(timeStamp);
-	return concat(input);
-}
 
 //*******************************************************************
 
@@ -67,7 +32,7 @@ function ePermitId(input){
  * @return {Boolean}      - Whether application is for an individual
  */
 function isAppFromPerson(body){
-	const output = (!body.applicantInfo.orgType || body.applicantInfo.orgType === 'Individual');
+	const output = (!body.applicantInfo.orgType || body.applicantInfo.orgType.toUpperCase() === 'PERSON');
 	return output;
 }
 
@@ -131,23 +96,23 @@ function buildAutoPopulatedFields(fieldsToBuild, body){
 		});
 		switch (field[key].madeOf.function){
 		case 'concat':
-			autoPopulatedFieldValue = concat(fieldMakeUp);
+			autoPopulatedFieldValue = autoPopulate.concat(fieldMakeUp);
 			break;
 		case 'contId':
 			if (isAppFromPerson(body)){
 				if (fieldMakeUp.length > 3){
 					fieldMakeUp.pop();
 				}
-				autoPopulatedFieldValue = contId(fieldMakeUp);
+				autoPopulatedFieldValue = autoPopulate.contId(fieldMakeUp);
 			}
 			else {
 				const toUse = [];
 				toUse.push(fieldMakeUp.pop());
-				autoPopulatedFieldValue = contId(toUse);
+				autoPopulatedFieldValue = autoPopulate.contId(toUse);
 			}
 			break;
 		case 'ePermitId':
-			autoPopulatedFieldValue = ePermitId(fieldMakeUp);
+			autoPopulatedFieldValue = autoPopulate.ePermitId(fieldMakeUp);
 			break;
 		}
 		output[key] = autoPopulatedFieldValue;
@@ -367,7 +332,11 @@ function getFromBasic(req, res, controlNumber){
 		.catch(function(err){
 			if (err.statusCode && err.statusCode === 404){
 				console.error(err);
-				return error.sendError(req, res, 500, 'error returned from Basic API.');	
+				return error.sendError(req, res, 503, 'underlying service unavailable.');	
+			}
+			else if (err.error && err.error.code === 'ETIMEDOUT') {
+				console.error(err);
+				return error.sendError(req, res, 504, 'underlying service has timed out.');	
 			}
 			else {
 				reject(err);		
@@ -382,7 +351,7 @@ function getFromBasic(req, res, controlNumber){
  * @param  {Object} sch - Schema object
  * @param  {Object} body - User input
  */
-function postToBasic(req, res, sch, body){ //Should remove control number once we get from BASIC api
+function postToBasic(req, res, sch, body){
 
 	return new Promise(function (fulfill, reject){
 
@@ -471,17 +440,17 @@ function postToBasic(req, res, sch, body){ //Should remove control number once w
 		})
 		.then(function(response){
 			const applResponse  = response;
-			if (SUDS_API_URL.endsWith('/mocks')){
-				const controlNumber = (Math.floor((Math.random() * 10000000000) + 1)).toString();
-				applResponse.accinstCn = controlNumber;
-			}
 			apiCallsObject.POST['/application'].response = applResponse;
 			fulfill(apiCallsObject);
 		})
 		.catch(function(err){
 			if (err.statusCode && err.statusCode === 404){
 				console.error(err);
-				return error.sendError(req, res, 500, 'error returned from Basic API.');	
+				return error.sendError(req, res, 503, 'underlying service unavailable.');	
+			}
+			else if (err.error && err.error.code === 'ETIMEDOUT') {
+				console.error(err);
+				return error.sendError(req, res, 504, 'underlying service has timed out.');	
 			}
 			else {
 				reject(err);		
