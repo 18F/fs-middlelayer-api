@@ -8,6 +8,28 @@
 	"tags": [
 	],
 	"paths": {
+		"/login": {
+			"get": {
+				"tags": [
+					"Login"
+				],
+				"summary": "Login",
+				"description": "",
+				"produces": [
+					"application/json"
+				],
+				"responses": {
+					"200": {
+						"description": "Success",
+						"examples": {
+							"application/json": [{
+								"token": "abc-123"
+							}]
+						}
+					}
+				}
+			}
+		},
 		"/contact/lastname/{lastname}": {
 			"get": {
 				"tags": [
@@ -201,14 +223,14 @@
         					"application/json": {
         						"addrCn": "987654321",
 								"addressType": "BILLING",
-								"address1": "1234 Main St",								
+								"address1": "1234 Main St",
 								"cityName": "Washington",
 								"stateCode": "DC",
 								"postalCode": "12345",
 								"contCn": "/[1-9]{1}[0-9]{3}[.][0-9]{6}/",
-								"createdDate": "2016-06-04",								
+								"createdDate": "2016-06-04",
 								"programArea": "SUDS",
-								"securityId": "0102"								
+								"securityId": "0102"
         					}
          				}
 					}
