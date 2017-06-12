@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -23,6 +23,8 @@ const db = require('./db.js');
 const autoPopulate = require('./autoPopulate.js');
 const DuplicateContactsError = require('./errors/duplicateContactsError.js');
 const SUDS_API_URL = process.env.SUDS_API_URL;
+const SUDS_API_USERNAME = process.env.SUDS_API_USERNAME;
+const SUDS_API_PASSWORD = process.env.SUDS_API_PASSWORD;
 
 //*******************************************************************
 
@@ -149,7 +151,7 @@ function getBasicFields(fieldsToBasic, body, autoPopValues){
 			}
 		});
 	});
-	//requestsObj contains objects, labeled as each request that may be sent to the basic API, containing the fields 
+	//requestsObj contains objects, labeled as each request that may be sent to the basic API, containing the fields
 	//which need to be included in that request
 	for (const request in requestsObj){
 		if (requestsObj.hasOwnProperty(request)){
@@ -191,7 +193,7 @@ function getBasicFields(fieldsToBasic, body, autoPopValues){
 /** Takes fields to be stored, creates post objects and populated with user input
  * @param  {Object} sch - validation schema for this request
  * @param  {Object} body - user input
- * @return {Object} - All post objects 
+ * @return {Object} - All post objects
  */
 function prepareBasicPost(sch, body){
 	const otherFields = [];
@@ -307,40 +309,66 @@ function getContId(fieldsObj, person){
 	}
 }
 
+function getToken() {
+	return new Promise(function(fulfill, reject) {
+		const authURL = `${SUDS_API_URL}/login`;
+		request.get(authURL, {
+			auth: {
+				user: SUDS_API_USERNAME,
+				pass: SUDS_API_PASSWORD,
+				// Change to false if SUDS API requires digest
+				sendImmediately: true
+			},
+			json: true
+		}).then(function(response) {
+			if (response.token) {
+				return fulfill(response.token);
+			}
+			reject(new Error('Token not in data returned from SUDS basic API'));
+		}).catch(reject);
+	});
+}
+
 /** Gets info about an application and returns it.
  * @param  {Object} req - Request Object
  * @param  {Object} res - Response Object
  * @param  {Object} pathData - All data from swagger for the path that has been run
- * @return {Object} - Data from the basic API about an application 
+ * @return {Object} - Data from the basic API about an application
  */
 function getFromBasic(req, res, controlNumber){
 
 	return new Promise(function (fulfill, reject){
 
-		const applicationCheck = `${SUDS_API_URL}/application/${controlNumber}`;
-		const getApplicationOptions = {
-			method: 'GET',
-			uri: applicationCheck,
-			qs:{},
-			json: true
-		};
-		
-		request(getApplicationOptions)
-		.then(function(response){
-			return fulfill(response);
-		})
-		.catch(function(err){
-			if (err.statusCode && err.statusCode === 404){
-				console.error(err);
-				return error.sendError(req, res, 503, 'underlying service unavailable.');	
-			}
-			else if (err.error && err.error.code === 'ETIMEDOUT') {
-				console.error(err);
-				return error.sendError(req, res, 504, 'underlying service has timed out.');	
-			}
-			else {
-				reject(err);		
-			}	
+		getToken()
+		.then(function(sudsToken) {
+			const applicationCheck = `${SUDS_API_URL}/application/${controlNumber}`;
+			const getApplicationOptions = {
+				method: 'GET',
+				uri: applicationCheck,
+				qs:{},
+				json: true,
+				headers: {
+					'Authorization': `Bearer ${sudsToken}`
+				}
+			};
+
+			request(getApplicationOptions)
+			.then(function(response){
+				return fulfill(response);
+			})
+			.catch(function(err){
+				if (err.statusCode && err.statusCode === 404){
+					console.error(err);
+					return error.sendError(req, res, 503, 'underlying service unavailable.');
+				}
+				else if (err.error && err.error.code === 'ETIMEDOUT') {
+					console.error(err);
+					return error.sendError(req, res, 504, 'underlying service has timed out.');
+				}
+				else {
+					reject(err);
+				}
+			});
 		});
 	});
 }
@@ -400,7 +428,7 @@ function postToBasic(req, res, sch, body){
 			if (res.length === 1  && res[0].contCn){
 				if (contId === res[0].contId){
 					return new Promise(function(resolve){
-						resolve(res[0].contCn);	
+						resolve(res[0].contCn);
 					});
 				}
 				else {
@@ -416,7 +444,7 @@ function postToBasic(req, res, sch, body){
 					if (contId === contact.contId){
 						duplicateContacts.push(contact);
 						tmpContCn = contact.contCn;
-					}					
+					}
 				});
 
 				if (duplicateContacts.length === 0){
@@ -424,7 +452,7 @@ function postToBasic(req, res, sch, body){
 				}
 				else if (duplicateContacts.length === 1){
 					return new Promise(function(resolve){
-						resolve(tmpContCn);	
+						resolve(tmpContCn);
 					});
 				}
 				else {
@@ -446,15 +474,15 @@ function postToBasic(req, res, sch, body){
 		.catch(function(err){
 			if (err.statusCode && err.statusCode === 404){
 				console.error(err);
-				return error.sendError(req, res, 503, 'underlying service unavailable.');	
+				return error.sendError(req, res, 503, 'underlying service unavailable.');
 			}
 			else if (err.error && err.error.code === 'ETIMEDOUT') {
 				console.error(err);
-				return error.sendError(req, res, 504, 'underlying service has timed out.');	
+				return error.sendError(req, res, 504, 'underlying service has timed out.');
 			}
 			else {
-				reject(err);		
-			}	
+				reject(err);
+			}
 		});
 
 	});
