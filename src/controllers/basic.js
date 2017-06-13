@@ -237,7 +237,7 @@ function postRequest(res, apiCallsObject, fieldsObj, responseKey, requestKey, re
 	const addressURL = `${SUDS_API_URL}${requestPath}`;
 	apiCallsObject.POST[requestPath].request = addressField;
 	const createAddressOptions = getRequestOptions(addressURL, 'POST', addressField, sudsToken);
-	return request(createAddressOptions);
+	return request.post(createAddressOptions);
 }
 /**
  * Calls basic API to create a contact in SUDS
@@ -262,7 +262,7 @@ function createContact(fieldsObj, person, apiCallsObject, sudsToken){
 			apiCallsObject.POST[responseKey].request = contactField;
 		}
 		const createContactOptions = getRequestOptions(createPersonOrOrgURL, 'POST', contactField, sudsToken);
-		request(createContactOptions)
+		request.post(createContactOptions)
 		.then(function(res){
 			return postRequest(res, apiCallsObject, fieldsObj, responseKey, '/contact/address', '/contact-address', sudsToken);
 		})
@@ -292,7 +292,7 @@ function createApplication(fieldsObj, contCN, apiCallsObject, sudsToken){
 	const applicationPost = fieldsObj['/application'];
 	apiCallsObject.POST['/application'].request = applicationPost;
 	const createApplicationOptions = getRequestOptions(createApplicationURL, 'POST', applicationPost, sudsToken);
-	return request(createApplicationOptions);
+	return request.post(createApplicationOptions);
 }
 
 /**
@@ -310,7 +310,7 @@ function getContId(fieldsObj, person){
 	}
 }
 
-function getToken(request) {
+function getToken() {
 	return new Promise(function(fulfill, reject) {
 		const authURL = `${SUDS_API_URL}/login`;
 		request.get(authURL, {
@@ -342,12 +342,12 @@ function getFromBasic(req, res, controlNumber){
 
 	return new Promise(function (fulfill, reject){
 
-		getToken(request)
+		getToken()
 		.then(function(sudsToken) {
 			const applicationCheck = `${SUDS_API_URL}/application/${controlNumber}`;
 			const getApplicationOptions = getRequestOptions(applicationCheck, 'GET', null, sudsToken);
 
-			request(getApplicationOptions)
+			request.get(getApplicationOptions)
 			.then(function(response){
 				return fulfill(response);
 			})
@@ -379,7 +379,7 @@ function postToBasic(req, res, sch, body){
 
 	return new Promise(function (fulfill, reject){
 
-		getToken(request)
+		getToken()
 		.then(function(sudsToken) {
 			const apiCallsObject = {
 				'GET':{
@@ -410,7 +410,7 @@ function postToBasic(req, res, sch, body){
 			}
 			const getContactOptions = getRequestOptions(existingContactCheck, 'GET', null, sudsToken);
 
-			request(getContactOptions)
+			request.get(getContactOptions)
 			.then(function(res){
 				if (person){
 					apiCallsObject.GET['/contact/lastname/{lastName}'].response = res;
