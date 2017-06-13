@@ -28,6 +28,22 @@ const SUDS_API_PASSWORD = process.env.SUDS_API_PASSWORD;
 
 //*******************************************************************
 
+function getRequestOptions(uri, method = 'GET', body = null, sudsToken = '') {
+	const requestOptions = {
+		method,
+		uri,
+		json: true
+	};
+
+	if (sudsToken) {
+		requestOptions.headers = {
+			'Authorization': `Bearer ${sudsToken}`
+		};
+	}
+
+	return requestOptions;
+}
+
 /**
  * Returns whether application is for an individual.
  * @param  {Object}  body - User input
@@ -214,18 +230,13 @@ function prepareBasicPost(sch, body){
  * @param  {String} requestPath - Path from basic API route this response needs to be sent to
  * @return {Promise}            - Promise to be fulfilled
  */
-function postRequest(res, apiCallsObject, fieldsObj, responseKey, requestKey, requestPath){
+function postRequest(res, apiCallsObject, fieldsObj, responseKey, requestKey, requestPath, sudsToken){
 	apiCallsObject.POST[responseKey].response = res;
 	const addressField = fieldsObj[requestKey];
 	addressField.contCn = res.contCn;
 	const addressURL = `${SUDS_API_URL}${requestPath}`;
 	apiCallsObject.POST[requestPath].request = addressField;
-	const createAddressOptions = {
-		method: 'POST',
-		uri: addressURL,
-		body: addressField,
-		json: true
-	};
+	const createAddressOptions = getRequestOptions(addressURL, 'POST', addressField, sudsToken);
 	return request(createAddressOptions);
 }
 /**
@@ -235,7 +246,7 @@ function postRequest(res, apiCallsObject, fieldsObj, responseKey, requestKey, re
  * @param  {Object} apiCallsObject - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @return {Promise}		   - Promise to be fulfilled
  */
-function createContact(fieldsObj, person, apiCallsObject){
+function createContact(fieldsObj, person, apiCallsObject, sudsToken){
 	return new Promise(function(fulfill, reject){
 		let contactField, createPersonOrOrgURL, responseKey;
 		if (person){
@@ -250,18 +261,13 @@ function createContact(fieldsObj, person, apiCallsObject){
 			responseKey = '/contact/orgcode';
 			apiCallsObject.POST[responseKey].request = contactField;
 		}
-		const createContactOptions = {
-			method: 'POST',
-			uri: createPersonOrOrgURL,
-			body: contactField,
-			json: true
-		};
+		const createContactOptions = getRequestOptions(createPersonOrOrgURL, 'POST', contactField, sudsToken);
 		request(createContactOptions)
 		.then(function(res){
-			return postRequest(res, apiCallsObject, fieldsObj, responseKey, '/contact/address', '/contact-address');
+			return postRequest(res, apiCallsObject, fieldsObj, responseKey, '/contact/address', '/contact-address', sudsToken);
 		})
 		.then(function(res){
-			return postRequest(res, apiCallsObject, fieldsObj, '/contact-address', '/contact/phone', '/contact-phone');
+			return postRequest(res, apiCallsObject, fieldsObj, '/contact-address', '/contact/phone', '/contact-phone', sudsToken);
 		})
 		.then(function(res){
 			apiCallsObject.POST['/contact-phone'].response = res;
@@ -280,17 +286,12 @@ function createContact(fieldsObj, person, apiCallsObject){
  * @param  {Object} apiCallsObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @return {Promise}            - Promise to be fulfilled
  */
-function createApplication(fieldsObj, contCN, apiCallsObject){
+function createApplication(fieldsObj, contCN, apiCallsObject, sudsToken){
 	const createApplicationURL = `${SUDS_API_URL}/application`;
 	fieldsObj['/application'].contCn = contCN;
 	const applicationPost = fieldsObj['/application'];
 	apiCallsObject.POST['/application'].request = applicationPost;
-	const createApplicationOptions = {
-		method: 'POST',
-		uri: createApplicationURL,
-		body: applicationPost,
-		json: true
-	};
+	const createApplicationOptions = getRequestOptions(createApplicationURL, 'POST', applicationPost, sudsToken);
 	return request(createApplicationOptions);
 }
 
@@ -309,7 +310,7 @@ function getContId(fieldsObj, person){
 	}
 }
 
-function getToken() {
+function getToken(request) {
 	return new Promise(function(fulfill, reject) {
 		const authURL = `${SUDS_API_URL}/login`;
 		request.get(authURL, {
@@ -325,7 +326,9 @@ function getToken() {
 				return fulfill(response.token);
 			}
 			reject(new Error('Token not in data returned from SUDS basic API'));
-		}).catch(reject);
+		}).catch(function(err) {
+			reject(err);
+		});
 	});
 }
 
@@ -339,18 +342,10 @@ function getFromBasic(req, res, controlNumber){
 
 	return new Promise(function (fulfill, reject){
 
-		getToken()
+		getToken(request)
 		.then(function(sudsToken) {
 			const applicationCheck = `${SUDS_API_URL}/application/${controlNumber}`;
-			const getApplicationOptions = {
-				method: 'GET',
-				uri: applicationCheck,
-				qs:{},
-				json: true,
-				headers: {
-					'Authorization': `Bearer ${sudsToken}`
-				}
-			};
+			const getApplicationOptions = getRequestOptions(applicationCheck, 'GET', null, sudsToken);
 
 			request(getApplicationOptions)
 			.then(function(response){
@@ -369,7 +364,8 @@ function getFromBasic(req, res, controlNumber){
 					reject(err);
 				}
 			});
-		});
+		})
+		.catch(reject);
 	});
 }
 
@@ -383,108 +379,107 @@ function postToBasic(req, res, sch, body){
 
 	return new Promise(function (fulfill, reject){
 
-		const apiCallsObject = {
-			'GET':{
-				'/contact/lastname/{lastName}':{},
-				'/contact/orgcode/{orgCode}':{}
-			},
-			'POST':{
-				'/contact/person':{},
-				'/contact/orgcode':{},
-				'/contact-address':{},
-				'/contact-phone':{},
-				'/application':{}
-			}
-		};
-		const fieldsObj = prepareBasicPost(sch, body);
+		getToken(request)
+		.then(function(sudsToken) {
+			const apiCallsObject = {
+				'GET':{
+					'/contact/lastname/{lastName}':{},
+					'/contact/orgcode/{orgCode}':{}
+				},
+				'POST':{
+					'/contact/person':{},
+					'/contact/orgcode':{},
+					'/contact-address':{},
+					'/contact-phone':{},
+					'/application':{}
+				}
+			};
+			const fieldsObj = prepareBasicPost(sch, body);
 
-		const person = isAppFromPerson(body);
-		let existingContactCheck;
-		if (person){
-			const lastName = body.applicantInfo.lastName;
-			existingContactCheck = `${SUDS_API_URL}/contact/lastname/${lastName}`;
-			apiCallsObject.GET['/contact/lastname/{lastName}'].request = {'lastName':lastName};
-		}
-		else {
-			const orgName = body.applicantInfo.organizationName;
-			existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}`;
-			apiCallsObject.GET['/contact/orgcode/{orgCode}'].request = {'orgCode':orgName};
-		}
-		const getContactOptions = {
-			method: 'GET',
-			uri: existingContactCheck,
-			qs:{},
-			json: true
-		};
-		request(getContactOptions)
-		.then(function(res){
+			const person = isAppFromPerson(body);
+			let existingContactCheck;
 			if (person){
-				apiCallsObject.GET['/contact/lastname/{lastName}'].response = res;
+				const lastName = body.applicantInfo.lastName;
+				existingContactCheck = `${SUDS_API_URL}/contact/lastname/${lastName}`;
+				apiCallsObject.GET['/contact/lastname/{lastName}'].request = {'lastName':lastName};
 			}
 			else {
-				apiCallsObject.GET['/contact/orgcode/{orgCode}'].response = res;
+				const orgName = body.applicantInfo.organizationName;
+				existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}`;
+				apiCallsObject.GET['/contact/orgcode/{orgCode}'].request = {'orgCode':orgName};
 			}
-			const contId = getContId(fieldsObj, person);
-			if (res.length === 1  && res[0].contCn){
-				if (contId === res[0].contId){
-					return new Promise(function(resolve){
-						resolve(res[0].contCn);
-					});
+			const getContactOptions = getRequestOptions(existingContactCheck, 'GET', null, sudsToken);
+
+			request(getContactOptions)
+			.then(function(res){
+				if (person){
+					apiCallsObject.GET['/contact/lastname/{lastName}'].response = res;
 				}
 				else {
-					return createContact(fieldsObj, person, apiCallsObject);
+					apiCallsObject.GET['/contact/orgcode/{orgCode}'].response = res;
 				}
-			}
-			else if (res.length > 1){
-				const matchingContacts = res;
-				const duplicateContacts = [];
-				let tmpContCn;
-
-				matchingContacts.forEach((contact)=>{
-					if (contId === contact.contId){
-						duplicateContacts.push(contact);
-						tmpContCn = contact.contCn;
+				const contId = getContId(fieldsObj, person);
+				if (res.length === 1  && res[0].contCn){
+					if (contId === res[0].contId){
+						return new Promise(function(resolve){
+							resolve(res[0].contCn);
+						});
 					}
-				});
-
-				if (duplicateContacts.length === 0){
-					return createContact(fieldsObj, person, apiCallsObject);
+					else {
+						return createContact(fieldsObj, person, apiCallsObject, sudsToken);
+					}
 				}
-				else if (duplicateContacts.length === 1){
-					return new Promise(function(resolve){
-						resolve(tmpContCn);
+				else if (res.length > 1){
+					const matchingContacts = res;
+					const duplicateContacts = [];
+					let tmpContCn;
+
+					matchingContacts.forEach((contact)=>{
+						if (contId === contact.contId){
+							duplicateContacts.push(contact);
+							tmpContCn = contact.contCn;
+						}
 					});
+
+					if (duplicateContacts.length === 0){
+						return createContact(fieldsObj, person, apiCallsObject, sudsToken);
+					}
+					else if (duplicateContacts.length === 1){
+						return new Promise(function(resolve){
+							resolve(tmpContCn);
+						});
+					}
+					else {
+						throw new DuplicateContactsError(duplicateContacts);
+					}
 				}
 				else {
-					throw new DuplicateContactsError(duplicateContacts);
+					return createContact(fieldsObj, person, apiCallsObject, sudsToken);
 				}
-			}
-			else {
-				return createContact(fieldsObj, person, apiCallsObject);
-			}
+			})
+			.then(function(contCn){
+				return createApplication(fieldsObj, contCn, apiCallsObject, sudsToken);
+			})
+			.then(function(response){
+				const applResponse  = response;
+				apiCallsObject.POST['/application'].response = applResponse;
+				fulfill(apiCallsObject);
+			})
+			.catch(function(err){
+				if (err.statusCode && err.statusCode === 404){
+					console.error(err);
+					return error.sendError(req, res, 503, 'underlying service unavailable.');
+				}
+				else if (err.error && err.error.code === 'ETIMEDOUT') {
+					console.error(err);
+					return error.sendError(req, res, 504, 'underlying service has timed out.');
+				}
+				else {
+					reject(err);
+				}
+			});
 		})
-		.then(function(contCn){
-			return createApplication(fieldsObj, contCn, apiCallsObject);
-		})
-		.then(function(response){
-			const applResponse  = response;
-			apiCallsObject.POST['/application'].response = applResponse;
-			fulfill(apiCallsObject);
-		})
-		.catch(function(err){
-			if (err.statusCode && err.statusCode === 404){
-				console.error(err);
-				return error.sendError(req, res, 503, 'underlying service unavailable.');
-			}
-			else if (err.error && err.error.code === 'ETIMEDOUT') {
-				console.error(err);
-				return error.sendError(req, res, 504, 'underlying service has timed out.');
-			}
-			else {
-				reject(err);
-			}
-		});
-
+		.catch(reject);
 	});
 
 }
