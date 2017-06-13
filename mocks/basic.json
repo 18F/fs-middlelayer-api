@@ -22,9 +22,9 @@
 					"200": {
 						"description": "Success",
 						"examples": {
-							"application/json": [{
+							"application/json": {
 								"token": "abc-123"
-							}]
+							}
 						}
 					}
 				}
