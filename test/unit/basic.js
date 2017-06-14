@@ -4,6 +4,7 @@ const expect = chai.expect;
 const sinon = require('sinon');
 const request = require('request-promise');
 
+const testData = require('./basic.json');
 const basic = require('../../src/controllers/basic');
 
 function verifyArgsForSUDSAuthentication(args) {
@@ -19,7 +20,7 @@ function verifyArgsForSUDSAuthentication(args) {
 	expect(json).to.equal(true);
 }
 
-describe('unit test - src/controllers/basic.js', () => {
+describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 	describe('getFromBasic()', () => {
 		describe('error getting token', () => {
 			const error = new Error();
@@ -164,6 +165,148 @@ describe('unit test - src/controllers/basic.js', () => {
 	});
 
 	describe('postToBasic()', () => {
+		describe('error getting token', () => {
+			const error = new Error();
+			const notAnError = { };
 
+			before(() => {
+				sinon.stub(request, 'get')
+					.onFirstCall().rejects(error);
+			});
+
+			beforeEach(() => {
+				request.get.resetHistory();
+			});
+
+			after(() => {
+				request.get.restore();
+			});
+
+			it('should make one GET request', () => {
+				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(() => {
+					expect(request.get.callCount).to.equal(1);
+					return notAnError;
+				}).then(err => {
+					if (err === notAnError) {
+						return;
+					}
+					return Promise.reject(new Error('promise should reject'));
+				});
+			});
+
+			it('should correctly request a SUDS authentication token', () => {
+				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(() => {
+					verifyArgsForSUDSAuthentication(request.get.args[0]);
+					return notAnError;
+				}).then(err => {
+					if (err === notAnError) {
+						return;
+					}
+					throw new Error('should reject');
+				});
+			});
+
+			it('should ultimately reject with the expected value', () => {
+				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(finalResult => {
+					expect(finalResult).to.equal(error);
+					return notAnError;
+				}).then(err => {
+					if (err === notAnError) {
+						return;
+					}
+					throw new Error('should reject');
+				});
+			});
+		});
+
+		describe('returned body from SUDS is invalid', () => {
+			const notAnError = { };
+
+			before(() => {
+				sinon.stub(request, 'get')
+					.onFirstCall().resolves('not a token');
+			});
+
+			beforeEach(() => {
+				request.get.resetHistory();
+			});
+
+			after(() => {
+				request.get.restore();
+			});
+
+			it('should make one GET request', () => {
+				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(() => {
+					expect(request.get.callCount).to.equal(1);
+					return notAnError;
+				}).then(err => {
+					if (err === notAnError) {
+						return;
+					}
+					return Promise.reject(new Error('promise should reject'));
+				});
+			});
+
+			it('should correctly request a SUDS authentication token', () => {
+				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(() => {
+					verifyArgsForSUDSAuthentication(request.get.args[0]);
+					return notAnError;
+				}).then(err => {
+					if (err === notAnError) {
+						return;
+					}
+					throw new Error('should reject');
+				});
+			});
+
+			it('should ultimately reject with an error', () => {
+				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(finalResult => {
+					expect(finalResult.message).to.equal('Token not in data returned from SUDS basic API');
+					return notAnError;
+				}).then(err => {
+					if (err === notAnError) {
+						return;
+					}
+					throw new Error('should reject');
+				});
+			});
+		});
+
+		describe('no errors', () => {
+			before(() => {
+				sinon.stub(request, 'get')
+					.onCall(0).resolves({ token: 'token' })
+					.onCall(1).resolves([]);
+				sinon.stub(request, 'post').resolves({});
+			});
+
+			beforeEach(() => {
+				request.get.resetHistory();
+				request.post.resetHistory();
+			});
+
+			after(() => {
+				request.get.restore();
+				request.post.restore();
+			});
+
+			it('should make two GET requests', () => {
+				return basic.postToBasic({}, {}, testData.schema, testData.body).then(() => {
+					expect(request.get.callCount).to.equal(2);
+				});
+			});
+
+			it('should correctly request a SUDS authentication token', () => {
+				return basic.postToBasic({}, {}, testData.schema, testData.body).then(() => {
+					verifyArgsForSUDSAuthentication(request.get.args[0]);
+				});
+			});
+
+			it('should ultimately resolve with the expected value', () => {
+				return basic.postToBasic({}, {}, testData.schema, testData.body).then(finalResult => {
+					expect(finalResult).to.be.an('object');
+				});
+			});
+		});
 	});
 });
