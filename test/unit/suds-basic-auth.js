@@ -4,7 +4,7 @@ const expect = chai.expect;
 const sinon = require('sinon');
 const request = require('request-promise');
 
-const testData = require('./basic.json');
+const testData = require('./suds-basic-auth.json');
 const basic = require('../../src/controllers/basic');
 
 function verifyArgsForSUDSAuthentication(args) {
@@ -19,6 +19,13 @@ function verifyArgsForSUDSAuthentication(args) {
 	expect(auth.pass).to.equal(process.env.SUDS_API_PASSWORD);
 	expect(json).to.equal(true);
 }
+
+// =============== IMPORTANT NOTE ===============
+// These tests only check that calls to the SUDS basic API are preceded by
+// a call to the /login SUDS endpoint, that the results of that call are
+// handled correctly, and that subsequent calls to the SUDS API include a
+// bearer token in the Authorization header.  It does NOT test the correct
+// behavior of the getFromBasic() or postToBasic() methods otherwise.
 
 describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 	describe('getFromBasic()', () => {
