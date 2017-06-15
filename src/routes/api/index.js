@@ -43,18 +43,24 @@ function getAllFileNames() {
 	if (apiSchema) {
 		for (const k in apiSchema.paths) {
 
-			for (const l in apiSchema.paths[k]) {
-				
-				if (apiSchema.paths[k][l].parameters) {
+			if (apiSchema.paths.hasOwnProperty(k)) {
 
-					for (let i = 0; i < apiSchema.paths[k][l].parameters.length; i++) {
+				for (const l in apiSchema.paths[k]) {
 
-						if (apiSchema.paths[k][l].parameters[i].type === 'file') {
-							
-							allFilesNames.push({
-								name: apiSchema.paths[k][l].parameters[i].name,
-								maxCount: 1
-							});
+					if (apiSchema.paths[k].hasOwnProperty(l)) {					
+					
+						if (apiSchema.paths[k][l].parameters) {
+
+							for (let i = 0; i < apiSchema.paths[k][l].parameters.length; i++) {
+
+								if (apiSchema.paths[k][l].parameters[i].type === 'file') {
+									
+									allFilesNames.push({
+										name: apiSchema.paths[k][l].parameters[i].name,
+										maxCount: 1
+									});
+								}
+							}
 						}
 					}
 				}
@@ -83,7 +89,7 @@ router.use('/*', function(req, res, next){
 });
 
 // api router to controller
-router.use('/*', postUploadFields, function(req, res, next){
+router.use('/*', postUploadFields, function(req, res){
 	controller.routeRequest(req, res);
 });
 

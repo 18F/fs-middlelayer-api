@@ -1,0 +1,102 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Non-Object Property",
+    "description": "A property listed under validation.json",
+    "type": "object",
+    "properties":{
+    	"allOf":{
+    		"description":"Only used for properties of type object. Used for validation purposes to require that all of the fields listed be provided.",
+    		"type":"object"
+    	},
+    	"basicField":{
+    		"description":"Describes what the name of the field should be when sent to the basic API. Only required if the field will be sent to the basic API, if the field will be stored in just the DB or no where at all, this field will be ignored.",
+    		"type":"string"
+    	},
+    	"default":{
+    		"description":"Value to be used and stored wherever the field is used and stored, if there is no value provided by the intake module.",
+    		"type":["number", "string", "boolean"]
+    	},
+    	"dependencies":{
+    		"description":"Only used for properties of type object. Used for validation to ensure that if a given field is present, that the field listed in the value is provided as well.",
+    		"type":"object"
+    	},
+    	"filetypecode":{
+    		"description":"Only used if type is 'file'. Lists the filetypecode that will be store in the DB for this file.",
+    		"type":"string"
+    	},
+    	"format":{
+    		"description":"Name of a function to be used in the validation process to validate this field. Can not be used with pattern.",
+    		"type":"string"	
+    	},
+    	"fromIntake":{
+    		"description":"Describes whether the field will be populated with data from the intake module(true) or it will need to be autopopulated by other field or values listed in 'madeOf'(false).",
+    		"type":"boolean"
+    	},
+    	"madeOf":{
+    		"type":"object",
+    		"properties":{
+    			"fields":{
+    				"type":"array",
+    				"items":{
+    					"type":"object",
+    					"properties":{
+    						"fromIntake":{
+    							"type":"boolean"
+    						},
+    						"oneOf":{
+    							"field":{
+    								"description":"Used if fromIntake is true.",
+    								"type":"string"
+    							},
+    							"value":{
+    								"description":"Used if fromIntake is false. ",
+    								"type":"string"
+    							}
+    						}
+    					}
+    				}
+    			},
+    			"function":{
+    				"description":"",
+    				"type":"string"
+    			}
+    		}
+    	},
+    	"maxLength":{
+    		"description":"Only used if type is string. Indicates the maximum number of characters a field can be.",
+    		"type":"integer"
+    	},
+    	"maxSize":{
+    		"description":"Only used if type is 'file'. Indicates the maximum size in megabytes that the file can be.",
+    		"type":"integer"
+    	},
+    	"pattern":{
+    		"description":"",
+    		"type":"string"
+    	},
+    	"requiredFile":{
+    		"description":"If type of this field is a file, it describes whether this file must be provided or not. If the field is not a file, it is ignored.",
+    		"type":"boolean"
+    	},
+    	"store":{
+    		"description":"Array containing the locations that this field should be stored.",
+    		"type":"array",
+    		"items":{
+    			"description":"String describing the location to store this field",
+    			"type":"string"
+    		}
+    	},
+    	"type":{
+    		"description":"Expected type of this field.",
+    		"type":"string"
+    	},
+    	"validExtensions":{
+    		"description":"Only used if type is 'file'. List of extensions that a file can be.",
+    		"type":"array",
+    		"items":{
+    			"description":"One valid extension.",
+    			"type":"string"
+    		}
+    	}
+    }
+}

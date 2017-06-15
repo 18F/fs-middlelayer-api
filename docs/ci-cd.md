@@ -12,4 +12,4 @@ The build process includes the following steps:
     2. `npm run lint`
     3. `istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive`
     4. `codecov`
-3. A successful build on a PR merge triggers a branch-dependent deployment to cloud.gov or Heroku. An `api_key` in `.travis.yml` directs the deployment to `fs-epermit-dev`. 
+3. A successful build on a PR merge triggers a branch-dependent deployment to cloud.gov. An `api_key` in `.travis.yml` directs the deployment to `fs-epermit-dev`. 
