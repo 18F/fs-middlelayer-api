@@ -3,7 +3,8 @@ engines:
     enabled: true
     config:
       languages:
-      - javascript
+        javascript:
+          mass_threshold: 100
   eslint:
     enabled: true
   fixme:
@@ -36,6 +37,7 @@ exclude_paths:
 - api-docs/
 - code-docs/
 - dba/
+- cmd/
 - "**/lang/"
 - "**/lib/"
 ecmaFeatures:
