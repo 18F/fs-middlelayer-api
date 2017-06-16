@@ -12,11 +12,16 @@ function verifyArgsForSUDSAuthentication(args) {
 	const auth = args[1].auth;
 	const json = args[1].json;
 
-	expect(url).to.equal(`${process.env.SUDS_API_URL}/login`);
+	const VCAPServices = JSON.parse(process.env.VCAP_SERVICES);
+	const SUDS_API_URL = VCAPServices['user-provided'][0].credentials.SUDS_API_URL;
+	const SUDS_API_USERNAME = VCAPServices['user-provided'][0].credentials.password;
+	const SUDS_API_PASSWORD = VCAPServices['user-provided'][0].credentials.username;
+
+	expect(url).to.equal(`${SUDS_API_URL}/login`);
 	expect(auth).to.have.property('user');
 	expect(auth).to.have.property('pass');
-	expect(auth.user).to.equal(process.env.SUDS_API_USERNAME);
-	expect(auth.pass).to.equal(process.env.SUDS_API_PASSWORD);
+	expect(auth.user).to.equal(SUDS_API_USERNAME);
+	expect(auth.pass).to.equal(SUDS_API_PASSWORD);
 	expect(json).to.equal(true);
 }
 
