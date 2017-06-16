@@ -6,11 +6,7 @@ These are the environment variables that must be created on the Node.js server f
 
 - `DATABASE_URL=postgres://<username>:<password>@<database hostname>:5432<database name>`
 - `JWT_SECRET_KEY=<secret key to generate tokens>`
-- `AWS_ACCESS_KEY_ID=<AWS access key ID>`
-- `AWS_SECRET_ACCESS_KEY=<AWS secret key>`
-- `AWS_REGION=<AWS region>`
-- `AWS_BUCKET_NAME=<AWS S3 bucket name>`
-- `SUDS_API_URL=<SUDS Basic API URL>`
+- `VCAP_SERVICES=an object to replicate the bound services of the SUDS_API_URL and the S3 bucket`
 
 ## Creating API User Accounts Using Environment Variables
 
@@ -27,4 +23,4 @@ The Node.js server will look for the AWS properties in the system's environment 
 
 ## Setting Environment Variables
 
-The [dotenv](https://www.npmjs.com/package/dotenv) npm package is used to load environment variables to the application for local development. 
+The [dotenv](https://www.npmjs.com/package/dotenv) npm package is used to load environment variables to the application for local development.

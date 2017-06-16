@@ -31,12 +31,13 @@ This repository is being developed under a task order of the Agile Blanket Purch
 - Environment variables:
   - PORT | Default: 8000
   - DATABASE_URL | Format: postgres://user:password@host:port/database
-  - AWS_ACCESS_KEY_ID
-  - AWS_SECRET_ACCESS_KEY
-  - AWS_REGION
-  - AWS_BUCKET_NAME
-  - SUDS_API_URL
-    - To use the moxai dependency and point at the mock API, update this to be `http://localhost:${PORT}/mocks`.
+  - VCAP_SERVICES
+    - S3 credentials for s3 aws bucket
+    - nrm-suds-url-service
+      - SUDS_API_URL
+        - To use the moxai dependency and point at the mock API, update this to be `http://localhost:${PORT}/mocks`.
+      - username
+      - password
 
 - API user account:
   - To create an API user account, run `node cmd/createUser.js -u <username> -p <password> -r <userrole>`. The user role is either 'user' or 'admin'. The ‘admin’ role has permission to access all routes, but the ‘user’ role does not currently have permission to access any routes.
@@ -74,7 +75,7 @@ Refer to application package and dependency trackers for additional dependency i
   - [VersionEye](https://www.versioneye.com/user/projects/58a669e7b4d2a20055fcb84c)
   - [Bithound](https://www.bithound.io/github/nci-ats/fs-middlelayer-api/feat%2Fswagger-ui/dependencies/npm)
 
-The [Moxai package](https://www.npmjs.com/package/moxai) is a dependency for testing and was built specifically for this project. Moxai was published as an independent package that can be used with any Express application. This application uses the moxai package as a placeholder mock API. The [/mocks/basic.json file](mocks/basic.json) maintains the API endpoint schema. 
+The [Moxai package](https://www.npmjs.com/package/moxai) is a dependency for testing and was built specifically for this project. Moxai was published as an independent package that can be used with any Express application. This application uses the moxai package as a placeholder mock API. The [/mocks/basic.json file](mocks/basic.json) maintains the API endpoint schema.
 
 It is known that the [api.json](src/api.json) file is not strictly valid per the OpenAPI Specification. If this is checked against a validator it will report that it is invalid. We are allowing this to stay invalid because we felt it would be more valuable for developers to have an example data model for permits, rather than have every part of the specification be valid.
 
