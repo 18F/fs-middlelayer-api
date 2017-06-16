@@ -22,9 +22,10 @@ const error = require('./errors/error.js');
 const db = require('./db.js');
 const autoPopulate = require('./autoPopulate.js');
 const DuplicateContactsError = require('./errors/duplicateContactsError.js');
-const SUDS_API_URL = process.env.SUDS_API_URL;
-const SUDS_API_USERNAME = process.env.SUDS_API_USERNAME;
-const SUDS_API_PASSWORD = process.env.SUDS_API_PASSWORD;
+
+const SUDS_API_URL = VCAPServices['user-provided'][0].credentials.SUDS_API_URL;
+const SUDS_API_USERNAME = VCAPServices['user-provided'][0].credentials.password;
+const SUDS_API_PASSWORD = VCAPServices['user-provided'][0].credentials.username;
 
 //*******************************************************************
 
