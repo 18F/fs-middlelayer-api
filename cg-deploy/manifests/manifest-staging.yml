@@ -9,4 +9,3 @@ applications:
   - fs-staging-psql
   - nrm-suds-url-service
   - auth-service
-  - nrm-suds-url-service
