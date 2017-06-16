@@ -34,21 +34,21 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			const notAnError = { };
 
 			before(() => {
-				sinon.stub(request, 'get')
+				sinon.stub(request, 'post')
 					.onFirstCall().rejects(error);
 			});
 
 			beforeEach(() => {
-				request.get.resetHistory();
+				request.post.resetHistory();
 			});
 
 			after(() => {
-				request.get.restore();
+				request.post.restore();
 			});
 
-			it('should make one GET request', () => {
+			it('should make one post request', () => {
 				return basic.getFromBasic().catch(() => {
-					expect(request.get.callCount).to.equal(1);
+					expect(request.post.callCount).to.equal(1);
 					return notAnError;
 				}).then(err => {
 					if (err === notAnError) {
@@ -60,7 +60,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 
 			it('should correctly request a SUDS authentication token', () => {
 				return basic.getFromBasic().catch(() => {
-					verifyArgsForSUDSAuthentication(request.get.args[0]);
+					verifyArgsForSUDSAuthentication(request.post.args[0]);
 					return notAnError;
 				}).then(err => {
 					if (err === notAnError) {
@@ -87,21 +87,21 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			const notAnError = { };
 
 			before(() => {
-				sinon.stub(request, 'get')
+				sinon.stub(request, 'post')
 					.onFirstCall().resolves('not a token');
 			});
 
 			beforeEach(() => {
-				request.get.resetHistory();
+				request.post.resetHistory();
 			});
 
 			after(() => {
-				request.get.restore();
+				request.post.restore();
 			});
 
-			it('should make one GET request', () => {
+			it('should make one post request', () => {
 				return basic.getFromBasic().catch(() => {
-					expect(request.get.callCount).to.equal(1);
+					expect(request.post.callCount).to.equal(1);
 					return notAnError;
 				}).then(err => {
 					if (err === notAnError) {
@@ -113,7 +113,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 
 			it('should correctly request a SUDS authentication token', () => {
 				return basic.getFromBasic().catch(() => {
-					verifyArgsForSUDSAuthentication(request.get.args[0]);
+					verifyArgsForSUDSAuthentication(request.post.args[0]);
 					return notAnError;
 				}).then(err => {
 					if (err === notAnError) {
@@ -138,28 +138,31 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 
 		describe('no errors', () => {
 			before(() => {
-				sinon.stub(request, 'get')
+				sinon.stub(request, 'post')
 					.onFirstCall().resolves({ token: 'token' })
-					.onSecondCall().resolves('hello world');
+			  sinon.stub(request, 'get').onFirstCall().resolves('hello world');
 			});
 
 			beforeEach(() => {
 				request.get.resetHistory();
+				request.post.resetHistory();
 			});
 
 			after(() => {
 				request.get.restore();
+				request.post.restore();
 			});
 
-			it('should make two GET requests', () => {
+			it('should make one GET and one POST requests', () => {
 				return basic.getFromBasic().then(() => {
-					expect(request.get.callCount).to.equal(2);
+					expect(request.post.callCount).to.equal(1);
+					expect(request.get.callCount).to.equal(1);
 				});
 			});
 
 			it('should correctly request a SUDS authentication token', () => {
 				return basic.getFromBasic().then(() => {
-					verifyArgsForSUDSAuthentication(request.get.args[0]);
+					verifyArgsForSUDSAuthentication(request.post.args[0]);
 				});
 			});
 
@@ -177,21 +180,24 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			const notAnError = { };
 
 			before(() => {
-				sinon.stub(request, 'get')
+				sinon.stub(request, 'post')
 					.onFirstCall().rejects(error);
+				sinon.stub(request, 'get');
 			});
 
 			beforeEach(() => {
+				request.post.resetHistory();
 				request.get.resetHistory();
 			});
 
 			after(() => {
+				request.post.restore();
 				request.get.restore();
 			});
 
 			it('should make one GET request', () => {
 				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(() => {
-					expect(request.get.callCount).to.equal(1);
+					expect(request.post.callCount).to.equal(1);
 					return notAnError;
 				}).then(err => {
 					if (err === notAnError) {
@@ -203,7 +209,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 
 			it('should correctly request a SUDS authentication token', () => {
 				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(() => {
-					verifyArgsForSUDSAuthentication(request.get.args[0]);
+					verifyArgsForSUDSAuthentication(request.post.args[0]);
 					return notAnError;
 				}).then(err => {
 					if (err === notAnError) {
@@ -230,21 +236,24 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			const notAnError = { };
 
 			before(() => {
-				sinon.stub(request, 'get')
+				sinon.stub(request, 'post')
 					.onFirstCall().resolves('not a token');
+				sinon.stub(request, 'get');
 			});
 
 			beforeEach(() => {
 				request.get.resetHistory();
+				request.post.resetHistory();
 			});
 
 			after(() => {
 				request.get.restore();
+				request.post.restore();
 			});
 
-			it('should make one GET request', () => {
+			it('should make one POST request', () => {
 				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(() => {
-					expect(request.get.callCount).to.equal(1);
+					expect(request.post.callCount).to.equal(1);
 					return notAnError;
 				}).then(err => {
 					if (err === notAnError) {
@@ -256,7 +265,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 
 			it('should correctly request a SUDS authentication token', () => {
 				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(() => {
-					verifyArgsForSUDSAuthentication(request.get.args[0]);
+					verifyArgsForSUDSAuthentication(request.post.args[0]);
 					return notAnError;
 				}).then(err => {
 					if (err === notAnError) {
@@ -281,10 +290,10 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 
 		describe('no errors', () => {
 			before(() => {
-				sinon.stub(request, 'get')
-					.onCall(0).resolves({ token: 'token' })
-					.onCall(1).resolves([]);
-				sinon.stub(request, 'post').resolves({});
+				sinon.stub(request, 'post')
+					.resolves({contCn: '3'})
+					.onFirstCall().resolves({ token: 'token' });
+				sinon.stub(request, 'get').resolves([]);
 			});
 
 			beforeEach(() => {
@@ -297,15 +306,16 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 				request.post.restore();
 			});
 
-			it('should make two GET requests', () => {
+			it('should make one GET and one POST requests', () => {
 				return basic.postToBasic({}, {}, testData.schema, testData.body).then(() => {
-					expect(request.get.callCount).to.equal(2);
+					expect(request.post.callCount).to.equal(5);
+					expect(request.get.callCount).to.equal(1);
 				});
 			});
 
 			it('should correctly request a SUDS authentication token', () => {
 				return basic.postToBasic({}, {}, testData.schema, testData.body).then(() => {
-					verifyArgsForSUDSAuthentication(request.get.args[0]);
+					verifyArgsForSUDSAuthentication(request.post.args[0]);
 				});
 			});
 

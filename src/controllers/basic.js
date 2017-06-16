@@ -233,6 +233,7 @@ function prepareBasicPost(sch, body){
 function postRequest(res, apiCallsObject, fieldsObj, responseKey, requestKey, requestPath, sudsToken){
 	apiCallsObject.POST[responseKey].response = res;
 	const addressField = fieldsObj[requestKey];
+	console.log(res);
 	addressField.contCn = res.contCn;
 	const addressURL = `${SUDS_API_URL}${requestPath}`;
 	apiCallsObject.POST[requestPath].request = addressField;
@@ -313,7 +314,7 @@ function getContId(fieldsObj, person){
 function getToken() {
 	return new Promise(function(fulfill, reject) {
 		const authURL = `${SUDS_API_URL}/login`;
-		request.get(authURL, {
+		request.post(authURL, {
 			auth: {
 				user: SUDS_API_USERNAME,
 				pass: SUDS_API_PASSWORD,
