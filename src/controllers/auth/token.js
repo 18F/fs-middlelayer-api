@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -18,7 +18,8 @@ const jwt = require('jsonwebtoken');
 
 const error = include('src/controllers/errors/error.js');
 
-const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+const VCAPServices = JSON.parse(process.env.VCAP_SERVICES);
+const JWT_SECRET_KEY = VCAPServices['user-provided'][1].credentials.JWT_SECRET_KEY;
 
 //*******************************************************************
 // token
@@ -30,13 +31,13 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
  * @param  {Function} next - What to call after verifying token
  */
 const token = function(req, res, next){
-    
+
 	const token = req.body.token || req.query.token || req.headers['x-access-token'];
-	
+
 	if (token) {
 
 		const claims = {
-			issuer: 'fs-epermit-api', 
+			issuer: 'fs-epermit-api',
 			subject: 'permit applications',
 			audience: 'fs-epermit-api-intake-users'
 		};
@@ -44,18 +45,18 @@ const token = function(req, res, next){
 		jwt.verify(token, JWT_SECRET_KEY, claims, function(err, decoded) {
 			if (err) {
 				error.sendError(req, res, 401, 'Failed to authenticate token.');
-			} 
+			}
 			else {
-				req.decoded = decoded;    
+				req.decoded = decoded;
 				return next();
 			}
 		});
 
-	} 
+	}
 	else {
 		error.sendError(req, res, 403, 'No token provided.');
 	}
-    
+
 };
 
 //*******************************************************************=

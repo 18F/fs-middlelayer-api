@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -18,11 +18,13 @@ const AWS = require('aws-sdk');
 
 //*************************************************************
 // AWS
+const VCAPServices = JSON.parse(process.env.VCAP_SERVICES);
+const S3_INFO = VCAPServices.s3[0].credentials;
 
-const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
-const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
-const AWS_REGION = process.env.AWS_REGION;
-const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME;
+const AWS_ACCESS_KEY_ID = S3_INFO.access_key_id;
+const AWS_SECRET_ACCESS_KEY = S3_INFO.secret_access_key;
+const AWS_REGION = S3_INFO.region;
+const AWS_BUCKET_NAME = S3_INFO.bucket;
 
 AWS.config.update({
 	accessKeyId: AWS_ACCESS_KEY_ID,

@@ -8,3 +8,4 @@ applications:
   - fs-router-staging-s3
   - fs-staging-psql
   - nrm-suds-url-service
+  - auth-service
