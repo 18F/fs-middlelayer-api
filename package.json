@@ -56,7 +56,6 @@
     "mocha": "^3.2.0",
     "mock-aws": "^1.2.3",
     "npm-run-all": "^4.0.2",
-    "sinon": "^2.3.2",
     "supertest": "^3.0.0",
     "unionized": "^4.11.0"
   },

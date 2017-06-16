@@ -6,6 +6,7 @@ applications:
   instances: 1
   services:
   - fs-router-staging-s3
-  - fs-api-staging
+  - fs-staging-psql
   - nrm-suds-url-service
   - auth-service
+  - nrm-suds-url-service
