@@ -5,7 +5,6 @@ test:
   pre:
     - npm run dba
   override:
-    - npm run dba
     - npm run lint
     - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive
     - codecov
