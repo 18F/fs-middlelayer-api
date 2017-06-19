@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -25,7 +25,7 @@ const fsr = require('file-stream-rotator');
 const mkdirp = require('mkdirp');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const moxai = require('moxai');
+const SUDS_INFO = require('./controllers/vcap.js').SUDS_INFO;
 
 const routes = require('./routes');
 
@@ -50,7 +50,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 // log
 
 const logDirectory = path.join(__dirname, '../log');
-    
+
 mkdirp(logDirectory);
 
 const accessLogStream = fsr.getStream({
@@ -62,7 +62,7 @@ const accessLogStream = fsr.getStream({
 app.use(morgan('combined', {stream: accessLogStream}));
 
 //*******************************************************************
-// public 
+// public
 
 app.use(express.static('docs/api'));
 app.use('/docs', express.static('docs/api'));
@@ -76,7 +76,10 @@ app.use('/schema/api.json', express.static('src/api.json'));
 //*******************************************************************
 // mocks
 
-app.use('/mocks', moxai({'dir': '../mocks', 'file': 'basic', 'random': true}));
+if(SUDS_INFO.USING_MOCKS){
+  const moxai = require('moxai');
+  app.use('/mocks', moxai({'dir': '../mocks', 'file': 'basic', 'random': true}));
+}
 
 //*******************************************************************
 // routes
