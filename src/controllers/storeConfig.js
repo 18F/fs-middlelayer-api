@@ -18,8 +18,7 @@ const AWS = require('aws-sdk');
 
 //*************************************************************
 // AWS
-const VCAPServices = JSON.parse(process.env.VCAP_SERVICES);
-const S3_INFO = VCAPServices.s3[0].credentials;
+const S3_INFO = require('./vcap.js').S3_INFO;
 
 const AWS_ACCESS_KEY_ID = S3_INFO.access_key_id;
 const AWS_SECRET_ACCESS_KEY = S3_INFO.secret_access_key;

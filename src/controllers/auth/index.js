@@ -22,8 +22,7 @@ const bcrypt = require('bcrypt-nodejs');
 const models = include('src/models');
 const jwt = require('jsonwebtoken');
 const uuidV4 = require('uuid/v4');
-const VCAPServices = JSON.parse(process.env.VCAP_SERVICES);
-const JWT_SECRET_KEY = VCAPServices['user-provided'][1].credentials.JWT_SECRET_KEY;
+const JWT_SECRET_KEY = require('../vcap.js').JWT_SECRET_KEY;
 
 //*******************************************************************
 // passport

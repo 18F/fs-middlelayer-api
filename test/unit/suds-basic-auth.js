@@ -12,10 +12,10 @@ function verifyArgsForSUDSAuthentication(args) {
 	const auth = args[1].auth;
 	const json = args[1].json;
 
-	const VCAPServices = JSON.parse(process.env.VCAP_SERVICES);
-	const SUDS_API_URL = VCAPServices['user-provided'][0].credentials.SUDS_API_URL;
-	const SUDS_API_USERNAME = VCAPServices['user-provided'][0].credentials.password;
-	const SUDS_API_PASSWORD = VCAPServices['user-provided'][0].credentials.username;
+	const SUDS_INFO = require('../../src/controllers/vcap.js').SUDS_INFO;
+	const SUDS_API_URL = SUDS_INFO.SUDS_API_URL;
+	const SUDS_API_USERNAME = SUDS_INFO.password;
+	const SUDS_API_PASSWORD = SUDS_INFO.username;
 
 	expect(url).to.equal(`${SUDS_API_URL}/login`);
 	expect(auth).to.have.property('user');
