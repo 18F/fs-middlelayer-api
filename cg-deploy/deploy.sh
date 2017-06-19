@@ -1,7 +1,7 @@
 set -e
 
 export PATH=$HOME:$PATH
-curl -L -o $HOME/cf.tgz "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.22.2"
+curl -L -o $HOME/cf.tgz "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.26.0"
 tar xzvf $HOME/cf.tgz -C $HOME
 cf install-plugin -f -r CF-Community autopilot
 
