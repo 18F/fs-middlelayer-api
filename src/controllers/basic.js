@@ -25,8 +25,8 @@ const DuplicateContactsError = require('./errors/duplicateContactsError.js');
 
 const SUDS_INFO = require('./vcap.js').SUDS_INFO;
 const SUDS_API_URL = SUDS_INFO.SUDS_API_URL;
-const SUDS_API_USERNAME = SUDS_INFO.password;
-const SUDS_API_PASSWORD = SUDS_INFO.username;
+const SUDS_API_USERNAME = SUDS_INFO.username;
+const SUDS_API_PASSWORD = SUDS_INFO.password;
 
 //*******************************************************************
 

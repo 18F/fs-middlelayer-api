@@ -1,8 +1,20 @@
-require('dotenv').config();
+let VCAPServices = {};
+try {
+  VCAPServices = JSON.parse(process.env.VCAP_SERVICES);
+}
+catch(err){
+  console.log(`VCAP SERVICES PARSE recieved the following error: ${err}`);
+}
 
-const VCAPServices = JSON.parse(process.env.VCAP_SERVICES);
-// console.log(VCAPServices)
-const S3_INFO = VCAPServices.s3[0].credentials;
+
+//Env Variables bound to the app through cloud foundry services
+//S3 bucket assignment
+let S3_INFO = {};
+if (Array.isArray(VCAPServices.s3) && VCAPServices.s3.length > 0){
+  S3_INFO = VCAPServices.s3[0].credentials;
+}
+
+//User provided services
 let JWT_SECRET_KEY = '';
 let SUDS_INFO = {};
 for (var service of VCAPServices['user-provided']) {
@@ -11,6 +23,14 @@ for (var service of VCAPServices['user-provided']) {
   } else if (service.name == 'nrm-suds-url-service') {
     SUDS_INFO = service.credentials;
   }
+}
+
+//Handle using mocks
+if(SUDS_INFO.SUDS_API_URL == 'MOCKS'){
+  SUDS_INFO.SUDS_API_URL = `http://localhost:${process.env.PORT}/mocks`;
+  SUDS_INFO.USING_MOCKS = true;
+} else {
+  SUDS_INFO.USING_MOCKS = false;
 }
 
 module.exports.S3_INFO = S3_INFO;

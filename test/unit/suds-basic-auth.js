@@ -13,9 +13,9 @@ function verifyArgsForSUDSAuthentication(args) {
 	const json = args[1].json;
 
 	const SUDS_INFO = require('../../src/controllers/vcap.js').SUDS_INFO;
-	const SUDS_API_URL = SUDS_INFO.SUDS_API_URL;
-	const SUDS_API_USERNAME = SUDS_INFO.password;
-	const SUDS_API_PASSWORD = SUDS_INFO.username;
+	const SUDS_API_URL = `http://localhost:${process.env.PORT}/mocks`;
+	const SUDS_API_USERNAME = SUDS_INFO.username;
+	const SUDS_API_PASSWORD = SUDS_INFO.password;
 
 	expect(url).to.equal(`${SUDS_API_URL}/login`);
 	expect(auth).to.have.property('user');
