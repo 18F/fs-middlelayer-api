@@ -8,3 +8,4 @@ applications:
     - fs-api-s3
     - fs-api-db
     - nrm-suds-url-service
+    - auth-service

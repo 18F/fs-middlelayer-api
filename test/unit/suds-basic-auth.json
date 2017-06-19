@@ -1,0 +1,458 @@
+{
+	"schema": {
+		"id": "http://json-schema.org/tempOutfitterApplication#",
+		"type": "object",
+		"allOf": [{
+			"type": "object",
+			"properties": {
+				"region": {
+					"default": "",
+					"fromIntake": true,
+					"pattern": "^[0-9]{2}$",
+					"store": ["middleLayer:region"],
+					"type": "string"
+				},
+				"forest": {
+					"default": "",
+					"fromIntake": true,
+					"pattern": "^[0-9]{2}$",
+					"store": ["middleLayer:forest"],
+					"type": "string"
+				},
+				"district": {
+					"default": "",
+					"fromIntake": true,
+					"pattern": "^[0-9]{2}$",
+					"store": ["middleLayer:district"],
+					"type": "string"
+				},
+				"securityId": {
+					"basicField": "securityId",
+					"default": "",
+					"fromIntake": false,
+					"madeOf": {
+						"fields": [{
+							"fromIntake": true,
+							"field": "region"
+						}, {
+							"fromIntake": true,
+							"field": "forest"
+						}],
+						"function": "concat"
+					},
+					"store": ["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
+					"type": "string"
+				},
+				"managingID": {
+					"basicField": "managingOrg",
+					"default": "",
+					"fromIntake": false,
+					"madeOf": {
+						"fields": [{
+							"fromIntake": true,
+							"field": "region"
+						}, {
+							"fromIntake": true,
+							"field": "forest"
+						}],
+						"function": "concat"
+					},
+					"store": ["basic:/application"],
+					"type": "string"
+				},
+				"adminOrg": {
+					"basicField": "adminOrg",
+					"default": "",
+					"fromIntake": false,
+					"madeOf": {
+						"fields": [{
+							"fromIntake": true,
+							"field": "region"
+						}, {
+							"fromIntake": true,
+							"field": "forest"
+						}],
+						"function": "concat"
+					},
+					"store": ["basic:/application"],
+					"type": "string"
+				},
+				"epermitId": {
+					"basicField": "epermitId",
+					"default": "",
+					"fromIntake": false,
+					"madeOf": {
+						"fields": [{
+							"fromIntake": true,
+							"field": "region"
+						}, {
+							"fromIntake": true,
+							"field": "forest"
+						}],
+						"function": "ePermitId"
+					},
+					"store": ["basic:/application"],
+					"type": "string"
+				},
+				"acres": {
+					"basicField": "acres",
+					"default": 0,
+					"fromIntake": false,
+					"store": ["basic:/application"],
+					"type": "integer"
+				},
+				"contCn": {
+					"basicField": "contCn",
+					"default": "",
+					"fromIntake": false,
+					"store": ["basic:/contact/phone", "basic:/contact/address", "basic:/application"],
+					"type": "string"
+				},
+				"contId": {
+					"basicField": "contId",
+					"default": "",
+					"fromIntake": false,
+					"madeOf": {
+						"fields": [{
+							"fromIntake": true,
+							"field": "applicantInfo.lastName"
+						}, {
+							"fromIntake": false,
+							"value": ", "
+						}, {
+							"fromIntake": true,
+							"field": "applicantInfo.firstName"
+						}, {
+							"fromIntake": true,
+							"field": "applicantInfo.organizationName"
+						}],
+						"function": "contId"
+					},
+					"store": ["basic:/contact/person", "basic:/contact/organization"],
+					"type": "string"
+				}
+			},
+			"required": ["region", "forest", "district"]
+		}, {
+			"properties": {
+				"applicantInfo": {
+					"type": "object",
+					"allOf": [{
+						"type": "object",
+						"properties": {
+							"firstName": {
+								"basicField": "firstName",
+								"default": "",
+								"fromIntake": true,
+								"maxLength": 255,
+								"store": ["basic:/contact/person"],
+								"type": "string"
+							},
+							"lastName": {
+								"basicField": "lastName",
+								"default": "",
+								"fromIntake": true,
+								"maxLength": 255,
+								"store": ["basic:/contact/person"],
+								"type": "string"
+							},
+							"eveningPhone": {
+								"type": "object",
+								"properties": {
+									"areaCode": {
+										"basicField": "areaCode",
+										"default": "0",
+										"fromIntake": true,
+										"pattern": "^[0-9]{3}$",
+										"store": ["basic:/contact/phone"],
+										"type": "string"
+									},
+									"number": {
+										"basicField": "phoneNumber",
+										"default": "0",
+										"fromIntake": true,
+										"pattern": "^[0-9]{7}$",
+										"store": ["basic:/contact/phone"],
+										"type": "string"
+									},
+									"extension": {
+										"basicField": "extension",
+										"default": "",
+										"fromIntake": true,
+										"pattern": "[\\d]+",
+										"store": ["basic:/contact/phone"],
+										"type": "string"
+									},
+									"phoneType": {
+										"basicField": "phoneNumberType",
+										"default": "",
+										"fromIntake": true,
+										"store": ["basic:/contact/phone"],
+										"type": "string"
+									}
+								},
+								"required": ["areaCode", "number", "phoneType"]
+							},
+							"dayPhone": {
+								"type": "object",
+								"properties": {
+									"areaCode": {
+										"basicField": "areaCode",
+										"default": "0",
+										"fromIntake": true,
+										"pattern": "^[0-9]{3}$",
+										"store": ["basic:/contact/phone"],
+										"type": "string"
+									},
+									"number": {
+										"basicField": "phoneNumber",
+										"default": "0",
+										"fromIntake": true,
+										"pattern": "^[0-9]{7}$",
+										"store": ["basic:/contact/phone"],
+										"type": "string"
+									},
+									"extension": {
+										"basicField": "extension",
+										"default": "",
+										"fromIntake": true,
+										"pattern": "[\\d]+",
+										"store": ["basic:/contact/phone"],
+										"type": "string"
+									},
+									"phoneType": {
+										"basicField": "phoneNumberType",
+										"default": "",
+										"fromIntake": true,
+										"store": ["basic:/contact/phone"],
+										"type": "string"
+									}
+								},
+								"required": ["areaCode", "number", "phoneType"]
+							},
+							"emailAddress": {
+								"basicField": "email",
+								"default": "",
+								"fromIntake": true,
+								"pattern": "^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$",
+								"store": ["basic:/contact/address"],
+								"type": "string"
+							},
+							"mailingAddress": {
+								"basicField": "address1",
+								"default": "",
+								"fromIntake": true,
+								"store": ["basic:/contact/address"],
+								"type": "string"
+							},
+							"mailingAddress2": {
+								"basicField": "address2",
+								"default": "",
+								"fromIntake": true,
+								"store": ["basic:/contact/address"],
+								"type": "string"
+							},
+							"mailingCity": {
+								"basicField": "cityName",
+								"default": "",
+								"fromIntake": true,
+								"store": ["basic:/contact/address"],
+								"type": "string"
+							},
+							"mailingState": {
+								"basicField": "stateCode",
+								"default": "",
+								"fromIntake": true,
+								"pattern": "^(A[EKLPRSZ]|C[AOT]|D[CE]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHVJMY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$",
+								"store": ["basic:/contact/address"],
+								"type": "string"
+							},
+							"mailingZIP": {
+								"basicField": "postalCode",
+								"default": "",
+								"fromIntake": true,
+								"pattern": "^[0-9]{5}$|^[0-9]{9}$",
+								"store": ["basic:/contact/address"],
+								"type": "string"
+							},
+							"website": {
+								"default": "",
+								"fromIntake": true,
+								"store": ["middleLayer:website"],
+								"type": "string"
+							},
+							"countryName": {
+								"basicField": "countryName",
+								"default": "United States of America",
+								"store": ["basic:/contact/address"],
+								"type": "string"
+							}
+						},
+						"required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState"]
+					}, {
+						"properties": {
+							"organizationName": {
+								"basicField": "orgCode",
+								"default": "",
+								"fromIntake": true,
+								"store": ["basic:/contact/organization"],
+								"type": "string"
+							},
+							"orgType": {
+								"description": "Organization Type",
+								"enum": ["Association", "Corporation", "Education", "Federal Government", "State Government", "Local Govt", "Married Common Property", "Limited Liability Company (LLC)", "Limited Liability Partnership (LLP)", "Person", "Trust"],
+								"fromIntake": true,
+								"store": ["basic:/contact/organization"],
+								"type": "string"
+							}
+						},
+						"required": ["orgType"]
+					}]
+				},
+				"type": {
+					"type": "string",
+					"default": "tempOutfitters",
+					"enum": ["noncommercial", "tempOutfitters"]
+				},
+				"tempOutfitterFields": {
+					"type": "object",
+					"properties": {
+						"individualIsCitizen": {
+							"default": false,
+							"fromIntake": true,
+							"store": ["middleLayer:individualIsCitizen"],
+							"type": "boolean"
+						},
+						"smallBusiness": {
+							"default": false,
+							"fromIntake": true,
+							"store": ["middleLayer:smallBusiness"],
+							"type": "boolean"
+						},
+						"activityDescription": {
+							"basicField": "purpose",
+							"default": "",
+							"fromIntake": true,
+							"store": ["middleLayer:activityDescription", "basic:/application"],
+							"type": "string"
+						},
+						"advertisingURL": {
+							"default": "",
+							"fromIntake": true,
+							"store": ["middleLayer:advertisingURL"],
+							"type": "string"
+						},
+						"advertisingDescription": {
+							"default": "",
+							"fromIntake": true,
+							"store": ["middleLayer:advertisingDescription"],
+							"type": "string"
+						},
+						"clientCharges": {
+							"default": "",
+							"fromIntake": true,
+							"store": ["middleLayer:clientCharges"],
+							"type": "string"
+						},
+						"experienceList": {
+							"default": "",
+							"fromIntake": true,
+							"store": ["middleLayer:experienceList"],
+							"type": "string"
+						},
+						"guideDocumentation": {
+							"filetypecode": "gud",
+							"maxSize": 25,
+							"requiredFile": false,
+							"store": ["middleLayer:guideDocumentation"],
+							"type": "file",
+							"validExtensions": ["pdf", "doc", "docx", "rtf"]
+						},
+						"acknowledgementOfRiskForm": {
+							"filetypecode": "arf",
+							"maxSize": 10,
+							"requirequiredFilered": false,
+							"store": ["middleLayer:acknowledgementOfRiskForm"],
+							"type": "file",
+							"validExtensions": ["pdf", "doc", "docx", "rtf"]
+						},
+						"insuranceCertificate": {
+							"filetypecode": "inc",
+							"maxSize": 10,
+							"requiredFile": true,
+							"store": ["middleLayer:insuranceCertificate"],
+							"type": "file",
+							"validExtensions": ["pdf", "doc", "docx", "rtf"]
+						},
+						"goodStandingEvidence": {
+							"filetypecode": "gse",
+							"maxSize": 10,
+							"requiredFile": true,
+							"store": ["middleLayer:acknowledgementOfRiskForm"],
+							"type": "file",
+							"validExtensions": ["pdf", "doc", "docx", "rtf"]
+						},
+						"operatingPlan": {
+							"filetypecode": "opp",
+							"maxSize": 10,
+							"requiredFile": true,
+							"store": ["middleLayer:operatingPlan"],
+							"type": "file",
+							"validExtensions": ["pdf", "doc", "docx", "rtf"]
+						},
+						"formName": {
+							"basicField": "formName",
+							"default": "FS-2700-4I",
+							"store": ["middleLayer:formName", "basic:/application"],
+							"type": "string"
+						}
+					},
+					"allOf": [{
+						"required": ["activityDescription", "clientCharges"]
+					}, {
+						"anyOf": [{
+							"required": ["advertisingURL"]
+						}, {
+							"required": ["advertisingDescription"]
+						}]
+					}]
+				}
+			},
+			"required": ["applicantInfo", "type", "tempOutfitterFields"]
+		}]
+	},
+	"body": {
+		"region": "38",
+		"forest": "50",
+		"district": "50",
+		"authorizingOfficerName": "Jane Roe",
+		"authorizingOfficerTitle": "null",
+		"applicantInfo": {
+			"firstName": "John",
+			"lastName": "Doe",
+			"dayPhone": {
+				"areaCode": "202",
+				"number": "5551234",
+				"extension": "0",
+				"phoneType": "BUSINESS"
+			},
+			"emailAddress": "test@email.com",
+			"mailingAddress": "1234 Main St",
+			"mailingCity": "Washington",
+			"mailingState": "DC",
+			"mailingZIP": "12345",
+			"orgType": "Limited Liability Company (LLC)",
+			"organizationName": "ABC Company"
+		},
+		"type": "tempOutfitters",
+		"tempOutfitterFields": {
+			"individualIsCitizen": true,
+			"smallBusiness": false,
+			"activityDescription": "Sample Activity",
+			"advertisingURL": "www.sample.com",
+			"advertisingDescription": "Sample Advertising",
+			"clientCharges": "500",
+			"experienceList": "Sample List"
+		}
+	}
+}
