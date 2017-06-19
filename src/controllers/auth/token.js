@@ -18,8 +18,7 @@ const jwt = require('jsonwebtoken');
 
 const error = include('src/controllers/errors/error.js');
 
-const VCAPServices = JSON.parse(process.env.VCAP_SERVICES);
-const JWT_SECRET_KEY = VCAPServices['user-provided'][1].credentials.JWT_SECRET_KEY;
+const JWT_SECRET_KEY = require('../vcap.js').JWT_SECRET_KEY;
 
 //*******************************************************************
 // token
