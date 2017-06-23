@@ -34,6 +34,7 @@ function getRequestOptions(uri, method = 'GET', body = null, sudsToken = '') {
 	const requestOptions = {
 		method,
 		uri,
+		body,
 		json: true
 	};
 
