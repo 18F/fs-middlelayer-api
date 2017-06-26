@@ -37,6 +37,10 @@ function getRequestOptions(uri, method = 'GET', body = null, sudsToken = '') {
 		json: true
 	};
 
+	if(body){
+		requestOptions.body = body;
+	}
+
 	if (sudsToken) {
 		requestOptions.headers = {
 			'Authorization': `Bearer ${sudsToken}`
