@@ -23,10 +23,10 @@ const db = require('./db.js');
 const autoPopulate = require('./autoPopulate.js');
 const DuplicateContactsError = require('./errors/duplicateContactsError.js');
 
-const VCAPServices = JSON.parse(process.env.VCAP_SERVICES);
-const SUDS_API_URL = VCAPServices['user-provided'][0].credentials.SUDS_API_URL;
-const SUDS_API_USERNAME = VCAPServices['user-provided'][0].credentials.password;
-const SUDS_API_PASSWORD = VCAPServices['user-provided'][0].credentials.username;
+const SUDS_INFO = require('./vcap.js').SUDS_INFO;
+const SUDS_API_URL = SUDS_INFO.SUDS_API_URL;
+const SUDS_API_USERNAME = SUDS_INFO.username;
+const SUDS_API_PASSWORD = SUDS_INFO.password;
 
 //*******************************************************************
 
@@ -36,6 +36,10 @@ function getRequestOptions(uri, method = 'GET', body = null, sudsToken = '') {
 		uri,
 		json: true
 	};
+
+	if (body){
+		requestOptions.body = body;
+	}
 
 	if (sudsToken) {
 		requestOptions.headers = {
