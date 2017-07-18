@@ -35,7 +35,7 @@ This repository is being developed under a task order of the Agile Blanket Purch
     - S3 credentials for s3 aws bucket
     - nrm-suds-url-service
       - SUDS_API_URL
-        - To use the moxai dependency and point at the mock API, update this to be `http://localhost:${PORT}/mocks`.
+        - To use the moxai dependency and point at the mock API, update this to be `MOCKS`.
       - username
       - password
 
