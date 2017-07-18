@@ -37,7 +37,7 @@ function getRequestOptions(uri, method = 'GET', body = null, sudsToken = '') {
 		json: true
 	};
 
-	if(body){
+	if (body){
 		requestOptions.body = body;
 	}
 

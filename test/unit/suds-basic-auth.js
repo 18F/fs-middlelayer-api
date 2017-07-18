@@ -6,13 +6,13 @@ const request = require('request-promise');
 
 const testData = require('./suds-basic-auth.json');
 const basic = require('../../src/controllers/basic');
+const SUDS_INFO = require('../../src/controllers/vcap.js').SUDS_INFO;
 
 function verifyArgsForSUDSAuthentication(args) {
 	const url = args[0];
 	const auth = args[1].auth;
 	const json = args[1].json;
 
-	const SUDS_INFO = require('../../src/controllers/vcap.js').SUDS_INFO;
 	const SUDS_API_URL = `http://localhost:${process.env.PORT}/mocks`;
 	const SUDS_API_USERNAME = SUDS_INFO.username;
 	const SUDS_API_PASSWORD = SUDS_INFO.password;
@@ -144,8 +144,8 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 		describe('no errors', () => {
 			before(() => {
 				sinon.stub(request, 'post')
-					.onFirstCall().resolves({ token: 'token' })
-			  sinon.stub(request, 'get').onFirstCall().resolves('hello world');
+					.onFirstCall().resolves({ token: 'token' });
+				sinon.stub(request, 'get').onFirstCall().resolves('hello world');
 			});
 
 			beforeEach(() => {
