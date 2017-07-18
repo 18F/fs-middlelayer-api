@@ -26,6 +26,7 @@ const mkdirp = require('mkdirp');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const SUDS_INFO = require('./controllers/vcap.js').SUDS_INFO;
+const moxai = require('moxai');
 
 const routes = require('./routes');
 
@@ -76,9 +77,8 @@ app.use('/schema/api.json', express.static('src/api.json'));
 //*******************************************************************
 // mocks
 
-if(SUDS_INFO.USING_MOCKS){
-  const moxai = require('moxai');
-  app.use('/mocks', moxai({'dir': '../mocks', 'file': 'basic', 'random': true}));
+if (SUDS_INFO.USING_MOCKS){
+	app.use('/mocks', moxai({'dir': '../mocks', 'file': 'basic', 'random': true}));
 }
 
 //*******************************************************************

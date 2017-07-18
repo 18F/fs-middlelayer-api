@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -137,7 +137,7 @@ describe('outfitters validation ', function(){
 			expect (actual).to.eql(expected);
 		});
 		it('should report issues when no tempOutfitterFields/small business is provided', function(){
-			
+
 			const actual = specialUses.validate.checkForSmallBusiness(tempOutfitterFactory.create({'tempOutfitterFields.smallBusiness' : undefined}), { errorArray: [] }).errorArray;
 			const expected = [
 				errorFactory.create({field: 'tempOutfitterFields.smallBusiness', errorType: 'missing'})
@@ -248,7 +248,7 @@ describe('noncommercial validation', function(){
 		it('should report issues when no mailing address is provided', function(){
 			const actual = specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.mailingAddress' : undefined}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray;
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.mailingAddress', errorType: 'missing'})	
+				errorFactory.create({field: 'applicantInfo.mailingAddress', errorType: 'missing'})
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -422,7 +422,7 @@ describe('noncommercial validation', function(){
 		});
 	});
 	describe('ensure fields are the right format', function(){
-		
+
 		it('should report issues when the wrong format of applicantInfo/day phone/area code is provided', function(){
 			const actual = specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.dayPhone.areaCode' : '12'}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray;
 			const expected = [
@@ -506,8 +506,8 @@ describe('noncommercial validation', function(){
 			const actual = specialUses.validate.validateBody(noncommercialFactory.create({'type' : 'invalid'}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray;
 			const expected = [
 				{
-					field: 'type', 
-					errorType: 'enum', 
+					field: 'type',
+					errorType: 'enum',
 					enumMessage: 'is not one of enum values: noncommercial,tempOutfitters',
 					anyOfFields: undefined,
 					dependency: undefined
@@ -520,7 +520,7 @@ describe('noncommercial validation', function(){
 			const expected = [
 				{
 					field: 'applicantInfo.orgType',
-					errorType: 'enum', 
+					errorType: 'enum',
 					enumMessage: 'is not one of enum values: Association,Corporation,Education,Federal Government,State Government,Local Govt,Married Common Property,Limited Liability Company (LLC),Limited Liability Partnership (LLP),Person,Trust',
 					anyOfFields: undefined,
 					dependency: undefined
@@ -534,8 +534,8 @@ describe('noncommercial validation', function(){
 			const actual = specialUses.validate.validateBody(noncommercialFactory.create({'applicantInfo.organizationName' : 'theOrg'}), noncommercialObjects.pathData, noncommercialObjects.derefSchema).errorArray;
 			const expected = [
 				{
-					field: 'applicantInfo.organizationName', 
-					errorType: 'dependencies', 
+					field: 'applicantInfo.organizationName',
+					errorType: 'dependencies',
 					dependency:'applicantInfo.orgType',
 					anyOfFields:undefined
 				}
