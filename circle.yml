@@ -21,4 +21,4 @@ deployment:
     branch: dev
     owner: 18F
     commands:
-      - ./cg-deploy/deploy.sh fs-api-staging
+      - ./cg-deploy/deploy.sh api-staging
