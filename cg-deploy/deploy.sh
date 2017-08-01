@@ -6,7 +6,7 @@ tar xzvf $HOME/cf.tgz -C $HOME
 cf install-plugin -f -r CF-Community autopilot
 
 API="https://api.fr.cloud.gov"
-ORG="gsa-acq-proto"
+ORG="usda-forest-service"
 SPACE=$1
 
 if [ $# -ne 1 ]; then
