@@ -14,7 +14,7 @@ echo "Usage: deploy <space>"
 exit
 fi
 
-if [ $SPACE = 'fs-api-prod' ]; then
+if [ $SPACE = 'api-production' ]; then
   NAME="fs-middlelayer-api"
   MANIFEST="./cg-deploy/manifests/manifest.yml"
   CF_USERNAME=$CF_USERNAME_PROD

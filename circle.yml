@@ -16,7 +16,7 @@ deployment:
     branch: master
     owner: 18F
     commands:
-      - ./cg-deploy/deploy.sh fs-api-prod
+      - ./cg-deploy/deploy.sh api-production
   staging:
     branch: dev
     owner: 18F
