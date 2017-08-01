@@ -6,7 +6,7 @@ tar xzvf $HOME/cf.tgz -C $HOME
 cf install-plugin -f -r CF-Community autopilot
 
 API="https://api.fr.cloud.gov"
-ORG="gsa-acq-proto"
+ORG="usda-forest-service"
 SPACE=$1
 
 if [ $# -ne 1 ]; then
@@ -14,12 +14,12 @@ echo "Usage: deploy <space>"
 exit
 fi
 
-if [ $SPACE = 'fs-api-prod' ]; then
+if [ $SPACE = 'api-production' ]; then
   NAME="fs-middlelayer-api"
   MANIFEST="./cg-deploy/manifests/manifest.yml"
   CF_USERNAME=$CF_USERNAME_PROD
   CF_PASSWORD=$CF_PASSWORD_PROD
-elif [ $SPACE = 'fs-api-staging' ]; then
+elif [ $SPACE = 'api-staging' ]; then
   NAME="fs-middlelayer-api-staging"
   MANIFEST="./cg-deploy/manifests/manifest-staging.yml"
   CF_USERNAME=$CF_USERNAME_DEV
