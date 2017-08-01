@@ -5,7 +5,7 @@ applications:
   memory: 128M
   instances: 1
   services:
-  - fs-router-staging-s3
-  - fs-staging-psql
-  - nrm-suds-url-service
-  - auth-service
+    - fs-api-s3
+    - fs-api-db
+    - nrm-suds-url-service
+    - auth-service
