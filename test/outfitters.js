@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) "_| "  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) "_| "  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -124,7 +124,7 @@ function unmockZip(){
 //*******************************************************************
 
 describe('API Routes: permits/special-uses/commercial/outfitters', function() {
-	
+
 	let token;
 	let postControlNumber;
 	let postFileName;
@@ -136,8 +136,8 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		const hash = bcrypt.hashSync(adminPassword, salt);
 
 		const adminUser = {
-			userName: adminUsername, 
-			passHash: hash, 
+			userName: adminUsername,
+			passHash: hash,
 			userRole: 'admin'
 		};
 
@@ -146,15 +146,15 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 				return false;
 			}
 			else {
-				
+
 				util.getToken(adminUsername, adminPassword, function(t){
 					token = t;
 					return done();
 				});
-					
+
 			}
 		});
-	
+
 	});
 
 	after(function(done) {
@@ -167,11 +167,11 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 				return done();
 			}
 		});
-		
+
 	});
 
 	it('should return valid json for tempOutfitters POST (controlNumber to be used in GET)', function(done) {
-			
+
 		this.timeout(5000);
 
 		request(server)
@@ -188,7 +188,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 			.expect(200, done);
 
 	});
-	
+
 	it('should return valid json for tempOutfitters GET request for id', function(done) {
 
 		request(server)
@@ -226,31 +226,12 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
 				.field('body', JSON.stringify(tempOutfitterFactory.create()))
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				// .attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
 				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
-					
-					expect(res.body.message).to.equal('Operating Plan is a required file.');
 
-				})
-				.expect(400, done);
-
-		});
-
-		it('should return valid json missing multiple required files', function(done) {
-
-			request(server)
-				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
-				.set('x-access-token', token)
-				.field('body', JSON.stringify(tempOutfitterFactory.create()))
-				.attach('guideDocumentation', './test/data/test_guideDocumentation.docx')
-				.attach('acknowledgementOfRiskForm', './test/data/test_acknowledgementOfRiskForm.docx')
-				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
-				.expect('Content-Type', /json/)
-				.expect(function(res){
-					
-					expect(res.body.message).to.equal('Good Standing Evidence is a required file. Operating Plan is a required file.');
+					expect(res.body.message).to.equal('Insurance Certificate is a required file.');
 
 				})
 				.expect(400, done);
@@ -268,7 +249,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 				.attach('operatingPlan', './test/data/test_invalidExtension.txt')
 				.expect('Content-Type', /json/)
 				.expect(function(res){
-					
+
 					expect(res.body.message).to.equal('Operating Plan must be one of the following extensions: pdf, doc, docx, rtf.');
 
 				})
@@ -295,7 +276,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 	describe('tempOutfitters GET/POST files: post a new application with files, get that application, get file', function(){
 
 		it('should return valid json when application submitted with three required files', function(done) {
-			
+
 			this.timeout(10000);
 
 			request(server)
@@ -342,9 +323,9 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 			.buffer()
 			.parse(binaryParser)
 			.end(function(err) {
-				if (err) 
+				if (err)
 					return done(err);
-				
+
 				expect(200, done);
 				done();
 			});
@@ -377,8 +358,8 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 		const hash = bcrypt.hashSync(adminPassword, salt);
 
 		const adminUser = {
-			userName: adminUsername, 
-			passHash: hash, 
+			userName: adminUsername,
+			passHash: hash,
 			userRole: 'admin'
 		};
 
@@ -387,15 +368,15 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 				return false;
 			}
 			else {
-				
+
 				util.getToken(adminUsername, adminPassword, function(t){
 					token = t;
 					return done();
 				});
-					
+
 			}
 		});
-	
+
 	});
 
 	after(function(done) {
@@ -403,7 +384,7 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 		if (process.env.npm_config_mock === 'Y'){
 			unmockZip();
 		}
-		
+
 		db.deleteUser(adminUsername, function(err){
 			if (err){
 				return false;
@@ -412,13 +393,13 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 				return done();
 			}
 		});
-		
+
 	});
 
-	describe('post a new application with files, get that application, get files zipped', function(){ 
+	describe('post a new application with files, get that application, get files zipped', function(){
 
 		it('should return valid json when application submitted with three required files', function(done) {
-			
+
 			this.timeout(10000);
 
 			request(server)
@@ -455,13 +436,13 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 			.buffer()
 			.parse(binaryParser)
 			.end(function(err) {
-				if (err) 
+				if (err)
 					return done(err);
-				
+
 				expect(200, done);
 				done();
 			});
 
 		});
-	});	
+	});
 });
