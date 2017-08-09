@@ -468,7 +468,7 @@
             "in": "formData",
             "name": "goodStandingEvidence",
             "description": "temp-outfitter goodStandingEvidence file upload",
-            "required": true,
+            "required": false,
             "type": "file"
           },
           {
