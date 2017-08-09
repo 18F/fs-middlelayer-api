@@ -153,7 +153,7 @@
             "goodStandingEvidence": {
                 "filetypecode":"gse",
                 "maxSize": 10,
-                "requiredFile":true,
+                "requiredFile":false,
                 "store":["middleLayer:acknowledgementOfRiskForm"],
                 "type": "file",
                 "validExtensions":[
@@ -166,7 +166,7 @@
             "operatingPlan": {
                 "filetypecode":"opp",
                 "maxSize": 10,
-                "requiredFile":true,
+                "requiredFile":false,
                 "store":["middleLayer:operatingPlan"],
                 "type": "file",
                 "validExtensions":[
