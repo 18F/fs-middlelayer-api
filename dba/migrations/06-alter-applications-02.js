@@ -3,8 +3,8 @@
 module.exports = {
 	up: function (queryInterface, Sequelize) {
 		return queryInterface.changeColumn('applications', 'activity_description', {
-				type: Sequelize.STRING(512),
-				allowNull: false
+			type: Sequelize.STRING(512),
+			allowNull: false
 		});
 	},
 
