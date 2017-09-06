@@ -8,7 +8,7 @@ module.exports = function(sequelize, DataTypes) {
 		forest: { type: DataTypes.STRING(2), field: 'forest' },
 		district: { type: DataTypes.STRING(2), field: 'district' },
 		website: { type: DataTypes.STRING(255), field: 'website' },
-		activityDescription: { type: DataTypes.STRING(255), field: 'activity_description' },
+		activityDescription: { type: DataTypes.STRING(512), field: 'activity_description' },
 		locationDescription: { type: DataTypes.STRING(255), field: 'location_description' },
 		startDatetime: { type: DataTypes.DATE, field: 'start_datetime' },
 		endDatetime: { type: DataTypes.DATE, field: 'end_datetime' },
