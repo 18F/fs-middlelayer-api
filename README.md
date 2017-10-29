@@ -18,7 +18,21 @@
 
 A repository for the development of an API to support the public facing ePermit system to connect to the related Forest Service database, the Special Use Data System (SUDS) located in the National Resource Management System.
 
-This repository is being developed under a task order of the Agile Blanket Purchase Agreement.
+This repository was partially developed under a task order of the Agile Blanket Purchase Agreement.
+
+## Table of Contents
+- [Setup](#setup)
+- [Configuration](#configuration)
+- [Dependencies](#dependencies)
+- [Creating a new permit type](#creating-a-new-permit-type)
+- [Authentication](#authentication-process)
+- [Continuous integration and deployment](#continuous-integration-and-deployment)
+- [Code quality and coverage](#code-quality-and-coverage)
+- [File storage - AWS / S3](#file-storage---AWS-/-S3)
+- [Database and ORM](#Database and ORM)
+- [Schema spec](#schema-spec)
+- [Automated tests](#automated-tests)
+- [Field validation](#field-validation)
 
 ## Setup
 
@@ -46,18 +60,6 @@ This repository is being developed under a task order of the Agile Blanket Purch
   - [Dotenv](https://www.npmjs.com/package/dotenv) is used which can load environment variables from a .env file into process.env
   - Example: PORT=8080
 
-## How to Test
-
-- Scripts
-  - Use `npm test` to run Mocha unit tests.
-  - Use `npm run coverage` for Istanbul code coverage. *Results in /coverage folder.*
-  - Use `npm run lint` for ESLint static code analysis. *Results in /lint folder.*
-  - Use `npm run fix` for ESLint code fix.
-  - Use `npm run dba` to run Sequelize migration and seeder.
-  - Use `npm run doc` to run [JSDoc](http://usejsdoc.org/) code documentation. *Results in `/docs/code` folder and accessed via `<application-URL>/docs/code`.*
-- Data
-  - Files: Test files are stored in [test/data](test/data) directory
-
 ## Dependencies
 
 Refer to application package and dependency trackers for additional dependency information:
@@ -79,9 +81,413 @@ The [Moxai package](https://www.npmjs.com/package/moxai) is a dependency for tes
 
 It is known that the [api.json](src/api.json) file is not strictly valid per the OpenAPI Specification. If this is checked against a validator it will report that it is invalid. We are allowing this to stay invalid because we felt it would be more valuable for developers to have an example data model for permits, rather than have every part of the specification be valid.
 
-## Point of Contact and Notifications
+## Creating a new permit type
 
-You can report issues and submit questions by opening a new [Issue](https://help.github.com/articles/creating-an-issue/) in GitHub. You can [Watch](https://help.github.com/articles/watching-repositories/) this repo to receive notifications from GitHub when a new issue is posted, when an existing issue’s status is updated, and when a pull request is created.
+These steps define the process for creating a new permit type using Example Permit.
+
+1. Create Swagger Documentation.
+    1. Go to the `src/api.json` Swagger document file and add the new `GET`, `PUT`, and `POST` route for the new Example Permit as shown below:
+
+        `/permits/applications/special-uses/commercial/example-permit/`
+
+    2. Create the GET endpoint for the new permit with the relevant application form fields in the Swagger document. </br>
+        Example `GET` in `api.json`:
+
+            /permits/applications/special-uses/commercial/example-permit{controlNumber}/: {
+                "get": {
+                    "getTemplate":{
+                        "controlNumber":{"default":"", "intake":"accinstCn"},
+                        "region": {"default":"", "intake":"middleLayer/region"},
+                        "forest": {"default":"", "intake":"middleLayer/forest"},
+                        "applicantInfo": {
+                            "contactControlNumber":{"default":"", "intake":"addresses/contCn"},
+                            "firstName": {"default":"", "intake":"holders/firstName"},
+                        }
+                    }
+                }
+            }
+
+        Intake options include:
+        - `middleLayer/<fieldName>`
+          - From the application table in middleLayer database, column name `<fieldName>`
+        - `addresses/<fieldName>`
+          - From Basic API response JSON; using the first element of the `addresses` array, `<fieldName>` is the key of the key value pair
+        - `holders/<fieldName>`
+          - From Basic API response JSON; using the first element of the `holders` array, `<fieldName>` is the key of the key value pair
+        - `phones/<fieldName>`
+          - From Basic API response JSON; using the first element of the `phones` array, `<fieldName>` is the key of the key value pair
+        - `<fieldName>`
+          - From Basic API response, not in any array
+
+
+    3. Create the POST endpoint for the new permit with the relevant application form fields. </br>
+        Example `POST` in `api.json`:
+
+            "/permits/applications/special-uses/commercial/example-permit/": {
+                "post": {
+                    "x-validation":"validation.json#examplePermit",
+                    "parameters": [          
+                        {
+                            "in": "formData",
+                            "name": "body",
+                            "description": "example permit information",
+                            "required": true,
+                            "schema": {
+                                "$ref": "#/definitions/examplePermit"
+                            }
+                        },
+                        {
+                            "in": "formData",
+                            "name": "exampleDocumentation",
+                            "description": "example file upload",
+                            "type": "file"
+                        }
+                    ]
+                }
+                "examplePermit": {
+                    "type": "object",
+                    "properties": {
+                        "region": { "type" : "string" },
+                        "forest": { "type" : "string" },
+                        "district": { "type" : "string" }
+                        ...
+                    },
+                    "required": ["region","forest","district"...]
+                }
+
+    4. The `validation.json` is a schema file for validating submitted data through `POST` routes.</br>
+        Example `POST` in `validation.json`:
+
+                "district": {
+                    "default":"",
+                    "fromIntake":true,
+                    "pattern":"^[0-9]{2}$",
+                    "store":["middleLayer:district"],
+                    "type" : "string"
+                },
+                "firstName": {
+                    "basicField":"firstName",
+                    "default":"",
+                    "fromIntake":true,
+                    "maxLength":255,
+                    "store":["basic:/contact/person"],
+                    "type": "string"
+                },
+                "securityId":{
+                    "basicField":"securityId",
+                    "default":"",
+                    "fromIntake":false,
+                    "madeOf":{
+                        "fields":[
+                            {
+                                "fromIntake":true,
+                                "field":"region"
+                            },
+                            {
+                                "fromIntake":true,
+                                "field":"forest"
+                            },
+                            {
+                                "fromIntake":false,
+                                "value":"123"
+                            }
+                        ],
+                        "function":"concat"
+                    },
+                    "store":["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
+                    "type" : "string"
+                },
+                "exampleDocumentation": {
+                    "filetypecode":"exd",
+                    "maxSize": 25,
+                    "requiredFile":false,
+                    "store":["middleLayer:exampleDocumentation"],
+                    "type": "file",
+                    "validExtensions":[
+                        "pdf",
+                        "doc",
+                        "docx",
+                        "rtf"
+                    ]
+                },
+
+
+          - `fromIntake` indicates whether the field will be directly populated with user input. If set to `false`, the API will populate this field using the strings and fields provided under `madeOf`.
+
+          - `store` describes where this field should be stored, either in the middlelayer DB or in the basic API. It can list multiple places to store this field
+
+          - `madeOf` describes how to auto-populate the field, if fromIntake is false.
+            - `fields` lists the fields, and values which are to be used when auto-populating the field.
+                - `fromIntake` indicates whether this piece of the field is from the intake module or not
+                    - If `fromIntake` is true, `field` is expected in the same object, specifying the field where this part of the field should come from.
+                    - If `fromIntake` is false, `value` is expected in the same object, specifying what value is to be used in this part of the field.
+                -`function` describes the function that should be used on an array of all indicies of `fields`, current options are `concat`, `ePermitId`, and `contId`.
+                    - To add an option for this field, create a function in `src/controllers/autoPopulate.js` which takes an array as input and outputs a string. Next export that function at the end of the file like the existing functions. Then update the `buildAutoPopulatedFields` function in `src/controllers/basic.js` by adding a case to the switch/case statement for the name of the newly created function and then a call to that function inside the case statement.
+
+          Files:
+          - `maxSize` is measured in megabytes
+
+          Store options include:
+          - `middleLayer:<fieldName>`
+          - `basic:/application`
+          - `basic:/contact/person`
+          - `basic:/contact/address`
+          - `basic:/contact/phone`
+
+          If the store contains one of the `basic` type options, `basicField` attribute must be included. This is the name of the field used to submit this data to the Basic API.
+
+2. Extend the schema, if necessary.
+    1. If there are any new form fields not supported by the current middle-layer database, they can be added in the application table. To do this, create a new migration file (e.g., `06-alter-applications.js`) with the sequelize alter table script and save it under `dba/migrations/`. Also, update `src/models/applications.js` to include the new database fields. Please refer to the [Sequelize migrations documentation](http://docs.sequelizejs.com/en/latest/docs/migrations/) for information on altering an existing table.
+    2. If there are routing changes, update `src/controllers/index.js`.
+    3. If there are validation changes, update `src/controllers/validation.js` and/or `src/controllers/fileValidation.js` as needed.
+    4. If there are any changes on how the files are to be stored, update `src/controllers/store.js`.
+    5. If there are any changes on how the requests are made to Basic API, update `src/controllers/basic.js`.
+
+## Authentication process
+
+When a user enters a username and password in the `/auth` route, that information is verified against the `Users` table in the middle-layer database. This table contains the usernames and their encrypted password.
+
+Once the user is authenticated, the application sends back a jwt token that can be used for any of the API routes. The token is valid for two hours. Note that only userrole ‘admin’ has permission to access all routes; userrole ‘user’ does not currently have permission to access any routes.
+
+A separate route, `/auth`, generates token. This token-based authentication is handled using four `npm` modules:
+
+- `Passport`, the authentication middleware
+- `passport-local`
+- `bcrypt-nodejs`
+- `jsonwebtoken`
+
+This API uses the `passport-local` strategy. This strategy authenticates users with a username and password and verifies that information against the database. When the user enters a username and password, the `bcrypt-nodejs` module verifies the submitted password against the hash in the database. Upon successful authentication, the application sends back a token using the `jsonwebtoken` module. The `jsonwebtoken` module uses a secret key, stored as an environment variable, to generate the token, which is set to be valid for 120 minutes.
+
+## Continuous integration and deployment
+
+This repo currently uses Circle CI for automated tests and deployment.
+
+Circle is triggered to build with every commit and pull request creation or merge.
+
+The build process includes the following steps:
+
+1. The CI creates a database to test against.
+2. Then runs these four commands:
+    1. `npm run dba`
+    2. `npm run lint`
+    3. `istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive`
+    4. `codecov`
+3. A successful build on a PR merge triggers a branch-dependent deployment to cloud.gov using the `cg-deploy/deploy.sh` and the accompanying manifests.
+
+## Code Quality and Coverage
+
+We are using the following packages for maintaining code quality and coverage.
+
+### Code Quality
+
+#### ESLint
+
+[ESLint](https://www.npmjs.com/package/eslint) is a pluggable linting utility for JavaScript. The linting configuration and rules are provided in the `.eslintrc.json` file. Use `npm run lint` to run ESLint.
+
+#### MarkdownLint
+
+[MarkdownLint](https://www.npmjs.com/package/markdownlint) is a static analysis tool with a library of rules to enforce standards and consistency for Markdown files.
+The linting configuration and rules are provided in the `.markdownlint.json` file.
+Use `npm run lint:md` to run MarkdownLint.
+
+####  JSDoc
+
+[JSDoc](https://www.npmjs.com/package/jsdoc) is an API documentation generator for JavaScript.
+JSDoc documentation is available in the `/docs/code` folder and accessed via `<application-URL>/docs/code`. Use `npm run doc` to run JSDoc.
+
+### Code Coverage
+
+####  Codecov
+
+We use [Istanbul](https://www.npmjs.com/package/istanbul) to run the Mocha test cases. [Codecov](https://www.npmjs.com/package/codecov) makes the Instanbul test coverage report available to Travis CI.
+Using `npm run coverage` runs the `istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive` command. This command runs the tests and creates the report in `/coverage`. The coverage indicates the percentage of code covered by unit testing.
+
+#### Code Climate
+
+[Code Climate](https://www.npmjs.com/package/codeclimate) is another tool for generating [unit test coverage reports](https://codeclimate.com/github/nci-ats/fs-middlelayer-api/code). Code Climate is configured in the `.codecov.yml` file.
+
+## File storage - AWS / S3
+
+To upload files for permits that require additional files, create an S3 bucket in one of the AWS Regions.
+
+When creating a new application, the application creates a directory with the control number name within the bucket. This directory contains the user-uploaded files.
+
+### Properties
+
+These are the properties for AWS S3 data storage, which is a bound service created through cloud.gov. These env vars are set in the VCAP services.
+
+- `AWS_ACCESS_KEY_ID=<AWS access key ID>`
+- `AWS_SECRET_ACCESS_KEY=<AWS secret key>`
+- `AWS_REGION=<AWS region>`
+- `AWS_BUCKET_NAME=<AWS S3 bucket name>`
+
+
+## Environment Variables
+
+These are the environment variables that must be created on the Node.js server for the application to run:
+
+### Required for Production and Testing
+
+- `DATABASE_URL=postgres://<username>:<password>@<database hostname>:5432<database name>`
+- `JWT_SECRET_KEY=<secret key to generate tokens>`
+- `VCAP_SERVICES=an object to replicate the bound services of the SUDS_API_URL and the S3 bucket`
+
+### Creating API User Accounts Using Environment Variables
+
+User accounts will be created only if these variable are present:
+
+- `ADMINROLE_USER=<admin role account username>`
+- `ADMINROLE_HASH=<admin role account password’s hash generated by bcrypt>`
+- `USERROLE_USER=<user role account username>`
+- `USERROLE_HASH=<user role account password’s hash generated by bcrypt>`
+
+### Setting Environment Variables
+
+The [dotenv](https://www.npmjs.com/package/dotenv) npm package is used to load environment variables to the application for local development.
+
+### Setting AWS Credentials
+
+The Node.js server will look for the AWS properties in the system's environment variables first. If they are not found, the server will look for the credentials file under the `.aws` directory. Refer to [Setting Credentials in Node.js](http://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-credentials-node.html) for more information.
+
+## Database and ORM
+
+The middle-layer database stores application fields that are not supported by the SUDS database. The middle-layer API uses Sequelize, a promise-based Node.js ORM, to access the middle-layer database. For more information, refer to the [Sequelize documentation](http://docs.sequelizejs.com/en/v3/).
+
+Database migrations and filetypes can be populated using the `npm run dba` command.
+
+### Models
+
+Models are a JavaScript factory class that represents a table in the database. Models are located under `/src/models`.
+
+## Schema spec
+The json schema was extended for this project. See the [schema extension here](/docs/spec.json).
+
+
+## Automated tests
+
+The `npm test` command during the build process invokes all test cases included in the code. Those test cases are for both API testing and unit testing.
+
+We use the [Mocha testing framework](https://www.npmjs.com/package/mocha) with the [Chai assertion library](https://www.npmjs.com/package/chai) along with [SuperTest](https://www.npmjs.com/package/supertest), an HTTP AJAX request library, for testing API endpoint responses.
+
+### Overview
+
+- Scripts
+  - Use `npm test` to run Mocha unit tests.
+  - Use `npm run coverage` for Istanbul code coverage. *Results in /coverage folder.*
+  - Use `npm run lint` for ESLint static code analysis. *Results in /lint folder.*
+  - Use `npm run fix` for ESLint code fix.
+  - Use `npm run dba` to run Sequelize migration and seeder.
+  - Use `npm run doc` to run [JSDoc](http://usejsdoc.org/) code documentation. *Results in `/docs/code` folder and accessed via `<application-URL>/docs/code`.*
+- Data
+  - Files: Test files are stored in [test/data](test/data) directory
+
+### Unit testing
+
+Unit testing tests a particular javascript function (e.g., checking a phone number).
+These two files contain unit testing test cases:
+- `test/controllers-test.js`
+- `test/functions-test.js`
+
+### API tests (Integration Tests)
+
+API tests run the test case against the API routes.
+
+These three files contain the API testing test cases:
+- `test/authentication.js`
+- `test/noncommercial.js`
+- `test/outfitters.js`
+
+### Functional testing
+
+Functional testing is managed through [HipTest](https://hiptest.net/). [Manual testing scenarios](docs/testing_scenarios.xlsx) walk testers through a series of steps to verify that the application functions as expected. Each test maps to acceptance criteria for a corresponding user story. Testers can execute multiple runs for a given set of scenarios, and HipTest keeps a record of all test run results.
+
+## Field validation
+
+### Updating state abbreviations
+
+In [validation.json](../src/controllers/validation.json), in the `applicantInfoBase` schema under `mailingState`, there is a field called `pattern`.
+
+#### Adding a state
+
+Given the pattern `^(A[EZ]|C[AOT]|D[E])$`:
+
+To add a state code AQ, update the pattern to `^(A[EZQ]|C[AOT]|D[E])$`.
+
+To add a state code ZQ, update the pattern to `^(A[EZ]|C[AOT]|D[E]|Z[Q])$`.
+
+#### Removing a state
+
+Given the pattern `^(A[EZ]|C[AOT]|D[E]|Z[Q])$`:
+
+To remove a state code AE, update the pattern to `^(A[Z]|C[AOT]|D[E]|Z[Q])$`.
+
+To remove a state code ZQ, update the pattern to `^(A[EZ]|C[AOT]|D[E])$`.
+
+### Adding field validations
+
+#### Adding validation for required field
+
+Under the properties field, add a field by adding the following, replacing `fieldName` with the name of the field to be added:
+`"fieldName": { "type": "fieldType" }`. Then add the name of the field to the required array, located after the properties object.
+
+This will automatically generate an error if the required field is not provided.
+
+#### Adding validation for required field type
+
+Using the above example `"fieldName": { "type": "fieldType" }`:
+
+Specify the field's required types by updating `fieldType` to the type `fieldName` should be. Fields can have multiple types by providing an array with the types `fieldName` can be.
+
+This will automatically generate an error if the required type is not provided.
+
+#### Adding validation for field format
+
+Using the example `"fieldName": { "type": "fieldType" }`:
+
+Add format validation by adding a format field to the fieldName object: `"fieldName": { "type": "fieldType", "format": "fieldFormat1" }`.
+
+The format field points to the name of a function, provided to the validation package, which will be used to validate whether the field is valid or not.
+
+In addition to adding the function name to the schema, the function must be created. It must take input in and return a Boolean.
+
+Once the function has been created, it must be provided in the validation package. In [validation.js](../src/controllers/validation.js), inside the `validateBody` function, add `v.customFormats.fieldFormat1 = fieldFormat2;` where `fieldFormat1` is the name of the function defined to return a Boolean and `fieldFormat2` is the format used in the schema. `fieldFormat1` and `fieldFormat2` can have the same name.
+
+##### Adding error for field format
+
+When adding error text to [patternErrorMesssages.json](../src/controllers/patternErrorMessages.json), the key is the name of the field the format is applied to, and the value is the error message that should be returned. In the above example, the new key/value pair would be `"fieldName": "must do something"`. This will return "fieldName must do something" if the format validation fails.
+
+#### Adding validation for field regex pattern
+
+Using the example `"fieldName": { "type": "fieldType" }`:
+
+Add pattern validation by adding a pattern field to the fieldName object: `"fieldName": { "type": "fieldType", "pattern": "^[a-z]{6}$" }`.
+
+##### Adding error for field regex pattern
+
+When adding error text to [patternErrorMesssages.json](../src/controllers/patternErrorMessages.json), the key is the name of the field the pattern is applied to, and the value is the error message that should be returned. In the above example, the new key/value pair would be `"fieldName": "must do something"`. This will return "fieldName must do something" if the pattern validation fails.
+
+#### Adding validation for field dependency
+
+Using the example `"properties:{`
+`fieldName": { "type": "fieldType" },`
+`fieldName2: { "type": "fieldType2" }`
+`}`:
+
+Add dependencies by adding a dependencies field after properties.
+
+`"properties:{`
+`fieldName": { "type": "fieldType" },`
+`fieldName2: { "type": "fieldType2" }`
+`},`
+`"dependencies:{"`
+`"fieldName":["fieldName2"]`
+`}`
+
+The above code will require `fieldName2` if `fieldName` is present.
+
+##### Adding error for field dependency
+
+No extra steps needed.
 
 ## Contributing
 
