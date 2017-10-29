@@ -16,9 +16,9 @@ module.exports = function(sequelize, DataTypes) {
 		individualIsCitizen: { type: DataTypes.BOOLEAN, field: 'individual_is_citizen' },
 		smallBusiness: { type: DataTypes.BOOLEAN, field: 'small_business' },
 		advertisingURL: { type: DataTypes.STRING(255), field: 'advertising_url' },
-		advertisingDescription: { type: DataTypes.STRING(255), field: 'advertising_description' },
-		clientCharges: { type: DataTypes.STRING(255), field: 'client_charges' },
-		experienceList: { type: DataTypes.STRING(255), field: 'experience_list' },
+		advertisingDescription: { type: DataTypes.STRING(512), field: 'advertising_description' },
+		clientCharges: { type: DataTypes.STRING(512), field: 'client_charges' },
+		experienceList: { type: DataTypes.STRING(512), field: 'experience_list' },
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'created' },
 		updatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'updated' },
 		numberSpectators: { type: DataTypes.INTEGER, field: 'number_spectators' }
