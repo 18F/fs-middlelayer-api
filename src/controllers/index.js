@@ -132,7 +132,7 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
  * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
  * @param  {Object} reqData.schema - Schema of the route requested
  */
-const getControlNumberFileName = function(req, res, reqData) {
+function getControlNumberFileName(req, res, reqData) {
 
 	const controlNumber = reqData.matches.controlNumber;
 	const fileName = reqData.matches.fileName;
@@ -178,7 +178,7 @@ const getControlNumberFileName = function(req, res, reqData) {
  * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
  * @param  {Object} reqData.schema - Schema of the route requested
  */
-const getControlNumber = function(req, res, reqData){
+function getControlNumber(req, res, reqData){
 	const pathData = reqData.schema;
 	const fileTypes = {
 		'gud': 'guideDocumentation',
@@ -283,7 +283,7 @@ const getControlNumber = function(req, res, reqData){
  * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
  * @param  {Object} reqData.schema - Schema of the route requested
  */
-const postApplication = function(req, res, reqData){
+function postApplication(req, res, reqData){
 
 	const pathData = reqData.schema;
 
@@ -363,7 +363,7 @@ const postApplication = function(req, res, reqData){
  * @param  {Object} req - User request object
  * @param  {Object} res - Response object
  */
-const routeRequest = function(req, res){
+function routeRequest(req, res){
 
 	const reqPath = `/${req.params[0]}`;
 	const reqMethod = req.method.toLowerCase();

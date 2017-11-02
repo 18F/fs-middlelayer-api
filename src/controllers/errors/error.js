@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -42,7 +42,7 @@ function logging(req, message){
  * @param  {String} message - Error message to return
  * @param  {Array} errors  - Array of error objects to return
  */
-const sendError = function(req, res, code, message, errors){
+function sendError(req, res, code, message, errors){
 
 	const output = {
 		'status' : 'error',

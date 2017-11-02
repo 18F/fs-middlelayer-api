@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -29,8 +29,8 @@ const models = include('src/models');
  */
 function saveFile(applicationId, uploadFile, callback){
 	models.files.create({
-		applicationId: applicationId, 
-		fileType: uploadFile.filetypecode, 
+		applicationId: applicationId,
+		fileType: uploadFile.filetypecode,
 		filePath: uploadFile.keyname,
 		fileName: uploadFile.filename,
 		fileOriginalname: uploadFile.originalname,
@@ -53,10 +53,10 @@ function saveFile(applicationId, uploadFile, callback){
  * @param  {String}   fp - Path to file in data store
  * @param  {Function} callback - Function to call after getting info back from DB
  */
-const getFile = function(fp, callback){
+function getFile(fp, callback){
 
 	models.files.findOne({
-		where: {filePath: fp} 
+		where: {filePath: fp}
 	})
 	.then(function(file) {
 		return callback(null, file);
@@ -72,7 +72,7 @@ const getFile = function(fp, callback){
  * @param  {Number}   appId - application Id of files to get
  * @param  {Function} callback      - Function to call after getting info back from DB
  */
-const getFiles = function(appId, callback){
+function getFiles(appId, callback){
 
 	models.files.findAll({
 		where: {applicationId: appId}
@@ -91,7 +91,7 @@ const getFiles = function(appId, callback){
  * @param  {Number}   cNum - control number of application to retreive
  * @param  {Function} callback      - Function to call after getting info back from DB
  */
-const getApplication = function(cNum, callback){
+function getApplication(cNum, callback){
 
 	models.applications.findOne({
 		where: {
@@ -99,7 +99,7 @@ const getApplication = function(cNum, callback){
 		}
 	}).then(function(appl) {
 		if (appl){
-			
+
 			getFiles(appl.id, function(fileErr, files) {
 				if (fileErr){
 					return callback(fileErr, null, null);
@@ -129,7 +129,7 @@ const getApplication = function(cNum, callback){
  * @param  {Object}   toStore       - object containing all of the fields to save to DB
  * @param  {Function} callback      - Function to call after saving application to DB
  */
-const saveApplication = function(toStore, callback) {
+function saveApplication(toStore, callback) {
 	models.applications.create(toStore)
 	.then(function(appl) {
 		return callback(null, appl);
@@ -218,7 +218,7 @@ function getDataToStoreInDB(schema, body){
  * @param  {Object}   user       - user object containing fields to save in DB
  * @param  {Function} callback      - Function to call after saving user to DB
  */
-const saveUser = function(user, callback) {
+function saveUser(user, callback) {
 	models.users.create(user)
 	.then(function(usr) {
 		return callback(null, usr);
@@ -234,7 +234,7 @@ const saveUser = function(user, callback) {
  * @param  {String}   username       - username to be deleted from DB
  * @param  {Function} callback      - Function to call after deleting user from DB
  */
-const deleteUser = function(username, callback) {
+function deleteUser(username, callback) {
 	models.users.destroy({
 		where: {
 			userName: username
@@ -244,10 +244,10 @@ const deleteUser = function(username, callback) {
 			return callback(null);
 		}
 		else {
-			return callback('row could not be be deleted');	
+			return callback('row could not be be deleted');
 		}
 	}, function(err){
-		console.error(err); 
+		console.error(err);
 		return callback(err);
 	});
 };

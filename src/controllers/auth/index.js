@@ -64,7 +64,7 @@ passport.use(new Strategy(
  * @param  {Object}   res - Response object
  * @param  {Function} next - What to call after serializing user info
  */
-const serialize = function(req, res, next) {
+function serialize(req, res, next) {
 
 	req.user = {
 		id: req.user.id,
@@ -79,7 +79,7 @@ const serialize = function(req, res, next) {
  * @param  {Object}   res - Response object
  * @param  {Function} next - What to call after creating JWT
  */
-const generate = function(req, res, next) {
+function generate(req, res, next) {
 
 	const claims = {
 		expiresIn: 120 * 60,
@@ -103,7 +103,7 @@ const generate = function(req, res, next) {
  * @param  {Object}   req - Request object
  * @param  {Object}   res - Response object
  */
-const respond = function(req, res) {
+function respond(req, res) {
 
 	res.status(200).json({
 		user: req.user,
