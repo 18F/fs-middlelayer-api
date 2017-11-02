@@ -33,8 +33,7 @@ const bcrypt = require('bcrypt-nodejs');
 const db = include('src/controllers/db.js');
 const models = include('src/models');
 
-const adminUsername = 'admin' + (Math.floor((Math.random() * 1000000) + 1)).toString();
-const adminPassword = 'pwd' + (Math.floor((Math.random() * 1000000) + 1)).toString();
+const adminCredentials = util.makeUserEntry('admin');
 
 //*******************************************************************
 //Mock Input
@@ -52,10 +51,10 @@ describe('Integration tests - noncommercial', function(){
 
 		models.users.sync({ force: false });
 		const salt = bcrypt.genSaltSync(10);
-		const hash = bcrypt.hashSync(adminPassword, salt);
+		const hash = bcrypt.hashSync(adminCredentials.pwd, salt);
 
 		const adminUser = {
-			userName: adminUsername,
+			userName: adminCredentials.un,
 			passHash: hash,
 			userRole: 'admin'
 		};
@@ -66,7 +65,7 @@ describe('Integration tests - noncommercial', function(){
 			}
 			else {
 
-				util.getToken(adminUsername, adminPassword, function(t){
+				util.getToken(adminCredentials.un, adminCredentials.pwd, function(t){
 					token = t;
 					return done();
 				});
@@ -78,7 +77,7 @@ describe('Integration tests - noncommercial', function(){
 
 	after(function(done) {
 
-		db.deleteUser(adminUsername, function(err){
+		db.deleteUser(adminCredentials.un, function(err){
 			if (err){
 				return false;
 			}
