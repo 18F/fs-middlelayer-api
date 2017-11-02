@@ -32,7 +32,7 @@ function authorize(req, res, next){
 	}
 
 	error.sendError(req, res, 403, 'Forbidden.');
-};
+}
 
 //*******************************************************************=
 //exports

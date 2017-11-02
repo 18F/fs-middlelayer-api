@@ -71,7 +71,7 @@ function serialize(req, res, next) {
 		role: req.user.role
 	};
 	next();
-};
+}
 
 /**
  * Creates JWT to return to user
@@ -96,7 +96,7 @@ function generate(req, res, next) {
 	}, JWT_SECRET_KEY, claims);
 
 	next();
-};
+}
 
 /**
  * Responds to user request with token
@@ -109,7 +109,7 @@ function respond(req, res) {
 		user: req.user,
 		token: req.token
 	});
-};
+}
 
 //*******************************************************************=
 //exports

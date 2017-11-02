@@ -54,7 +54,7 @@ function sendError(req, res, code, message, errors){
 
 	res.status(code).json(output);
 
-};
+}
 
 //*******************************************************************
 // exports

@@ -6,7 +6,6 @@ const request = require('request-promise');
 const auth = require('./auth.js');
 const error = require('../errors/error.js');
 
-
 //*******************************************************************
 
 /** Gets info about an application and returns it.

@@ -65,7 +65,7 @@ function getFile(fp, callback){
 		console.error(err);
 		return callback(err, null);
 	});
-};
+}
 
 /**
  * Get info of multiple files from DB
@@ -84,7 +84,7 @@ function getFiles(appId, callback){
 		console.error(err);
 		return callback(err, null);
 	});
-};
+}
 
 /**
  * Gets application info from DB
@@ -122,7 +122,7 @@ function getApplication(cNum, callback){
 		console.error(err);
 		return callback(err, null, null);
 	});
-};
+}
 
 /**
  * Save application data to DB
@@ -138,7 +138,21 @@ function saveApplication(toStore, callback) {
 		console.error(err);
 		return callback(err, null);
 	});
-};
+}
+
+/** checks if the field specifies that it should be stored in that location
+* @param {String} saveLocation - either in the middleLayer or move to the basic layer
+* @param {Object} schemaKey - field to check about storage
+*/
+function checkIfStore(saveLocation, schemaKey){
+	if (saveLocation === 'basic' && schemaKey.hasOwnProperty('basicStore')){
+		return true;
+	}
+	if (saveLocation === 'middleLayer' && schemaKey.hasOwnProperty('localStore') && schemaKey.type !== 'file'){
+		return true;
+	}
+	return false;
+}
 
 /** Gets list of fields that are to be stored in DB
  * @param  {Object} schema - Schema to look through to find any fields to store in DB
@@ -182,20 +196,6 @@ function getFieldsToStore(schema, fieldsToStore, path, saveLocation){
 	});
 }
 
-/** checks if the field specifies that it should be stored in that location
-* @param {String} saveLocation - either in the middleLayer or move to the basic layer
-* @param {Object} schemaKey - field to check about storage
-*/
-function checkIfStore(saveLocation, schemaKey){
-	if(saveLocation == 'basic' && schemaKey.hasOwnProperty('basicStore')){
-		return true;
-	}
-	if (saveLocation == 'middleLayer' && schemaKey.hasOwnProperty('localStore') && schemaKey.type !== 'file'){
-		return true;
-	}
-	return false;
-}
-
 /** Formats data from user input, that needs to be submitted to DB, so that DB can receive it.
  * @param  {Object} schema - Schema of application being submitted
  * @param  {Object} body - User input
@@ -212,10 +212,10 @@ function getDataToStoreInDB(schema, body){
 		splitPath.forEach((sp)=>{
 			bodyField = bodyField[sp];
 		});
-		if ((typeof bodyField) === 'undefined'){
+		if (typeof bodyField === 'undefined'){
 			bodyField = field[path].default;
 		}
-		const dbField = splitPath[splitPath.length-1];
+		const dbField = splitPath[splitPath.length - 1];
 		output[dbField] = bodyField;
 	});
 	return output;
@@ -235,7 +235,7 @@ function saveUser(user, callback) {
 		console.error(err);
 		return callback(err, null);
 	});
-};
+}
 
 /**
  * Delete user from DB
@@ -258,7 +258,7 @@ function deleteUser(username, callback) {
 		console.error(err);
 		return callback(err);
 	});
-};
+}
 
 module.exports.getDataToStoreInDB = getDataToStoreInDB;
 module.exports.getFieldsToStore = getFieldsToStore;

@@ -1,3 +1,4 @@
+/* eslint no-undefined: 0 */
 /*
 
   ___ ___       ___               _ _       _   ___ ___
@@ -120,8 +121,6 @@ describe('Integration tests - noncommercial', function(){
 		const noncommercialInput = noncommercialFactory.create();
 		noncommercialInput.applicantInfo.organizationName = 'Temp Organization';
 		noncommercialInput.applicantInfo.orgType = 'ORGANIZATION';
-		// noncommercialInput.applicantInfo.firstName = 'Fname';
-		// noncommercialInput.applicantInfo.lastName = 'Lname';
 		request(server)
 			.post(testURL)
 			.set('x-access-token', token)

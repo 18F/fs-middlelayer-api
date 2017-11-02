@@ -167,7 +167,7 @@ function getControlNumberFileName(req, res, reqData) {
 		}
 	});
 
-};
+}
 
 /** Controller for GET routes with only a control number
  * @param  {Object} req - request object
@@ -270,7 +270,7 @@ function getControlNumber(req, res, reqData){
 
 	}
 
-};
+}
 
 //*************************************************************
 
@@ -356,7 +356,7 @@ function postApplication(req, res, reqData){
 			}
 		});
 	}
-};
+}
 
 /**
  * Takes in request and calls functions based on what route was called
@@ -424,7 +424,7 @@ function routeRequest(req, res){
 	else {
 		return error.sendError(req, res, 404, 'Invalid endpoint.');
 	}
-};
+}
 
 //*******************************************************************
 // exports

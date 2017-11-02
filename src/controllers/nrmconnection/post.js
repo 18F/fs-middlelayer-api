@@ -18,7 +18,6 @@ const request = require('request-promise');
 //*******************************************************************
 // other files
 
-
 const db = require('../db.js');
 const error = require('../errors/error.js');
 const DuplicateContactsError = require('../errors/duplicateContactsError.js');
@@ -27,7 +26,6 @@ const auth = require('./auth');
 const autoPopulate = require('./autoPopulate.js');
 
 //*******************************************************************
-
 
 /**
  * Returns whether application is for an individual.
@@ -50,36 +48,19 @@ function getBasicFields(fieldsToBasic, body, autoPopValues){
 	const postObjs = {}, requestsObj = {};
 	fieldsToBasic.forEach((field)=>{
 		const key = Object.keys(field)[0];
-		if(field[key].hasOwnProperty('basicStore')){
+		if (field[key].hasOwnProperty('basicStore')){
 			field[key].basicStore.forEach((location)=>{
-				if(requestsObj.hasOwnProperty(location)){
+				if (requestsObj.hasOwnProperty(location)){
 					requestsObj[location][key] = field[key];
 				}
 				else {
 					requestsObj[location] = {};
-					requestsObj
+					requestsObj[location][key] = field[key];
 				}
 			});
 		}
-		// const whereToStore = field[key].store;
-		// //whereToStore is where the field needs to be stored, either basic or middlelayer
-		// whereToStore.forEach((location)=>{
-		// 	const requestToUse = location.split(':')[1];
-		// 	if (location.split(':')[0] === 'basic'){
-		// 		let postObjExists = false;
-		// 		for (const request in requestsObj){
-		// 			if (request === requestToUse){
-		// 				postObjExists = true;
-		// 				requestsObj[requestToUse][key] = field[key];
-		// 			}
-		// 		}
-		// 		if (!postObjExists){
-		// 			requestsObj[requestToUse] = {};
-		// 			requestsObj[requestToUse][key] = field[key];
-		// 		}
-		// 	}
-		// });
 	});
+	
 	//requestsObj contains objects, labeled as each request that may be sent to the basic API, containing the fields
 	//which need to be included in that request
 	for (const request in requestsObj){
@@ -152,6 +133,7 @@ function postRequest(res, apiCallLogObject, fieldsObj, responseKey, requestKey, 
 	const createAddressOptions = auth.getRequestOptions(addressURL, 'POST', addressField, sudsToken);
 	return request.post(createAddressOptions);
 }
+
 /**
  * Calls basic API to create a contact in SUDS
  * @param  {Object} fieldsObj  - Object containing post objects to be sent to basic api
@@ -308,10 +290,9 @@ function postToBasic(req, res, validationSchema, body){
 
 		auth.getToken()
 		.then(function(sudsToken) {
+
 			const person = isAppFromPerson(body);
 			const fieldsInBasicPostFormat = prepareBasicPost(validationSchema, body, person);
-			let existingContactCheck;
-
 			const contactGETOptions = setContactGETOptions(body.applicantInfo, person, sudsToken, apiCallLogObject);
 			apiCallLogObject = contactGETOptions.apiCallLogObject;
 
@@ -330,7 +311,7 @@ function postToBasic(req, res, validationSchema, body){
 					}
 				}
 				else if (res.length > 1){
-					const duplicateContacts = multipleContactsCheck(contId, res, fieldsInBasicPostFormat, person, apiCallLogObject, sudsToken);
+					multipleContactsCheck(contId, res, fieldsInBasicPostFormat, person, apiCallLogObject, sudsToken);
 				}
 				else {
 					return createContact(fieldsInBasicPostFormat, person, apiCallLogObject, sudsToken);

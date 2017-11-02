@@ -1,3 +1,5 @@
+# US Forest Service ePermit Middlelayer API
+
 [![FS ePermit API](https://img.shields.io/badge/-ePermit-006227.svg?colorA=FFC526&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAMAAAAolt3jAAACFlBMVEUAAAD%2F%2FyXsvSW8qiXLsCXjuSXyvyX7wiX2wSXqvCXUsyXBrCXvviX%2F%2FyX8yCWUmyVliSV%2FkyV7kSWIlyV0jiWZnSX9yCXNsSXRsiXWtCVWgyVYhCXZtiX%2FyCV8kiV%2BkiX%2FyiX%2FzCWIliWElSX%2FzSX2wiVniSV3kCX2wiXUtCU5eCVujCXWtCW%2FqyXDrSWtpCWwpSWmoiWypiXeuCWJlyWPmSXiuiX%2F1CXsvSXFriW4qSWrpCWElCVdhiWSmiW3qCXCrSXQsiXyvyX%2F1CX%2F%2FyP%2F5yX%2F0iX%2FxCXrvCX%2FxiX%2F0iX%2F5yUcbCU6eCVAeiUfbiVEfCVEfCVZhCVEfCUzdSUtcyVAeyVNfyVZhCVGfSVEfCUqciUSaSUIZCUYayWPmSUUaiUCYiUVaiU1diVjiCUjcCVNfyVFfCXnuyU%2FeiUqciVliSVPgCWQmSUlcCVQgSV7kSX%2FxiWHliVPgCWPmSUtcyWLlyUibyVXgyWzpyX%2FxyXJryUXayVahCWIliWOmCU4eCV2jyXBrCXcuCXMsSVbhSUYaiV1jyU4eCVOgCVujCU6eCUudCWAkyUlcCVEfCVehiVYhCU%2FeiVvjSUSaSUAYiUAYiU1diWAlCUxdSUAYSUBYiUTaSVvjSVqiyVGfSUcbCUQaCUPaCUNZyULZiURaSUYayU6eCVehiVehiV1jyVmiSVOgCVRgSVSgSV2jyVxjSVvjSVMulUvAAAATHRSTlMAAGrao3NYUFdvndVtADfb%2Ffn2%2BP3cOMHAl%2F39lT7v7jsx6eozTPT2UoT%2B%2F4%2FGz%2FL46ut68%2FJ4B1Kau9Pu%2F%2BzQt5NMBgAKGUikQxYIJokgEwAAAFtJREFUCNdjZGBEBiwMvIy2jIcZGRkZrRiPMTIyiFsiJPcxMkgyOsJ4OxhZGFgYOeE6SeMyMuhGI0yew8LAxI3gMqFxGRmMGUthvBZGRgZzFEczMDC4QJlbGRgA3KAIv74V5FUAAAAASUVORK5CYII%3D)](README.md)
 [![TravisCI](https://travis-ci.org/nci-ats/fs-middlelayer-api.svg?branch=dev)](https://travis-ci.org/nci-ats/fs-middlelayer-api)
 [![Code Climate](https://codeclimate.com/github/nci-ats/fs-middlelayer-api/badges/gpa.svg)](https://codeclimate.com/github/nci-ats/fs-middlelayer-api)
@@ -14,13 +16,12 @@
 [![Semver](https://img.shields.io/badge/SemVer-2.0-blue.svg)](http://semver.org/spec/v2.0.0.html)
 [![license](https://img.shields.io/badge/license-CC0--1.0-blue.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
 
-# US Forest Service ePermit Middlelayer API
-
 A repository for the development of an API to support the public facing ePermit system to connect to the related Forest Service database, the Special Use Data System (SUDS) located in the National Resource Management System.
 
 This repository was partially developed under a task order of the Agile Blanket Purchase Agreement.
 
 ## Table of Contents
+
 - [Setup](#setup)
 - [Configuration](#configuration)
 - [Dependencies](#dependencies)
@@ -290,14 +291,14 @@ We are using the following packages for maintaining code quality and coverage.
 The linting configuration and rules are provided in the `.markdownlint.json` file.
 Use `npm run lint:md` to run MarkdownLint.
 
-####  JSDoc
+#### JSDoc
 
 [JSDoc](https://www.npmjs.com/package/jsdoc) is an API documentation generator for JavaScript.
 JSDoc documentation is available in the `/docs/code` folder and accessed via `<application-URL>/docs/code`. Use `npm run doc` to run JSDoc.
 
 ### Code Coverage
 
-####  Codecov
+#### Codecov
 
 We use [Istanbul](https://www.npmjs.com/package/istanbul) to run the Mocha test cases. [Codecov](https://www.npmjs.com/package/codecov) makes the Instanbul test coverage report available to Travis CI.
 Using `npm run coverage` runs the `istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive` command. This command runs the tests and creates the report in `/coverage`. The coverage indicates the percentage of code covered by unit testing.
@@ -360,6 +361,7 @@ Database migrations and filetypes can be populated using the `npm run dba` comma
 Models are a JavaScript factory class that represents a table in the database. Models are located under `/src/models`.
 
 ## Schema spec
+
 The json schema was extended for this project. See the [schema extension here](/docs/spec.json).
 
 
@@ -385,6 +387,7 @@ We use the [Mocha testing framework](https://www.npmjs.com/package/mocha) with t
 
 Unit testing tests a particular javascript function (e.g., checking a phone number).
 These two files contain unit testing test cases:
+
 - `test/controllers-test.js`
 - `test/functions-test.js`
 
@@ -393,6 +396,7 @@ These two files contain unit testing test cases:
 API tests run the test case against the API routes.
 
 These three files contain the API testing test cases:
+
 - `test/authentication.js`
 - `test/noncommercial.js`
 - `test/outfitters.js`

@@ -56,7 +56,7 @@ function token(req, res, next){
 		error.sendError(req, res, 403, 'No token provided.');
 	}
 
-};
+}
 
 //*******************************************************************=
 //exports
