@@ -18,37 +18,16 @@ const request = require('request-promise');
 //*******************************************************************
 // other files
 
-const error = require('./errors/error.js');
-const db = require('./db.js');
-const autoPopulate = require('./autoPopulate.js');
-const DuplicateContactsError = require('./errors/duplicateContactsError.js');
 
-const SUDS_INFO = require('./vcap.js').SUDS_INFO;
-const SUDS_API_URL = SUDS_INFO.SUDS_API_URL;
-const SUDS_API_USERNAME = SUDS_INFO.username;
-const SUDS_API_PASSWORD = SUDS_INFO.password;
+const db = require('../db.js');
+const error = require('../errors/error.js');
+const DuplicateContactsError = require('../errors/duplicateContactsError.js');
+
+const auth = require('./auth');
+const autoPopulate = require('./autoPopulate.js');
 
 //*******************************************************************
 
-function getRequestOptions(uri, method = 'GET', body = null, sudsToken = '') {
-	const requestOptions = {
-		method,
-		uri,
-		json: true
-	};
-
-	if (body){
-		requestOptions.body = body;
-	}
-
-	if (sudsToken) {
-		requestOptions.headers = {
-			'Authorization': `Bearer ${sudsToken}`
-		};
-	}
-
-	return requestOptions;
-}
 
 /**
  * Returns whether application is for an individual.
@@ -60,89 +39,6 @@ function isAppFromPerson(body){
 	return output;
 }
 
-/** Finds basic API fields which are to be auto-populated
- * @param  {Array} basicFields - Fields(Objects) which are stored in SUDS
- * @return {Array} - Fields(Objects) which are to be auto-populated
- */
-function getAutoPopulatedFields(basicFields){
-	const autoPop = [];
-	basicFields.forEach((field)=>{
-		const key = Object.keys(field)[0];
-		if (!field[key].fromIntake && field[key].madeOf){
-			autoPop.push(field);
-		}
-	});
-	return autoPop;
-}
-
-/**
- * Given a path seperated by periods, return the field specified if it exists, else false.
- * @param  {String} path                  - String made of the path to the desired field, must be seperated by periods
- * @param  {Object} body                  - Object representing the user input
- * @return {Boolean|String|Number|Object} - Contents of the field specified or false
- */
-function getFieldFromBody(path, body){
-	const pathParts = path.split('.');
-	pathParts.forEach((pathPart)=>{
-		body = body[pathPart];
-	});
-	if (body){
-		return body;
-	}
-	else {
-		return false;
-	}
-}
-/** Given list of fields which must be auto-populate, returns values to store
- * @param  {Array} fieldsToBuild - Array of objects representing Fields which need to be auto-populated
- * @param  {Object} body   - user input
- * @return {Array}         - created values
- */
-function buildAutoPopulatedFields(fieldsToBuild, body){
-	const output = {};
-	fieldsToBuild.forEach((field)=>{
-		const key = Object.keys(field)[0];
-		const fieldMakeUp = [];
-		let autoPopulatedFieldValue = '';
-		field[key].madeOf.fields.forEach((madeOfField)=>{
-			if (madeOfField.fromIntake){
-				const fieldValue = getFieldFromBody(madeOfField.field, body);
-				if (fieldValue){
-					fieldMakeUp.push(fieldValue);
-				}
-				else {
-					console.error(`${madeOfField.field} does not exist`);
-				}
-			}
-			else {
-				fieldMakeUp.push(madeOfField.value);
-			}
-		});
-		switch (field[key].madeOf.function){
-		case 'concat':
-			autoPopulatedFieldValue = autoPopulate.concat(fieldMakeUp);
-			break;
-		case 'contId':
-			if (isAppFromPerson(body)){
-				if (fieldMakeUp.length > 3){
-					fieldMakeUp.pop();
-				}
-				autoPopulatedFieldValue = autoPopulate.contId(fieldMakeUp);
-			}
-			else {
-				const toUse = [];
-				toUse.push(fieldMakeUp.pop());
-				autoPopulatedFieldValue = autoPopulate.contId(toUse);
-			}
-			break;
-		case 'ePermitId':
-			autoPopulatedFieldValue = autoPopulate.ePermitId(fieldMakeUp);
-			break;
-		}
-		output[key] = autoPopulatedFieldValue;
-	});
-	return output;
-}
 /**
  * Gets the data from all fields that are to be send to the basic API, also builds post object, used to pass data to basic api
  * @param  {Array} fieldsToBasic - All fields in object form which will be sent to basicAPI
@@ -213,15 +109,15 @@ function getBasicFields(fieldsToBasic, body, autoPopValues){
 }
 
 /** Takes fields to be stored, creates post objects and populated with user input
- * @param  {Object} sch - validation schema for this request
+ * @param  {Object} validationSchema - validation schema for this request
  * @param  {Object} body - user input
+ * @param  {Boolean} person - whether application is for individual(true) or organization (false)
  * @return {Object} - All post objects
  */
-function prepareBasicPost(sch, body){
+function prepareBasicPost(validationSchema, body, person){
 	const otherFields = [];
-	db.getFieldsToStore(sch, otherFields, '', 'basic');
-	const toBuild = getAutoPopulatedFields(otherFields);
-	const autoPopulateValues = buildAutoPopulatedFields(toBuild, body);
+	db.getFieldsToStore(validationSchema, otherFields, '', 'basic');
+	const autoPopulateValues = autoPopulate.buildAutoPopulatedFields(otherFields, person, body);
 	const fieldsToPost = getBasicFields(otherFields, body, autoPopulateValues);
 	return fieldsToPost;
 }
@@ -240,9 +136,9 @@ function postRequest(res, apiCallsObject, fieldsObj, responseKey, requestKey, re
 	apiCallsObject.POST[responseKey].response = res;
 	const addressField = fieldsObj[requestKey];
 	addressField.contCn = res.contCn;
-	const addressURL = `${SUDS_API_URL}${requestPath}`;
+	const addressURL = `${auth.SUDS_API_URL}${requestPath}`;
 	apiCallsObject.POST[requestPath].request = addressField;
-	const createAddressOptions = getRequestOptions(addressURL, 'POST', addressField, sudsToken);
+	const createAddressOptions = auth.getRequestOptions(addressURL, 'POST', addressField, sudsToken);
 	return request.post(createAddressOptions);
 }
 /**
@@ -257,17 +153,17 @@ function createContact(fieldsObj, person, apiCallsObject, sudsToken){
 		let contactField, createPersonOrOrgURL, responseKey;
 		if (person){
 			contactField = fieldsObj['/contact/person'];
-			createPersonOrOrgURL = `${SUDS_API_URL}/contact/person`;
+			createPersonOrOrgURL = `${auth.SUDS_API_URL}/contact/person`;
 			responseKey = '/contact/person';
 			apiCallsObject.POST[responseKey].request = contactField;
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
-			createPersonOrOrgURL = `${SUDS_API_URL}/contact/organization`;
+			createPersonOrOrgURL = `${auth.SUDS_API_URL}/contact/organization`;
 			responseKey = '/contact/orgcode';
 			apiCallsObject.POST[responseKey].request = contactField;
 		}
-		const createContactOptions = getRequestOptions(createPersonOrOrgURL, 'POST', contactField, sudsToken);
+		const createContactOptions = auth.getRequestOptions(createPersonOrOrgURL, 'POST', contactField, sudsToken);
 		request.post(createContactOptions)
 		.then(function(res){
 			return postRequest(res, apiCallsObject, fieldsObj, responseKey, '/contact/address', '/contact-address', sudsToken);
@@ -293,11 +189,11 @@ function createContact(fieldsObj, person, apiCallsObject, sudsToken){
  * @return {Promise}            - Promise to be fulfilled
  */
 function createApplication(fieldsObj, contCN, apiCallsObject, sudsToken){
-	const createApplicationURL = `${SUDS_API_URL}/application`;
+	const createApplicationURL = `${auth.SUDS_API_URL}/application`;
 	fieldsObj['/application'].contCn = contCN;
 	const applicationPost = fieldsObj['/application'];
 	apiCallsObject.POST['/application'].request = applicationPost;
-	const createApplicationOptions = getRequestOptions(createApplicationURL, 'POST', applicationPost, sudsToken);
+	const createApplicationOptions = auth.getRequestOptions(createApplicationURL, 'POST', applicationPost, sudsToken);
 	return request.post(createApplicationOptions);
 }
 
@@ -316,76 +212,17 @@ function getContId(fieldsObj, person){
 	}
 }
 
-function getToken() {
-	return new Promise(function(fulfill, reject) {
-		const authURL = `${SUDS_API_URL}/login`;
-		request.post(authURL, {
-			auth: {
-				user: SUDS_API_USERNAME,
-				pass: SUDS_API_PASSWORD,
-				// Change to false if SUDS API requires digest
-				sendImmediately: true
-			},
-			json: true
-		}).then(function(response) {
-			if (response.token) {
-				return fulfill(response.token);
-			}
-			reject(new Error('Token not in data returned from SUDS basic API'));
-		}).catch(function(err) {
-			reject(err);
-		});
-	});
-}
-
-/** Gets info about an application and returns it.
- * @param  {Object} req - Request Object
- * @param  {Object} res - Response Object
- * @param  {Object} pathData - All data from swagger for the path that has been run
- * @return {Object} - Data from the basic API about an application
- */
-function getFromBasic(req, res, controlNumber){
-
-	return new Promise(function (fulfill, reject){
-
-		getToken()
-		.then(function(sudsToken) {
-			const applicationCheck = `${SUDS_API_URL}/application/${controlNumber}`;
-			const getApplicationOptions = getRequestOptions(applicationCheck, 'GET', null, sudsToken);
-
-			request.get(getApplicationOptions)
-			.then(function(response){
-				return fulfill(response);
-			})
-			.catch(function(err){
-				if (err.statusCode && err.statusCode === 404){
-					console.error(err);
-					return error.sendError(req, res, 503, 'underlying service unavailable.');
-				}
-				else if (err.error && err.error.code === 'ETIMEDOUT') {
-					console.error(err);
-					return error.sendError(req, res, 504, 'underlying service has timed out.');
-				}
-				else {
-					reject(err);
-				}
-			});
-		})
-		.catch(reject);
-	});
-}
-
 /** Sends requests needed to create an application via the Basic API
  * @param  {Object} req - Request Object
  * @param  {Object} res - Response Object
- * @param  {Object} sch - Schema object
+ * @param  {Object} validationSchema - Schema object
  * @param  {Object} body - User input
  */
-function postToBasic(req, res, sch, body){
+function postToBasic(req, res, validationSchema, body){
 
 	return new Promise(function (fulfill, reject){
 
-		getToken()
+		auth.getToken()
 		.then(function(sudsToken) {
 			const apiCallsObject = {
 				'GET':{
@@ -400,21 +237,21 @@ function postToBasic(req, res, sch, body){
 					'/application':{}
 				}
 			};
-			const fieldsObj = prepareBasicPost(sch, body);
 
 			const person = isAppFromPerson(body);
+			const fieldsObj = prepareBasicPost(validationSchema, body, person);
 			let existingContactCheck;
 			if (person){
 				const lastName = body.applicantInfo.lastName;
-				existingContactCheck = `${SUDS_API_URL}/contact/lastname/${lastName}`;
+				existingContactCheck = `${auth.SUDS_API_URL}/contact/lastname/${lastName}`;
 				apiCallsObject.GET['/contact/lastname/{lastName}'].request = {'lastName':lastName};
 			}
 			else {
 				const orgName = body.applicantInfo.organizationName;
-				existingContactCheck = `${SUDS_API_URL}/contact/orgcode/${orgName}`;
+				existingContactCheck = `${auth.SUDS_API_URL}/contact/orgcode/${orgName}`;
 				apiCallsObject.GET['/contact/orgcode/{orgCode}'].request = {'orgCode':orgName};
 			}
-			const getContactOptions = getRequestOptions(existingContactCheck, 'GET', null, sudsToken);
+			const getContactOptions = auth.getRequestOptions(existingContactCheck, 'GET', null, sudsToken);
 
 			request.get(getContactOptions)
 			.then(function(res){
@@ -491,4 +328,3 @@ function postToBasic(req, res, sch, body){
 }
 
 module.exports.postToBasic = postToBasic;
-module.exports.getFromBasic = getFromBasic;
