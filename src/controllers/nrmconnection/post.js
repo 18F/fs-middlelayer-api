@@ -212,6 +212,34 @@ function getContId(fieldsObj, person){
 	}
 }
 
+/**
+ * Set the options for the check if a contact exists
+ * @param {Object} applicantInfo - portion of the body of the request with the contact information
+ * @param {Object} apiCallsObject - running log of the requests
+ * @param {Boolean} person - whether the applicaion is from an individual or not
+ * @param {String} token - JWT token from SUDS
+ */
+function setContactGETOptions(applicantInfo, person, token, apiCallsObject){
+	let endpoint;
+	let contact;
+	if (person){
+		contact = applicantInfo.lastName;
+		endpoint = 'lastName';
+	}
+	else {
+		contact = applicantInfo.organizationName;
+		endpoint = 'orgCode';
+	}
+	const requestUri = `${auth.SUDS_API_URL}/contact/${endpoint.toLowerCase()}/${contact}`;
+	const logUri = `/contact/${endpoint.toLowerCase()}/{${endpoint}}`;
+	const sumReq = {};
+	sumReq[endpoint] = contact;
+	apiCallsObject.GET[logUri].request = sumReq;
+
+	const requestParams = auth.getRequestOptions(requestUri, 'GET', null, token);
+	return {logUri, requestParams, apiCallsObject: apiCallsObject};
+}
+
 /** Sends requests needed to create an application via the Basic API
  * @param  {Object} req - Request Object
  * @param  {Object} res - Response Object
@@ -222,45 +250,32 @@ function postToBasic(req, res, validationSchema, body){
 
 	return new Promise(function (fulfill, reject){
 
+		let apiCallsObject = {
+			'GET':{
+				'/contact/lastname/{lastName}':{},
+				'/contact/orgcode/{orgCode}':{}
+			},
+			'POST':{
+				'/contact/person':{},
+				'/contact/orgcode':{},
+				'/contact-address':{},
+				'/contact-phone':{},
+				'/application':{}
+			}
+		};
+
 		auth.getToken()
 		.then(function(sudsToken) {
-			const apiCallsObject = {
-				'GET':{
-					'/contact/lastname/{lastName}':{},
-					'/contact/orgcode/{orgCode}':{}
-				},
-				'POST':{
-					'/contact/person':{},
-					'/contact/orgcode':{},
-					'/contact-address':{},
-					'/contact-phone':{},
-					'/application':{}
-				}
-			};
-
 			const person = isAppFromPerson(body);
 			const fieldsObj = prepareBasicPost(validationSchema, body, person);
 			let existingContactCheck;
-			if (person){
-				const lastName = body.applicantInfo.lastName;
-				existingContactCheck = `${auth.SUDS_API_URL}/contact/lastname/${lastName}`;
-				apiCallsObject.GET['/contact/lastname/{lastName}'].request = {'lastName':lastName};
-			}
-			else {
-				const orgName = body.applicantInfo.organizationName;
-				existingContactCheck = `${auth.SUDS_API_URL}/contact/orgcode/${orgName}`;
-				apiCallsObject.GET['/contact/orgcode/{orgCode}'].request = {'orgCode':orgName};
-			}
-			const getContactOptions = auth.getRequestOptions(existingContactCheck, 'GET', null, sudsToken);
 
-			request.get(getContactOptions)
+			const contactGETOptions = setContactGETOptions(body.applicantInfo, person, sudsToken, apiCallsObject);
+			apiCallsObject = contactGETOptions.apiCallsObject;
+
+			request.get(contactGETOptions.requestParams)
 			.then(function(res){
-				if (person){
-					apiCallsObject.GET['/contact/lastname/{lastName}'].response = res;
-				}
-				else {
-					apiCallsObject.GET['/contact/orgcode/{orgCode}'].response = res;
-				}
+				apiCallsObject.GET[contactGETOptions.logUri].response = res;
 				const contId = getContId(fieldsObj, person);
 				if (res.length === 1  && res[0].contCn){
 					if (contId === res[0].contId){
