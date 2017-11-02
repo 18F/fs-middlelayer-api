@@ -27,6 +27,7 @@ This repository was partially developed under a task order of the Agile Blanket 
 - [Dependencies](#dependencies)
 - [Creating a new permit type](#creating-a-new-permit-type)
 - [Authentication](#authentication-process)
+- [Environment Variables](#environment-variables)
 - [Continuous integration and deployment](#continuous-integration-and-deployment)
 - [Code quality and coverage](#code-quality-and-coverage)
 - [File storage - AWS / S3](#file-storage---aws--s3)
@@ -39,27 +40,10 @@ This repository was partially developed under a task order of the Agile Blanket 
 
 1. Clone or download this repository.
 2. Run `npm install` to install application and all dependencies.
-3. Run `npm start` to start Node.js server.
-
-## Configuration
-
-- Environment variables:
-  - PORT | Default: 8000
-  - DATABASE_URL | Format: postgres://user:password@host:port/database
-  - VCAP_SERVICES
-    - S3 credentials for s3 aws bucket
-    - nrm-suds-url-service
-      - SUDS_API_URL
-        - To use the moxai dependency and point at the mock API, update this to be `MOCKS`.
-      - username
-      - password
-
-- API user account:
-  - To create an API user account, run `node cmd/createUser.js -u <username> -p <password> -r <userrole>`. The user role is either 'user' or 'admin'. The ‘admin’ role has permission to access all routes, but the ‘user’ role does not currently have permission to access any routes.
-
-- Dotenv:
-  - [Dotenv](https://www.npmjs.com/package/dotenv) is used which can load environment variables from a .env file into process.env
-  - Example: PORT=8080
+3. Set the [environment variables](#environment-variables)
+4. Setup a database and run `npm run dba`.
+5. [Create a test user](#create-a-user).
+6. Run `npm start` to start Node.js server.
 
 ## Dependencies
 
@@ -108,7 +92,7 @@ These steps define the process for creating a new permit type using Example Perm
                 }
             }
 
-        Intake options include:
+        `Intake` is a term for the origin of the field. Acceptable options for `intake`:
         - `middleLayer/<fieldName>`
           - From the application table in middleLayer database, column name `<fieldName>`
         - `addresses/<fieldName>`
@@ -163,7 +147,7 @@ These steps define the process for creating a new permit type using Example Perm
                     "default":"",
                     "fromIntake":true,
                     "pattern":"^[0-9]{2}$",
-                    "store":["middleLayer:district"],
+                    "basicStore":true,
                     "type" : "string"
                 },
                 "firstName": {
@@ -171,7 +155,7 @@ These steps define the process for creating a new permit type using Example Perm
                     "default":"",
                     "fromIntake":true,
                     "maxLength":255,
-                    "store":["basic:/contact/person"],
+                    "basicStore":["/contact/person"],
                     "type": "string"
                 },
                 "securityId":{
@@ -195,14 +179,14 @@ These steps define the process for creating a new permit type using Example Perm
                         ],
                         "function":"concat"
                     },
-                    "store":["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
+                    "basicStore":["/application", "/contact/address", "/contact/phone"],
                     "type" : "string"
                 },
                 "exampleDocumentation": {
                     "filetypecode":"exd",
                     "maxSize": 25,
                     "requiredFile":false,
-                    "store":["middleLayer:exampleDocumentation"],
+                    "localStore":["exampleDocumentation"],
                     "type": "file",
                     "validExtensions":[
                         "pdf",
@@ -213,9 +197,15 @@ These steps define the process for creating a new permit type using Example Perm
                 },
 
 
-          - `fromIntake` indicates whether the field will be directly populated with user input. If set to `false`, the API will populate this field using the strings and fields provided under `madeOf`.
+          - `fromIntake {Boolean} default:true`: indicates whether the field will be directly populated with user input. If set to `false`, the API will populate this field using the strings and fields provided under `madeOf`.
 
-          - `store` describes where this field should be stored, either in the middlelayer DB or in the basic API. It can list multiple places to store this field
+          - `basicStore {Boolean} default:false` describes which endpoints in the basic api, the fields will be sent to. Endpoint options include:
+              - `/application`
+              - `/contact/person`
+              - `/contact/address`
+              - `/contact/phone`
+
+          - `localStore {Boolean} default:false` whether to store the field in the database.
 
           - `madeOf` describes how to auto-populate the field, if fromIntake is false.
             - `fields` lists the fields, and values which are to be used when auto-populating the field.
@@ -228,13 +218,6 @@ These steps define the process for creating a new permit type using Example Perm
           Files:
           - `maxSize` is measured in megabytes
 
-          Store options include:
-          - `middleLayer:<fieldName>`
-          - `basic:/application`
-          - `basic:/contact/person`
-          - `basic:/contact/address`
-          - `basic:/contact/phone`
-
           If the store contains one of the `basic` type options, `basicField` attribute must be included. This is the name of the field used to submit this data to the Basic API.
 
 2. Extend the schema, if necessary.
@@ -242,7 +225,7 @@ These steps define the process for creating a new permit type using Example Perm
     2. If there are routing changes, update `src/controllers/index.js`.
     3. If there are validation changes, update `src/controllers/validation.js` and/or `src/controllers/fileValidation.js` as needed.
     4. If there are any changes on how the files are to be stored, update `src/controllers/store.js`.
-    5. If there are any changes on how the requests are made to Basic API, update `src/controllers/basic.js`.
+    5. If there are any changes on how the requests are made to Basic API, update `src/controllers/nrmconnection` directory.
 
 ## Authentication process
 
@@ -258,6 +241,10 @@ A separate route, `/auth`, generates token. This token-based authentication is h
 - `jsonwebtoken`
 
 This API uses the `passport-local` strategy. This strategy authenticates users with a username and password and verifies that information against the database. When the user enters a username and password, the `bcrypt-nodejs` module verifies the submitted password against the hash in the database. Upon successful authentication, the application sends back a token using the `jsonwebtoken` module. The `jsonwebtoken` module uses a secret key, stored as an environment variable, to generate the token, which is set to be valid for 120 minutes.
+
+### Create a user
+
+To create an API user account, run `node cmd/createUser.js -u <username> -p <password> -r <userrole>`. The user role is either 'user' or 'admin'. The ‘admin’ role has permission to access all routes, but the ‘user’ role does not currently have permission to access any routes.
 
 ## Continuous integration and deployment
 
@@ -344,7 +331,9 @@ User accounts will be created only if these variable are present:
 
 ### Setting Environment Variables
 
-The [dotenv](https://www.npmjs.com/package/dotenv) npm package is used to load environment variables to the application for local development.
+The [dotenv](https://www.npmjs.com/package/dotenv) npm package is used to load environment variables to the application for local development.from a .env file into process.env
+
+`Example: PORT=8080`
 
 ### Setting AWS Credentials
 
@@ -363,7 +352,6 @@ Models are a JavaScript factory class that represents a table in the database. M
 ## Schema spec
 
 The json schema was extended for this project. See the [schema extension here](/docs/spec.json).
-
 
 ## Automated tests
 
