@@ -48,7 +48,6 @@ describe('Integration tests - noncommercial', function(){
 	let postControlNumber;
 
 	before(function(done) {
-
 		models.users.sync({ force: false });
 		const salt = bcrypt.genSaltSync(10);
 		const hash = bcrypt.hashSync(adminCredentials.pwd, salt);
@@ -72,7 +71,6 @@ describe('Integration tests - noncommercial', function(){
 
 			}
 		});
-
 	});
 
 	after(function(done) {
