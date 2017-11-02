@@ -120,17 +120,17 @@ function getBasicFields(fieldsToBasic, body, autoPopValues){
 }
 
 /** Takes fields to be stored, creates post objects and populated with user input
- * @param  {Object} validationSchema - validation schema for this request
+ * @param  {Object} validationSchema - validation schema for route requested
  * @param  {Object} body - user input
  * @param  {Boolean} person - whether application is for individual(true) or organization (false)
  * @return {Object} - All post objects
  */
 function prepareBasicPost(validationSchema, body, person){
-	const otherFields = [];
-	db.getFieldsToStore(validationSchema, otherFields, '', 'basic');
-	const autoPopulateValues = autoPopulate.buildAutoPopulatedFields(otherFields, person, body);
-	const fieldsToPost = getBasicFields(otherFields, body, autoPopulateValues);
-	return fieldsToPost;
+	const fieldsToSend = [];
+	db.getFieldsToStore(validationSchema, fieldsToSend, '', 'basic');
+	const autoPopulateValues = autoPopulate.buildAutoPopulatedFields(fieldsToSend, person, body);
+	const populatedFieldsToSend = getBasicFields(fieldsToSend, body, autoPopulateValues);
+	return populatedFieldsToSend;
 }
 
 /**
@@ -309,7 +309,7 @@ function postToBasic(req, res, validationSchema, body){
 		auth.getToken()
 		.then(function(sudsToken) {
 			const person = isAppFromPerson(body);
-			const fieldsObj = prepareBasicPost(validationSchema, body, person);
+			const fieldsInBasicPostFormat = prepareBasicPost(validationSchema, body, person);
 			let existingContactCheck;
 
 			const contactGETOptions = setContactGETOptions(body.applicantInfo, person, sudsToken, apiCallLogObject);
@@ -318,7 +318,7 @@ function postToBasic(req, res, validationSchema, body){
 			request.get(contactGETOptions.requestParams)
 			.then(function(res){
 				apiCallLogObject.GET[contactGETOptions.logUri].response = res;
-				const contId = getContId(fieldsObj, person);
+				const contId = getContId(fieldsInBasicPostFormat, person);
 				if (res.length === 1  && res[0].contCn){
 					if (contId === res[0].contId){
 						return new Promise(function(resolve){
@@ -326,18 +326,18 @@ function postToBasic(req, res, validationSchema, body){
 						});
 					}
 					else {
-						return createContact(fieldsObj, person, apiCallLogObject, sudsToken);
+						return createContact(fieldsInBasicPostFormat, person, apiCallLogObject, sudsToken);
 					}
 				}
 				else if (res.length > 1){
-					const duplicateContacts = multipleContactsCheck(contId, res, fieldsObj, person, apiCallLogObject, sudsToken);
+					const duplicateContacts = multipleContactsCheck(contId, res, fieldsInBasicPostFormat, person, apiCallLogObject, sudsToken);
 				}
 				else {
-					return createContact(fieldsObj, person, apiCallLogObject, sudsToken);
+					return createContact(fieldsInBasicPostFormat, person, apiCallLogObject, sudsToken);
 				}
 			})
 			.then(function(contCn){
-				return createApplication(fieldsObj, contCn, apiCallLogObject, sudsToken);
+				return createApplication(fieldsInBasicPostFormat, contCn, apiCallLogObject, sudsToken);
 			})
 			.then(function(response){
 				const applResponse  = response;

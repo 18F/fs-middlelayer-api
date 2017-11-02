@@ -160,14 +160,6 @@ function getFieldsToStore(schema, fieldsToStore, path, saveLocation){
 			getFieldsToStore(schema.properties, fieldsToStore, `${path}`, saveLocation);
 			break;
 		default: {
-			// const store = schema[key].store;
-			// let storeInMiddle = false;
-			// if (store && schema[key].type !== 'file'){
-			// 	store.forEach((place)=>{
-			// 		const location = place.split(':')[0];
-			// 		storeInMiddle = storeInMiddle || (location === saveLocation);
-			// 	});
-			// }
 
 			const needToStore = checkIfStore(saveLocation, schema[key]);
 			if (needToStore){
@@ -213,7 +205,6 @@ function getDataToStoreInDB(schema, body){
 	const fieldsToStoreInDB = [];
 	const output = {};
 	getFieldsToStore(schema, fieldsToStoreInDB, '', 'middleLayer');
-	console.log(fieldsToStoreInDB);
 	fieldsToStoreInDB.forEach((field)=>{
 		const path = Object.keys(field)[0];
 		const splitPath = path.split('.');
@@ -224,8 +215,7 @@ function getDataToStoreInDB(schema, body){
 		if ((typeof bodyField) === 'undefined'){
 			bodyField = field[path].default;
 		}
-		console.log(path);
-		const dbField = path;
+		const dbField = splitPath[splitPath.length-1];
 		output[dbField] = bodyField;
 	});
 	return output;

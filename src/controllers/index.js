@@ -292,8 +292,8 @@ function postApplication(req, res, reqData){
 	console.log(body);
 	const possbileFiles = [];
 
-	const schema = validation.getValidationSchema(pathData);
-	const sch = derefFunc(schema.schemaToUse, [schema.fullSchema], true);
+	const validationSchema = validation.getValidationSchema(pathData);
+	const sch = derefFunc(validationSchema.schemaToUse, [validationSchema.fullSchema], true);
 	const allErrors = validation.getFieldValidationErrors(body, pathData, sch);
 
 	//Files to validate are in possbileFiles
