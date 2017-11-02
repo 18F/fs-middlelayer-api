@@ -50,24 +50,35 @@ function getBasicFields(fieldsToBasic, body, autoPopValues){
 	const postObjs = {}, requestsObj = {};
 	fieldsToBasic.forEach((field)=>{
 		const key = Object.keys(field)[0];
-		const whereToStore = field[key].store;
-		//whereToStore is where the field needs to be stored, either basic or middlelayer
-		whereToStore.forEach((location)=>{
-			const requestToUse = location.split(':')[1];
-			if (location.split(':')[0] === 'basic'){
-				let postObjExists = false;
-				for (const request in requestsObj){
-					if (request === requestToUse){
-						postObjExists = true;
-						requestsObj[requestToUse][key] = field[key];
-					}
+		if(field[key].hasOwnProperty('basicStore')){
+			field[key].basicStore.forEach((location)=>{
+				if(requestsObj.hasOwnProperty(location)){
+					requestsObj[location][key] = field[key];
 				}
-				if (!postObjExists){
-					requestsObj[requestToUse] = {};
-					requestsObj[requestToUse][key] = field[key];
+				else {
+					requestsObj[location] = {};
+					requestsObj
 				}
-			}
-		});
+			});
+		}
+		// const whereToStore = field[key].store;
+		// //whereToStore is where the field needs to be stored, either basic or middlelayer
+		// whereToStore.forEach((location)=>{
+		// 	const requestToUse = location.split(':')[1];
+		// 	if (location.split(':')[0] === 'basic'){
+		// 		let postObjExists = false;
+		// 		for (const request in requestsObj){
+		// 			if (request === requestToUse){
+		// 				postObjExists = true;
+		// 				requestsObj[requestToUse][key] = field[key];
+		// 			}
+		// 		}
+		// 		if (!postObjExists){
+		// 			requestsObj[requestToUse] = {};
+		// 			requestsObj[requestToUse][key] = field[key];
+		// 		}
+		// 	}
+		// });
 	});
 	//requestsObj contains objects, labeled as each request that may be sent to the basic API, containing the fields
 	//which need to be included in that request
@@ -320,28 +331,6 @@ function postToBasic(req, res, validationSchema, body){
 				}
 				else if (res.length > 1){
 					const duplicateContacts = multipleContactsCheck(contId, res, fieldsObj, person, apiCallLogObject, sudsToken);
-					// const matchingContacts = res;
-					// const duplicateContacts = [];
-					// let tmpContCn;
-					//
-					// matchingContacts.forEach((contact)=>{
-					// 	if (contId === contact.contId){
-					// 		duplicateContacts.push(contact);
-					// 		tmpContCn = contact.contCn;
-					// 	}
-					// });
-
-					// if (duplicateContacts.length === 0){
-					// 	return createContact(fieldsObj, person, apiCallLogObject, sudsToken);
-					// }
-					// else if (duplicateContacts.length === 1){
-					// 	return new Promise(function(resolve){
-					// 		resolve(tmpContCn);
-					// 	});
-					// }
-					// else {
-					// 	throw new DuplicateContactsError(duplicateContacts);
-					// }
 				}
 				else {
 					return createContact(fieldsObj, person, apiCallLogObject, sudsToken);

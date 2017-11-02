@@ -160,15 +160,17 @@ function getFieldsToStore(schema, fieldsToStore, path, saveLocation){
 			getFieldsToStore(schema.properties, fieldsToStore, `${path}`, saveLocation);
 			break;
 		default: {
-			const store = schema[key].store;
-			let storeInMiddle = false;
-			if (store && schema[key].type !== 'file'){
-				store.forEach((place)=>{
-					const location = place.split(':')[0];
-					storeInMiddle = storeInMiddle || (location === saveLocation);
-				});
-			}
-			if (storeInMiddle){
+			// const store = schema[key].store;
+			// let storeInMiddle = false;
+			// if (store && schema[key].type !== 'file'){
+			// 	store.forEach((place)=>{
+			// 		const location = place.split(':')[0];
+			// 		storeInMiddle = storeInMiddle || (location === saveLocation);
+			// 	});
+			// }
+
+			const needToStore = checkIfStore(saveLocation, schema[key]);
+			if (needToStore){
 				const obj = {};
 
 				if (path !== ''){
@@ -188,6 +190,20 @@ function getFieldsToStore(schema, fieldsToStore, path, saveLocation){
 	});
 }
 
+/** checks if the field specifies that it should be stored in that location
+* @param {String} saveLocation - either in the middleLayer or move to the basic layer
+* @param {Object} schemaKey - field to check about storage
+*/
+function checkIfStore(saveLocation, schemaKey){
+	if(saveLocation == 'basic' && schemaKey.hasOwnProperty('basicStore')){
+		return true;
+	}
+	if (saveLocation == 'middleLayer' && schemaKey.hasOwnProperty('localStore') && schemaKey.type !== 'file'){
+		return true;
+	}
+	return false;
+}
+
 /** Formats data from user input, that needs to be submitted to DB, so that DB can receive it.
  * @param  {Object} schema - Schema of application being submitted
  * @param  {Object} body - User input
@@ -197,6 +213,7 @@ function getDataToStoreInDB(schema, body){
 	const fieldsToStoreInDB = [];
 	const output = {};
 	getFieldsToStore(schema, fieldsToStoreInDB, '', 'middleLayer');
+	console.log(fieldsToStoreInDB);
 	fieldsToStoreInDB.forEach((field)=>{
 		const path = Object.keys(field)[0];
 		const splitPath = path.split('.');
@@ -207,7 +224,8 @@ function getDataToStoreInDB(schema, body){
 		if ((typeof bodyField) === 'undefined'){
 			bodyField = field[path].default;
 		}
-		const dbField = field[path].store[0].split(':')[1];
+		console.log(path);
+		const dbField = path;
 		output[dbField] = bodyField;
 	});
 	return output;
