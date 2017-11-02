@@ -46,7 +46,7 @@ function randomEndString(){
 }
 
 function makeUserEntry(type){
- return {'un': type+randomEndString(), 'pwd': 'pwd'+randomEndString()}
+	return {'un': type + randomEndString(), 'pwd': 'pwd' + randomEndString()};
 }
 
 //*******************************************************************

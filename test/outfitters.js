@@ -35,8 +35,6 @@ const bcrypt = require('bcrypt-nodejs');
 const db = include('src/controllers/db.js');
 const models = include('src/models');
 
-// const adminCredentials.un = 'admin' + (Math.floor((Math.random() * 1000000) + 1)).toString();
-// const adminCredentials.pwd = 'pwd' + (Math.floor((Math.random() * 1000000) + 1)).toString();
 const adminCredentials = util.makeUserEntry('admin');
 
 const specialUses = {};
@@ -57,7 +55,7 @@ const binaryParser = function (res, cb) {
 	res.on('end', function () {
 		cb(null, new Buffer(res.data, 'binary'));
 	});
-}
+};
 
 function mockZip(){
 	sinon.stub(s3zipper.prototype, 'getFiles').callsFake(function(data, callback){
