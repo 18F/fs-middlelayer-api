@@ -125,19 +125,19 @@ function prepareBasicPost(validationSchema, body, person){
 /**
  * Creates request for Basic API calls to create contact
  * @param  {Object} res         - Response of previous request
- * @param  {Object} apiCallsObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @param  {Object} apiCallLogObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @param  {Object} fieldsObj   - Object containing post objects to be sent to basic api
- * @param  {String} responseKey - Key in apiCallsObject for the response object of the previous request
- * @param  {String} requestKey  - Key in apiCallsObject for the request object of this request
+ * @param  {String} responseKey - Key in apiCallLogObject for the response object of the previous request
+ * @param  {String} requestKey  - Key in apiCallLogObject for the request object of this request
  * @param  {String} requestPath - Path from basic API route this response needs to be sent to
  * @return {Promise}            - Promise to be fulfilled
  */
-function postRequest(res, apiCallsObject, fieldsObj, responseKey, requestKey, requestPath, sudsToken){
-	apiCallsObject.POST[responseKey].response = res;
+function postRequest(res, apiCallLogObject, fieldsObj, responseKey, requestKey, requestPath, sudsToken){
+	apiCallLogObject.POST[responseKey].response = res;
 	const addressField = fieldsObj[requestKey];
 	addressField.contCn = res.contCn;
 	const addressURL = `${auth.SUDS_API_URL}${requestPath}`;
-	apiCallsObject.POST[requestPath].request = addressField;
+	apiCallLogObject.POST[requestPath].request = addressField;
 	const createAddressOptions = auth.getRequestOptions(addressURL, 'POST', addressField, sudsToken);
 	return request.post(createAddressOptions);
 }
@@ -145,34 +145,34 @@ function postRequest(res, apiCallsObject, fieldsObj, responseKey, requestKey, re
  * Calls basic API to create a contact in SUDS
  * @param  {Object} fieldsObj  - Object containing post objects to be sent to basic api
  * @param  {boolean} person    - Boolean indicating whether the contract being created is for a person or not
- * @param  {Object} apiCallsObject - Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @param  {Object} apiCallLogObject - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @return {Promise}		   - Promise to be fulfilled
  */
-function createContact(fieldsObj, person, apiCallsObject, sudsToken){
+function createContact(fieldsObj, person, apiCallLogObject, sudsToken){
 	return new Promise(function(fulfill, reject){
 		let contactField, createPersonOrOrgURL, responseKey;
 		if (person){
 			contactField = fieldsObj['/contact/person'];
 			createPersonOrOrgURL = `${auth.SUDS_API_URL}/contact/person`;
 			responseKey = '/contact/person';
-			apiCallsObject.POST[responseKey].request = contactField;
+			apiCallLogObject.POST[responseKey].request = contactField;
 		}
 		else {
 			contactField = fieldsObj['/contact/organization'];
 			createPersonOrOrgURL = `${auth.SUDS_API_URL}/contact/organization`;
 			responseKey = '/contact/orgcode';
-			apiCallsObject.POST[responseKey].request = contactField;
+			apiCallLogObject.POST[responseKey].request = contactField;
 		}
 		const createContactOptions = auth.getRequestOptions(createPersonOrOrgURL, 'POST', contactField, sudsToken);
 		request.post(createContactOptions)
 		.then(function(res){
-			return postRequest(res, apiCallsObject, fieldsObj, responseKey, '/contact/address', '/contact-address', sudsToken);
+			return postRequest(res, apiCallLogObject, fieldsObj, responseKey, '/contact/address', '/contact-address', sudsToken);
 		})
 		.then(function(res){
-			return postRequest(res, apiCallsObject, fieldsObj, '/contact-address', '/contact/phone', '/contact-phone', sudsToken);
+			return postRequest(res, apiCallLogObject, fieldsObj, '/contact-address', '/contact/phone', '/contact-phone', sudsToken);
 		})
 		.then(function(res){
-			apiCallsObject.POST['/contact-phone'].response = res;
+			apiCallLogObject.POST['/contact-phone'].response = res;
 			fulfill(res.contCn);
 		})
 		.catch(function(err){
@@ -185,14 +185,14 @@ function createContact(fieldsObj, person, apiCallsObject, sudsToken){
  * Calls basic API to create an application in SUDS
  * @param  {Object} fieldsObj   - Object containing post objects to be sent to basic api
  * @param  {Number} contCN      - Contact control number of contact associated with this application
- * @param  {Object} apiCallsObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
+ * @param  {Object} apiCallLogObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @return {Promise}            - Promise to be fulfilled
  */
-function createApplication(fieldsObj, contCN, apiCallsObject, sudsToken){
+function createApplication(fieldsObj, contCN, apiCallLogObject, sudsToken){
 	const createApplicationURL = `${auth.SUDS_API_URL}/application`;
 	fieldsObj['/application'].contCn = contCN;
 	const applicationPost = fieldsObj['/application'];
-	apiCallsObject.POST['/application'].request = applicationPost;
+	apiCallLogObject.POST['/application'].request = applicationPost;
 	const createApplicationOptions = auth.getRequestOptions(createApplicationURL, 'POST', applicationPost, sudsToken);
 	return request.post(createApplicationOptions);
 }
@@ -215,11 +215,11 @@ function getContId(fieldsObj, person){
 /**
  * Set the options for the check if a contact exists
  * @param {Object} applicantInfo - portion of the body of the request with the contact information
- * @param {Object} apiCallsObject - running log of the requests
  * @param {Boolean} person - whether the applicaion is from an individual or not
  * @param {String} token - JWT token from SUDS
+ * @param {Object} apiCallLogObject - running log of the requests
  */
-function setContactGETOptions(applicantInfo, person, token, apiCallsObject){
+function setContactGETOptions(applicantInfo, person, token, apiCallLogObject){
 	let endpoint;
 	let contact;
 	if (person){
@@ -234,10 +234,10 @@ function setContactGETOptions(applicantInfo, person, token, apiCallsObject){
 	const logUri = `/contact/${endpoint.toLowerCase()}/{${endpoint}}`;
 	const sumReq = {};
 	sumReq[endpoint] = contact;
-	apiCallsObject.GET[logUri].request = sumReq;
+	apiCallLogObject.GET[logUri].request = sumReq;
 
 	const requestParams = auth.getRequestOptions(requestUri, 'GET', null, token);
-	return {logUri, requestParams, apiCallsObject: apiCallsObject};
+	return {logUri, requestParams, apiCallLogObject: apiCallLogObject};
 }
 
 /** Sends requests needed to create an application via the Basic API
@@ -250,7 +250,7 @@ function postToBasic(req, res, validationSchema, body){
 
 	return new Promise(function (fulfill, reject){
 
-		let apiCallsObject = {
+		let apiCallLogObject = {
 			'GET':{
 				'/contact/lastname/{lastName}':{},
 				'/contact/orgcode/{orgCode}':{}
@@ -270,12 +270,12 @@ function postToBasic(req, res, validationSchema, body){
 			const fieldsObj = prepareBasicPost(validationSchema, body, person);
 			let existingContactCheck;
 
-			const contactGETOptions = setContactGETOptions(body.applicantInfo, person, sudsToken, apiCallsObject);
-			apiCallsObject = contactGETOptions.apiCallsObject;
+			const contactGETOptions = setContactGETOptions(body.applicantInfo, person, sudsToken, apiCallLogObject);
+			apiCallLogObject = contactGETOptions.apiCallLogObject;
 
 			request.get(contactGETOptions.requestParams)
 			.then(function(res){
-				apiCallsObject.GET[contactGETOptions.logUri].response = res;
+				apiCallLogObject.GET[contactGETOptions.logUri].response = res;
 				const contId = getContId(fieldsObj, person);
 				if (res.length === 1  && res[0].contCn){
 					if (contId === res[0].contId){
@@ -284,7 +284,7 @@ function postToBasic(req, res, validationSchema, body){
 						});
 					}
 					else {
-						return createContact(fieldsObj, person, apiCallsObject, sudsToken);
+						return createContact(fieldsObj, person, apiCallLogObject, sudsToken);
 					}
 				}
 				else if (res.length > 1){
@@ -300,7 +300,7 @@ function postToBasic(req, res, validationSchema, body){
 					});
 
 					if (duplicateContacts.length === 0){
-						return createContact(fieldsObj, person, apiCallsObject, sudsToken);
+						return createContact(fieldsObj, person, apiCallLogObject, sudsToken);
 					}
 					else if (duplicateContacts.length === 1){
 						return new Promise(function(resolve){
@@ -312,16 +312,16 @@ function postToBasic(req, res, validationSchema, body){
 					}
 				}
 				else {
-					return createContact(fieldsObj, person, apiCallsObject, sudsToken);
+					return createContact(fieldsObj, person, apiCallLogObject, sudsToken);
 				}
 			})
 			.then(function(contCn){
-				return createApplication(fieldsObj, contCn, apiCallsObject, sudsToken);
+				return createApplication(fieldsObj, contCn, apiCallLogObject, sudsToken);
 			})
 			.then(function(response){
 				const applResponse  = response;
-				apiCallsObject.POST['/application'].response = applResponse;
-				fulfill(apiCallsObject);
+				apiCallLogObject.POST['/application'].response = applResponse;
+				fulfill(apiCallLogObject);
 			})
 			.catch(function(err){
 				if (err.statusCode && err.statusCode === 404){
