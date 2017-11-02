@@ -240,6 +240,37 @@ function setContactGETOptions(applicantInfo, person, token, apiCallLogObject){
 	return {logUri, requestParams, apiCallLogObject: apiCallLogObject};
 }
 
+/** handle if multiple contacts are found
+* @param {String} - contId - ID of the contact
+* @param {Array} matchingContacts - response body array of potential contacts with that ContName
+* @param {Boolean} person - whether the applicaion is from an individual or not
+* @param {String} token - JWT token from SUDS
+* @param {Object} apiCallLogObject - running log of the requests
+*/
+function multipleContactsCheck(contId, matchingContacts, fieldsObj, person, apiCallLogObject, sudsToken){
+	const duplicateContacts = [];
+	let tmpContCn;
+
+	matchingContacts.forEach((contact)=>{
+		if (contId === contact.contId){
+			duplicateContacts.push(contact);
+			tmpContCn = contact.contCn;
+		}
+	});
+
+	if (duplicateContacts.length === 0){
+		return createContact(fieldsObj, person, apiCallLogObject, sudsToken);
+	}
+	else if (duplicateContacts.length === 1){
+		return new Promise(function(resolve){
+			resolve(tmpContCn);
+		});
+	}
+	else {
+		throw new DuplicateContactsError(duplicateContacts);
+	}
+}
+
 /** Sends requests needed to create an application via the Basic API
  * @param  {Object} req - Request Object
  * @param  {Object} res - Response Object
@@ -288,28 +319,29 @@ function postToBasic(req, res, validationSchema, body){
 					}
 				}
 				else if (res.length > 1){
-					const matchingContacts = res;
-					const duplicateContacts = [];
-					let tmpContCn;
+					const duplicateContacts = multipleContactsCheck(contId, res, fieldsObj, person, apiCallLogObject, sudsToken);
+					// const matchingContacts = res;
+					// const duplicateContacts = [];
+					// let tmpContCn;
+					//
+					// matchingContacts.forEach((contact)=>{
+					// 	if (contId === contact.contId){
+					// 		duplicateContacts.push(contact);
+					// 		tmpContCn = contact.contCn;
+					// 	}
+					// });
 
-					matchingContacts.forEach((contact)=>{
-						if (contId === contact.contId){
-							duplicateContacts.push(contact);
-							tmpContCn = contact.contCn;
-						}
-					});
-
-					if (duplicateContacts.length === 0){
-						return createContact(fieldsObj, person, apiCallLogObject, sudsToken);
-					}
-					else if (duplicateContacts.length === 1){
-						return new Promise(function(resolve){
-							resolve(tmpContCn);
-						});
-					}
-					else {
-						throw new DuplicateContactsError(duplicateContacts);
-					}
+					// if (duplicateContacts.length === 0){
+					// 	return createContact(fieldsObj, person, apiCallLogObject, sudsToken);
+					// }
+					// else if (duplicateContacts.length === 1){
+					// 	return new Promise(function(resolve){
+					// 		resolve(tmpContCn);
+					// 	});
+					// }
+					// else {
+					// 	throw new DuplicateContactsError(duplicateContacts);
+					// }
 				}
 				else {
 					return createContact(fieldsObj, person, apiCallLogObject, sudsToken);
