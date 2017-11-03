@@ -55,7 +55,16 @@
                             "Person",
                             "Trust"
                         ],
-                        "fromIntake":true,
+                        "madeOf":{
+                            "fields":[
+                                {
+                                    "fromIntake":true,
+                                    "field":"applicantInfo.orgType"
+                                }
+                            ],
+                            "function":"contId"
+                        },
+                        "fromIntake":false,
                         "basicStore":["/contact/organization"],
                         "type":"string"
                     }
@@ -255,7 +264,16 @@
                             "Person",
                             "Trust"
                         ],
-                        "fromIntake":true,
+                        "madeOf":{
+                            "fields":[
+                                {
+                                    "fromIntake":true,
+                                    "field":"applicantInfo.orgType"
+                                }
+                            ],
+                            "function":"contId"
+                        },
+                        "fromIntake":false,
                         "basicStore":["/contact/organization"],
                         "type":"string"
                     }
