@@ -101,7 +101,7 @@ function buildAutoPopulatedFields(basicFields, person, body){
 					fieldMakeUp.push(fieldValue);
 				}
 				else {
-					console.error(`${madeOfField.field} does not exist`);
+					console.warn(`${madeOfField.field} does not exist. This may not be an issue if the field is optional.`);
 				}
 			}
 			else {
