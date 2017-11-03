@@ -134,6 +134,41 @@ function buildAutoPopulatedFields(basicFields, person, body){
 	return output;
 }
 
+/**
+ * Gets the data from all fields that are to be send to the basic API, also builds post object, used to pass data to basic api
+ * @param  {Array} fieldsToBasic - All fields in object form which will be sent to basicAPI
+ * @param {Object} intakeRequest - body of the incoming post request
+ * @param {Object} autoPopValues - field entries that did not come directly from a request
+ * @return {Object} - Array of endpoints with which fields should go in them
+ */
+function populateValues(fieldsByEnpoint, intakeRequest, autoPopValues){
+	const requestsTobeSent = {};
+	for (const request in fieldsByEnpoint){
+			requestsTobeSent[request] = {};
+			for (const fieldKey in fieldsByEnpoint[request]){
+					const field = fieldsByEnpoint[request][fieldKey];
+					const splitPath = fieldKey.split('.');
+					const fieldName = splitPath[splitPath.length -1];
+					let basicFieldName = fieldName;
+					if(!field.hasOwnProperty('basicField')){
+						basicFieldName = field.basicField;
+					}
+					let fieldValue = field.default;
+					if (field.fromIntake && intakeRequest[fieldName]){
+						requestsTobeSent[request][basicFieldName] = intakeRequest[fieldName];
+					}
+					else if (autoPopValues[fieldKey]) {
+						requestsTobeSent[request][basicFieldName] = autoPopValues[fieldKey];
+					}
+					else {
+						requestsTobeSent[request][basicFieldName] = field.default;
+					}
+			}
+	}
+	return requestsTobeSent;
+}
+
 //*******************************************************************
 
 module.exports.buildAutoPopulatedFields = buildAutoPopulatedFields;
+module.exports.populateValues = populateValues;
