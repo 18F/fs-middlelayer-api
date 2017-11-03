@@ -117,7 +117,7 @@ describe('Integration tests - noncommercial', function(){
 	it('should return valid json with 400 status for noncommercial POST request (contact search - duplicate contacts error)', function(done) {
 		const noncommercialInput = noncommercialFactory.create();
 		noncommercialInput.applicantInfo.organizationName = 'Temp Organization';
-		noncommercialInput.applicantInfo.orgType = 'ORGANIZATION';
+		noncommercialInput.applicantInfo.orgType = 'CORPORATION';
 		request(server)
 			.post(testURL)
 			.set('x-access-token', token)

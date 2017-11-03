@@ -40,38 +40,44 @@ function isAppFromPerson(body){
 /**
  * Gets the data from all fields that are to be send to the basic API, also builds post object, used to pass data to basic api
  * @param  {Array} fieldsToBasic - All fields in object form which will be sent to basicAPI
- * @param  {Object} body - user input
- * @param  {Object} autoPopValues - All values which have been auto-populated
- * @return {Object} - Array of post objects
+ * @return {Object} - Array of endpoints with which fields should go in them
  */
-function getBasicFields(fieldsToBasic, body, autoPopValues){
-	const postObjs = {}, requestsObj = {};
+function assignFieldsToEndpoints(fieldsToBasic){
+	const fieldsAssignedToEndpoints = {};
 	fieldsToBasic.forEach((field)=>{
 		const key = Object.keys(field)[0];
 		if (field[key].hasOwnProperty('basicStore')){
 			field[key].basicStore.forEach((location)=>{
-				if (requestsObj.hasOwnProperty(location)){
-					requestsObj[location][key] = field[key];
+				if (fieldsAssignedToEndpoints.hasOwnProperty(location)){
+					fieldsAssignedToEndpoints[location][key] = field[key];
 				}
 				else {
-					requestsObj[location] = {};
-					requestsObj[location][key] = field[key];
+					fieldsAssignedToEndpoints[location] = {};
+					fieldsAssignedToEndpoints[location][key] = field[key];
 				}
 			});
 		}
 	});
-	
+	return fieldsAssignedToEndpoints;
+}
+
+/**
+ * Gets the data from all fields that are to be send to the basic API, also builds post object, used to pass data to basic api
+ * @param  {Array} fieldsToBasic - All fields in object form which will be sent to basicAPI
+ * @param {Object} body - body of the incoming post request
+ * @param {Object} autoPopValues - field entries that did not come directly from a request
+ * @return {Object} - Array of endpoints with which fields should go in them
+ */
+function populateEnpointRequests(fieldsByEnpoint, body, autoPopValues){
+	const postObjs = {};
 	//requestsObj contains objects, labeled as each request that may be sent to the basic API, containing the fields
 	//which need to be included in that request
-	for (const request in requestsObj){
-		if (requestsObj.hasOwnProperty(request)){
+	for (const request in fieldsByEnpoint){
 			const obj = {};
 			obj[request] = {};
-			for (const fieldKey in requestsObj[request]){
-				if (requestsObj[request].hasOwnProperty(fieldKey)){
-					const field = requestsObj[request][fieldKey];
-					const fieldPath = fieldKey;
-					const splitPath = fieldPath.split('.');
+			for (const fieldKey in fieldsByEnpoint[request]){
+					const field = fieldsByEnpoint[request][fieldKey];
+					const splitPath = fieldKey.split('.');
 					let bodyField = body;
 					if (field.fromIntake){
 						splitPath.forEach((sp)=>{
@@ -82,6 +88,13 @@ function getBasicFields(fieldsToBasic, body, autoPopValues){
 								bodyField = field.default;
 							}
 						});
+						// let basicFieldName;
+						// if(!field.hasOwnProperty('basicField')){
+						// 	basicFieldName = field.basicField;
+						// }
+						// else {
+						// 	//basicFieldName =
+						// }
 						obj[request][field.basicField] = bodyField;
 					}
 					else {
@@ -92,10 +105,8 @@ function getBasicFields(fieldsToBasic, body, autoPopValues){
 							obj[request][field.basicField] = field.default;
 						}
 					}
-				}
 			}
 			postObjs[request] = obj[request];
-		}
 	}
 	return postObjs;
 }
@@ -110,7 +121,8 @@ function prepareBasicPost(validationSchema, body, person){
 	const fieldsToSend = [];
 	db.getFieldsToStore(validationSchema, fieldsToSend, '', 'basic');
 	const autoPopulateValues = autoPopulate.buildAutoPopulatedFields(fieldsToSend, person, body);
-	const populatedFieldsToSend = getBasicFields(fieldsToSend, body, autoPopulateValues);
+	const fieldsToSendByEndpoint = assignFieldsToEndpoints(fieldsToSend);
+	const populatedFieldsToSend = populateEnpointRequests(fieldsToSendByEndpoint, body, autoPopulateValues);
 	return populatedFieldsToSend;
 }
 
@@ -293,6 +305,8 @@ function postToBasic(req, res, validationSchema, body){
 
 			const person = isAppFromPerson(body);
 			const fieldsInBasicPostFormat = prepareBasicPost(validationSchema, body, person);
+			console.log("fieldsInBasicPostFormat:");
+			console.log(fieldsInBasicPostFormat);
 			const contactGETOptions = setContactGETOptions(body.applicantInfo, person, sudsToken, apiCallLogObject);
 			apiCallLogObject = contactGETOptions.apiCallLogObject;
 

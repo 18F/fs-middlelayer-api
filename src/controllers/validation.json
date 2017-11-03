@@ -40,6 +40,7 @@
                         "type": "string"
                     },
                     "orgType":{
+                      "basicField":"orgType",
                         "description":"Organization Type",
                         "enum":[
                             "Association",
@@ -241,7 +242,6 @@
                     "orgType":{
                         "basicField":"orgType",
                         "default":"",
-                        "description":"Organization Type",
                         "enum":[
                             "Association",
                             "Corporation",
