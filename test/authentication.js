@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -31,11 +31,8 @@ const loginFactory = factory.factory({'username': null, 'password': null});
 const noncommercialInput = include('test/data/testInputNoncommercial.json');
 const noncommercialFactory = factory.factory(noncommercialInput);
 
-const adminUsername = 'admin' + (Math.floor((Math.random() * 1000000) + 1)).toString();
-const adminPassword = 'pwd' + (Math.floor((Math.random() * 1000000) + 1)).toString();
-
-const userUsername = 'user' + (Math.floor((Math.random() * 1000000) + 1)).toString();
-const userPassword = 'pwd' + (Math.floor((Math.random() * 1000000) + 1)).toString();
+const adminCredentials = util.makeUserEntry('admin');
+const userCredentials = util.makeUserEntry('user');
 
 //*******************************************************************
 
@@ -48,17 +45,17 @@ describe('authentication validation', function() {
 
 		models.users.sync({ force: false });
 		const salt = bcrypt.genSaltSync(10);
-		const hash = bcrypt.hashSync(adminPassword, salt);
-		const userHash = bcrypt.hashSync(userPassword, salt);
+		const hash = bcrypt.hashSync(adminCredentials.pwd, salt);
+		const userHash = bcrypt.hashSync(userCredentials.pwd, salt);
 
 		const adminUser = {
-			userName: adminUsername, 
-			passHash: hash, 
+			userName: adminCredentials.un,
+			passHash: hash,
 			userRole: 'admin'
 		};
 		const userUser = {
-			userName: userUsername, 
-			passHash: userHash, 
+			userName: userCredentials.un,
+			passHash: userHash,
 			userRole: 'user'
 		};
 
@@ -69,10 +66,10 @@ describe('authentication validation', function() {
 			else {
 				db.saveUser(userUser, function(err){
 					if (!err){
-						util.getToken(adminUsername, adminPassword, function(t){
-							token = t; 
-						});	
-						util.getToken(userUsername, userPassword, function(t2){
+						util.getToken(adminCredentials.un, adminCredentials.pwd, function(t){
+							token = t;
+						});
+						util.getToken(userCredentials.un, userCredentials.pwd, function(t2){
 							userToken = t2;
 							return done();
 						});
@@ -80,24 +77,24 @@ describe('authentication validation', function() {
 				});
 			}
 		});
-		
+
 	});
-	
+
 	after(function(done) {
-		
-		db.deleteUser(adminUsername, function(err){
+
+		db.deleteUser(adminCredentials.un, function(err){
 			if (err){
 				return false;
 			}
 			else {
-				db.deleteUser(userUsername, function(err){
+				db.deleteUser(userCredentials.un, function(err){
 					if (!err){
 						return done();
 					}
 				});
 			}
 		});
-		
+
 	});
 
 	it('should return valid json with a 401 status code for invalid username or password', function(done) {
@@ -112,9 +109,9 @@ describe('authentication validation', function() {
 		request(server)
 			.post('/auth')
 			.set('Accept', 'application/json')
-			.send(loginFactory.create({username: adminUsername, password: adminPassword}))
+			.send(loginFactory.create({username: adminCredentials.un, password: adminCredentials.pwd}))
 			.expect(function(res){
-				expect(res.body).to.have.property('token'); 
+				expect(res.body).to.have.property('token');
 			})
 			.expect(200, done);
 	});
@@ -123,7 +120,7 @@ describe('authentication validation', function() {
 		request(server)
 			.post('/auth')
 			.set('Accept', 'application/json')
-			.send(loginFactory.create({username: adminUsername, password: 'invalidPwd'}))
+			.send(loginFactory.create({username: adminCredentials.un, password: 'invalidPwd'}))
 			.expect(401, done);
 	});
 

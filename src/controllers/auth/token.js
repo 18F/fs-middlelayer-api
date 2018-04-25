@@ -29,7 +29,7 @@ const JWT_SECRET_KEY = require('../vcap.js').JWT_SECRET_KEY;
  * @param  {Object}   res - Response object
  * @param  {Function} next - What to call after verifying token
  */
-const token = function(req, res, next){
+function token(req, res, next){
 
 	const token = req.body.token || req.query.token || req.headers['x-access-token'];
 
@@ -56,7 +56,7 @@ const token = function(req, res, next){
 		error.sendError(req, res, 403, 'No token provided.');
 	}
 
-};
+}
 
 //*******************************************************************=
 //exports

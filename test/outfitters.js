@@ -35,8 +35,7 @@ const bcrypt = require('bcrypt-nodejs');
 const db = include('src/controllers/db.js');
 const models = include('src/models');
 
-const adminUsername = 'admin' + (Math.floor((Math.random() * 1000000) + 1)).toString();
-const adminPassword = 'pwd' + (Math.floor((Math.random() * 1000000) + 1)).toString();
+const adminCredentials = util.makeUserEntry('admin');
 
 const specialUses = {};
 
@@ -57,6 +56,7 @@ const binaryParser = function (res, cb) {
 		cb(null, new Buffer(res.data, 'binary'));
 	});
 };
+
 function mockZip(){
 	sinon.stub(s3zipper.prototype, 'getFiles').callsFake(function(data, callback){
 		const output = {
@@ -116,6 +116,7 @@ function mockZip(){
 		return callback(null, 'result');
 	});
 }
+
 function unmockZip(){
 	s3zipper.prototype.getFiles.restore();
 	s3zipper.prototype.streamZipDataTo.restore();
@@ -133,10 +134,10 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 		models.users.sync({ force: false });
 		const salt = bcrypt.genSaltSync(10);
-		const hash = bcrypt.hashSync(adminPassword, salt);
+		const hash = bcrypt.hashSync(adminCredentials.pwd, salt);
 
 		const adminUser = {
-			userName: adminUsername,
+			userName: adminCredentials.un,
 			passHash: hash,
 			userRole: 'admin'
 		};
@@ -147,7 +148,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 			}
 			else {
 
-				util.getToken(adminUsername, adminPassword, function(t){
+				util.getToken(adminCredentials.un, adminCredentials.pwd, function(t){
 					token = t;
 					return done();
 				});
@@ -159,7 +160,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	after(function(done) {
 
-		db.deleteUser(adminUsername, function(err){
+		db.deleteUser(adminCredentials.un, function(err){
 			if (err){
 				return false;
 			}
@@ -355,10 +356,10 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 
 		models.users.sync({ force: false });
 		const salt = bcrypt.genSaltSync(10);
-		const hash = bcrypt.hashSync(adminPassword, salt);
+		const hash = bcrypt.hashSync(adminCredentials.pwd, salt);
 
 		const adminUser = {
-			userName: adminUsername,
+			userName: adminCredentials.un,
 			passHash: hash,
 			userRole: 'admin'
 		};
@@ -369,7 +370,7 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 			}
 			else {
 
-				util.getToken(adminUsername, adminPassword, function(t){
+				util.getToken(adminCredentials.un, adminCredentials.pwd, function(t){
 					token = t;
 					return done();
 				});
@@ -385,7 +386,7 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 			unmockZip();
 		}
 
-		db.deleteUser(adminUsername, function(err){
+		db.deleteUser(adminCredentials.un, function(err){
 			if (err){
 				return false;
 			}
