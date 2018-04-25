@@ -20,7 +20,9 @@ jobs:
           - fs-ml-deps-
       - run:
           name: Install dependencies
-          command: npm install
+          command: |
+            npm install
+            npm install -g instabul
       - save_cache:
           paths:
             - ./node_modules
