@@ -21,6 +21,7 @@ jobs:
           command: |
             npm install
             sudo npm install -g istanbul
+            sudo npm install -g snyk
       - save_cache:
           paths:
             - ./node_modules
@@ -31,6 +32,9 @@ jobs:
       - run:
           name: Lint check
           command: npm run lint
+      - run:
+          name: Snyk vulnerability test
+          command: snyk test
       - run:
           name: Run tests
           command: |
