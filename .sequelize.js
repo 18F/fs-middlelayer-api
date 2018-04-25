@@ -17,7 +17,8 @@ const dbConfig = {
 	seederStorage: 'sequelize'
 };
 
-if (dbParams.hostname !== 'localhost') {
+if (dbParams.hostname !== 'localhost' &&
+	dbParams.hostname !== '127.0.0.1') {
 	dbConfig.ssl = true;
 	dbConfig.dialectOptions = {
 		ssl:{
