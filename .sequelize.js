@@ -11,6 +11,7 @@ const dbConfig = {
 	password: dbAuth[1],
 	host: dbParams.hostname,
 	port: dbParams.port,
+	ssl: false,
 	dialect: dbParams.protocol.split(':')[0],
 	logging: console.log,
 	seederStorage: 'sequelize'
