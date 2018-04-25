@@ -22,7 +22,7 @@ jobs:
           name: Install dependencies
           command: |
             npm install
-            npm install -g instabul
+            npm install -g istanbul
       - save_cache:
           paths:
             - ./node_modules
