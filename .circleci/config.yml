@@ -34,8 +34,8 @@ jobs:
       - run:
           name: Run tests
           command: |
-            - istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive
-            - codecov
+            istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive
+            codecov
   prod-deploy:
     docker:
       - image: circleci/node:6.10.2
