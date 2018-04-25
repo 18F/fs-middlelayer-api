@@ -20,7 +20,7 @@ jobs:
           name: Install dependencies
           command: |
             npm install
-            
+            sudo npm install -g istanbul
       - save_cache:
           paths:
             - ./node_modules
@@ -34,7 +34,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            ./node_modules/istanbul/bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive
+            istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive
             ./node_modules/codecov/bin/codecov
   prod-deploy:
     docker:
