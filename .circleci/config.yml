@@ -2,7 +2,7 @@ version: 2
 jobs:
   run-tests:
     docker:
-      - image: circleci/node:6.10.2
+      - image: circleci/node:8.9.4
         environment:
           DATABASE_URL: "postgres://ubuntu@localhost/circle_test"
       - image: postgres:9.6.3
