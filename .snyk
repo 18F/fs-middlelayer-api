@@ -38,10 +38,16 @@ patch:
   'npm:minimatch:20160620':
     - sequelize-cli > gulp > vinyl-fs > glob-stream > glob > minimatch:
         patched: '2018-04-25T20:01:52.337Z'
+      sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > minimatch:
+        patched: '2018-04-26T16:47:03.203Z'
     - sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > minimatch:
         patched: '2018-04-25T20:01:52.337Z'
+      sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > glob > minimatch:
+        patched: '2018-04-26T16:47:03.203Z'
     - sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > glob > minimatch:
         patched: '2018-04-25T20:01:52.337Z'
+      sequelize-cli > gulp > vinyl-fs > glob-stream > minimatch:
+        patched: '2018-04-26T16:47:03.203Z'
     - sequelize-cli > gulp > vinyl-fs > glob-stream > minimatch:
         patched: '2018-04-25T20:01:52.337Z'
   'npm:moment:20170905':
