@@ -5,6 +5,10 @@ const url = require('url');
 const dbParams = url.parse(process.env.DATABASE_URL, true);
 const dbAuth = dbParams.auth.split(':');
 
+const Sequelize = require('sequelize');
+const Operators = Sequelize.Op;
+
+
 const dbConfig = {
 	database: dbParams.pathname.split('/')[1],
 	username: dbAuth[0],
@@ -14,7 +18,8 @@ const dbConfig = {
 	ssl: false,
 	dialect: dbParams.protocol.split(':')[0],
 	logging: console.log,
-	seederStorage: 'sequelize'
+	seederStorage: 'sequelize',
+	operatorAliases: false
 };
 
 if (dbParams.hostname !== 'localhost' &&
