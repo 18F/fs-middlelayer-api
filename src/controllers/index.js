@@ -292,7 +292,7 @@ const postApplication = function(req, res, reqData){
 	console.log(body);
 	const possbileFiles = [];
 
-	const schema = validation.getValidationSchema(pathData);
+	const schema = validation.selectValidationSchema(pathData);
 	const sch = derefFunc(schema.schemaToUse, [schema.fullSchema], true);
 	const allErrors = validation.getFieldValidationErrors(body, pathData, sch);
 	
