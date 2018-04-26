@@ -20,7 +20,7 @@
     "doc": "./node_modules/.bin/jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -R README.md -r .",
     "postinstall": "npm run doc",
     "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "prepare": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
