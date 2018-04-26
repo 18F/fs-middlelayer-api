@@ -19,7 +19,9 @@
     "lint:md": "markdownlint ./docs ./README.md || exit 0",
     "dba": "sequelize db:migrate && sequelize db:seed:all",
     "doc": "./node_modules/.bin/jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -R README.md -r .",
-    "postinstall": "npm run doc"
+    "postinstall": "npm run doc",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "repository": {
     "type": "git",
@@ -93,6 +95,8 @@
     "sinon": "^2.3.4",
     "url": "^0.11.0",
     "util": "^0.10.3",
-    "uuid": "^3.0.1"
-  }
+    "uuid": "^3.0.1",
+    "snyk": "^1.73.0"
+  },
+  "snyk": true
 }

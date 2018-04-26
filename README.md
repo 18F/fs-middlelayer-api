@@ -53,6 +53,8 @@ This repository was partially developed under a task order of the Agile Blanket 
       - username
       - password
 
+ - Additional environment variable for Circle: SNYK_TOKEN
+
 - API user account:
   - To create an API user account, run `node cmd/createUser.js -u <username> -p <password> -r <userrole>`. The user role is either 'user' or 'admin'. The ‘admin’ role has permission to access all routes, but the ‘user’ role does not currently have permission to access any routes.
 
