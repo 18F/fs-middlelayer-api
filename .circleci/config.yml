@@ -42,7 +42,7 @@ jobs:
             ./node_modules/codecov/bin/codecov
       - run:
           name: Clean s3 bucket
-          command: ./circleci/clean-s3-bucket.sh
+          command: ./.circleci/clean-s3-bucket.sh
 
   prod-deploy:
     docker:
