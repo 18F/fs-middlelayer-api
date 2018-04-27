@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -22,7 +22,7 @@ const server = include('src/index.js');
 
 function getToken(username, password, callback){
 
-	let token; 
+	let token;
 
 	request(server)
 		.post('/auth')
@@ -37,12 +37,20 @@ function getToken(username, password, callback){
 			}
 			token = res.body.token;
 			return callback(token);
-				
-		});
 
+		});
+}
+
+function randomEndString(){
+	return (Math.floor((Math.random() * 1000000) + 1)).toString();
+}
+
+function makeUserEntry(type){
+	return {'un': type + randomEndString(), 'pwd': 'pwd' + randomEndString()};
 }
 
 //*******************************************************************
 // exports
 
 module.exports.getToken = getToken;
+module.exports.makeUserEntry = makeUserEntry;

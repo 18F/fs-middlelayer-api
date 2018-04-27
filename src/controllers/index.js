@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -28,7 +28,7 @@ const error = require('./errors/error.js');
 const get = require('./get.js');
 const store = require('./store.js');
 const db = require('./db.js');
-const basic = require('./basic.js');
+const basic = require('./nrmconnection');
 const validation = require('./validation.js');
 const fileValidation = require('./fileValidation.js');
 const util = require('./utility.js');
@@ -52,14 +52,14 @@ function apiSchemaData(apiSchema, reqPath){
 				const ms = matchstick(k, 'template');
 				ms.match(reqPath);
 
-				if ( ms.match(reqPath) ) { 
+				if ( ms.match(reqPath) ) {
 
 					return {
 						path: k,
 						tokens: ms.tokens,
 						matches: ms.matches
 					};
-				}	
+				}
 			}
 		}
 	}
@@ -101,7 +101,7 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 							else {
 								return callback (null);
 							}
-						});	
+						});
 					}
 				});
 			}
@@ -128,11 +128,11 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
  * @param  {Object} res - response object
  * @param  {Object} reqData - Object containing information about the request and the route requested
  * @param  {String} reqData.path - Path being requested
- * @param  {Array} reqData.tokens - Array of all tokens present in path being requested 
+ * @param  {Array} reqData.tokens - Array of all tokens present in path being requested
  * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
  * @param  {Object} reqData.schema - Schema of the route requested
  */
-const getControlNumberFileName = function(req, res, reqData) {
+function getControlNumberFileName(req, res, reqData) {
 
 	const controlNumber = reqData.matches.controlNumber;
 	const fileName = reqData.matches.fileName;
@@ -143,7 +143,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 
 		if (err){
 			console.error(err);
-			error.sendError(req, res, 500, 'error while getting file from data store.');	
+			error.sendError(req, res, 500, 'error while getting file from data store.');
 		}
 		else {
 			if (file){
@@ -156,7 +156,7 @@ const getControlNumberFileName = function(req, res, reqData) {
 					}
 					else {
 						res.attachment(file.fileName);
-						res.send(data.Body);	
+						res.send(data.Body);
 					}
 
 				});
@@ -166,19 +166,19 @@ const getControlNumberFileName = function(req, res, reqData) {
 			}
 		}
 	});
-	
-};
+
+}
 
 /** Controller for GET routes with only a control number
  * @param  {Object} req - request object
  * @param  {Object} res - response object
  * @param  {Object} reqData - Object containing information about the request and the route requested
  * @param  {String} reqData.path - Path being requested
- * @param  {Array} reqData.tokens - Array of all tokens present in path being requested 
+ * @param  {Array} reqData.tokens - Array of all tokens present in path being requested
  * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
  * @param  {Object} reqData.schema - Schema of the route requested
  */
-const getControlNumber = function(req, res, reqData){
+function getControlNumber(req, res, reqData){
 	const pathData = reqData.schema;
 	const fileTypes = {
 		'gud': 'guideDocumentation',
@@ -198,7 +198,7 @@ const getControlNumber = function(req, res, reqData){
 
 			if (err) {
 				console.error(err);
-				return error.sendError(req, res, 500, 'error while getting application from the database.');	
+				return error.sendError(req, res, 500, 'error while getting application from the database.');
 			}
 
 			else if (fileData){
@@ -207,17 +207,17 @@ const getControlNumber = function(req, res, reqData){
 
 					if (err){
 						error.sendError(req, res, 404, 'file not found in data store.');
-					}			
+					}
 
-				});	
-				
+				});
+
 			}
 			else {
-				error.sendError(req, res, 404, 'file not found in the database.');	
+				error.sendError(req, res, 404, 'file not found in the database.');
 			}
-	
+
 		});
-		
+
 	}
 	else {
 
@@ -242,9 +242,9 @@ const getControlNumber = function(req, res, reqData){
 						return error.sendError(req, res, 500, 'error while getting application from the database.');
 					}
 					else {
-						
+
 						if (!appl){
-							return error.sendError(req, res, 404, 'application not found in the database.');		
+							return error.sendError(req, res, 404, 'application not found in the database.');
 						}
 						else if (fileData){
 							fileData.forEach(function(file){
@@ -270,7 +270,7 @@ const getControlNumber = function(req, res, reqData){
 
 	}
 
-};
+}
 
 //*************************************************************
 
@@ -279,11 +279,11 @@ const getControlNumber = function(req, res, reqData){
  * @param  {Object} res - response object
  * @param  {Object} reqData - Object containing information about the request and the route requested
  * @param  {String} reqData.path - Path being requested
- * @param  {Array} reqData.tokens - Array of all tokens present in path being requested 
+ * @param  {Array} reqData.tokens - Array of all tokens present in path being requested
  * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
  * @param  {Object} reqData.schema - Schema of the route requested
  */
-const postApplication = function(req, res, reqData){
+function postApplication(req, res, reqData){
 
 	const pathData = reqData.schema;
 
@@ -292,8 +292,8 @@ const postApplication = function(req, res, reqData){
 	console.log(body);
 	const possbileFiles = [];
 
-	const schema = validation.selectValidationSchema(pathData);
-	const routeRequestSchema = derefFunc(schema.schemaToUse, [schema.fullSchema], true);
+	const validationSchema = validation.selectValidationSchema(pathData);
+	const routeRequestSchema = derefFunc(validationSchema.schemaToUse, [validationSchema.fullSchema], true);
 	const allErrors = validation.getFieldValidationErrors(body, pathData, routeRequestSchema);
 	
 	//Files to validate are in possbileFiles
@@ -334,7 +334,7 @@ const postApplication = function(req, res, reqData){
 							jsonResponse.controlNumber = controlNumber;
 							console.log(JSON.stringify(postObject, null, 4));
 							return res.json(jsonResponse);
-							
+
 						}
 					});
 				}
@@ -345,25 +345,25 @@ const postApplication = function(req, res, reqData){
 			console.error(err);
 			if (err instanceof DuplicateContactsError){
 				if (err.duplicateContacts){
-					return error.sendError(req, res, 400, err.duplicateContacts.length + ' duplicate contacts found.', err.duplicateContacts);		
+					return error.sendError(req, res, 400, err.duplicateContacts.length + ' duplicate contacts found.', err.duplicateContacts);
 				}
 				else {
-					return error.sendError(req, res, 400, 'duplicate contacts found.');	
+					return error.sendError(req, res, 400, 'duplicate contacts found.');
 				}
 			}
 			else {
-				return error.sendError(req, res, 500, 'unable to process request.');	
+				return error.sendError(req, res, 500, 'unable to process request.');
 			}
 		});
 	}
-};
+}
 
 /**
  * Takes in request and calls functions based on what route was called
  * @param  {Object} req - User request object
  * @param  {Object} res - Response object
  */
-const routeRequest = function(req, res){
+function routeRequest(req, res){
 
 	const reqPath = `/${req.params[0]}`;
 	const reqMethod = req.method.toLowerCase();
@@ -390,7 +390,7 @@ const routeRequest = function(req, res){
 						return error.sendError(req, res, 500, 'No endpoint success found.');
 					}
 					else {
-						
+
 						const schemaData = apiSchema.paths[apiPath][reqMethod];
 
 						const reqData = {
@@ -407,7 +407,7 @@ const routeRequest = function(req, res){
 
 							}
 							else {
-				
+
 								getControlNumber(req, res, reqData);
 							}
 
@@ -415,7 +415,7 @@ const routeRequest = function(req, res){
 						else if (reqMethod === 'post') {
 							postApplication(req, res, reqData);
 						}
-		
+
 					}
 				}
 			}
@@ -424,10 +424,9 @@ const routeRequest = function(req, res){
 	else {
 		return error.sendError(req, res, 404, 'Invalid endpoint.');
 	}
-};
+}
 
 //*******************************************************************
 // exports
 
 module.exports.routeRequest = routeRequest;
-

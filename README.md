@@ -1,3 +1,5 @@
+# US Forest Service ePermit Middlelayer API
+
 [![FS ePermit API](https://img.shields.io/badge/-ePermit-006227.svg?colorA=FFC526&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAMAAAAolt3jAAACFlBMVEUAAAD%2F%2FyXsvSW8qiXLsCXjuSXyvyX7wiX2wSXqvCXUsyXBrCXvviX%2F%2FyX8yCWUmyVliSV%2FkyV7kSWIlyV0jiWZnSX9yCXNsSXRsiXWtCVWgyVYhCXZtiX%2FyCV8kiV%2BkiX%2FyiX%2FzCWIliWElSX%2FzSX2wiVniSV3kCX2wiXUtCU5eCVujCXWtCW%2FqyXDrSWtpCWwpSWmoiWypiXeuCWJlyWPmSXiuiX%2F1CXsvSXFriW4qSWrpCWElCVdhiWSmiW3qCXCrSXQsiXyvyX%2F1CX%2F%2FyP%2F5yX%2F0iX%2FxCXrvCX%2FxiX%2F0iX%2F5yUcbCU6eCVAeiUfbiVEfCVEfCVZhCVEfCUzdSUtcyVAeyVNfyVZhCVGfSVEfCUqciUSaSUIZCUYayWPmSUUaiUCYiUVaiU1diVjiCUjcCVNfyVFfCXnuyU%2FeiUqciVliSVPgCWQmSUlcCVQgSV7kSX%2FxiWHliVPgCWPmSUtcyWLlyUibyVXgyWzpyX%2FxyXJryUXayVahCWIliWOmCU4eCV2jyXBrCXcuCXMsSVbhSUYaiV1jyU4eCVOgCVujCU6eCUudCWAkyUlcCVEfCVehiVYhCU%2FeiVvjSUSaSUAYiUAYiU1diWAlCUxdSUAYSUBYiUTaSVvjSVqiyVGfSUcbCUQaCUPaCUNZyULZiURaSUYayU6eCVehiVehiV1jyVmiSVOgCVRgSVSgSV2jyVxjSVvjSVMulUvAAAATHRSTlMAAGrao3NYUFdvndVtADfb%2Ffn2%2BP3cOMHAl%2F39lT7v7jsx6eozTPT2UoT%2B%2F4%2FGz%2FL46ut68%2FJ4B1Kau9Pu%2F%2BzQt5NMBgAKGUikQxYIJokgEwAAAFtJREFUCNdjZGBEBiwMvIy2jIcZGRkZrRiPMTIyiFsiJPcxMkgyOsJ4OxhZGFgYOeE6SeMyMuhGI0yew8LAxI3gMqFxGRmMGUthvBZGRgZzFEczMDC4QJlbGRgA3KAIv74V5FUAAAAASUVORK5CYII%3D)](README.md)
 [![TravisCI](https://travis-ci.org/nci-ats/fs-middlelayer-api.svg?branch=dev)](https://travis-ci.org/nci-ats/fs-middlelayer-api)
 [![Code Climate](https://codeclimate.com/github/nci-ats/fs-middlelayer-api/badges/gpa.svg)](https://codeclimate.com/github/nci-ats/fs-middlelayer-api)
@@ -14,18 +16,18 @@
 [![Semver](https://img.shields.io/badge/SemVer-2.0-blue.svg)](http://semver.org/spec/v2.0.0.html)
 [![license](https://img.shields.io/badge/license-CC0--1.0-blue.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
 
-# US Forest Service ePermit Middlelayer API
-
 A repository for the development of an API to support the public facing ePermit system to connect to the related Forest Service database, the Special Use Data System (SUDS) located in the National Resource Management System.
 
 This repository was partially developed under a task order of the Agile Blanket Purchase Agreement.
 
 ## Table of Contents
+
 - [Setup](#setup)
 - [Configuration](#configuration)
 - [Dependencies](#dependencies)
 - [Creating a new permit type](#creating-a-new-permit-type)
 - [Authentication](#authentication-process)
+- [Environment Variables](#environment-variables)
 - [Continuous integration and deployment](#continuous-integration-and-deployment)
 - [Code quality and coverage](#code-quality-and-coverage)
 - [File storage - AWS / S3](#file-storage---aws--s3)
@@ -38,29 +40,10 @@ This repository was partially developed under a task order of the Agile Blanket 
 
 1. Clone or download this repository.
 2. Run `npm install` to install application and all dependencies.
-3. Run `npm start` to start Node.js server.
-
-## Configuration
-
-- Environment variables:
-  - PORT | Default: 8000
-  - DATABASE_URL | Format: postgres://user:password@host:port/database
-  - VCAP_SERVICES
-    - S3 credentials for s3 aws bucket
-    - nrm-suds-url-service
-      - SUDS_API_URL
-        - To use the moxai dependency and point at the mock API, update this to be `MOCKS`.
-      - username
-      - password
-
- - Additional environment variable for Circle: SNYK_TOKEN
-
-- API user account:
-  - To create an API user account, run `node cmd/createUser.js -u <username> -p <password> -r <userrole>`. The user role is either 'user' or 'admin'. The ‘admin’ role has permission to access all routes, but the ‘user’ role does not currently have permission to access any routes.
-
-- Dotenv:
-  - [Dotenv](https://www.npmjs.com/package/dotenv) is used which can load environment variables from a .env file into process.env
-  - Example: PORT=8080
+3. Set the [environment variables](#environment-variables)
+4. Setup a database and run `npm run dba`.
+5. [Create a test user](#create-a-user).
+6. Run `npm start` to start Node.js server.
 
 ## Dependencies
 
@@ -109,7 +92,7 @@ These steps define the process for creating a new permit type using Example Perm
                 }
             }
 
-        Intake options include:
+        `Intake` is a term for the origin of the field. Acceptable options for `intake`:
         - `middleLayer/<fieldName>`
           - From the application table in middleLayer database, column name `<fieldName>`
         - `addresses/<fieldName>`
@@ -164,7 +147,7 @@ These steps define the process for creating a new permit type using Example Perm
                     "default":"",
                     "fromIntake":true,
                     "pattern":"^[0-9]{2}$",
-                    "store":["middleLayer:district"],
+                    "basicStore":true,
                     "type" : "string"
                 },
                 "firstName": {
@@ -172,7 +155,7 @@ These steps define the process for creating a new permit type using Example Perm
                     "default":"",
                     "fromIntake":true,
                     "maxLength":255,
-                    "store":["basic:/contact/person"],
+                    "basicStore":["/contact/person"],
                     "type": "string"
                 },
                 "securityId":{
@@ -196,14 +179,14 @@ These steps define the process for creating a new permit type using Example Perm
                         ],
                         "function":"concat"
                     },
-                    "store":["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
+                    "basicStore":["/application", "/contact/address", "/contact/phone"],
                     "type" : "string"
                 },
                 "exampleDocumentation": {
                     "filetypecode":"exd",
                     "maxSize": 25,
                     "requiredFile":false,
-                    "store":["middleLayer:exampleDocumentation"],
+                    "localStore":["exampleDocumentation"],
                     "type": "file",
                     "validExtensions":[
                         "pdf",
@@ -214,9 +197,15 @@ These steps define the process for creating a new permit type using Example Perm
                 },
 
 
-          - `fromIntake` indicates whether the field will be directly populated with user input. If set to `false`, the API will populate this field using the strings and fields provided under `madeOf`.
+          - `fromIntake {Boolean} default:true`: indicates whether the field will be directly populated with user input. If set to `false`, the API will populate this field using the strings and fields provided under `madeOf`.
 
-          - `store` describes where this field should be stored, either in the middlelayer DB or in the basic API. It can list multiple places to store this field
+          - `basicStore {Boolean} default:false` describes which endpoints in the basic api, the fields will be sent to. Endpoint options include:
+              - `/application`
+              - `/contact/person`
+              - `/contact/address`
+              - `/contact/phone`
+
+          - `localStore {Boolean} default:false` whether to store the field in the database.
 
           - `madeOf` describes how to auto-populate the field, if fromIntake is false.
             - `fields` lists the fields, and values which are to be used when auto-populating the field.
@@ -229,13 +218,6 @@ These steps define the process for creating a new permit type using Example Perm
           Files:
           - `maxSize` is measured in megabytes
 
-          Store options include:
-          - `middleLayer:<fieldName>`
-          - `basic:/application`
-          - `basic:/contact/person`
-          - `basic:/contact/address`
-          - `basic:/contact/phone`
-
           If the store contains one of the `basic` type options, `basicField` attribute must be included. This is the name of the field used to submit this data to the Basic API.
 
 2. Extend the schema, if necessary.
@@ -243,7 +225,7 @@ These steps define the process for creating a new permit type using Example Perm
     2. If there are routing changes, update `src/controllers/index.js`.
     3. If there are validation changes, update `src/controllers/validation.js` and/or `src/controllers/fileValidation.js` as needed.
     4. If there are any changes on how the files are to be stored, update `src/controllers/store.js`.
-    5. If there are any changes on how the requests are made to Basic API, update `src/controllers/basic.js`.
+    5. If there are any changes on how the requests are made to Basic API, update `src/controllers/nrmconnection` directory.
 
 ## Authentication process
 
@@ -259,6 +241,10 @@ A separate route, `/auth`, generates token. This token-based authentication is h
 - `jsonwebtoken`
 
 This API uses the `passport-local` strategy. This strategy authenticates users with a username and password and verifies that information against the database. When the user enters a username and password, the `bcrypt-nodejs` module verifies the submitted password against the hash in the database. Upon successful authentication, the application sends back a token using the `jsonwebtoken` module. The `jsonwebtoken` module uses a secret key, stored as an environment variable, to generate the token, which is set to be valid for 120 minutes.
+
+### Create a user
+
+To create an API user account, run `node cmd/createUser.js -u <username> -p <password> -r <userrole>`. The user role is either 'user' or 'admin'. The ‘admin’ role has permission to access all routes, but the ‘user’ role does not currently have permission to access any routes.
 
 ## Continuous integration and deployment
 
@@ -292,14 +278,14 @@ We are using the following packages for maintaining code quality and coverage.
 The linting configuration and rules are provided in the `.markdownlint.json` file.
 Use `npm run lint:md` to run MarkdownLint.
 
-####  JSDoc
+#### JSDoc
 
 [JSDoc](https://www.npmjs.com/package/jsdoc) is an API documentation generator for JavaScript.
 JSDoc documentation is available in the `/docs/code` folder and accessed via `<application-URL>/docs/code`. Use `npm run doc` to run JSDoc.
 
 ### Code Coverage
 
-####  Codecov
+#### Codecov
 
 We use [Istanbul](https://www.npmjs.com/package/istanbul) to run the Mocha test cases. [Codecov](https://www.npmjs.com/package/codecov) makes the Instanbul test coverage report available to Travis CI.
 Using `npm run coverage` runs the `istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive` command. This command runs the tests and creates the report in `/coverage`. The coverage indicates the percentage of code covered by unit testing.
@@ -334,6 +320,9 @@ These are the environment variables that must be created on the Node.js server f
 - `JWT_SECRET_KEY=<secret key to generate tokens>`
 - `VCAP_SERVICES=an object to replicate the bound services of the SUDS_API_URL and the S3 bucket`
 
+#### CI 
+   - Additional environment variable for Circle: SNYK_TOKEN
+   
 ### Creating API User Accounts Using Environment Variables
 
 User accounts will be created only if these variable are present:
@@ -345,7 +334,9 @@ User accounts will be created only if these variable are present:
 
 ### Setting Environment Variables
 
-The [dotenv](https://www.npmjs.com/package/dotenv) npm package is used to load environment variables to the application for local development.
+The [dotenv](https://www.npmjs.com/package/dotenv) npm package is used to load environment variables to the application for local development.from a .env file into process.env
+
+`Example: PORT=8080`
 
 ### Setting AWS Credentials
 
@@ -362,8 +353,8 @@ Database migrations and filetypes can be populated using the `npm run dba` comma
 Models are a JavaScript factory class that represents a table in the database. Models are located under `/src/models`.
 
 ## Schema spec
-The json schema was extended for this project. See the [schema extension here](/docs/spec.json).
 
+The json schema was extended for this project. See the [schema extension here](/docs/spec.json).
 
 ## Automated tests
 
@@ -387,6 +378,7 @@ We use the [Mocha testing framework](https://www.npmjs.com/package/mocha) with t
 
 Unit testing tests a particular javascript function (e.g., checking a phone number).
 These two files contain unit testing test cases:
+
 - `test/controllers-test.js`
 - `test/functions-test.js`
 
@@ -395,6 +387,7 @@ These two files contain unit testing test cases:
 API tests run the test case against the API routes.
 
 These three files contain the API testing test cases:
+
 - `test/authentication.js`
 - `test/noncommercial.js`
 - `test/outfitters.js`

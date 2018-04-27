@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -25,14 +25,14 @@ const error = include('src/controllers/errors/error.js');
  * @param  {Object}   res - Response object
  * @param  {Function} next - What to call after authorizing user
  */
-const authorize = function(req, res, next){
+function authorize(req, res, next){
 
 	if (req.decoded.role === 'admin'){
 		return next();
 	}
-	
+
 	error.sendError(req, res, 403, 'Forbidden.');
-};
+}
 
 //*******************************************************************=
 //exports

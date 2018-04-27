@@ -36,10 +36,11 @@
                         "basicField":"orgCode",
                         "default":"",
                         "fromIntake":true,
-                        "store":["basic:/contact/organization"],
+                        "basicStore":["/contact/organization"],
                         "type": "string"
                     },
                     "orgType":{
+                      "basicField":"orgType",
                         "description":"Organization Type",
                         "enum":[
                             "Association",
@@ -54,8 +55,17 @@
                             "Person",
                             "Trust"
                         ],
-                        "fromIntake":true,
-                        "store":["basic:/contact/organization"],
+                        "madeOf":{
+                            "fields":[
+                                {
+                                    "fromIntake":true,
+                                    "field":"applicantInfo.orgType"
+                                }
+                            ],
+                            "function":"contId"
+                        },
+                        "fromIntake":false,
+                        "basicStore":["/contact/organization"],
                         "type":"string"
                     }
                 },
@@ -71,51 +81,52 @@
             "individualIsCitizen": {
                 "default":false,
                 "fromIntake":true,
-                "store":["middleLayer:individualIsCitizen"],
+                "localStore": true,
                 "type":"boolean"
             },
             "smallBusiness": {
                 "default":false,
                 "fromIntake":true,
-                "store":["middleLayer:smallBusiness"],
+                "localStore":true,
                 "type":"boolean"
             },
             "activityDescription": {
                 "basicField":"purpose",
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:activityDescription", "basic:/application"],
+                "localStore":true,
+                "basicStore":["/application"],
                 "type": "string"
             },
             "advertisingURL": {
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:advertisingURL"],
+                "localStore":true,
                 "type": "string"
             },
             "advertisingDescription": {
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:advertisingDescription"],
+                "localStore":true,
                 "type": "string"
             },
             "clientCharges": {
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:clientCharges"],
+                "localStore":true,
                 "type": "string"
             },
             "experienceList": {
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:experienceList"],
+                "localStore":true,
                 "type": "string"
             },
             "guideDocumentation": {
                 "filetypecode":"gud",
                 "maxSize": 25,
                 "requiredFile":false,
-                "store":["middleLayer:guideDocumentation"],
+                "localStore":true,
                 "type": "file",
                 "validExtensions":[
                     "pdf",
@@ -130,7 +141,7 @@
                 "filetypecode":"arf",
                 "maxSize": 10,
                 "requirequiredFilered":false,
-                "store":["middleLayer:acknowledgementOfRiskForm"],
+                "localStore":true,
                 "type": "file",
                 "validExtensions":[
                     "pdf",
@@ -143,7 +154,7 @@
                 "filetypecode":"inc",
                 "maxSize": 10,
                 "requiredFile":true,
-                "store":["middleLayer:insuranceCertificate"],
+                "localStore":true,
                 "type": "file",
                 "validExtensions":[
                     "pdf",
@@ -156,7 +167,7 @@
                 "filetypecode":"gse",
                 "maxSize": 10,
                 "requiredFile":false,
-                "store":["middleLayer:acknowledgementOfRiskForm"],
+                "localStore":true,
                 "type": "file",
                 "validExtensions":[
                     "pdf",
@@ -169,7 +180,7 @@
                 "filetypecode":"opp",
                 "maxSize": 10,
                 "requiredFile":false,
-                "store":["middleLayer:operatingPlan"],
+                "localStore":true,
                 "type": "file",
                 "validExtensions":[
                     "pdf",
@@ -181,7 +192,8 @@
             "formName":{
                 "basicField":"formName",
                 "default":"FS-2700-4I",
-                "store":["middleLayer:formName", "basic:/application"],
+                "localStore":true,
+                "basicStore": ["application"],
                 "type":"string"
             }
         },
@@ -233,13 +245,12 @@
                         "basicField":"orgCode",
                         "default":"",
                         "fromIntake":true,
-                        "store":["basic:/contact/organization"],
+                        "basicStore":["/contact/organization"],
                         "type": "string"
                     },
                     "orgType":{
                         "basicField":"orgType",
                         "default":"",
-                        "description":"Organization Type",
                         "enum":[
                             "Association",
                             "Corporation",
@@ -253,8 +264,17 @@
                             "Person",
                             "Trust"
                         ],
-                        "fromIntake":true,
-                        "store":["basic:/contact/organization"],
+                        "madeOf":{
+                            "fields":[
+                                {
+                                    "fromIntake":true,
+                                    "field":"applicantInfo.orgType"
+                                }
+                            ],
+                            "function":"contId"
+                        },
+                        "fromIntake":false,
+                        "basicStore":["/contact/organization"],
                         "type":"string"
                     }
                 },
@@ -272,46 +292,47 @@
             "activityDescription": {
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:activityDescription"],
+                "localStore":true,
                 "type": "string"
             },
             "locationDescription": {
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:locationDescription"],
+                "localStore":true,
                 "type": "string"
             },
             "startDateTime": {
                 "default":"",
                 "fromIntake":true,
                 "pattern":"\\d{4}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d([+-][0-2]\\d:[0-5]\\d|Z)",
-                "store":["middleLayer:startDatetime"],
+                "localStore":true,
                 "type": "string"
             },
             "endDateTime": {
                 "default":"",
                 "fromIntake":true,
                 "pattern":"\\d{4}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d([+-][0-2]\\d:[0-5]\\d|Z)",
-                "store":["middleLayer:endDatetime"],
+                "localStore":true,
                 "type": "string"
             },
             "numberParticipants": {
                 "default":0,
                 "fromIntake":true,
-                "store":["middleLayer:numberParticipants"],
+                "localStore":true,
                 "type": "integer"
             },
             "numberSpectators": {
                 "default":0,
                 "fromIntake":true,
-                "store":["middleLayer:numberSpectators"],
+                "localStore":true,
                 "type": "integer"
             },
             "formName":{
                 "basicField":"formName",
                 "default":"FS-2700-3B",
                 "fromIntake":false,
-                "store":["middleLayer:formName", "basic:/application"],
+                "localStore":true,
+                "basicStore": ["/application"],
                 "type":"string"
             },
             "purpose":{
@@ -395,7 +416,7 @@
                     ],
                     "function":"concat"
                 },
-                "store":["basic:/application"],
+                "basicStore":["/application"],
                 "type":"string"
             }
         },
@@ -410,7 +431,7 @@
                 "default":"0",
                 "fromIntake":true,
                 "pattern":"^[0-9]{3}$",
-                "store":["basic:/contact/phone"],
+                "basicStore":["/contact/phone"],
                 "type": "string"
             },
             "number": {
@@ -418,7 +439,7 @@
                 "default":"0",
                 "fromIntake":true,
                 "pattern":"^[0-9]{7}$",
-                "store":["basic:/contact/phone"],
+                "basicStore":["/contact/phone"],
                 "type": "string"
             },
             "extension": {
@@ -426,14 +447,14 @@
                 "default":"",
                 "fromIntake":true,
                 "pattern": "[\\d]+",
-                "store":["basic:/contact/phone"],
+                "basicStore":["/contact/phone"],
                 "type": "string"
             },
             "phoneType": {
                 "basicField":"phoneNumberType",
                 "default":"",
                 "fromIntake":true,
-                "store":["basic:/contact/phone"],
+                "basicStore":["/contact/phone"],
                 "type": "string"
             }
         },
@@ -449,7 +470,7 @@
                 "default":"",
                 "fromIntake":true,
                 "maxLength":255,
-                "store":["basic:/contact/person"],
+                "basicStore":["/contact/person"],
                 "type": "string"
             },
             "lastName": {
@@ -457,7 +478,7 @@
                 "default":"",
                 "fromIntake":true,
                 "maxLength":255,
-                "store":["basic:/contact/person"],
+                "basicStore":["/contact/person"],
                 "type": "string"
             },
             "eveningPhone": { "$ref": "phoneNumber" },
@@ -467,28 +488,28 @@
                 "default":"",
                 "fromIntake":true,
                 "pattern":"^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$",
-                "store":["basic:/contact/address"],
+                "basicStore":["/contact/address"],
                 "type": "string"
             },
             "mailingAddress": {
                 "basicField":"address1",
                 "default":"",
                 "fromIntake":true,
-                "store":["basic:/contact/address"],
+                "basicStore":["/contact/address"],
                 "type": "string"
             },
             "mailingAddress2": {
                 "basicField":"address2",
                 "default":"",
                 "fromIntake":true,
-                "store":["basic:/contact/address"],
+                "basicStore":["/contact/address"],
                 "type": "string"
             },
             "mailingCity": {
                 "basicField":"cityName",
                 "default":"",
                 "fromIntake":true,
-                "store":["basic:/contact/address"],
+                "basicStore":["/contact/address"],
                 "type": "string"
             },
             "mailingState": {
@@ -496,7 +517,7 @@
                 "default":"",
                 "fromIntake":true,
                 "pattern":"^(A[EKLPRSZ]|C[AOT]|D[CE]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHVJMY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$",
-                "store":["basic:/contact/address"],
+                "basicStore":["/contact/address"],
                 "type": "string"
             },
             "mailingZIP": {
@@ -504,19 +525,19 @@
                 "default":"",
                 "fromIntake":true,
                 "pattern":"^[0-9]{5}$|^[0-9]{9}$",
-                "store":["basic:/contact/address"],
+                "basicStore":["/contact/address"],
                 "type": "string"
             },
             "website":{
                 "default":"",
                 "fromIntake":true,
-                "store":["middleLayer:website"],
+                "localStore":true,
                 "type": "string"
             },
             "countryName":{
                 "basicField":"countryName",
                 "default":"United States of America",
-                "store":["basic:/contact/address"],
+                "basicStore":["/contact/address"],
                 "type": "string"
             }
         },
@@ -530,21 +551,21 @@
                 "default":"",
                 "fromIntake":true,
                 "pattern":"^[0-9]{2}$",
-                "store":["middleLayer:region"],
+                "localStore":true,
                 "type" : "string"
             },
             "forest": {
                 "default":"",
                 "fromIntake":true,
                 "pattern":"^[0-9]{2}$",
-                "store":["middleLayer:forest"],
+                "localStore":true,
                 "type" : "string"
             },
             "district": {
                 "default":"",
                 "fromIntake":true,
                 "pattern":"^[0-9]{2}$",
-                "store":["middleLayer:district"],
+                "localStore":true,
                 "type" : "string"
             },
             "securityId":{
@@ -564,7 +585,7 @@
                     ],
                     "function":"concat"
                 },
-                "store":["basic:/application", "basic:/contact/address", "basic:/contact/phone"],
+                "basicStore":["/application", "/contact/address", "/contact/phone"],
                 "type" : "string"
             },
             "managingID":{
@@ -584,7 +605,7 @@
                     ],
                     "function":"concat"
                 },
-                "store":["basic:/application"],
+                "basicStore":["/application"],
                 "type" : "string"
             },
             "adminOrg":{
@@ -604,7 +625,7 @@
                     ],
                     "function":"concat"
                 },
-                "store":["basic:/application"],
+                "basicStore":["/application"],
                 "type" : "string"
             },
             "epermitId":{
@@ -624,21 +645,21 @@
                     ],
                     "function":"ePermitId"
                 },
-                "store":["basic:/application"],
+                "basicStore":["/application"],
                 "type" : "string"
             },
             "acres":{
                 "basicField":"acres",
                 "default":0,
                 "fromIntake":false,
-                "store":["basic:/application"],
+                "basicStore":["/application"],
                 "type" : "integer"
             },
             "contCn":{
                 "basicField":"contCn",
                 "default":"",
                 "fromIntake":false,
-                "store":["basic:/contact/phone", "basic:/contact/address", "basic:/application"],
+                "basicStore":["/contact/phone", "/contact/address", "/application"],
                 "type" : "string"
             },
             "contId":{
@@ -666,7 +687,7 @@
                     ],
                     "function":"contId"
                 },
-                "store":["basic:/contact/person", "basic:/contact/organization"],
+                "basicStore":["/contact/person", "/contact/organization"],
                 "type" : "string"
             }
         },

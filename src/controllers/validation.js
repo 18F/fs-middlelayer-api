@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -26,7 +26,7 @@ const v = new Validator();
 
 /**
  * Removes 'instance' from prop field of validation errors. Used to make fields human readable
- * 
+ *
  * @param  {string} prop - Prop field from validation error
  * @return {string}
  */
@@ -70,14 +70,14 @@ function combinePropArgument(property, argument){
 }
 /**
  * Creates error object which can be read by error message building function
- * 
+ *
  * @param {string} field             - Field where error occured at
  * @param {string} errorType         - Type of error returned
  * @param {string} expectedFieldType - Type that the field is expected to be
  * @param {string} enumMessage       - Enum message returned by validation
  * @param {string} dependency        - Fields that are a dependeny of field
  * @param {array} anyOfFields        - Array of strings of all field included in anyOf
- * 
+ *
  * @return Error object
  */
 function makeErrorObj(field, errorType, expectedFieldType, enumMessage, dependency, anyOfFields){
@@ -116,7 +116,8 @@ function checkForExtraRequired(schema){
 		}
 	}
 }
-/** Traverses schema object in search of all fields listed as required. Stores all fields in requiredFiles array. 
+
+/** Traverses schema object in search of all fields listed as required. Stores all fields in requiredFiles array.
  * @param  {Object} schema - schema to traverse in search for all required fields
  */
 function getAllRequired(schema){
@@ -287,7 +288,7 @@ function handleAnyOfError(errorTracking, result, counter){
 		requiredOptions.push(combinePropArgument(property, fieldObj.required[0]));
 	});
 	errorTracking.errorArray.push(makeErrorObj(null, 'anyOf', null, null, null, requiredOptions));
-	
+
 }
 
 /** Get the schema to be used for validating user input
@@ -410,7 +411,7 @@ function makePathReadable(input){
 
 /**
  * Creates error message for format errors
- * 
+ *
  * @param  {String} fullPath - path to field where error is at
  * @return {String}          - error message to be given to user
  */
@@ -424,7 +425,7 @@ function buildFormatErrorMessage(fullPath){
 
 /**
  * Creates error message for anyOf errors
- * 
+ *
  * @param  {array} anyOfFields - list of fields, at least one being required.
  * @return {string}
  */
@@ -557,13 +558,13 @@ function checkFieldLengths(schema, input, processedFieldErrors, path){
 				}
 			}
 			else if (schema[key].fromIntake){
-				
+
 				if (input){
 					const maxLength = schema[key].maxLength;
 					const fieldLength = `${input[key]}`.length;
 
 					if (maxLength < fieldLength){
-						
+
 						processedFieldErrors.errorArray.push(makeErrorObj(field, 'length', maxLength));
 					}
 

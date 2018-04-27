@@ -26,7 +26,7 @@
     	},
     	"format":{
     		"description":"Name of a function to be used in the validation process to validate this field. Can not be used with pattern.",
-    		"type":"string"	
+    		"type":"string"
     	},
     	"fromIntake":{
     		"description":"Describes whether the field will be populated with data from the intake module(true) or it will need to be autopopulated by other field or values listed in 'madeOf'(false).",
@@ -78,8 +78,12 @@
     		"description":"If type of this field is a file, it describes whether this file must be provided or not. If the field is not a file, it is ignored.",
     		"type":"boolean"
     	},
-    	"store":{
-    		"description":"Array containing the locations that this field should be stored.",
+      "localStore":{
+        "description":"Whether the field should be stored in the database.",
+        "type":"boolean"
+      },
+    	"basicStore":{
+    		"description":"Array the endpoints that this field should be passed onto in NRM.",
     		"type":"array",
     		"items":{
     			"description":"String describing the location to store this field",
