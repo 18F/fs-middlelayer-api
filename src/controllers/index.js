@@ -292,12 +292,12 @@ function postApplication(req, res, reqData){
 	console.log(body);
 	const possbileFiles = [];
 
-	const validationSchema = validation.getValidationSchema(pathData);
-	const sch = derefFunc(validationSchema.schemaToUse, [validationSchema.fullSchema], true);
-	const allErrors = validation.getFieldValidationErrors(body, pathData, sch);
-
+	const validationSchema = validation.selectValidationSchema(pathData);
+	const routeRequestSchema = derefFunc(validationSchema.schemaToUse, [validationSchema.fullSchema], true);
+	const allErrors = validation.getFieldValidationErrors(body, pathData, routeRequestSchema);
+	
 	//Files to validate are in possbileFiles
-	fileValidation.checkForFilesInSchema(sch, possbileFiles);
+	fileValidation.checkForFilesInSchema(routeRequestSchema, possbileFiles);
 
 	if (possbileFiles.length !== 0){
 		possbileFiles.forEach((fileConstraints)=>{
@@ -311,9 +311,9 @@ function postApplication(req, res, reqData){
 		return error.sendError(req, res, 400, errorMessage, allErrors.errorArray);
 	}
 	else {
-		basic.postToBasic(req, res, sch, body)
+		basic.postToBasic(req, res, routeRequestSchema, body)
 		.then((postObject)=>{
-			const toStoreInDB = db.getDataToStoreInDB(sch, body);
+			const toStoreInDB = db.getDataToStoreInDB(routeRequestSchema, body);
 			const controlNumber = postObject.POST['/application'].response.accinstCn;
 			toStoreInDB.controlNumber = controlNumber;
 			db.saveApplication(toStoreInDB, function(err, appl){

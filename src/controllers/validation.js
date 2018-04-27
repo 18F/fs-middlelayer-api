@@ -293,15 +293,16 @@ function handleAnyOfError(errorTracking, result, counter){
 
 /** Get the schema to be used for validating user input
  * @param  {Object} pathData - All data from swagger for the path that has been run
- * @return {Object} schemas  - fullSchema is the full validation schemas for all permit types. schemaToUse is the validation schema for this route
+ * @return {Object} schemas  - fullSchema is the full validation schemas for all permit types. schemaToUse is the validation schema for this route, schemaToGet path
  */
-function getValidationSchema(pathData){
+function selectValidationSchema(pathData){
 	const fileToGet = `src/${pathData['x-validation'].split('#')[0]}`;
 	const schemaToGet = pathData['x-validation'].split('#')[1];
 	const applicationSchema = include(fileToGet);
 	return {
 		'fullSchema':applicationSchema,
-		'schemaToUse':applicationSchema[schemaToGet]
+		'schemaToUse':applicationSchema[schemaToGet],
+		'schemaPath': schemaToGet
 	};
 }
 
@@ -348,7 +349,7 @@ function validateBody(body, pathData, validationSchema){
 	const processedFieldErrors = {
 		errorArray:[]
 	};
-	const schema = getValidationSchema(pathData);
+	const schema = selectValidationSchema(pathData);
 	const applicationSchema = schema.fullSchema;
 	const schemaToUse = schema.schemaToUse;
 	let key;
@@ -670,7 +671,7 @@ module.exports.handleEnumError = handleEnumError;
 module.exports.getDependency = getDependency;
 module.exports.handleDependencyError = handleDependencyError;
 module.exports.handleAnyOfError = handleAnyOfError;
-module.exports.getValidationSchema = getValidationSchema;
+module.exports.selectValidationSchema = selectValidationSchema;
 module.exports.validateBody = validateBody;
 module.exports.processErrors = processErrors;
 module.exports.makeFieldReadable = makeFieldReadable;

@@ -5,11 +5,13 @@ const path = require('path');
 const url = require('url');
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
+const Op = Sequelize.Op;
 
 const db = {};
 
 const sequelizeOptions = {
-	dialect: url.parse(process.env.DATABASE_URL, true).protocol.split(':')[0]
+	dialect: url.parse(process.env.DATABASE_URL, true).protocol.split(':')[0],
+	operatorsAliases: Op
 };
 
 if (url.parse(process.env.DATABASE_URL, true).hostname !== 'localhost') {
