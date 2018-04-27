@@ -38,7 +38,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive
+            npm run coverage
             ./node_modules/codecov/bin/codecov
       - run:
           name: Clean s3 bucket
