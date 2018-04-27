@@ -48,7 +48,7 @@ jobs:
           name: Deploy
           command: |
             if [ "${CIRCLE_PROJECT_USERNAME}" == "18F" ];
-              then ./.cg-deploy/deploy.sh api-production;
+              then .cg-deploy/deploy.sh api-production;
             fi 
   staging-deploy:
     docker:
@@ -58,7 +58,7 @@ jobs:
           name: Deploy
           command: |
             if [ "${CIRCLE_PROJECT_USERNAME}" == "18F" ];
-              then ./.cg-deploy/deploy.sh api-staging;
+              then .cg-deploy/deploy.sh api-staging;
             fi
             
 workflows:

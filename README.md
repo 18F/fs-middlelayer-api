@@ -320,8 +320,8 @@ These are the environment variables that must be created on the Node.js server f
 - `JWT_SECRET_KEY=<secret key to generate tokens>`
 - `VCAP_SERVICES=an object to replicate the bound services of the SUDS_API_URL and the S3 bucket`
 
-#### CI 
-   - Additional environment variable for Circle: SNYK_TOKEN
+### CI Environment variables
+Additional environment variable for Circle: SNYK_TOKEN
    
 ### Creating API User Accounts Using Environment Variables
 
