@@ -46,23 +46,23 @@ jobs:
 
   prod-deploy:
     docker:
-      - image: circleci/node:6.10.2
+      - image: circleci/node:8.9.4
     steps:
       - run:
           name: Deploy
           command: |
             if [ "${CIRCLE_PROJECT_USERNAME}" == "18F" ];
-              then .cg-deploy/deploy.sh api-production;
+              then ./.cg-deploy/deploy.sh api-production;
             fi 
   staging-deploy:
     docker:
-      - image: circleci/node:6.10.2
+      - image: circleci/node:8.9.4
     steps:
       - run:
           name: Deploy
           command: |
             if [ "${CIRCLE_PROJECT_USERNAME}" == "18F" ];
-              then .cg-deploy/deploy.sh api-staging;
+              then ./.cg-deploy/deploy.sh api-staging;
             fi
             
 workflows:
