@@ -40,6 +40,10 @@ jobs:
           command: |
             istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec --recursive
             ./node_modules/codecov/bin/codecov
+      - run:
+          name: Clean s3 bucket
+          command: ./.circleci/clean-s3-bucket.sh
+
   prod-deploy:
     docker:
       - image: circleci/node:6.10.2
@@ -48,7 +52,7 @@ jobs:
           name: Deploy
           command: |
             if [ "${CIRCLE_PROJECT_USERNAME}" == "18F" ];
-              then ./.cg-deploy/deploy.sh api-production;
+              then .cg-deploy/deploy.sh api-production;
             fi 
   staging-deploy:
     docker:
@@ -58,7 +62,7 @@ jobs:
           name: Deploy
           command: |
             if [ "${CIRCLE_PROJECT_USERNAME}" == "18F" ];
-              then ./.cg-deploy/deploy.sh api-staging;
+              then .cg-deploy/deploy.sh api-staging;
             fi
             
 workflows:

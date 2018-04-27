@@ -144,17 +144,18 @@ function buildAutoPopulatedFields(basicFields, person, body){
 function populateValues(fieldsByEnpoint, intakeRequest, autoPopValues){
 	const requestsTobeSent = {};
 	for (const request in fieldsByEnpoint){
+		if (fieldsByEnpoint.hasOwnProperty(request)){
 			requestsTobeSent[request] = {};
 			for (const fieldKey in fieldsByEnpoint[request]){
+				if (fieldsByEnpoint[request].hasOwnProperty(fieldKey)){
 					const field = fieldsByEnpoint[request][fieldKey];
 					const splitPath = fieldKey.split('.');
-					const fieldName = splitPath[splitPath.length -1];
+					const fieldName = splitPath[splitPath.length - 1];
 					let basicFieldName = fieldName;
-					if(!field.hasOwnProperty('basicField')){
+					if (!field.hasOwnProperty('basicField')) {
 						basicFieldName = field.basicField;
 					}
-					let fieldValue = field.default;
-					if (field.fromIntake && intakeRequest[fieldName]){
+					if (field.fromIntake && intakeRequest[fieldName]) {
 						requestsTobeSent[request][basicFieldName] = intakeRequest[fieldName];
 					}
 					else if (autoPopValues[fieldKey]) {
@@ -163,7 +164,9 @@ function populateValues(fieldsByEnpoint, intakeRequest, autoPopValues){
 					else {
 						requestsTobeSent[request][basicFieldName] = field.default;
 					}
+				}
 			}
+		}
 	}
 	return requestsTobeSent;
 }

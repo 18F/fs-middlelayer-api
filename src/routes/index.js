@@ -16,7 +16,6 @@
 
 const express = require('express');
 const router = express.Router();
-const include = require('include')(__dirname);
 
 const auth = require('./auth');
 const api = require('./api');
