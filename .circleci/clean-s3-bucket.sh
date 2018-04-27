@@ -1,4 +1,5 @@
 sudo apt-get install -y awscli
+
 export BUCKET=`echo "${VCAP_SERVICES}" | jq -r .s3[0].credentials.bucket`
 export AWS_ACCESS_KEY_ID=`echo "${VCAP_SERVICES}" | jq -r .s3[0].credentials.access_key_id`
 export AWS_SECRET_ACCESS_KEY=`echo "${VCAP_SERVICES}" | jq -r .s3[0].credentials.secret_access_key`
