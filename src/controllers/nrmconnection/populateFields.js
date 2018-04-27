@@ -82,8 +82,43 @@ function getFieldFromBody(path, body){
 	}
 }
 
+/**
+ * Handle autoPolutated values based on what type of field
+ * @param {Object} field - field to evaluated
+ * @param {String} key - first key of the field object
+ * @param {Boolean} person - whether the input is for an individual or an organization?
+ * @param {Array} fieldMakeUp - array of the subfields or strings that comprise the field
+ * @return {String} fieldValue - the string of the fieldValue
+ */
+function generateAutoPopulatedField(field, key, person, fieldMakeUp) {
+	let fieldValue;
+	switch (field[key].madeOf.function) {
+	case 'concat':
+		fieldValue = concat(fieldMakeUp);
+		break;
+	case 'contId':
+		if (person) {
+			if (fieldMakeUp.length > 3) {
+				fieldMakeUp.pop();
+			}
+			fieldValue = contId(fieldMakeUp);
+		}
+		else {
+			const toUse = [];
+			toUse.push(fieldMakeUp.pop());
+			fieldValue = contId(toUse);
+		}
+		break;
+	case 'ePermitId':
+		fieldValue = ePermitId(fieldMakeUp);
+		break;
+	}
+	return fieldValue;
+}
+
 /** Given list of fields which must be auto-populate, returns values to store
  * @param  {Array} fieldsToBuild - Array of objects representing Fields which need to be auto-populated
+ * @param {boolean} person - Not sure?
  * @param  {Object} body   - user input
  * @return {Array}         - created values
  */
@@ -93,7 +128,6 @@ function buildAutoPopulatedFields(basicFields, person, body){
 	fieldsToBuild.forEach((field)=>{
 		const key = Object.keys(field)[0];
 		const fieldMakeUp = [];
-		let autoPopulatedFieldValue = '';
 		field[key].madeOf.fields.forEach((madeOfField)=>{
 			if (madeOfField.fromIntake){
 				const fieldValue = getFieldFromBody(madeOfField.field, body);
@@ -108,28 +142,8 @@ function buildAutoPopulatedFields(basicFields, person, body){
 				fieldMakeUp.push(madeOfField.value);
 			}
 		});
-		switch (field[key].madeOf.function){
-		case 'concat':
-			autoPopulatedFieldValue = concat(fieldMakeUp);
-			break;
-		case 'contId':
-			if (person){
-				if (fieldMakeUp.length > 3){
-					fieldMakeUp.pop();
-				}
-				autoPopulatedFieldValue = contId(fieldMakeUp);
-			}
-			else {
-				const toUse = [];
-				toUse.push(fieldMakeUp.pop());
-				autoPopulatedFieldValue = contId(toUse);
-			}
-			break;
-		case 'ePermitId':
-			autoPopulatedFieldValue = ePermitId(fieldMakeUp);
-			break;
-		}
-		output[key] = autoPopulatedFieldValue;
+		
+		output[key] = generateAutoPopulatedField(field, key, person, fieldMakeUp);
 	});
 	return output;
 }
