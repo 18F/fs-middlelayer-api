@@ -15,10 +15,7 @@
 // required modules
 
 const include = require('include')(__dirname);
-const async = require('async');
 const deref = require('deref');
-const matchstick = require('matchstick');
-
 const apiSchema = include('src/api.json');
 
 //*******************************************************************
@@ -33,92 +30,6 @@ const validation = require('./validation.js');
 const fileValidation = require('./fileValidation.js');
 const util = require('./utility.js');
 const DuplicateContactsError = require('./errors/duplicateContactsError.js');
-
-//*************************************************************
-// Helper Functions
-
-/** Find the matching route in the routing schema for any request. If one is found, extract the useful information from it and return that information.
- * @param  {Object} apiSchema - The whole routing schema, which contains the route used.
- * @param  {String} reqPath - The path that was requested from the API
- * @return {Object} Object describing the matching route, if any, in the routing schema. The path field contains the matched path listed in the routing schema. The tokens field contains all tokens, listed in the matched path. And the matches field contains the tokens with the values that have been given for them.
- */
-function apiSchemaData(apiSchema, reqPath){
-
-	if (apiSchema) {
-		for (const k in apiSchema.paths) {
-
-			if (apiSchema.paths.hasOwnProperty(k)){
-
-				const ms = matchstick(k, 'template');
-				ms.match(reqPath);
-
-				if ( ms.match(reqPath) ) {
-
-					return {
-						path: k,
-						tokens: ms.tokens,
-						matches: ms.matches
-					};
-				}
-			}
-		}
-	}
-
-}
-
-/** Saves all information for a file upload to the DB and uploads the file to S3.
- * @param  {Object} req - request object
- * @param  {Object} res - response object
- * @param  {Array} possbileFiles - list of all files that can be uploaded for this permit type
- * @param  {Array} files - Files being uploaded and saved
- * @param  {String} controlNumber - Control number of the application being processed
- * @param  {Object} application - Body of application being submitted
- * @param  {Function} callback - Function to be called after attempting to save the files.
- */
-function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, application, callback){
-
-	const asyncTasks = [];
-
-	possbileFiles.forEach((fileConstraints)=>{
-
-		asyncTasks.push(function(callback){
-
-			const key = Object.keys(fileConstraints)[0];
-			if (files[key]){
-				const fileInfo = fileValidation.getFileInfo(files[key], fileConstraints);
-				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
-				store.uploadFile(fileInfo, function(err){
-					if (err){
-						console.error(err);
-						return error.sendError(req, res, 500, 'error while storing files in data store.');
-					}
-					else {
-						db.saveFile(application.id, fileInfo, function(err){
-							if (err){
-								console.error(err);
-								return error.sendError(req, res, 500, 'error while saving file information to the database.');
-							}
-							else {
-								return callback (null);
-							}
-						});
-					}
-				});
-			}
-			else {
-				return callback (null);
-			}
-		});
-	});
-	async.parallel(asyncTasks, function(err){
-		if (err){
-			return callback (err);
-		}
-		else {
-			return callback (null);
-		}
-	});
-}
 
 //*******************************************************************
 // controller functions
@@ -203,13 +114,7 @@ function getControlNumber(req, res, reqData){
 
 			else if (fileData){
 
-				store.getFilesZip(controlNumber, fileData, res, function(err){
-
-					if (err){
-						error.sendError(req, res, 404, 'file not found in data store.');
-					}
-
-				});
+				store.getFilesZip(controlNumber, fileData, res);
 
 			}
 			else {
@@ -322,7 +227,7 @@ function postApplication(req, res, reqData){
 					return error.sendError(req, res, 500, 'error while saving application in the database.');
 				}
 				else {
-					saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err){
+					store.saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err){
 						if (err) {
 							console.error(err);
 							return error.sendError(req, res, 500, 'error while uploading files.');
@@ -368,7 +273,7 @@ function routeRequest(req, res){
 	const reqPath = `/${req.params[0]}`;
 	const reqMethod = req.method.toLowerCase();
 
-	const apiReqData = apiSchemaData(apiSchema, reqPath);
+	const apiReqData = util.apiSchemaData(apiSchema, reqPath);
 	if (apiReqData){
 		const apiPath = apiReqData.path;
 		const apiTokens = apiReqData.tokens;
