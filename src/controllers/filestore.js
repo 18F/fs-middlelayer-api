@@ -24,6 +24,7 @@ const zipper = require ('s3-zip');
 const AWS = config.getStoreObject();
 const fileValidation = require('./fileValidation.js');
 const db = require('./db.js');
+const error = require('./errors/error.js');
 
 //*************************************************************
 
@@ -92,7 +93,6 @@ function getFilesZip(controlNumber, dbFiles, res){
 
 	const filePath = `${controlNumber}`;
 
-	const storeFiles = [];
 	const fileNames = [];
 
 	dbFiles.forEach((dbFile)=>{
@@ -217,7 +217,52 @@ function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, appli
 	});
 }
 
-module.exports.getFile = getFile;
-module.exports.uploadFile = uploadFile;
+/** Controller for GET routes with a control number and a file name
+ * @param  {Object} req - request object
+ * @param  {Object} res - response object
+ * @param  {Object} reqData - Object containing information about the request and the route requested
+ * @param  {String} reqData.path - Path being requested
+ * @param  {Array} reqData.tokens - Array of all tokens present in path being requested
+ * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
+ * @param  {Object} reqData.schema - Schema of the route requested
+ */
+function getControlNumberFileName(req, res, reqData) {
+
+	const controlNumber = reqData.matches.controlNumber;
+	const fileName = reqData.matches.fileName;
+
+	const filePath = controlNumber + '/' + fileName;
+
+	db.getFile(filePath, function (err, file) {
+
+		if (err) {
+			console.error(err);
+			error.sendError(req, res, 500, 'error while getting file from data store.');
+		}
+		else {
+			if (file) {
+
+				getFile(controlNumber, fileName, function (err, data) {
+
+					if (err) {
+						console.error(err);
+						error.sendError(req, res, 404, 'file not found in the database.');
+					}
+					else {
+						res.attachment(file.fileName);
+						res.send(data.Body);
+					}
+
+				});
+			}
+			else {
+				error.sendError(req, res, 404, 'file not found in the data store.');
+			}
+		}
+	});
+
+}
+
 module.exports.getFilesZip = getFilesZip;
 module.exports.saveAndUploadFiles = saveAndUploadFiles;
+module.exports.getControlNumberFileName = getControlNumberFileName;

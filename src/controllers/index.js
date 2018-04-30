@@ -23,7 +23,7 @@ const apiSchema = include('src/api.json');
 
 const error = require('./errors/error.js');
 const get = require('./get.js');
-const store = require('./store.js');
+const filestore = require('./filestore.js');
 const db = require('./db.js');
 const basic = require('./nrmconnection');
 const validation = require('./validation.js');
@@ -33,52 +33,6 @@ const DuplicateContactsError = require('./errors/duplicateContactsError.js');
 
 //*******************************************************************
 // controller functions
-
-/** Controller for GET routes with a control number and a file name
- * @param  {Object} req - request object
- * @param  {Object} res - response object
- * @param  {Object} reqData - Object containing information about the request and the route requested
- * @param  {String} reqData.path - Path being requested
- * @param  {Array} reqData.tokens - Array of all tokens present in path being requested
- * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
- * @param  {Object} reqData.schema - Schema of the route requested
- */
-function getControlNumberFileName(req, res, reqData) {
-
-	const controlNumber = reqData.matches.controlNumber;
-	const fileName = reqData.matches.fileName;
-
-	const filePath = controlNumber + '/' + fileName;
-
-	db.getFile(filePath, function (err, file){
-
-		if (err){
-			console.error(err);
-			error.sendError(req, res, 500, 'error while getting file from data store.');
-		}
-		else {
-			if (file){
-
-				store.getFile(controlNumber, fileName, function(err, data){
-
-					if (err){
-						console.error(err);
-						error.sendError(req, res, 404, 'file not found in the database.');
-					}
-					else {
-						res.attachment(file.fileName);
-						res.send(data.Body);
-					}
-
-				});
-			}
-			else {
-				error.sendError(req, res, 404, 'file not found in the data store.');
-			}
-		}
-	});
-
-}
 
 /** Controller for GET routes with only a control number
  * @param  {Object} req - request object
@@ -114,7 +68,7 @@ function getControlNumber(req, res, reqData){
 
 			else if (fileData){
 
-				store.getFilesZip(controlNumber, fileData, res);
+				filestore.getFilesZip(controlNumber, fileData, res);
 
 			}
 			else {
@@ -227,7 +181,7 @@ function postApplication(req, res, reqData){
 					return error.sendError(req, res, 500, 'error while saving application in the database.');
 				}
 				else {
-					store.saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err){
+					filestore.saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err){
 						if (err) {
 							console.error(err);
 							return error.sendError(req, res, 500, 'error while uploading files.');
@@ -308,7 +262,7 @@ function routeRequest(req, res){
 						if (reqMethod === 'get') {
 							if (apiTokens.includes('fileName')) {
 
-								getControlNumberFileName(req, res, reqData);
+								filestore.getControlNumberFileName(req, res, reqData);
 
 							}
 							else {
