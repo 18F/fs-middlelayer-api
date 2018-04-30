@@ -6,6 +6,13 @@ ignore:
     - sequelize-cli > gulp > liftoff > findup-sync > micromatch > braces:
         reason: major updates coming
         expires: '2018-05-25T20:04:44.007Z'
+  'npm:lodash:20180130':
+    - aws-s3-zipper > aws-sdk > xmlbuilder > lodash:
+        reason: soon to refactor out zip
+        expires: '2018-05-30T14:28:42.265Z'
+    - aws-s3-zipper > archiver > lodash:
+        reason: soon to refactor out zip
+        expires: '2018-05-30T14:28:42.266Z'
 # patches apply the minimum changes required to fix a vulnerability
 patch:
   'npm:debug:20170905':
@@ -38,18 +45,18 @@ patch:
   'npm:minimatch:20160620':
     - sequelize-cli > gulp > vinyl-fs > glob-stream > glob > minimatch:
         patched: '2018-04-25T20:01:52.337Z'
-      sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > minimatch:
-        patched: '2018-04-26T16:47:03.203Z'
     - sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > minimatch:
         patched: '2018-04-25T20:01:52.337Z'
-      sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > glob > minimatch:
-        patched: '2018-04-26T16:47:03.203Z'
     - sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > glob > minimatch:
         patched: '2018-04-25T20:01:52.337Z'
-      sequelize-cli > gulp > vinyl-fs > glob-stream > minimatch:
-        patched: '2018-04-26T16:47:03.203Z'
     - sequelize-cli > gulp > vinyl-fs > glob-stream > minimatch:
         patched: '2018-04-25T20:01:52.337Z'
+    - sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > minimatch:
+        patched: '2018-04-26T16:47:03.203Z'
+    - sequelize-cli > gulp > vinyl-fs > glob-watcher > gaze > globule > glob > minimatch:
+        patched: '2018-04-26T16:47:03.203Z'
+    - sequelize-cli > gulp > vinyl-fs > glob-stream > minimatch:
+        patched: '2018-04-26T16:47:03.203Z'
   'npm:moment:20170905':
     - jsonwebtoken > joi > moment:
         patched: '2018-04-25T20:01:52.337Z'
