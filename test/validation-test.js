@@ -14,7 +14,7 @@
 
 //*******************************************************************
 
-const AWS = require('mock-aws');
+const AWSMock = require('mock-aws-s3');
 const chai = require('chai');
 const expect = chai.expect;
 
@@ -41,16 +41,14 @@ const errorFactory = factory.factory({
 });
 
 before(function(){
-	if (process.env.npm_config_mock === 'Y'){
-		AWS.mock('S3', 'putObject', { ETag: '"82e8674bebaea2797c28872c9a38ad43"' });
-		AWS.mock('S3', 'getObject', testObjects.mockS3Get);
-	}
+	AWSMock.config.basePath = '/tmp/buckets/'; // Can configure a basePath for your local buckets
+	const s3 = AWSMock.S3({
+		params: { Bucket: 'example' }
+	});
 });
 
 after(function(){
-	if (process.env.npm_config_mock === 'Y'){
-		AWS.restore();
-	}
+
 });
 
 describe('outfitters validation ', function(){

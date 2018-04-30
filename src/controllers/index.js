@@ -23,9 +23,9 @@ const apiSchema = include('src/api.json');
 
 const error = require('./errors/error.js');
 const get = require('./get.js');
-const filestore = require('./filestore.js');
+const fileStore = require('./fileStore.js');
 const db = require('./db.js');
-const basic = require('./nrmconnection');
+const NRMConnection = require('./nrmConnection');
 const validation = require('./validation.js');
 const fileValidation = require('./fileValidation.js');
 const util = require('./utility.js');
@@ -33,103 +33,6 @@ const DuplicateContactsError = require('./errors/duplicateContactsError.js');
 
 //*******************************************************************
 // controller functions
-
-/** Controller for GET routes with only a control number
- * @param  {Object} req - request object
- * @param  {Object} res - response object
- * @param  {Object} reqData - Object containing information about the request and the route requested
- * @param  {String} reqData.path - Path being requested
- * @param  {Array} reqData.tokens - Array of all tokens present in path being requested
- * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
- * @param  {Object} reqData.schema - Schema of the route requested
- */
-function getControlNumber(req, res, reqData){
-	const pathData = reqData.schema;
-	const fileTypes = {
-		'gud': 'guideDocumentation',
-		'arf': 'acknowledgementOfRiskForm',
-		'inc': 'insuranceCertificate',
-		'gse': 'goodStandingEvidence',
-		'opp': 'operatingPlan'
-	};
-
-	const reqPath = `/${req.params[0]}`;
-
-	if (reqPath.indexOf('/files') !== -1) {
-		let controlNumber = reqData.matches.controlNumber;
-		controlNumber = controlNumber.substr(0, controlNumber.length - 6);
-
-		db.getApplication(controlNumber, function(err, appl, fileData){
-
-			if (err) {
-				console.error(err);
-				return error.sendError(req, res, 500, 'error while getting application from the database.');
-			}
-
-			else if (fileData){
-
-				filestore.getFilesZip(controlNumber, fileData, res);
-
-			}
-			else {
-				error.sendError(req, res, 404, 'file not found in the database.');
-			}
-
-		});
-
-	}
-	else {
-
-		let basicData = {};
-		basic.getFromBasic(req, res, reqData.matches.controlNumber)
-		.then((appData)=>{
-			basicData = appData;
-
-			let jsonData = {};
-
-			const controlNumber = reqData.matches.controlNumber;
-
-			const jsonResponse = {};
-
-			const cnData = basicData;
-
-			if (basicData){
-
-				db.getApplication(controlNumber, function(err, appl, fileData){
-					if (err){
-						console.error(err);
-						return error.sendError(req, res, 500, 'error while getting application from the database.');
-					}
-					else {
-
-						if (!appl){
-							return error.sendError(req, res, 404, 'application not found in the database.');
-						}
-						else if (fileData){
-							fileData.forEach(function(file){
-								const fileType = fileTypes[file.fileType];
-								appl[fileType] = file.fileName;
-							});
-						}
-						jsonData = get.copyGenericInfo(cnData, appl, jsonData, pathData['x-getTemplate']);
-						jsonData.controlNumber = controlNumber;
-
-						jsonResponse.status = 'success';
-						const toReturn = Object.assign({}, jsonResponse, jsonData);
-
-						res.json(toReturn);
-					}
-				});
-			}
-		})
-		.catch((err)=>{
-			console.error(err);
-			return error.sendError(req, res, 500, 'unable to process request.');
-		});
-
-	}
-
-}
 
 //*************************************************************
 
@@ -170,7 +73,7 @@ function postApplication(req, res, reqData){
 		return error.sendError(req, res, 400, errorMessage, allErrors.errorArray);
 	}
 	else {
-		basic.postToBasic(req, res, routeRequestSchema, body)
+		NRMConnection.postToBasic(req, res, routeRequestSchema, body)
 		.then((postObject)=>{
 			const toStoreInDB = db.getDataToStoreInDB(routeRequestSchema, body);
 			const controlNumber = postObject.POST['/application'].response.accinstCn;
@@ -181,7 +84,7 @@ function postApplication(req, res, reqData){
 					return error.sendError(req, res, 500, 'error while saving application in the database.');
 				}
 				else {
-					filestore.saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err){
+					fileStore.saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err){
 						if (err) {
 							console.error(err);
 							return error.sendError(req, res, 500, 'error while uploading files.');
@@ -262,12 +165,12 @@ function routeRequest(req, res){
 						if (reqMethod === 'get') {
 							if (apiTokens.includes('fileName')) {
 
-								filestore.getControlNumberFileName(req, res, reqData);
+								fileStore.getControlNumberFileName(req, res, reqData);
 
 							}
 							else {
 
-								getControlNumber(req, res, reqData);
+								get.getControlNumber(req, res, reqData);
 							}
 
 						}

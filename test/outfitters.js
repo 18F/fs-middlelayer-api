@@ -21,8 +21,7 @@ const request = require('supertest');
 const server = include('src/index.js');
 const util = include('test/utility.js');
 
-const AWS = require('mock-aws');
-const sinon = require('sinon');
+const AWSMock = require('mock-aws-s3');
 
 const factory = require('unionized');
 const tempOutfitterInput = include('test/data/testInputTempOutfitters.json');
@@ -59,11 +58,10 @@ const binaryParser = function (res, cb) {
 };
 
 function mockZip(){
-	AWS.mock('S3', 'getObject', testObjects.mockS3Get);
-}
-
-function unmockZip(){
-	AWS.restore()
+	AWSMock.config.basePath = '/tmp/buckets/'; // Can configure a basePath for your local buckets
+	const s3 = AWSMock.S3({
+		params: { Bucket: 'example' }
+	});
 }
 
 //*******************************************************************
@@ -325,10 +323,6 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 	});
 
 	after(function(done) {
-
-		if (process.env.npm_config_mock === 'Y'){
-			unmockZip();
-		}
 
 		db.deleteUser(adminCredentials.un, function(err){
 			if (err){
