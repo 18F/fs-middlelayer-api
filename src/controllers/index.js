@@ -51,15 +51,16 @@ function postApplication(req, res, reqData){
 	console.log(body);
 	const possbileFiles = [];
 
-	const validator = new validation.ValidationClass(pathData);
+	const Validator = new validation.ValidationClass(pathData, body);
+	const errorObject = Validator.validateInput(possbileFiles, req);
 
 	if (errorObject.errorArray.length !== 0){
-		return error.sendError(req, res, 400, errorMessage, errorObject.errorArray);
+		return error.sendError(req, res, 400, errorObject.errorMessage, errorObject.errorArray);
 	}
 	else {
-		NRMConnection.postToBasic(req, res, routeRequestSchema, body)
+		NRMConnection.postToBasic(req, res, Validator.routeRequestSchema, body)
 		.then((postObject)=>{
-			const toStoreInDB = db.getDataToStoreInDB(routeRequestSchema, body);
+			const toStoreInDB = db.getDataToStoreInDB(Validator.routeRequestSchema, body);
 			const controlNumber = postObject.POST['/application'].response.accinstCn;
 			toStoreInDB.controlNumber = controlNumber;
 			db.saveApplication(toStoreInDB, function(err, appl){

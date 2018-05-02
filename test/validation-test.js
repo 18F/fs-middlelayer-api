@@ -54,7 +54,10 @@ after(function(){
 describe('outfitters validation ', function(){
 	describe('ensure field is present', function(){
 		it('should report issues when no body is provided', function(){
-			const actual = specialUses.validate.validateBody({}, outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray;
+			const Validator = new specialUses.validate.ValidationClass(outfittersObjects.pathData, {});
+			Validator.selectValidationSchema();
+			Validator.validateBody();
+			const actual = Validator.errorArray;
 			const expected = [
 				errorFactory.create({field: 'region', errorType: 'missing'}),
 				errorFactory.create({field: 'forest', errorType: 'missing'}),

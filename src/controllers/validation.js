@@ -26,14 +26,17 @@ const fileValidation = require('./fileValidation.js');
 class ValidationClass {
 	/**
 	* @param  { Object } pathData - All data from swagger for the path that has been run
-	* @param  {Object} processedFieldErrors            - Current object containing errors
-	* @param  {Array}  processedFieldErrors.errorArray - Array of all errors found so far
+	* @param  {Array}  errorArray - Array of all errors found so far
+	* @param {Object} body - json body of the request being sent
+	* @param {Object} routeRequestSchema - schema of the particular route
 	*/
-	constructor(pathData){
+	constructor(pathData, body){
 		this.pathData = pathData;
 		this.requiredFields = [];
 		this.schemaValidator = new Validator();
 		this.errorArray = [];
+		this.routeRequestSchema = {};
+		this.body = body;
 	}
 	/**
 	 * Removes 'instance' from prop field of validation errors. Used to make fields human readable
@@ -182,12 +185,12 @@ class ValidationClass {
 	 * @param  {Number} counter          - Index of the current error
 	 * @param  {Object} schema           - schema which input is being validated against
 	 */
-	handleMissingError(output, result, counter, schema) {
+	handleMissingError(output, result, counter) {
 		const property = this.removeInstance(result[counter].property);
 		const field = this.combinePropArgument(property, result[counter].argument);
 
 		output.errorArray.push(this.makeErrorObject(field, 'missing'));
-		this.findField(schema, field.split('.'), this.getAllRequired);
+		this.findField(this.routeRequestSchema, field.split('.'), this.getAllRequired);
 		for (const i in this.requiredFields) {
 			if (this.requiredFields.hasOwnProperty(i)) {
 				this.requiredFields[i] = `${field}.${this.requiredFields[i]}`;
@@ -309,14 +312,14 @@ class ValidationClass {
 	 * @param  {Array} - Array of ValidationErrors from validation
 	 * @param  {Array} - Array to store processed ErrorObjs in
 	 */
-	processErrors(errors, processedErrors, schema){
+	processErrors(errors, processedErrors){
 		const length = errors.length;
 		let counter;
 		for (counter = 0; counter < length; counter++){
 
 			switch (errors[counter].name){
 			case 'required':
-				this.handleMissingError(processedErrors, errors, counter, schema);
+				this.handleMissingError(processedErrors, errors, counter);
 				break;
 			case 'type':
 				this.handleTypeError(processedErrors, errors, counter);
@@ -343,16 +346,16 @@ class ValidationClass {
 	 * @param  {Object} validationSchema - schema to be used for validating input, same as validation.json without refs
 	 * @return {Array}                   - Array of ValidationErrors from validation
 	 */
-	validateBody(body, validationSchema){
+	validateBody(){
 		for (const key in this.applicationSchema){
 			if (this.applicationSchema.hasOwnProperty(key)) {
 				this.schemaValidator.addSchema(this.applicationSchema[key], key);
 			}
 		}
-		const val = this.schemaValidator.validate(body, this.schemaToUse);
+		const val = this.schemaValidator.validate(this.body, this.schemaToUse);
 		const error = val.errors;
 		if (error.length > 0){
-			this.processErrors(error, validationSchema);
+			this.processErrors(error);
 		}
 	}
 
@@ -608,14 +611,12 @@ class ValidationClass {
 
 	/**
 	 * Additional validation checks that can't be defined in the validation schema
-	 * @param  {Object} validationSchema     - schema to be used for validating input, same as validation.json without refs
-	 * @param  {Object} input                - User input
 	 */
-	additionalValidation(input){
-		this.checkFieldLengths(input, '');
-		this.checkForOrgName(input);
-		this.checkForIndividualIsCitizen(input);
-		this.checkForSmallBusiness(input);
+	additionalValidation(){
+		this.checkFieldLengths('');
+		this.checkForOrgName();
+		this.checkForIndividualIsCitizen();
+		this.checkForSmallBusiness();
 	}
 
 	/**
@@ -624,18 +625,18 @@ class ValidationClass {
 	 * @param  {Object} validationSchema - schema to be used for validating input, same as validation.json without refs
 	 * @return {Object}                  - Object containing an array of error objects for every error with fields
 	 */
-	getFieldValidationErrors(body){
+	getFieldValidationErrors(){
 
-		this.validateBody(body);
-		this.additionalValidation(body, '');
+		this.validateBody();
+		this.additionalValidation('');
 
 		return this.errorArray;
 	}
 
-	validateInput(body, possbileFiles, req){
+	validateInput(possbileFiles, req){
 		const validationSchema = this.selectValidationSchema();
 		this.routeRequestSchema = dereferenceSchema(validationSchema.schemaToUse, [validationSchema.fullSchema], true);
-		this.getFieldValidationErrors(body);
+		this.getFieldValidationErrors(this.body);
 
 		//Files to validate are in possbileFiles
 		fileValidation.checkForFilesInSchema(this.routeRequestSchema, possbileFiles);
