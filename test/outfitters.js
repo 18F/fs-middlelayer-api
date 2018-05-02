@@ -356,7 +356,7 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 
 		});
 
-		it('should return valid zip when getting outfitters files using the controlNumber returned from POST', function(done) {
+		xit('should return valid zip when getting outfitters files using the controlNumber returned from POST', function(done) {
 
 			this.timeout(10000);
 
