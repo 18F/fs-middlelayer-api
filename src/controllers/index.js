@@ -15,7 +15,6 @@
 // required modules
 
 const include = require('include')(__dirname);
-const deref = require('deref');
 const apiSchema = include('src/api.json');
 
 //*******************************************************************
@@ -25,9 +24,8 @@ const error = require('./errors/error.js');
 const get = require('./get.js');
 const fileStore = require('./fileStore.js');
 const db = require('./db.js');
-const NRMConnection = require('./nrmConnection');
+const NRMConnection = require('./NRMConnection');
 const validation = require('./validation.js');
-const fileValidation = require('./fileValidation.js');
 const util = require('./utility.js');
 const DuplicateContactsError = require('./errors/duplicateContactsError.js');
 
@@ -50,27 +48,13 @@ function postApplication(req, res, reqData){
 	const pathData = reqData.schema;
 
 	const body = util.getBody(req);
-	const derefFunc = deref();
 	console.log(body);
 	const possbileFiles = [];
 
-	const validationSchema = validation.selectValidationSchema(pathData);
-	const routeRequestSchema = derefFunc(validationSchema.schemaToUse, [validationSchema.fullSchema], true);
-	const allErrors = validation.getFieldValidationErrors(body, pathData, routeRequestSchema);
-	
-	//Files to validate are in possbileFiles
-	fileValidation.checkForFilesInSchema(routeRequestSchema, possbileFiles);
+	const validator = new validation.ValidationClass(pathData);
 
-	if (possbileFiles.length !== 0){
-		possbileFiles.forEach((fileConstraints)=>{
-			const key = Object.keys(fileConstraints)[0];
-			const fileValidationErrors = fileValidation.validateFile(req.files[key], fileConstraints, key);
-			allErrors.errorArray = allErrors.errorArray.concat(fileValidationErrors);
-		});
-	}
-	const errorMessage = validation.generateErrorMesage(allErrors);
-	if (allErrors.errorArray.length !== 0){
-		return error.sendError(req, res, 400, errorMessage, allErrors.errorArray);
+	if (errorObject.errorArray.length !== 0){
+		return error.sendError(req, res, 400, errorMessage, errorObject.errorArray);
 	}
 	else {
 		NRMConnection.postToBasic(req, res, routeRequestSchema, body)

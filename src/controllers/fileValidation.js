@@ -126,12 +126,10 @@ function validateFile(uploadFile, validationConstraints, fileName){
 
 /**
  * Creates error messages for all file errors
- * @param {Object} output           - Error object containing all error to report and the error message to deliver.
- * @param {Array} output.errorArray - Array contain all errors to report to user.
  * @param {Object} error            - error object to be processed
  * @param {Array} messages          - Array of all error messages to be returned
  */
-function generateFileErrors(output, error, messages){
+function generateFileErrors(error, messages){
 	const reqFile = `${validation.makePathReadable(error.field)} is a required file.`;
 	const small = `${validation.makePathReadable(error.field)} cannot be an empty file.`;
 	const large = `${validation.makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
