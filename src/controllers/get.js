@@ -18,6 +18,7 @@ const jsf = require('json-schema-faker');
 const db = require('./db.js');
 const NRMConnection = require('./NRMConnection');
 const error = require('./errors/error.js');
+const fileStore = require('./fileStore.js');
 //*******************************************************************
 
 /** Populates fields at the top level of an application
@@ -161,7 +162,7 @@ function getControlNumber(req, res, reqData) {
 
 			else if (fileData) {
 
-				filestore.getFilesZip(controlNumber, fileData, res);
+				fileStore.getFilesZip(controlNumber, fileData, res);
 
 			}
 			else {

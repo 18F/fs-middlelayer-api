@@ -104,63 +104,18 @@ function getFilesZip(controlNumber, dbFiles, res){
 	res.set('Content-Type', 'application/zip');
 	res.set('Content-Disposition', 'attachment; filename=' + archiveName);
 
-	zipper
-		.archive({ s3: s3Client, bucket: config.bucketName}, filePath, fileNames)
-		.pipe(res);
+	try {
+		zipper
+			.archive({ s3: s3Client, bucket: config.bucketName }, filePath, fileNames)
+			.pipe(res);
 
-// 	zipper.getFiles({
-// 		folderName: filePath
-// 	},
-//     function (err, fileResult) {
-// 	if (err){
-// 		console.error(err);
-// 		return callback(err);
-// 	}
-// 	else {
-// 		if (fileResult.files.length === 0 ){
-// 			return callback('files not found');
-// 		}
-// 		else {
-				
-// 			fileResult.files.forEach((storeFile)=>{
-
-// 				storeFiles.push(storeFile.Key);
-
-// 			});	
-
-// 			zipper.filterOutFiles = function(file){
-// 				if (fileNames.indexOf(file.Key) >= 0){
-// 					return file;
-// 				}
-// 				else {
-// 					return null;
-// 				}
-// 			};
-
-// 			res.set('Content-Type', 'application/zip');
-// 			res.set('Content-Disposition', 'attachment; filename=' + controlNumber + '.zip');
-
-// 			zipper.streamZipDataTo({
-// 				folderName: filePath,
-// 				pipe: res,
-// 				recursive: true
-// 			},
-// 				function (err) {
-// 					if (err){
-// 						console.error(err);
-// 						return callback(err);
-// 					}
-// 					else {
-// 						return callback(null);	
-// 					}
-// 				}
-// 			);
-
-// 		}
-		
-// 	}
-// });
-
+	} 
+	catch (e) {
+		const err = 'catched error: ' + e;
+		console.log(err);
+		context.fail(err);
+	}
+	
 }
 
 /** Saves all information for a file upload to the DB and uploads the file to S3.

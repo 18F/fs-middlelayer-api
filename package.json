@@ -20,7 +20,8 @@
     "doc": "./node_modules/.bin/jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -R README.md -r .",
     "postinstall": "npm run doc",
     "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "prepare": "npm run snyk-protect",
+    "watch": "./node_modules/.bin/nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -54,6 +55,7 @@
     "istanbul": "^0.4.5",
     "markdownlint-cli": "^0.3.1",
     "minimist": "^1.2.0",
+    "nodemon": "^1.17.3",
     "npm-run-all": "^4.0.2",
     "supertest": "^3.0.0",
     "unionized": "^4.11.0"
