@@ -193,7 +193,7 @@
                 "basicField":"formName",
                 "default":"FS-2700-4I",
                 "localStore":true,
-                "basicStore": ["application"],
+                "basicStore": ["/application"],
                 "type":"string"
             }
         },

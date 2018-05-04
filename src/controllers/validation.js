@@ -32,12 +32,12 @@ class ValidationClass {
 	*/
 	constructor(pathData, body){
 		this.pathData = pathData;
-		this.requiredFields = [];
 		this.schemaValidator = new Validator();
 		this.errorArray = [];
 		this.routeRequestSchema = '';
 		this.fullSchema = {};
 		this.schemaToUse = {};
+		this.requiredFields = [];
 		this.body = body;
 	}
 
@@ -111,8 +111,7 @@ class ValidationClass {
 			dependency,
 			anyOfFields
 		};
-		let key;
-		for (key in errorObject) {
+		for (const key in errorObject) {
 			if (errorObject[key] === null) {
 				delete errorObject[key];
 			}
@@ -126,14 +125,25 @@ class ValidationClass {
 	 */
 	checkForExtraRequired(schema) {
 		const keys = schema.properties;
+		console.log(`reqkeys: ${keys}`);
+		const self = this;
+		const fullRequiredFields = this.requiredFields;
+		console.log(`fullreq fields: ${fullRequiredFields}`);
 		for (const key in keys) {
+			console.log(`singleKey: ${key}`);
 			if (schema.properties[key].type === 'object' && schema.required.includes(key)) {
-				const indexOfSuper = this.requiredFields.indexOf(key) + 1;
+				const indexOfSuper = fullRequiredFields.indexOf(key) + 1;
+				console.log(`indexOfSuper: ${indexOfSuper}`);
+				console.log(`typeObj: schema.properties[key].type`);
+				console.log(`schema.properties[key]~ ${schema.properties[key]}`);
+				for (const subkey in schema.properties[key]){
+					console.log(`subkey ${subkey}`);
+				}
 
-				this.requiredFields.splice(indexOfSuper, 0, ...schema.properties[key].required.map(function (s) {
+				fullRequiredFields.splice(indexOfSuper, 0, ...schema.properties[key].required.map(function (s) {
 					return `${key}.${s}`;
 				}));
-				this.checkForExtraRequired(schema.properties[key]);
+				self.checkForExtraRequired(schema.properties[key]);
 			}
 		}
 	}
@@ -155,8 +165,8 @@ class ValidationClass {
 				self.getAllRequired(schema.properties);
 				break;
 			case 'required':
-				this.requiredFields = this.requiredFields.concat(schema.required);
-				this.checkForExtraRequired(schema);
+				self.requiredFields = self.requiredFields.concat(schema.required);
+				self.checkForExtraRequired(schema);
 			}
 		});
 	}
@@ -204,16 +214,16 @@ class ValidationClass {
 	handleMissingError(result, counter) {
 		const property = this.removeInstance(result[counter].property);
 		const field = this.combinePropArgument(property, result[counter].argument);
-
-		this.errorArray.push(this.makeErrorObject(field, 'missing'));
-		this.findField(this.routeRequestSchema, field.split('.'), this.getAllRequired(this.routeRequestSchema));
-		for (const i in this.requiredFields) {
-			if (this.requiredFields.hasOwnProperty(i)) {
-				this.requiredFields[i] = `${field}.${this.requiredFields[i]}`;
+		const self = this;
+		self.errorArray.push(this.makeErrorObject(field, 'missing'));
+		self.findField(this.routeRequestSchema, field.split('.'), self.getAllRequired(this.routeRequestSchema));
+		for (const i in self.requiredFields) {
+			if (self.requiredFields.hasOwnProperty(i)) {
+				self.requiredFields[i] = `${field}.${self.requiredFields[i]}`;
 			}
 		}
-		this.requiredFields.forEach((requiredField) => {
-			this.errorArray.push(this.makeErrorObject(requiredField, 'missing'));
+		self.requiredFields.forEach((requiredField) => {
+			self.errorArray.push(self.makeErrorObject(requiredField, 'missing'));
 		});
 	}
 
@@ -276,7 +286,7 @@ class ValidationClass {
 		const dependentField = this.removeInstance(error.argument);
 		const schemaPath = this.removeInstance(error.property);
 		const dependency = `${schemaPath}.${this.getDependency(result, counter)}`;
-		this.errorArray.push(this.this.makeErrorObject(dependentField, 'dependencies', null, null, dependency));
+		this.errorArray.push(this.makeErrorObject(dependentField, 'dependencies', null, null, dependency));
 
 	}
 
@@ -336,10 +346,7 @@ class ValidationClass {
 	 * @return {Array}                   - Array of ValidationErrors from validation
 	 */
 	validateBody(){
-		console.log('hi tiger');
-		console.log(this.fullSchema);
 		for (const key in this.fullSchema){
-			console.log(`validateBodyKey: ${key}`);
 			if (this.fullSchema.hasOwnProperty(key)) {
 				this.schemaValidator.addSchema(this.fullSchema[key], key);
 			}

@@ -282,7 +282,7 @@ function postToBasic(req, res, validationSchema, body){
 				fulfill(apiCallLogObject);
 			})
 			.catch(function(err){
-				error.basicServiceError(req, res, err);
+				error.nrmServiceError(req, res, err, error);
 			});
 		})
 		.catch(reject);

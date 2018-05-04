@@ -653,7 +653,7 @@ describe('noncommercial validation', function(){
 
 		it('should report issues when the wrong format of noncommercialFields/end date time is provided', function(){
 			const actual = validationHelper(noncommercialObjects.pathData,
-				noncommercialFactory.create({ 'noncommercialFields.startDateTime': '01-12-2012' }),
+				noncommercialFactory.create({ 'noncommercialFields.endDateTime': '01-12-2012' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
 				errorFactory.create({field: 'noncommercialFields.endDateTime', errorType: 'format'})

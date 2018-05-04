@@ -56,7 +56,7 @@ function sendError(req, res, code, message, errors){
 
 }
 
-function basicServiceError(req, res, err){
+function nrmServiceError(req, res, err, error){	
 	if (err.statusCode && err.statusCode === 404){
 		console.error(err);
 		return error.sendError(req, res, 503, 'underlying service unavailable.');
@@ -65,7 +65,7 @@ function basicServiceError(req, res, err){
 		return error.sendError(req, res, 504, 'underlying service has timed out.');
 	}
 	else {
-		reject(err);
+		return err;
 	}
 }
 
@@ -73,3 +73,4 @@ function basicServiceError(req, res, err){
 // exports
 
 module.exports.sendError = sendError;
+module.exports.nrmServiceError = nrmServiceError; 

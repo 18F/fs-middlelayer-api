@@ -48,7 +48,7 @@ function postApplication(req, res, reqData){
 	const pathData = reqData.schema;
 
 	const body = util.getBody(req);
-	console.log(body);
+	// console.log(body);
 	const possbileFiles = [];
 
 	const Validator = new validation.ValidationClass(pathData, body);
