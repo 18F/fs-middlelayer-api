@@ -45,15 +45,14 @@ class ValidationClass {
 	 * @return {Object} schemas  - fullSchema is the full validation schemas for all permit types. schemaToUse is the validation schema for this route, schemaToGet path
 	 */
 	selectValidationSchema() {
-		const fileToGet = `src/${this.pathData['x-validation'].split('#')[0]}`;
+		const validationSchemaFile = `src/${this.pathData['x-validation'].split('#')[0]}`;
 		const schemaToGet = this.pathData['x-validation'].split('#')[1];
-		const applicationSchema = include(fileToGet);
-		this.fullSchema = applicationSchema;
-		this.schemaToUse = applicationSchema[schemaToGet];
+		const validationSchema = include(validationSchemaFile);
+		this.fullSchema = validationSchema;
+		this.schemaToUse = validationSchema[schemaToGet];
 		return {
-			'fullSchema': applicationSchema,
-			'schemaToUse': applicationSchema[schemaToGet],
-			'schemaPath': schemaToGet
+			'fullSchema': validationSchema,
+			'schemaToUse': validationSchema[schemaToGet]
 		};
 	}
 	/**
@@ -104,7 +103,7 @@ class ValidationClass {
 	 * @return Error object
 	 */
 	makeErrorObject(field, errorType, expectedFieldType, enumMessage, dependency, anyOfFields) {
-		const output = {
+		const errorObject = {
 			field,
 			errorType,
 			expectedFieldType,
@@ -113,12 +112,12 @@ class ValidationClass {
 			anyOfFields
 		};
 		let key;
-		for (key in output) {
-			if (output[key] === null) {
-				delete output[key];
+		for (key in errorObject) {
+			if (errorObject[key] === null) {
+				delete errorObject[key];
 			}
 		}
-		return output;
+		return errorObject;
 	}
 
 	/**
@@ -144,15 +143,16 @@ class ValidationClass {
 	 */
 	getAllRequired(schema) {
 		const keys = Object.keys(schema);
+		const self = this;
 		keys.forEach((key) => {
 			switch (key) {
 			case 'allOf':
 				schema.allOf.forEach((sch) => {
-					this.getAllRequired(sch);
+					self.getAllRequired(sch);
 				});
 				break;
 			case 'properties':
-				this.getAllRequired(schema.properties);
+				self.getAllRequired(schema.properties);
 				break;
 			case 'required':
 				this.requiredFields = this.requiredFields.concat(schema.required);
@@ -197,67 +197,59 @@ class ValidationClass {
 
 	/**
 	 * Handles errors where a required field is missing.
-	 * @param  {Object} output           - Object used to keep track of any errors, will be outputted if any found
-	 * @param  {Array} output.errorArray - Array containing error objects which detail errors in schema
 	 * @param  {Array} result  	         - Array of all errors from schema validator
 	 * @param  {Number} counter          - Index of the current error
 	 * @param  {Object} schema           - schema which input is being validated against
 	 */
-	handleMissingError(output, result, counter) {
+	handleMissingError(result, counter) {
 		const property = this.removeInstance(result[counter].property);
 		const field = this.combinePropArgument(property, result[counter].argument);
 
-		output.errorArray.push(this.makeErrorObject(field, 'missing'));
-		this.findField(this.routeRequestSchema, field.split('.'), this.getAllRequired);
+		this.errorArray.push(this.makeErrorObject(field, 'missing'));
+		this.findField(this.routeRequestSchema, field.split('.'), this.getAllRequired(this.routeRequestSchema));
 		for (const i in this.requiredFields) {
 			if (this.requiredFields.hasOwnProperty(i)) {
 				this.requiredFields[i] = `${field}.${this.requiredFields[i]}`;
 			}
 		}
 		this.requiredFields.forEach((requiredField) => {
-			output.errorArray.push(this.makeErrorObject(requiredField, 'missing'));
+			this.errorArray.push(this.makeErrorObject(requiredField, 'missing'));
 		});
 	}
 
 	/**
 	 * Handles errors where a field is the wrong type.
-	 * @param  {Object} output           - Object used to keep track of any errors, will be outputted if any found
-	 * @param  {Array} output.errorArray - Array containing error objects which detail errors in schema
 	 * @param  {Array} result  	         - Array of all errors from schema validator
 	 * @param  {Number} counter          - Index of the current error
 	 */
-	handleTypeError(output, result, counter) {
+	handleTypeError(result, counter) {
 
 		const expectedType = result[counter].argument[0];
 		const property = this.removeInstance(result[counter].property);
-		output.errorArray.push(this.makeErrorObject(property, 'type', expectedType));
+		this.errorArray.push(this.makeErrorObject(property, 'type', expectedType));
 
 	}
 
 	/**
 	 * Handles errors where a field is formatted wrong.
-	 * @param  {Object} output           - Object used to keep track of any errors, will be outputted if any found
-	 * @param  {Array} output.errorArray - Array containing error objects which detail errors in schema
 	 * @param  {Array} result  	         - Array of all errors from schema validator
 	 * @param  {Number} counter          - Index of the current error
 	 */
-	handleFormatError(output, result, counter) {
+	handleFormatError(result, counter) {
 
 		const field = `${this.removeInstance(result[counter].property)}`;
-		output.errorArray.push(this.makeErrorObject(field, 'format'));
+		this.errorArray.push(this.makeErrorObject(field, 'format'));
 
 	}
 	/**
 	 * Handles errors where a field is not one of the enum values.
-	 * @param  {Object} output            - Object used to keep track of any errors, will be outputted if any found
-	 * @param  {Array}  output.errorArray - Array containing error objects which detail errors in schema
 	 * @param  {Array}  result            - Array of all errors from schema validator
 	 * @param  {Number} counter           - Index of the current error
 	 */
-	handleEnumError(output, result, counter) {
+	handleEnumError(result, counter) {
 
 		const property = this.removeInstance(result[counter].property);
-		output.errorArray.push(this.makeErrorObject(property, 'enum', null, result[counter].message));
+		this.errorArray.push(this.makeErrorObject(property, 'enum', null, result[counter].message));
 
 	}
 
@@ -275,18 +267,16 @@ class ValidationClass {
 
 	/**
 	 * Handles errors where a field has a dependency which is not provided.
-	 * @param  {Object} output            - Object used to keep track of any errors, will be outputted if any found
-	 * @param  {Array}  output.errorArray - Array containing error objects which detail errors in schema
 	 * @param  {Array}  result            - Array of all errors from schema validator
 	 * @param  {Number} counter           - Index of the current error
 	 */
-	handleDependencyError(output, result, counter){
+	handleDependencyError(result, counter){
 
 		const error = result[counter];
 		const dependentField = this.removeInstance(error.argument);
 		const schemaPath = this.removeInstance(error.property);
 		const dependency = `${schemaPath}.${this.getDependency(result, counter)}`;
-		output.errorArray.push(this.this.makeErrorObject(dependentField, 'dependencies', null, null, dependency));
+		this.errorArray.push(this.this.makeErrorObject(dependentField, 'dependencies', null, null, dependency));
 
 	}
 
@@ -312,32 +302,31 @@ class ValidationClass {
 
 	/** Processes ValidationError into ErrorObj, extracting the info needed to create an error message
 	 * @param  {Array} - Array of ValidationErrors from validation
-	 * @param  {Array} - Array to store processed ErrorObjs in
 	 */
-	processErrors(errors, processedErrors){
+	processErrors(errors){
 		const length = errors.length;
 		let counter;
 		for (counter = 0; counter < length; counter++){
 
 			switch (errors[counter].name){
 			case 'required':
-				this.handleMissingError(processedErrors, errors, counter);
+				this.handleMissingError(errors, counter);
 				break;
 			case 'type':
-				this.handleTypeError(processedErrors, errors, counter);
+				this.handleTypeError(errors, counter);
 				break;
 			case 'format':
 			case 'pattern':
-				this.handleFormatError(processedErrors, errors, counter);
+				this.handleFormatError(errors, counter);
 				break;
 			case 'enum':
-				this.handleEnumError(processedErrors, errors, counter);
+				this.handleEnumError(errors, counter);
 				break;
 			case 'dependencies':
-				this.handleDependencyError(processedErrors, errors, counter);
+				this.handleDependencyError(errors, counter);
 				break;
 			case 'anyOf':
-				this.handleAnyOfError(processedErrors, errors, counter);
+				this.handleAnyOfError(errors, counter);
 				break;
 			}
 		}
@@ -347,9 +336,12 @@ class ValidationClass {
 	 * @return {Array}                   - Array of ValidationErrors from validation
 	 */
 	validateBody(){
-		for (const key in this.applicationSchema){
-			if (this.applicationSchema.hasOwnProperty(key)) {
-				this.schemaValidator.addSchema(this.applicationSchema[key], key);
+		console.log('hi tiger');
+		console.log(this.fullSchema);
+		for (const key in this.fullSchema){
+			console.log(`validateBodyKey: ${key}`);
+			if (this.fullSchema.hasOwnProperty(key)) {
+				this.schemaValidator.addSchema(this.fullSchema[key], key);
 			}
 		}
 		const val = this.schemaValidator.validate(this.body, this.schemaToUse);
@@ -424,15 +416,15 @@ class ValidationClass {
 	 */
 	makeAnyOfMessage(anyOfFields){
 		if (anyOfFields){
-			let output, count = 1;
+			let count = 1;
 			const length = anyOfFields.length;
-			output = `${this.makePathReadable(anyOfFields[0])}`;
+			let message = `${this.makePathReadable(anyOfFields[0])}`;
 			while (count < length) {
 				const field = anyOfFields[count];
-				output = `${output} or ${this.makePathReadable(field)}`;
+				message = `${message} or ${this.makePathReadable(field)}`;
 				count ++;
 			}
-			return output;
+			return message;
 		}
 		else {
 			return false;
@@ -446,17 +438,15 @@ class ValidationClass {
 	 */
 	concatErrors(errorMessages){
 
-		let output = '';
+		let errMessage = '';
 		errorMessages.forEach((message)=>{
-			output = `${output}${message} `;
+			errMessage = `${errMessage}${message} `;
 		});
-		return output.trim();
+		return errMessage.trim();
 	}
 
 	/**
 	 * Creates error messages for all field errors
-	 * @param  {Object}  output            - Error object containing all error to report and the error message to deliver.
-	 * @param  {Array}   output.errorArray - Array contain all errors to report to user.
 	 * @param  {Object} error              - error object to be processed
 	 * @param  {Array}  messages           - Array of all error messages to be returned
 	 * @return {String}                    - All field error messages concated together
@@ -518,44 +508,47 @@ class ValidationClass {
 	 * Checks the length of all fields with a maxLength field in schema
 	 * @param  {Object} schema                          - Section of the validation schema being used
 	 * @param  {Object} input                           - User input being validated
+	 * @param  {Object} processedFieldErrors            - Current object containing errors
+	 * @param  {Array}  processedFieldErrors.errorArray - Array of all errors found so far
 	 * @param  {String} path                            - Path to field being checked
 	 * @return {Array}                                  - Array of error objects representing all errors found so far
 	 */
-	checkFieldLengths(input, path){
-		const keys = Object.keys(this.routeRequestSchema);
-		keys.forEach((key)=>{
-			switch (key){
+	checkFieldLengths(schema, input, path) {
+		const keys = Object.keys(schema);
+		const self = this;
+		keys.forEach((key) => {
+			switch (key) {
 			case 'allOf':
 			case 'anyOf':
-				this.routeRequestSchema[key].forEach((subSchema)=>{
-					this.checkFieldLengths(subSchema, input, path);
+				schema[key].forEach((sch) => {
+					self.checkFieldLengths(sch, input, path);
 				});
 				break;
 			case 'properties':
-				this.checkFieldLengths(this.routeRequestSchema.properties, input, path);
+				self.checkFieldLengths(schema.properties, input, path);
 				break;
-			default:{
+			default: {
 				let field;
-				if (path === ''){
+				if (path === '') {
 					field = `${key}`;
 				}
 				else {
 					field = `${path}.${key}`;
 				}
-				if (this.routeRequestSchema[key].type === 'object'){
-					if (input[key]){
-						this.checkFieldLengths(this.routeRequestSchema[key], input[key], field);
+				if (schema[key].type === 'object') {
+					if (input[key]) {
+						self.checkFieldLengths(schema[key], input[key], field);
 					}
 				}
-				else if (this.routeRequestSchema[key].fromIntake){
+				else if (schema[key].fromIntake) {
 
-					if (input){
-						const maxLength = this.routeRequestSchema[key].maxLength;
+					if (input) {
+						const maxLength = schema[key].maxLength;
 						const fieldLength = `${input[key]}`.length;
 
-						if (maxLength < fieldLength){
+						if (maxLength < fieldLength) {
 
-							this.errorArray.push(this.makeErrorObject(field, 'length', maxLength));
+							self.errorArray.push(self.makeErrorObject(field, 'length', maxLength));
 						}
 
 					}
@@ -571,10 +564,10 @@ class ValidationClass {
 	 * Checks that individualIsCitizen field is present if application is a temp-outfitters application and it is for an individual
 	 * @param  {Object} input                - User input
 	 */
-	checkForIndividualIsCitizen(input){
-		if (input.tempOutfitterFields && input.applicantInfo){
-			if (!input.applicantInfo.orgType || input.applicantInfo.orgType.toUpperCase() === 'PERSON'){
-				if ((typeof input.tempOutfitterFields.individualIsCitizen) !== 'boolean'){
+	checkForIndividualIsCitizen(){
+		if (this.body.tempOutfitterFields && this.body.applicantInfo){
+			if (!this.body.applicantInfo.orgType || this.body.applicantInfo.orgType.toUpperCase() === 'PERSON'){
+				if ((typeof this.body.tempOutfitterFields.individualIsCitizen) !== 'boolean'){
 					this.errorArray.push(this.makeErrorObject('tempOutfitterFields.individualIsCitizen', 'missing'));
 				}
 			}
@@ -585,10 +578,10 @@ class ValidationClass {
 	 * Checks that smallBusiness field is present if application is a temp-outfitters application and it is not for an individual
 	 * @param  {Object} input                - User input
 	 */
-	checkForSmallBusiness(input){
-		if (input.tempOutfitterFields && input.applicantInfo){
-			if (input.applicantInfo.orgType && input.applicantInfo.orgType.toUpperCase() !== 'PERSON'){
-				if ((typeof input.tempOutfitterFields.smallBusiness) !== 'boolean'){
+	checkForSmallBusiness(){
+		if (this.body.tempOutfitterFields && this.body.applicantInfo){
+			if (this.body.applicantInfo.orgType && this.body.applicantInfo.orgType.toUpperCase() !== 'PERSON'){
+				if ((typeof this.body.tempOutfitterFields.smallBusiness) !== 'boolean'){
 					this.errorArray.push(this.makeErrorObject('tempOutfitterFields.smallBusiness', 'missing'));
 				}
 			}
@@ -599,10 +592,10 @@ class ValidationClass {
 	 * Checks that organizationName field is present if application is not for an individual
 	 * @param  {Object} input                - User input
 	 */
-	checkForOrgName(input){
-		if (input.applicantInfo){
-			if (input.applicantInfo.orgType && input.applicantInfo.orgType.toUpperCase() !== 'PERSON'){
-				if (!input.applicantInfo.organizationName || input.applicantInfo.organizationName.length <= 0){
+	checkForOrgName(){
+		if (this.body.applicantInfo){
+			if (this.body.applicantInfo.orgType && this.body.applicantInfo.orgType.toUpperCase() !== 'PERSON'){
+				if (!this.body.applicantInfo.organizationName || this.body.applicantInfo.organizationName.length <= 0){
 					this.errorArray.push(this.makeErrorObject('applicantInfo.organizationName', 'missing'));
 				}
 			}
@@ -613,7 +606,7 @@ class ValidationClass {
 	 * Additional validation checks that can't be defined in the validation schema
 	 */
 	additionalValidation(){
-		this.checkFieldLengths('');
+		this.checkFieldLengths(this.routeRequestSchema, this.body, '');
 		this.checkForOrgName();
 		this.checkForIndividualIsCitizen();
 		this.checkForSmallBusiness();
@@ -649,19 +642,6 @@ class ValidationClass {
 		}
 		const errorMessage = this.generateErrorMesage();
 		return {'message': errorMessage, 'errorArray': this.errorArray};
-	}
-
-	validationHelper(dereferenceSchema) {
-		this.selectValidationSchema();
-		console.log('ValidHelpLog-s2u');
-		console.log(this.schemaToUse);
-		console.log('ValidHelpLog-full');
-		console.log(this.fullSchema);
-		this.routeRequestSchema = dereferenceSchema;
-		console.log('ValidHelpLog-rrs');
-		console.log(this.routeRequestSchema);
-		this.getFieldValidationErrors();
-		return this.errorArray;
 	}
 } // End of class
 
