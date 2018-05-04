@@ -15,7 +15,7 @@
 // required modules
 const Validator = require('jsonschema').Validator;
 const include = require('include')(__dirname);
-const deref = require('deref');
+const dereferenceSchema = require('deref');
 
 //*******************************************************************
 // other files
@@ -634,7 +634,6 @@ class ValidationClass {
 
 	validateInput(possbileFiles, req){
 		this.selectValidationSchema();
-		dereferenceSchema = deref();
 		this.routeRequestSchema = dereferenceSchema(this.schemaToUse, [this.fullSchema], true);
 		this.getFieldValidationErrors();
 
@@ -652,13 +651,13 @@ class ValidationClass {
 		return {'message': errorMessage, 'errorArray': this.errorArray};
 	}
 
-	validationHelper() {
+	validationHelper(dereferenceSchema) {
 		this.selectValidationSchema();
 		console.log('ValidHelpLog-s2u');
 		console.log(this.schemaToUse);
 		console.log('ValidHelpLog-full');
 		console.log(this.fullSchema);
-		this.routeRequestSchema = dereferenceSchema(this.schemaToUse, [this.fullSchema], true);
+		this.routeRequestSchema = dereferenceSchema;
 		console.log('ValidHelpLog-rrs');
 		console.log(this.routeRequestSchema);
 		this.getFieldValidationErrors();
