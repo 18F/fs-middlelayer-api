@@ -17,6 +17,7 @@
 const AWSMock = require('mock-aws-s3');
 const chai = require('chai');
 const expect = chai.expect;
+const dereferenceSchema = require('deref');
 
 const specialUses = {};
 
@@ -55,9 +56,7 @@ describe('outfitters validation ', function(){
 	describe('ensure field is present', function(){
 		it('should report issues when no body is provided', function(){
 			const Validator = new specialUses.validate.ValidationClass(outfittersObjects.pathData, {});
-			Validator.selectValidationSchema();
-			Validator.validateBody();
-			const actual = Validator.errorArray;
+			const actual = Validator.validationHelper();
 			const expected = [
 				errorFactory.create({field: 'region', errorType: 'missing'}),
 				errorFactory.create({field: 'forest', errorType: 'missing'}),
@@ -84,7 +83,11 @@ describe('outfitters validation ', function(){
 		});
 
 		it('should report issues when no applicantInfo object is provided', function(){
-			const actual = specialUses.validate.validateBody(tempOutfitterFactory.create({applicantInfo : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray;
+			const Validator = new specialUses.validate.ValidationClass(outfittersObjects.pathData, tempOutfitterFactory.create({ applicantInfo: undefined }));
+			Validator.selectValidationSchema();
+
+			Validator.validateBody();
+			const actual = Validator.errorArray;
 			const expected = [
 				errorFactory.create({field: 'applicantInfo', errorType: 'missing'}),
 				errorFactory.create({field: 'applicantInfo.firstName', errorType: 'missing'}),
@@ -104,7 +107,10 @@ describe('outfitters validation ', function(){
 		});
 
 		it('should report issues when no tempOutfitterFields object is provided', function(){
-			const actual = specialUses.validate.validateBody(tempOutfitterFactory.create({tempOutfitterFields : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray;
+			const Validator = new specialUses.validate.ValidationClass(outfittersObjects.pathData, tempOutfitterFactory.create({ applicantInfo: undefined }));
+			Validator.selectValidationSchema();
+			Validator.validateBody();
+			const actual = Validator.errorArray;
 			const expected = [
 				errorFactory.create({field: 'tempOutfitterFields', errorType: 'missing'}),
 				errorFactory.create({field: 'tempOutfitterFields.activityDescription', errorType: 'missing'}),
@@ -122,7 +128,10 @@ describe('outfitters validation ', function(){
 		});
 
 		it('should report issues when no tempOutfitterFields/activity description is provided', function(){
-			const actual = specialUses.validate.validateBody(tempOutfitterFactory.create({'tempOutfitterFields.activityDescription' : undefined}), outfittersObjects.pathData, outfittersObjects.derefSchema).errorArray;
+			const Validator = new specialUses.validate.ValidationClass(outfittersObjects.pathData, tempOutfitterFactory.create({ 'tempOutfitterFields.activityDescription': undefined }));
+			Validator.selectValidationSchema();
+			Validator.validateBody();
+			const actual = Validator.errorArray;
 			const expected = [
 				errorFactory.create({field: 'tempOutfitterFields.activityDescription', errorType: 'missing'})
 			];

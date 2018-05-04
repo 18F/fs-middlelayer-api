@@ -15,7 +15,7 @@
 // required modules
 const Validator = require('jsonschema').Validator;
 const include = require('include')(__dirname);
-const dereferenceSchema = require('deref');
+const deref = require('deref');
 
 //*******************************************************************
 // other files
@@ -26,8 +26,8 @@ const fileValidation = require('./fileValidation.js');
 class ValidationClass {
 	/**
 	* @param  { Object } pathData - All data from swagger for the path that has been run
-	* @param  {Array}  errorArray - Array of all errors found so far
 	* @param {Object} body - json body of the request being sent
+	* @param  {Array}  errorArray - Array of all errors found so far
 	* @param {Object} routeRequestSchema - schema of the particular route
 	*/
 	constructor(pathData, body){
@@ -35,8 +35,26 @@ class ValidationClass {
 		this.requiredFields = [];
 		this.schemaValidator = new Validator();
 		this.errorArray = [];
-		this.routeRequestSchema = {};
+		this.routeRequestSchema = '';
+		this.fullSchema = {};
+		this.schemaToUse = {};
 		this.body = body;
+	}
+
+	/** Get the schema to be used for validating user input
+	 * @return {Object} schemas  - fullSchema is the full validation schemas for all permit types. schemaToUse is the validation schema for this route, schemaToGet path
+	 */
+	selectValidationSchema() {
+		const fileToGet = `src/${this.pathData['x-validation'].split('#')[0]}`;
+		const schemaToGet = this.pathData['x-validation'].split('#')[1];
+		const applicationSchema = include(fileToGet);
+		this.fullSchema = applicationSchema;
+		this.schemaToUse = applicationSchema[schemaToGet];
+		return {
+			'fullSchema': applicationSchema,
+			'schemaToUse': applicationSchema[schemaToGet],
+			'schemaPath': schemaToGet
+		};
 	}
 	/**
 	 * Removes 'instance' from prop field of validation errors. Used to make fields human readable
@@ -292,22 +310,6 @@ class ValidationClass {
 
 	}
 
-	/** Get the schema to be used for validating user input
-	 * @return {Object} schemas  - fullSchema is the full validation schemas for all permit types. schemaToUse is the validation schema for this route, schemaToGet path
-	 */
-	selectValidationSchema(){
-		const fileToGet = `src/${this.pathData['x-validation'].split('#')[0]}`;
-		const schemaToGet = this.pathData['x-validation'].split('#')[1];
-		const applicationSchema = include(fileToGet);
-		this.fullSchema = applicationSchema;
-		this.schemaToUse = applicationSchema[schemaToGet];
-		return {
-			'fullSchema':applicationSchema,
-			'schemaToUse':applicationSchema[schemaToGet],
-			'schemaPath': schemaToGet
-		};
-	}
-
 	/** Processes ValidationError into ErrorObj, extracting the info needed to create an error message
 	 * @param  {Array} - Array of ValidationErrors from validation
 	 * @param  {Array} - Array to store processed ErrorObjs in
@@ -342,8 +344,6 @@ class ValidationClass {
 	}
 
 	/** Validates the fields in user input
-	 * @param  {Object} body             - Input from user to be validated
-	 * @param  {Object} validationSchema - schema to be used for validating input, same as validation.json without refs
 	 * @return {Array}                   - Array of ValidationErrors from validation
 	 */
 	validateBody(){
@@ -621,7 +621,6 @@ class ValidationClass {
 
 	/**
 	 * Drives validation of fields
-	 * @param  {Object} body             - User input
 	 * @param  {Object} validationSchema - schema to be used for validating input, same as validation.json without refs
 	 * @return {Object}                  - Object containing an array of error objects for every error with fields
 	 */
@@ -634,9 +633,10 @@ class ValidationClass {
 	}
 
 	validateInput(possbileFiles, req){
-		const validationSchema = this.selectValidationSchema();
-		this.routeRequestSchema = dereferenceSchema(validationSchema.schemaToUse, [validationSchema.fullSchema], true);
-		this.getFieldValidationErrors(this.body);
+		this.selectValidationSchema();
+		dereferenceSchema = deref();
+		this.routeRequestSchema = dereferenceSchema(this.schemaToUse, [this.fullSchema], true);
+		this.getFieldValidationErrors();
 
 		//Files to validate are in possbileFiles
 		fileValidation.checkForFilesInSchema(this.routeRequestSchema, possbileFiles);
@@ -650,6 +650,19 @@ class ValidationClass {
 		}
 		const errorMessage = this.generateErrorMesage();
 		return {'message': errorMessage, 'errorArray': this.errorArray};
+	}
+
+	validationHelper() {
+		this.selectValidationSchema();
+		console.log('ValidHelpLog-s2u');
+		console.log(this.schemaToUse);
+		console.log('ValidHelpLog-full');
+		console.log(this.fullSchema);
+		this.routeRequestSchema = dereferenceSchema(this.schemaToUse, [this.fullSchema], true);
+		console.log('ValidHelpLog-rrs');
+		console.log(this.routeRequestSchema);
+		this.getFieldValidationErrors();
+		return this.errorArray;
 	}
 } // End of class
 
