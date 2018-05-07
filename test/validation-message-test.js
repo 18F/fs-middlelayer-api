@@ -53,33 +53,34 @@ describe('Build error messages: ', function(){
 	});
 
 	it('should return \'First Name is a required field. Last Name is a required field.\'', function(){
-		const actual = errorMessageValidatorHelper(errorFactory.create(
+		const messages = [];
+		const errorFactoryOjbect = errorFactory.create(
 			{
 				'errorArray[]': 2,
 				'errorArray[0].field': 'applicantInfo.firstName',
 				'errorArray[0].errorType': 'missing',
 				'errorArray[1].field': 'applicantInfo.lastName',
 				'errorArray[1].errorType': 'missing'
-			}));
+			}
+		);
+		const Validator = new specialUses.validate.ValidationClass(noncommercialObjects.pathData,
+			noncommercialFactory.create());
+		messages.push(Validator.generateErrorMessage(errorFactoryOjbect.errorArray[0]));
+		messages.push(Validator.generateErrorMessage(errorFactoryOjbect.errorArray[1]));
+		const actual = Validator.concatErrors(messages);
 		expect(actual)
 		.to.be.equal('Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field.');
 	
 	});
 
 	it('should return \'First Name is expected to be of type \'string\'.\'', function(){
-		const messages = [];
-		const errorFactoryOjbect = errorMessageValidatorHelper(errorFactory.create(
+		const actual = errorMessageValidatorHelper(errorFactory.create(
 			{
 				'errorArray[]': 1,
 				'errorArray[0].field': 'applicantInfo.firstName',
 				'errorArray[0].errorType': 'type',
 				'errorArray[0].expectedFieldType': 'string'
 			}));
-		const Validator = new specialUses.validate.ValidationClass(noncommercialObjects.pathData,
-			noncommercialFactory.create());
-		messages.push(Validator.generateErrorMessage(errorFactoryOjbect.errorArray[0]));
-		messages.push(Validator.generateErrorMessage(errorFactoryOjbect.errorArray[1]));
-		const actual = Validator.concatErrors(messages);
 		expect(actual)
 		.to.be.equal('Applicant Info/First Name is expected to be type \'string\'.');
 	

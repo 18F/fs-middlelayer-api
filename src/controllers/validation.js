@@ -224,7 +224,6 @@ class ValidationClass {
 	handleTypeError(typeError) {
 		const expectedType = typeError.argument[0];
 		this.errorArray.push(this.makeErrorObject(typeError.cleanProperty, 'type', expectedType));
-
 	}
 
 	/**
@@ -240,7 +239,6 @@ class ValidationClass {
 	 */
 	handleEnumError(enumError) {
 		this.errorArray.push(this.makeErrorObject(enumError.cleanProperty, 'enum', null, enumError.message));
-
 	}
 
 	/**
@@ -253,7 +251,6 @@ class ValidationClass {
 		const dependencyPath = dependencyError.stack.split(' property ')[1].split(' not ')[0];
 		const dependency = `${dependencyError.cleanProperty}.${dependencyPath}`;
 		this.errorArray.push(this.makeErrorObject(dependentField, 'dependencies', null, null, dependency));
-
 	}
 
 	/**

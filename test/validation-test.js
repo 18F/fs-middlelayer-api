@@ -259,7 +259,7 @@ describe('noncommercial validation', function(){
 			const actual = validationHelper(noncommercialObjects.pathData,
 				noncommercialFactory.create({ 'applicantInfo.lastName': undefined }),
 				noncommercialObjects.derefSchema);
-				const expected = [
+			const expected = [
 				errorFactory.create({field: 'applicantInfo.lastName', errorType: 'missing'})
 			];
 			expect (actual).to.eql(expected);
