@@ -61,7 +61,7 @@ after(function(){
 
 describe('outfitters validation ', function(){
 	describe('ensure field is present', function(){
-		it('should report issues when no body is provided-i', function(){
+		it.only('should report issues when no body is provided-i', function(){
 			const actual = validationHelper(outfittersObjects.pathData, {}, outfittersObjects.derefSchema);
 			const expected = [
 				errorFactory.create({field: 'region', errorType: 'missing'}),
@@ -693,7 +693,7 @@ describe('noncommercial validation', function(){
 
 		it('should report issues for invalid option for applicant info/org type is provided', function(){
 			const actual = validationHelper(noncommercialObjects.pathData,
-				noncommercialFactory.create({ 'applicantInfo.orgType': 'invalid' }),
+				noncommercialFactory.create({ 'applicantInfo.orgType': 'invalid', 'applicantInfo.organizationName': 'testName' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
 				{

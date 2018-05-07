@@ -288,7 +288,7 @@ class ValidationClass {
 	 * @param {Array}  result                   - Array of errors found during validation.
 	 * @param {Number} counter                  - Position in result that the current error being handled is.
 	 */
-	handleAnyOfError(errorTracking, result, counter){
+	handleAnyOfError(result, counter){
 
 		const error = result[counter];
 		const property = this.removeInstance(error.property);
@@ -296,7 +296,7 @@ class ValidationClass {
 		error.schema.anyOf.forEach((fieldObj)=>{
 			requiredOptions.push(this.combinePropArgument(property, fieldObj.required[0]));
 		});
-		errorTracking.errorArray.push(this.makeErrorObject(null, 'anyOf', null, null, null, requiredOptions));
+		this.errorArray.push(this.makeErrorObject(null, 'anyOf', null, null, null, requiredOptions));
 
 	}
 
@@ -325,15 +325,8 @@ class ValidationClass {
 				this.handleDependencyError(errors, counter);
 				break;
 			case 'anyOf':
-				console.log(`anyof $ ${errors}`);
 				this.handleAnyOfError(errors, counter);
 				break;
-			default:
-				if (errors[counter].name !== 'allOf'){
-					console.log("ThisProcessErrordefaultexhAllOf");
-					console.log(errors[counter].name);
-					console.log(errors[counter]);
-				}
 			}
 		}
 	}
