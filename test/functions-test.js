@@ -19,7 +19,6 @@ const chai = require('chai');
 const expect = chai.expect;
 
 const validationJs =  require('../src/controllers/validation.js');
-const utility = require('../src/controllers/utility.js');
 
 //*******************************************************************
 
@@ -80,16 +79,6 @@ describe('Function Tests: validation.js ', function(){
 		const Validator = new validationJs.ValidationClass('', '');
 		expect(Validator.concatErrors(['a', 'b']) )
 		.to.be.equal('a b');
-	});
-
-	it('makePathReadable should return expected output', function(){
-		expect(utility.makePathReadable('error.field') )
-		.to.be.equal('Error/Field');
-	});
-
-	it('makeFieldReadable should return expected output', function(){
-		expect(utility.makeFieldReadable('firstName') )
-		.to.be.equal('First Name');
 	});
 
 });

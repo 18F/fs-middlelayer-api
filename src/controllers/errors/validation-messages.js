@@ -15,7 +15,49 @@
 // other files
 
 const errors = require('./patternErrorMessages.json');
-const utility = require('../utility.js');
+
+/**
+ * Takes input like fieldOne and converts it to Field One so that it is easier to read
+ * @param  {String} input - String to be made more readable
+ * @return {String}       - More readble string
+ */
+function makeFieldReadable(input) {
+
+	return input
+		.replace(/([A-Z])/g, ' $1')
+		.replace(/^./, function (str) {
+			return str.toUpperCase();
+		})
+		.replace('Z I P', 'Zip')
+		.replace('U R L', 'URL');
+
+}
+
+/**
+ * Takes input like fieldOne.fieldTwo and converts it to Field One/Field Two to make it easier to read
+ * @param  {String} input - path to field which has error
+ * @return {String}       - human readable path to errored field
+ */
+function makePathReadable(input) {
+
+	if (typeof input === 'string') {
+		const parts = input.split('.');
+		const readableParts = [];
+		let readablePath = '';
+		parts.forEach((field) => {
+			readableParts.push(makeFieldReadable(field));
+		});
+		readablePath = readableParts.shift();
+		readableParts.forEach((part) => {
+			readablePath = `${readablePath}/${part}`;
+		});
+		return readablePath;
+	}
+	else {
+		return false;
+	}
+
+}
 
 /**
 	 * Creates error message for format errors
@@ -25,7 +67,7 @@ const utility = require('../utility.js');
 	 */
 function buildFormatErrorMessage(fullPath) {
 	const field = fullPath.substring(fullPath.lastIndexOf('.') + 1);
-	const readablePath = utility.makePathReadable(fullPath);
+	const readablePath = makePathReadable(fullPath);
 	const errorMessage = `${readablePath}${errors[field]}`;
 	return errorMessage;
 
@@ -41,10 +83,10 @@ function makeAnyOfMessage(anyOfFields){
 	if (anyOfFields){
 		let count = 1;
 		const length = anyOfFields.length;
-		let message = `${utility.makePathReadable(anyOfFields[0])}`;
+		let message = `${makePathReadable(anyOfFields[0])}`;
 		while (count < length) {
 			const field = anyOfFields[count];
-			message = `${message} or ${utility.makePathReadable(field)}`;
+			message = `${message} or ${makePathReadable(field)}`;
 			count ++;
 		}
 		return message;
@@ -60,15 +102,15 @@ function makeAnyOfMessage(anyOfFields){
 function generateFileErrors(error) {
 	switch (error.errorType) {
 	case 'requiredFileMissing':
-		return `${utility.makePathReadable(error.field)} is a required file.`;
+		return `${makePathReadable(error.field)} is a required file.`;
 	case 'invalidExtension':
-		return `${utility.makePathReadable(error.field)} must be one of the following extensions: ${error.expectedFieldType.join(', ')}.`;
+		return `${makePathReadable(error.field)} must be one of the following extensions: ${error.expectedFieldType.join(', ')}.`;
 	case 'invalidMime':
-		return `${utility.makePathReadable(error.field)} must be one of the following mime types: ${error.expectedFieldType.join(', ')}.`;
+		return `${makePathReadable(error.field)} must be one of the following mime types: ${error.expectedFieldType.join(', ')}.`;
 	case 'invalidSizeSmall':
-		return `${utility.makePathReadable(error.field)} cannot be an empty file.`;
+		return `${makePathReadable(error.field)} cannot be an empty file.`;
 	case 'invalidSizeLarge':
-		return `${utility.makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
+		return `${makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
 	}
 }
 
@@ -82,26 +124,26 @@ function generateErrorMessage(validationError){
 	let message = '';
 	switch (validationError.errorType){
 	case 'missing':
-		message = `${utility.makePathReadable(validationError.field)} is a required field.`;
+		message = `${makePathReadable(validationError.field)} is a required field.`;
 		break;
 	case 'type':
-		message = `${utility.makePathReadable(validationError.field)} is expected to be type '${validationError.expectedFieldType}'.`;
+		message = `${makePathReadable(validationError.field)} is expected to be type '${validationError.expectedFieldType}'.`;
 		break;
 	case 'format':
 	case 'pattern':
 		message = buildFormatErrorMessage(validationError.field);
 		break;
 	case 'enum':
-		message = `${utility.makePathReadable(validationError.field)} ${validationError.enumMessage}.`;
+		message = `${makePathReadable(validationError.field)} ${validationError.enumMessage}.`;
 		break;
 	case 'dependencies':
-		message = `Having ${utility.makePathReadable(validationError.field)} requires that ${utility.makePathReadable(validationError.dependency)} be provided.`;
+		message = `Having ${makePathReadable(validationError.field)} requires that ${makePathReadable(validationError.dependency)} be provided.`;
 		break;
 	case 'anyOf':
 		message = `Either ${makeAnyOfMessage(validationError.anyOfFields)} is a required field.`;
 		break;
 	case 'length':
-		message = `${utility.makePathReadable(validationError.field)} is too long, must be ${validationError.expectedFieldType} chracters or shorter`;
+		message = `${makePathReadable(validationError.field)} is too long, must be ${validationError.expectedFieldType} chracters or shorter`;
 		break;
 	default:
 		message = generateFileErrors(validationError);
@@ -111,5 +153,7 @@ function generateErrorMessage(validationError){
 
 }
 
+module.exports.makeFieldReadable = makeFieldReadable;
+module.exports.makePathReadable = makePathReadable;
 module.exports.generateErrorMessage = generateErrorMessage;
 module.exports.makeAnyOfMessage = makeAnyOfMessage;

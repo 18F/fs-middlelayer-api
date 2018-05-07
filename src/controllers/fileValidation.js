@@ -16,9 +16,6 @@
 const path = require('path');
 
 //*******************************************************************
-// other files
-
-const utility = require('./utility.js');
 
 const fileMimes = [
 	'application/vnd.openxmlformats-officedocument.wordprocessingml.document',

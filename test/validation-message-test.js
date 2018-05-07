@@ -198,6 +198,16 @@ describe('Build error messages: ', function(){
 			.to.be.equal('Field1 or Field2');
 	});
 
+	it('makePathReadable should return expected output', function () {
+		expect(errorMessages.makePathReadable('error.field'))
+			.to.be.equal('Error/Field');
+	});
+
+	it('makeFieldReadable should return expected output', function () {
+		expect(errorMessages.makeFieldReadable('firstName'))
+			.to.be.equal('First Name');
+	});
+
 });
 
 //*******************************************************************

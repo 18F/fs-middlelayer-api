@@ -59,52 +59,7 @@ function apiSchemaData(apiSchema, reqPath) {
 
 }
 
-/**
- * Takes input like fieldOne and converts it to Field One so that it is easier to read
- * @param  {String} input - String to be made more readable
- * @return {String}       - More readble string
- */
-function makeFieldReadable(input) {
-
-	return input
-		.replace(/([A-Z])/g, ' $1')
-		.replace(/^./, function (str) {
-			return str.toUpperCase();
-		})
-		.replace('Z I P', 'Zip')
-		.replace('U R L', 'URL');
-
-}
-
-/**
- * Takes input like fieldOne.fieldTwo and converts it to Field One/Field Two to make it easier to read
- * @param  {String} input - path to field which has error
- * @return {String}       - human readable path to errored field
- */
-function makePathReadable(input) {
-
-	if (typeof input === 'string') {
-		const parts = input.split('.');
-		const readableParts = [];
-		let readablePath = '';
-		parts.forEach((field) => {
-			readableParts.push(makeFieldReadable(field));
-		});
-		readablePath = readableParts.shift();
-		readableParts.forEach((part) => {
-			readablePath = `${readablePath}/${part}`;
-		});
-		return readablePath;
-	}
-	else {
-		return false;
-	}
-
-}
-
 //*******************************************************************
 
 module.exports.getBody = getBody;
 module.exports.apiSchemaData = apiSchemaData;
-module.exports.makePathReadable = makePathReadable;
-module.exports.makeFieldReadable = makeFieldReadable;
