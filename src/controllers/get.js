@@ -18,7 +18,7 @@ const jsf = require('json-schema-faker');
 const db = require('./db.js');
 const NRMConnection = require('./nrmconnection');
 const error = require('./errors/error.js');
-const fileStore = require('./fileStore.js');
+const fileStore = require('./filestore.js');
 //*******************************************************************
 
 /** Populates fields at the top level of an application

@@ -22,7 +22,7 @@ const apiSchema = include('src/api.json');
 
 const error = require('./errors/error.js');
 const get = require('./get.js');
-const fileStore = require('./fileStore.js');
+const fileStore = require('./filestore.js');
 const db = require('./db.js');
 const NRMConnection = require('./nrmconnection');
 const validation = require('./validation.js');
