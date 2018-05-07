@@ -34,7 +34,7 @@ const noncommercialObjects = testObjects.noncommercial;
 function errorMessageValidatorHelper(errorFactoryOjbect){
 	const Validator = new specialUses.validate.ValidationClass(noncommercialObjects.pathData,
 		noncommercialFactory.create());
-	Validator.errorArray = [errorFactoryOjbect];
+	Validator.errorArray = errorFactoryOjbect.errorArray;
 	const errorMessage = Validator.generateErrorMesage();
 	return errorMessage;
 }

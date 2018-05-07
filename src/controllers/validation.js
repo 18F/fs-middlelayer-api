@@ -22,6 +22,7 @@ const dereferenceSchema = require('deref');
 
 const errors = require('./errors/patternErrorMessages.json');
 const fileValidation = require('./fileValidation.js');
+const utility = require('./utility.js');
 
 class ValidationClass {
 	/**
@@ -125,22 +126,12 @@ class ValidationClass {
 	 */
 	checkForExtraRequired(schema) {
 		const keys = schema.properties;
-		console.log(`reqkeys: ${keys}`);
 		const self = this;
-		const fullRequiredFields = this.requiredFields;
-		console.log(`fullreq fields: ${fullRequiredFields}`);
 		for (const key in keys) {
-			console.log(`singleKey: ${key}`);
 			if (schema.properties[key].type === 'object' && schema.required.includes(key)) {
-				const indexOfSuper = fullRequiredFields.indexOf(key) + 1;
-				console.log(`indexOfSuper: ${indexOfSuper}`);
-				console.log(`typeObj: schema.properties[key].type`);
-				console.log(`schema.properties[key]~ ${schema.properties[key]}`);
-				for (const subkey in schema.properties[key]){
-					console.log(`subkey ${subkey}`);
-				}
+				const indexOfSuper = self.requiredFields.indexOf(key) + 1;
 
-				fullRequiredFields.splice(indexOfSuper, 0, ...schema.properties[key].required.map(function (s) {
+				self.requiredFields.splice(indexOfSuper, 0, ...schema.properties[key].required.map(function (s) {
 					return `${key}.${s}`;
 				}));
 				self.checkForExtraRequired(schema.properties[key]);
@@ -174,19 +165,18 @@ class ValidationClass {
 	/** Traverses through schema to find field specified. Once found it executes a function on that field in the schema.
 	 * @param  {Object}   schema - schema to look for field in
 	 * @param  {Array}    field  - Array(String) containing the path to the field to find
-	 * @param  {Function} func   - Function to be run on the schema of field
 	 */
-	findField(schema, field, func) {
+	findField(schema, field) {
 		const fieldCopy = JSON.parse(JSON.stringify(field));
 		const schemaKeys = Object.keys(schema);
 		schemaKeys.forEach((key) => {
 			if (key === fieldCopy[0]) {
 				if (fieldCopy.length === 1) {
-					func(schema[key]);
+					this.getAllRequired(schema[key]);
 				}
 				else {
 					fieldCopy.shift();
-					this.findField(schema[key], fieldCopy, func);
+					this.findField(schema[key], fieldCopy);
 				}
 			}
 			else {
@@ -194,11 +184,11 @@ class ValidationClass {
 				case 'allOf':
 				case 'oneOf':
 					schema[key].forEach((sch) => {
-						this.findField(sch, fieldCopy, func);
+						this.findField(sch, fieldCopy);
 					});
 					break;
 				case 'properties':
-					this.findField(schema.properties, fieldCopy, func);
+					this.findField(schema.properties, fieldCopy);
 					break;
 				}
 			}
@@ -216,7 +206,7 @@ class ValidationClass {
 		const field = this.combinePropArgument(property, result[counter].argument);
 		const self = this;
 		self.errorArray.push(this.makeErrorObject(field, 'missing'));
-		self.findField(this.routeRequestSchema, field.split('.'), self.getAllRequired(this.routeRequestSchema));
+		self.findField(this.routeRequestSchema, field.split('.'));
 		for (const i in self.requiredFields) {
 			if (self.requiredFields.hasOwnProperty(i)) {
 				self.requiredFields[i] = `${field}.${self.requiredFields[i]}`;
@@ -315,8 +305,7 @@ class ValidationClass {
 	 */
 	processErrors(errors){
 		const length = errors.length;
-		let counter;
-		for (counter = 0; counter < length; counter++){
+		for (let counter = 0; counter < length; counter++){
 
 			switch (errors[counter].name){
 			case 'required':
@@ -336,8 +325,15 @@ class ValidationClass {
 				this.handleDependencyError(errors, counter);
 				break;
 			case 'anyOf':
+				console.log(`anyof $ ${errors}`);
 				this.handleAnyOfError(errors, counter);
 				break;
+			default:
+				if (errors[counter].name !== 'allOf'){
+					console.log("ThisProcessErrordefaultexhAllOf");
+					console.log(errors[counter].name);
+					console.log(errors[counter]);
+				}
 			}
 		}
 	}
@@ -351,54 +347,10 @@ class ValidationClass {
 				this.schemaValidator.addSchema(this.fullSchema[key], key);
 			}
 		}
-		const val = this.schemaValidator.validate(this.body, this.schemaToUse);
-		const error = val.errors;
-		if (error.length > 0){
-			this.processErrors(error);
+		const validationSchemaResult = this.schemaValidator.validate(this.body, this.schemaToUse);
+		if (validationSchemaResult.errors.length > 0){
+			this.processErrors(validationSchemaResult.errors);
 		}
-	}
-
-	/**
-	 * Takes input like fieldOne and converts it to Field One so that it is easier to read
-	 * @param  {String} input - String to be made more readable
-	 * @return {String}       - More readble string
-	 */
-	makeFieldReadable(input){
-
-		return input
-		.replace(/([A-Z])/g, ' $1')
-		.replace(/^./, function(str){
-			return str.toUpperCase();
-		})
-		.replace('Z I P', 'Zip')
-		.replace('U R L', 'URL');
-
-	}
-
-	/**
-	 * Takes input like fieldOne.fieldTwo and converts it to Field One/Field Two to make it easier to read
-	 * @param  {String} input - path to field which has error
-	 * @return {String}       - human readable path to errored field
-	 */
-	makePathReadable(input){
-
-		if (typeof input === 'string'){
-			const parts = input.split('.');
-			const readableParts = [];
-			let readablePath = '';
-			parts.forEach((field)=>{
-				readableParts.push(this.makeFieldReadable(field));
-			});
-			readablePath = readableParts.shift();
-			readableParts.forEach((part)=>{
-				readablePath = `${readablePath}/${part}`;
-			});
-			return readablePath;
-		}
-		else {
-			return false;
-		}
-
 	}
 
 	/**
@@ -409,7 +361,7 @@ class ValidationClass {
 	 */
 	buildFormatErrorMessage(fullPath){
 		const field = fullPath.substring(fullPath.lastIndexOf('.') + 1);
-		const readablePath = this.makePathReadable(fullPath);
+		const readablePath = utility.makePathReadable(fullPath);
 		const errorMessage = `${readablePath}${errors[field]}`;
 		return errorMessage;
 
@@ -425,10 +377,10 @@ class ValidationClass {
 		if (anyOfFields){
 			let count = 1;
 			const length = anyOfFields.length;
-			let message = `${this.makePathReadable(anyOfFields[0])}`;
+			let message = `${utility.makePathReadable(anyOfFields[0])}`;
 			while (count < length) {
 				const field = anyOfFields[count];
-				message = `${message} or ${this.makePathReadable(field)}`;
+				message = `${message} or ${utility.makePathReadable(field)}`;
 				count ++;
 			}
 			return message;
@@ -462,14 +414,15 @@ class ValidationClass {
 
 		let errorMessage = '';
 		const messages = [];
-		this.errorArray.forEach((error)=>{
+		const self = this;
+		self.errorArray.forEach((error)=>{
 
-			const missing = `${this.makePathReadable(error.field)} is a required field.`;
-			const type = `${this.makePathReadable(error.field)} is expected to be type '${error.expectedFieldType}'.`;
-			const enumMessage = `${this.makePathReadable(error.field)} ${error.enumMessage}.`;
-			const dependencies = `Having ${this.makePathReadable(error.field)} requires that ${this.makePathReadable(error.dependency)} be provided.`;
-			const anyOf = `Either ${this.makeAnyOfMessage(error.anyOfFields)} is a required field.`;
-			const length = `${this.makePathReadable(error.field)} is too long, must be ${error.expectedFieldType} chracters or shorter`;
+			const missing = `${utility.makePathReadable(error.field)} is a required field.`;
+			const type = `${utility.makePathReadable(error.field)} is expected to be type '${error.expectedFieldType}'.`;
+			const enumMessage = `${utility.makePathReadable(error.field)} ${error.enumMessage}.`;
+			const dependencies = `Having ${utility.makePathReadable(error.field)} requires that ${utility.makePathReadable(error.dependency)} be provided.`;
+			const anyOf = `Either ${self.makeAnyOfMessage(error.anyOfFields)} is a required field.`;
+			const length = `${utility.makePathReadable(error.field)} is too long, must be ${error.expectedFieldType} chracters or shorter`;
 
 			switch (error.errorType){
 			case 'missing':
@@ -482,8 +435,8 @@ class ValidationClass {
 				break;
 			case 'format':
 			case 'pattern':
-				messages.push(this.buildFormatErrorMessage(error.field));
-				error.message = this.buildFormatErrorMessage(error.field);
+				messages.push(self.buildFormatErrorMessage(error.field));
+				error.message = self.buildFormatErrorMessage(error.field);
 				break;
 			case 'enum':
 				messages.push(enumMessage);
@@ -643,7 +596,7 @@ class ValidationClass {
 		if (possbileFiles.length !== 0) {
 			possbileFiles.forEach((fileConstraints) => {
 				const key = Object.keys(fileConstraints)[0];
-				const fileValidationErrors = fileValidation.validateFile(req.files[key], fileConstraints, key);
+				const fileValidationErrors = fileValidation.validateFile(req.files[key], fileConstraints, key, this);
 				this.errorArray = this.errorArray.concat(fileValidationErrors);
 			});
 		}

@@ -26,7 +26,6 @@ const AWSMock = require('mock-aws-s3');
 const factory = require('unionized');
 const tempOutfitterInput = include('test/data/testInputTempOutfitters.json');
 const tempOutfitterObjects = include('test/data/testObjects.json');
-const testObjects = require('./data/testObjects.json');
 const testURL = '/permits/applications/special-uses/commercial/temp-outfitters/';
 
 const chai = require('chai');
@@ -40,6 +39,7 @@ const adminCredentials = util.makeUserEntry('admin');
 const specialUses = {};
 
 specialUses.fileValidate = require('../src/controllers/fileValidation.js');
+specialUses.validation = require('../src/controllers/validation.js');
 
 //*******************************************************************
 //Mock Input
@@ -145,20 +145,24 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 	describe('tempOutfitters POST files:', function(){
 
 		it('should return errors for file that is too large', function(){
+			const Validator = new specialUses.validation.ValidationClass({}, {});
 			expect (
-				specialUses.fileValidate.validateFile(tempOutfitterObjects.file.uploadFile_20MB, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate').length
+				
+				specialUses.fileValidate.validateFile(tempOutfitterObjects.file.uploadFile_20MB, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate', Validator).length
 			)
 			.to.be.equal(1);
 		});
 		it('should return errors for file that is too small', function(){
+			const Validator = new specialUses.validation.ValidationClass({}, {});
 			expect (
-				specialUses.fileValidate.validateFile(tempOutfitterObjects.file.uploadFile_empty, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate').length
+				specialUses.fileValidate.validateFile(tempOutfitterObjects.file.uploadFile_empty, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate', Validator).length
 			)
 			.to.be.equal(1);
 		});
 		it('should return errors for file that is the wrong mime type', function(){
+			const Validator = new specialUses.validation.ValidationClass({}, {});
 			expect (
-				specialUses.fileValidate.validateFile(tempOutfitterObjects.file.uploadFile_invalid_mime, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate').length
+				specialUses.fileValidate.validateFile(tempOutfitterObjects.file.uploadFile_invalid_mime, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate', Validator).length
 			)
 			.to.be.equal(1);
 		});

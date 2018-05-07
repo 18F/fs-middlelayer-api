@@ -19,6 +19,7 @@ const path = require('path');
 // other files
 
 const validation = require('./validation.js');
+const utility = require('./utility.js');
 
 const fileMimes = [
 	'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -90,9 +91,10 @@ function checkForFilesInSchema(schema, toCheck){
  * @param  {Array}  uploadFile            - Information about file, include the contents of it in hex
  * @param  {Object} validationConstraints - Description of how to validate file
  * @param  {String} fileName              - Name of file being validated
+ * @param  {Object} classInstance		  - Class instance of validation
  * @return {Array}                        - Array of all error objects for this file
  */
-function validateFile(uploadFile, validationConstraints, fileName){
+function validateFile(uploadFile, validationConstraints, fileName, Validator){
 
 	const fileInfo = getFileInfo(uploadFile, validationConstraints);
 	const constraints = validationConstraints[fileName];
@@ -101,23 +103,23 @@ function validateFile(uploadFile, validationConstraints, fileName){
 
 	if (uploadFile){
 		if (fileInfo.ext && !fileInfo.ext.toLowerCase().match(regex)){
-			errObjs.push(validation.makeErrorObj(fileInfo.filetype, 'invalidExtension', constraints.validExtensions));
+			errObjs.push(Validator.makeErrorObject(fileInfo.filetype, 'invalidExtension', constraints.validExtensions));
 		}
 		else if (fileMimes.indexOf(fileInfo.mimetype) < 0){
-			errObjs.push(validation.makeErrorObj(fileInfo.filetype, 'invalidMime', fileMimes));
+			errObjs.push(Validator.makeErrorObject(fileInfo.filetype, 'invalidMime', fileMimes));
 		}
 		if (fileInfo.size === 0){
-			errObjs.push(validation.makeErrorObj(fileInfo.filetype, 'invalidSizeSmall', 0));
+			errObjs.push(Validator.makeErrorObject(fileInfo.filetype, 'invalidSizeSmall', 0));
 		}
 		else {
 			const fileSizeInMegabytes = fileInfo.size / 1000000.0;
 			if (fileSizeInMegabytes > constraints.maxSize){
-				errObjs.push(validation.makeErrorObj(fileInfo.filetype, 'invalidSizeLarge', constraints.maxSize));
+				errObjs.push(Validator.makeErrorObject(fileInfo.filetype, 'invalidSizeLarge', constraints.maxSize));
 			}
 		}
 	}
 	else if (constraints.requiredFile){
-		errObjs.push(validation.makeErrorObj(fileName, 'requiredFileMissing'));
+		errObjs.push(validation.makeErrorObject(fileName, 'requiredFileMissing'));
 	}
 
 	return errObjs;
@@ -130,13 +132,13 @@ function validateFile(uploadFile, validationConstraints, fileName){
  * @param {Array} messages          - Array of all error messages to be returned
  */
 function generateFileErrors(error, messages){
-	const reqFile = `${validation.makePathReadable(error.field)} is a required file.`;
-	const small = `${validation.makePathReadable(error.field)} cannot be an empty file.`;
-	const large = `${validation.makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
+	const reqFile = `${utility.makePathReadable(error.field)} is a required file.`;
+	const small = `${utility.makePathReadable(error.field)} cannot be an empty file.`;
+	const large = `${utility.makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
 	let invExt, invMime;
 	if (typeof(error.expectedFieldType) !== 'undefined' && error.expectedFieldType.constructor === Array){
-		invExt = `${validation.makePathReadable(error.field)} must be one of the following extensions: ${error.expectedFieldType.join(', ')}.`;
-		invMime = `${validation.makePathReadable(error.field)} must be one of the following mime types: ${error.expectedFieldType.join(', ')}.`;
+		invExt = `${utility.makePathReadable(error.field)} must be one of the following extensions: ${error.expectedFieldType.join(', ')}.`;
+		invMime = `${utility.makePathReadable(error.field)} must be one of the following mime types: ${error.expectedFieldType.join(', ')}.`;
 	}
 
 	switch (error.errorType){

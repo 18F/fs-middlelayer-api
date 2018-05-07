@@ -1049,7 +1049,7 @@
                                 "formName": {
                                     "basicField": "formName",
                                     "default": "FS-2700-3b",
-                                    "localStore": true
+                                    "localStore": true,
                                     "basicStore": [
                                         "/application"
                                     ],
