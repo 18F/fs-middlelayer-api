@@ -15,7 +15,8 @@
 // required modules
 const Validator = require('jsonschema').Validator;
 const include = require('include')(__dirname);
-const dereferenceSchema = require('deref');
+const deref = require('deref');
+const dereferenceSchema = deref();
 
 //*******************************************************************
 // other files
@@ -403,52 +404,52 @@ class ValidationClass {
 	 * @param  {Array}  messages           - Array of all error messages to be returned
 	 * @return {String}                    - All field error messages concated together
 	 */
-	generateErrorMesage(){
+	generateErrorMessage(){
 
 		let errorMessage = '';
 		const messages = [];
 		const self = this;
-		self.errorArray.forEach((error)=>{
+		self.errorArray.forEach((validationError)=>{
 
-			const missing = `${utility.makePathReadable(error.field)} is a required field.`;
-			const type = `${utility.makePathReadable(error.field)} is expected to be type '${error.expectedFieldType}'.`;
-			const enumMessage = `${utility.makePathReadable(error.field)} ${error.enumMessage}.`;
-			const dependencies = `Having ${utility.makePathReadable(error.field)} requires that ${utility.makePathReadable(error.dependency)} be provided.`;
-			const anyOf = `Either ${self.makeAnyOfMessage(error.anyOfFields)} is a required field.`;
-			const length = `${utility.makePathReadable(error.field)} is too long, must be ${error.expectedFieldType} chracters or shorter`;
+			const missing = `${utility.makePathReadable(validationError.field)} is a required field.`;
+			const type = `${utility.makePathReadable(validationError.field)} is expected to be type '${validationError.expectedFieldType}'.`;
+			const enumMessage = `${utility.makePathReadable(validationError.field)} ${validationError.enumMessage}.`;
+			const dependencies = `Having ${utility.makePathReadable(validationError.field)} requires that ${utility.makePathReadable(validationError.dependency)} be provided.`;
+			const anyOf = `Either ${self.makeAnyOfMessage(validationError.anyOfFields)} is a required field.`;
+			const length = `${utility.makePathReadable(validationError.field)} is too long, must be ${validationError.expectedFieldType} chracters or shorter`;
 
-			switch (error.errorType){
+			switch (validationError.errorType){
 			case 'missing':
 				messages.push(missing);
-				error.message = missing;
 				break;
 			case 'type':
 				messages.push(type);
-				error.message = type;
+				validationError.message = type;
 				break;
 			case 'format':
 			case 'pattern':
-				messages.push(self.buildFormatErrorMessage(error.field));
-				error.message = self.buildFormatErrorMessage(error.field);
+				messages.push(self.buildFormatErrorMessage(validationError.field));
+				validationError.message = self.buildFormatErrorMessage(validationError.field);
 				break;
 			case 'enum':
 				messages.push(enumMessage);
-				error.message = enumMessage;
+				validationError.message = enumMessage;
 				break;
 			case 'dependencies':
 				messages.push(dependencies);
-				error.message = dependencies;
+				validationError.message = dependencies;
 				break;
 			case 'anyOf':
 				messages.push(anyOf);
-				error.message = anyOf;
+				validationError.message = anyOf;
 				break;
 			case 'length':
 				messages.push(length);
-				error.message = length;
+				validationError.message = length;
 				break;
 			default:
-				fileValidation.generateFileErrors(error, messages);
+				validationError.message = fileValidation.generateFileErrors(validationError);
+				messages.push(validationError.message);
 				break;
 			}
 		});
@@ -590,11 +591,12 @@ class ValidationClass {
 			possbileFiles.forEach((fileConstraints) => {
 				const key = Object.keys(fileConstraints)[0];
 				const fileValidationErrors = fileValidation.validateFile(req.files[key], fileConstraints, key, this);
+				
 				this.errorArray = this.errorArray.concat(fileValidationErrors);
 			});
 		}
-		const errorMessage = this.generateErrorMesage();
-		return {'message': errorMessage, 'errorArray': this.errorArray};
+		const errorMessage = this.generateErrorMessage();
+		return {'message': errorMessage, 'errorArray': this.errorArray, 'routeRequestSchema': this.routeRequestSchema};
 	}
 } // End of class
 

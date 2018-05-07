@@ -24,7 +24,7 @@ const error = require('./errors/error.js');
 const get = require('./get.js');
 const fileStore = require('./fileStore.js');
 const db = require('./db.js');
-const NRMConnection = require('./NRMConnection');
+const NRMConnection = require('./nrmconnection');
 const validation = require('./validation.js');
 const util = require('./utility.js');
 const DuplicateContactsError = require('./errors/duplicateContactsError.js');
@@ -54,12 +54,12 @@ function postApplication(req, res, reqData){
 	const errorObject = Validator.validateInput(possbileFiles, req);
 
 	if (errorObject.errorArray.length !== 0){
-		return error.sendError(req, res, 400, errorObject.errorMessage, errorObject.errorArray);
+		return error.sendError(req, res, 400, errorObject.message, errorObject.errorArray);
 	}
 	else {
-		NRMConnection.postToBasic(req, res, Validator.routeRequestSchema, body)
+		NRMConnection.postToBasic(req, res, errorObject.routeRequestSchema, body)
 		.then((postObject)=>{
-			const toStoreInDB = db.getDataToStoreInDB(Validator.routeRequestSchema, body);
+			const toStoreInDB = db.getDataToStoreInDB(errorObject.routeRequestSchema, body);
 			const controlNumber = postObject.POST['/application'].response.accinstCn;
 			toStoreInDB.controlNumber = controlNumber;
 			db.saveApplication(toStoreInDB, function(err, appl){

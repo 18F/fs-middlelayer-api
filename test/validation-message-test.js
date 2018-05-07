@@ -35,7 +35,7 @@ function errorMessageValidatorHelper(errorFactoryOjbect){
 	const Validator = new specialUses.validate.ValidationClass(noncommercialObjects.pathData,
 		noncommercialFactory.create());
 	Validator.errorArray = errorFactoryOjbect.errorArray;
-	const errorMessage = Validator.generateErrorMesage();
+	const errorMessage = Validator.generateErrorMessage();
 	return errorMessage;
 }
 

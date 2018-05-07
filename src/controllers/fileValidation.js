@@ -18,7 +18,6 @@ const path = require('path');
 //*******************************************************************
 // other files
 
-const validation = require('./validation.js');
 const utility = require('./utility.js');
 
 const fileMimes = [
@@ -58,28 +57,28 @@ function getFileInfo(file, constraints){
 /**
  * Checks schema for any files that could be provided.
  * @param  {Object} schema  - Schema for an application
- * @param  {Array}  toCheck - List of files to check for, and if present, validate
+ * @param  {Array}  postedFiles - List of files to check for, and if present, validate
  */
-function checkForFilesInSchema(schema, toCheck){
+function checkForFilesInSchema(schema, postedFiles){
 	const keys = Object.keys(schema);
 	keys.forEach((key)=>{
 		switch (key){
 		case 'allOf':
 			schema.allOf.forEach((sch)=>{
-				checkForFilesInSchema(sch, toCheck);
+				checkForFilesInSchema(sch, postedFiles);
 			});
 			break;
 		case 'properties':
-			checkForFilesInSchema(schema.properties, toCheck);
+			checkForFilesInSchema(schema.properties, postedFiles);
 			break;
 		default:
 			if (schema[key].type === 'file'){
 				const obj = {};
 				obj[key] = schema[key];
-				toCheck.push(obj);
+				postedFiles.push(obj);
 			}
 			else if (schema[key].type === 'object'){
-				checkForFilesInSchema(schema[key], toCheck);
+				checkForFilesInSchema(schema[key], postedFiles);
 			}
 			break;
 		}
@@ -119,7 +118,7 @@ function validateFile(uploadFile, validationConstraints, fileName, Validator){
 		}
 	}
 	else if (constraints.requiredFile){
-		errObjs.push(validation.makeErrorObject(fileName, 'requiredFileMissing'));
+		errObjs.push(Validator.makeErrorObject(fileName, 'requiredFileMissing'));
 	}
 
 	return errObjs;
@@ -129,39 +128,19 @@ function validateFile(uploadFile, validationConstraints, fileName, Validator){
 /**
  * Creates error messages for all file errors
  * @param {Object} error            - error object to be processed
- * @param {Array} messages          - Array of all error messages to be returned
  */
-function generateFileErrors(error, messages){
-	const reqFile = `${utility.makePathReadable(error.field)} is a required file.`;
-	const small = `${utility.makePathReadable(error.field)} cannot be an empty file.`;
-	const large = `${utility.makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
-	let invExt, invMime;
-	if (typeof(error.expectedFieldType) !== 'undefined' && error.expectedFieldType.constructor === Array){
-		invExt = `${utility.makePathReadable(error.field)} must be one of the following extensions: ${error.expectedFieldType.join(', ')}.`;
-		invMime = `${utility.makePathReadable(error.field)} must be one of the following mime types: ${error.expectedFieldType.join(', ')}.`;
-	}
-
+function generateFileErrors(error){
 	switch (error.errorType){
 	case 'requiredFileMissing':
-		messages.push(reqFile);
-		error.message = reqFile;
-		break;
+		return `${utility.makePathReadable(error.field)} is a required file.`;
 	case 'invalidExtension':
-		messages.push(invExt);
-		error.message = invExt;
-		break;
+		return `${utility.makePathReadable(error.field)} must be one of the following extensions: ${error.expectedFieldType.join(', ')}.`;
 	case 'invalidMime':
-		messages.push(invMime);
-		error.message = invMime;
-		break;
+		return `${utility.makePathReadable(error.field)} must be one of the following mime types: ${error.expectedFieldType.join(', ')}.`;
 	case 'invalidSizeSmall':
-		messages.push(small);
-		error.message = small;
-		break;
+		return `${utility.makePathReadable(error.field)} cannot be an empty file.`;
 	case 'invalidSizeLarge':
-		messages.push(large);
-		error.message = large;
-		break;
+		return `${utility.makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
 	}
 }
 

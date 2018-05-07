@@ -61,7 +61,7 @@ after(function(){
 
 describe('outfitters validation ', function(){
 	describe('ensure field is present', function(){
-		it.only('should report issues when no body is provided-i', function(){
+		it('should report issues when no body is provided', function(){
 			const actual = validationHelper(outfittersObjects.pathData, {}, outfittersObjects.derefSchema);
 			const expected = [
 				errorFactory.create({field: 'region', errorType: 'missing'}),
