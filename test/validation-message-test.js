@@ -34,8 +34,7 @@ const noncommercialObjects = testObjects.noncommercial;
 function errorMessageValidatorHelper(errorFactoryOjbect){
 	const Validator = new specialUses.validate.ValidationClass(noncommercialObjects.pathData,
 		noncommercialFactory.create());
-	Validator.errorArray = errorFactoryOjbect.errorArray;
-	const errorMessage = Validator.generateErrorMessage();
+	const errorMessage = Validator.generateErrorMessage(errorFactoryOjbect.errorArray[0]);
 	return errorMessage;
 }
 
@@ -68,13 +67,19 @@ describe('Build error messages: ', function(){
 	});
 
 	it('should return \'First Name is expected to be of type \'string\'.\'', function(){
-		const actual = errorMessageValidatorHelper(errorFactory.create(
+		const messages = [];
+		const errorFactoryOjbect = errorMessageValidatorHelper(errorFactory.create(
 			{
 				'errorArray[]': 1,
 				'errorArray[0].field': 'applicantInfo.firstName',
 				'errorArray[0].errorType': 'type',
 				'errorArray[0].expectedFieldType': 'string'
 			}));
+		const Validator = new specialUses.validate.ValidationClass(noncommercialObjects.pathData,
+			noncommercialFactory.create());
+		messages.push(Validator.generateErrorMessage(errorFactoryOjbect.errorArray[0]));
+		messages.push(Validator.generateErrorMessage(errorFactoryOjbect.errorArray[1]));
+		const actual = Validator.concatErrors(messages);
 		expect(actual)
 		.to.be.equal('Applicant Info/First Name is expected to be type \'string\'.');
 	

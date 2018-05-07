@@ -125,26 +125,6 @@ function validateFile(uploadFile, validationConstraints, fileName, Validator){
 	
 }
 
-/**
- * Creates error messages for all file errors
- * @param {Object} error            - error object to be processed
- */
-function generateFileErrors(error){
-	switch (error.errorType){
-	case 'requiredFileMissing':
-		return `${utility.makePathReadable(error.field)} is a required file.`;
-	case 'invalidExtension':
-		return `${utility.makePathReadable(error.field)} must be one of the following extensions: ${error.expectedFieldType.join(', ')}.`;
-	case 'invalidMime':
-		return `${utility.makePathReadable(error.field)} must be one of the following mime types: ${error.expectedFieldType.join(', ')}.`;
-	case 'invalidSizeSmall':
-		return `${utility.makePathReadable(error.field)} cannot be an empty file.`;
-	case 'invalidSizeLarge':
-		return `${utility.makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
-	}
-}
-
 module.exports.getFileInfo = getFileInfo;
 module.exports.checkForFilesInSchema = checkForFilesInSchema;
 module.exports.validateFile = validateFile;
-module.exports.generateFileErrors = generateFileErrors;

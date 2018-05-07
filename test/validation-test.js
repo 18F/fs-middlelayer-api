@@ -45,6 +45,9 @@ function validationHelper(pathData, body, dereferenceSchema) {
 	Validator.selectValidationSchema();
 	Validator.routeRequestSchema = dereferenceSchema;
 	Validator.getFieldValidationErrors();
+	for (let i = 0; i < Validator.errorArray.length; i++){
+		delete Validator.errorArray[i].message;
+	}
 	return Validator.errorArray;
 }
 
@@ -170,6 +173,7 @@ describe('outfitters validation ', function(){
 			const expected = [
 				errorFactory.create({field: 'tempOutfitterFields.smallBusiness', errorType: 'missing'})
 			];
+			expected[0].message = 'Temp Outfitter Fields/Small Business is a required field.';
 			expect (actual).to.eql(expected);
 		});
 
@@ -182,6 +186,7 @@ describe('outfitters validation ', function(){
 			const expected = [
 				errorFactory.create({field: 'tempOutfitterFields.individualIsCitizen', errorType: 'missing'})
 			];
+			expected[0].message = 'Temp Outfitter Fields/Individual Is Citizen is a required field.';
 			expect (actual).to.eql(expected);
 		});
 	});

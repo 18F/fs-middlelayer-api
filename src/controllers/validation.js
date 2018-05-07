@@ -40,6 +40,7 @@ class ValidationClass {
 		this.fullSchema = {};
 		this.schemaToUse = {};
 		this.requiredFields = [];
+		this.errorMessages = [];
 		this.body = body;
 	}
 
@@ -118,6 +119,7 @@ class ValidationClass {
 				delete errorObject[key];
 			}
 		}
+		errorObject.message = this.generateErrorMessage(errorObject);
 		return errorObject;
 	}
 
@@ -271,8 +273,7 @@ class ValidationClass {
 	 * @param  {Array} - Array of ValidationErrors from validation
 	 */
 	processErrors(errors){
-		const length = errors.length;
-		for (let counter = 0; counter < length; counter++){
+		for (let counter = 0; counter < errors.length; counter++){
 			const currentError = errors[counter];
 			currentError.cleanProperty = this.removeInstance(currentError.property);
 			switch (currentError.name){
@@ -371,58 +372,57 @@ class ValidationClass {
 	 * @param  {Array}  messages           - Array of all error messages to be returned
 	 * @return {String}                    - All field error messages concated together
 	 */
-	generateErrorMessage(){
+	generateErrorMessage(validationError){
+		let message = '';
+		switch (validationError.errorType){
+		case 'missing':
+			message = `${utility.makePathReadable(validationError.field)} is a required field.`;
+			break;
+		case 'type':
+			message = `${utility.makePathReadable(validationError.field)} is expected to be type '${validationError.expectedFieldType}'.`;
+			break;
+		case 'format':
+		case 'pattern':
+			message = this.buildFormatErrorMessage(validationError.field);
+			break;
+		case 'enum':
+			message = `${utility.makePathReadable(validationError.field)} ${validationError.enumMessage}.`;
+			break;
+		case 'dependencies':
+			message = `Having ${utility.makePathReadable(validationError.field)} requires that ${utility.makePathReadable(validationError.dependency)} be provided.`;
+			break;
+		case 'anyOf':
+			message = `Either ${this.makeAnyOfMessage(validationError.anyOfFields)} is a required field.`;
+			break;
+		case 'length':
+			message = `${utility.makePathReadable(validationError.field)} is too long, must be ${validationError.expectedFieldType} chracters or shorter`;
+			break;
+		default:
+			message = this.generateFileErrors(validationError);
+			break;
+		}
+		this.errorMessages.push(message);
+		return message;
 
-		let errorMessage = '';
-		const messages = [];
-		const self = this;
-		self.errorArray.forEach((validationError)=>{
+	}
 
-			const missing = `${utility.makePathReadable(validationError.field)} is a required field.`;
-			const type = `${utility.makePathReadable(validationError.field)} is expected to be type '${validationError.expectedFieldType}'.`;
-			const enumMessage = `${utility.makePathReadable(validationError.field)} ${validationError.enumMessage}.`;
-			const dependencies = `Having ${utility.makePathReadable(validationError.field)} requires that ${utility.makePathReadable(validationError.dependency)} be provided.`;
-			const anyOf = `Either ${self.makeAnyOfMessage(validationError.anyOfFields)} is a required field.`;
-			const length = `${utility.makePathReadable(validationError.field)} is too long, must be ${validationError.expectedFieldType} chracters or shorter`;
-
-			switch (validationError.errorType){
-			case 'missing':
-				messages.push(missing);
-				break;
-			case 'type':
-				messages.push(type);
-				validationError.message = type;
-				break;
-			case 'format':
-			case 'pattern':
-				messages.push(self.buildFormatErrorMessage(validationError.field));
-				validationError.message = self.buildFormatErrorMessage(validationError.field);
-				break;
-			case 'enum':
-				messages.push(enumMessage);
-				validationError.message = enumMessage;
-				break;
-			case 'dependencies':
-				messages.push(dependencies);
-				validationError.message = dependencies;
-				break;
-			case 'anyOf':
-				messages.push(anyOf);
-				validationError.message = anyOf;
-				break;
-			case 'length':
-				messages.push(length);
-				validationError.message = length;
-				break;
-			default:
-				validationError.message = fileValidation.generateFileErrors(validationError);
-				messages.push(validationError.message);
-				break;
-			}
-		});
-		errorMessage = this.concatErrors(messages);
-		return errorMessage;
-
+	/**
+	 * Creates error messages for all file errors
+	 * @param {Object} error            - error object to be processed
+	 */
+	generateFileErrors(error) {
+		switch (error.errorType) {
+		case 'requiredFileMissing':
+			return `${utility.makePathReadable(error.field)} is a required file.`;
+		case 'invalidExtension':
+			return `${utility.makePathReadable(error.field)} must be one of the following extensions: ${error.expectedFieldType.join(', ')}.`;
+		case 'invalidMime':
+			return `${utility.makePathReadable(error.field)} must be one of the following mime types: ${error.expectedFieldType.join(', ')}.`;
+		case 'invalidSizeSmall':
+			return `${utility.makePathReadable(error.field)} cannot be an empty file.`;
+		case 'invalidSizeLarge':
+			return `${utility.makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
+		}
 	}
 
 	/**
@@ -562,7 +562,7 @@ class ValidationClass {
 				this.errorArray = this.errorArray.concat(fileValidationErrors);
 			});
 		}
-		const errorMessage = this.generateErrorMessage();
+		const errorMessage = this.concatErrors(this.errorMessages);
 		return {'message': errorMessage, 'errorArray': this.errorArray, 'routeRequestSchema': this.routeRequestSchema};
 	}
 } // End of class
