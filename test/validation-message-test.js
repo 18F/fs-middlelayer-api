@@ -16,7 +16,6 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-
 const errorMessages = require('../src/controllers/errors/validation-messages.js');
 const validate = require('../src/controllers/validation.js');
 
