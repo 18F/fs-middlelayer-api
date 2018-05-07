@@ -87,12 +87,6 @@ describe('Function Tests: validation.js ', function(){
 		.to.be.equal('Error/Field');
 	});
 
-	it('makeAnyOfMessage should return expected output', function(){
-		const Validator = new validationJs.ValidationClass('', '');
-		expect(Validator.makeAnyOfMessage(['field1', 'field2']) )
-		.to.be.equal('Field1 or Field2');
-	});
-
 	it('makeFieldReadable should return expected output', function(){
 		expect(utility.makeFieldReadable('firstName') )
 		.to.be.equal('First Name');

@@ -16,9 +16,9 @@
 const chai = require('chai');
 const expect = chai.expect;
 
-const specialUses = {};
 
-specialUses.validate = require('../src/controllers/validation.js');
+const errorMessages = require('../src/controllers/errors/validation-messages.js');
+const validate = require('../src/controllers/validation.js');
 
 const factory = require('unionized');
 const errorMessageFactory = factory.factory({'field': null, 'errorType': null, 'expectedFieldType': null, 'enumMessage': null, 'dependency':null});
@@ -32,9 +32,7 @@ const noncommercialObjects = testObjects.noncommercial;
 //*******************************************************************
 
 function errorMessageValidatorHelper(errorFactoryOjbect){
-	const Validator = new specialUses.validate.ValidationClass(noncommercialObjects.pathData,
-		noncommercialFactory.create());
-	const errorMessage = Validator.generateErrorMessage(errorFactoryOjbect.errorArray[0]);
+	const errorMessage = errorMessages.generateErrorMessage(errorFactoryOjbect.errorArray[0]);
 	return errorMessage;
 }
 
@@ -63,10 +61,10 @@ describe('Build error messages: ', function(){
 				'errorArray[1].errorType': 'missing'
 			}
 		);
-		const Validator = new specialUses.validate.ValidationClass(noncommercialObjects.pathData,
+		const Validator = new validate.ValidationClass(noncommercialObjects.pathData,
 			noncommercialFactory.create());
-		messages.push(Validator.generateErrorMessage(errorFactoryOjbect.errorArray[0]));
-		messages.push(Validator.generateErrorMessage(errorFactoryOjbect.errorArray[1]));
+		messages.push(errorMessages.generateErrorMessage(errorFactoryOjbect.errorArray[0]));
+		messages.push(errorMessages.generateErrorMessage(errorFactoryOjbect.errorArray[1]));
 		const actual = Validator.concatErrors(messages);
 		expect(actual)
 		.to.be.equal('Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field.');
@@ -194,6 +192,11 @@ describe('Build error messages: ', function(){
 		expect(actual)
 		.to.be.equal('Insurance Certificate must be one of the following mime types: application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/msword, text/rtf, application/pdf.');
 	
+	});
+
+	it('makeAnyOfMessage should return expected output', function () {
+		expect(errorMessages.makeAnyOfMessage(['field1', 'field2']))
+			.to.be.equal('Field1 or Field2');
 	});
 
 });

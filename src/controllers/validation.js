@@ -21,9 +21,8 @@ const dereferenceSchema = deref();
 //*******************************************************************
 // other files
 
-const errors = require('./errors/patternErrorMessages.json');
+const errors = require('./errors/validation-messages.js');
 const fileValidation = require('./fileValidation.js');
-const utility = require('./utility.js');
 
 class ValidationClass {
 	/**
@@ -72,13 +71,13 @@ class ValidationClass {
 		return fixedProp;
 	}
 
- /**
- * Combines property and argument fields, if property exists, for missing field errors
- *
- * @param  {string} property - Upper field to combine
- * @param  {string} argument - Field where error is.
- * @return {string}          - Concatination of property, '.', and argument
- */
+	/**
+	 * Combines property and argument fields, if property exists, for missing field errors
+	 *
+	 * @param  {string} property - Upper field to combine
+	 * @param  {string} argument - Field where error is.
+	 * @return {string}          - Concatination of property, '.', and argument
+	 */
 	combinePropArgument(property, argument) {
 
 		let field;
@@ -119,7 +118,8 @@ class ValidationClass {
 				delete errorObject[key];
 			}
 		}
-		errorObject.message = this.generateErrorMessage(errorObject);
+		errorObject.message = errors.generateErrorMessage(errorObject);
+		this.errorMessages.push(errorObject.message);
 		return errorObject;
 	}
 
@@ -129,15 +129,15 @@ class ValidationClass {
 	 */
 	checkForExtraRequired(schema) {
 		const keys = schema.properties;
-		const self = this;
 		for (const key in keys) {
 			if (schema.properties[key].type === 'object' && schema.required.includes(key)) {
-				const indexOfSuper = self.requiredFields.indexOf(key) + 1;
+				const indexOfSuper = this.requiredFields.indexOf(key) + 1;
 
-				self.requiredFields.splice(indexOfSuper, 0, ...schema.properties[key].required.map(function (s) {
+				this.requiredFields.splice(indexOfSuper, 0, ...schema.properties[key].required.map(function (s) {
+					console.log(`key-s-${key}.${s}`);
 					return `${key}.${s}`;
 				}));
-				self.checkForExtraRequired(schema.properties[key]);
+				this.checkForExtraRequired(schema.properties[key]);
 			}
 		}
 	}
@@ -313,116 +313,6 @@ class ValidationClass {
 	}
 
 	/**
-	 * Creates error message for format errors
-	 *
-	 * @param  {String} fullPath - path to field where error is at
-	 * @return {String}          - error message to be given to user
-	 */
-	buildFormatErrorMessage(fullPath){
-		const field = fullPath.substring(fullPath.lastIndexOf('.') + 1);
-		const readablePath = utility.makePathReadable(fullPath);
-		const errorMessage = `${readablePath}${errors[field]}`;
-		return errorMessage;
-
-	}
-
-	/**
-	 * Creates error message for anyOf errors
-	 *
-	 * @param  {array} anyOfFields - list of fields, at least one being required.
-	 * @return {string}
-	 */
-	makeAnyOfMessage(anyOfFields){
-		if (anyOfFields){
-			let count = 1;
-			const length = anyOfFields.length;
-			let message = `${utility.makePathReadable(anyOfFields[0])}`;
-			while (count < length) {
-				const field = anyOfFields[count];
-				message = `${message} or ${utility.makePathReadable(field)}`;
-				count ++;
-			}
-			return message;
-		}
-		else {
-			return false;
-		}
-	}
-
-	/**
-	 * Combines all errors into one string which can be used to determine where all errors are at
-	 * @param  {Array} errorMessages - Array of error objects
-	 * @return {String}              - Error message containing all errors
-	 */
-	concatErrors(errorMessages){
-
-		let errMessage = '';
-		errorMessages.forEach((message)=>{
-			errMessage = `${errMessage}${message} `;
-		});
-		return errMessage.trim();
-	}
-
-	/**
-	 * Creates error messages for all field errors
-	 * @param  {Object} error              - error object to be processed
-	 * @param  {Array}  messages           - Array of all error messages to be returned
-	 * @return {String}                    - All field error messages concated together
-	 */
-	generateErrorMessage(validationError){
-		let message = '';
-		switch (validationError.errorType){
-		case 'missing':
-			message = `${utility.makePathReadable(validationError.field)} is a required field.`;
-			break;
-		case 'type':
-			message = `${utility.makePathReadable(validationError.field)} is expected to be type '${validationError.expectedFieldType}'.`;
-			break;
-		case 'format':
-		case 'pattern':
-			message = this.buildFormatErrorMessage(validationError.field);
-			break;
-		case 'enum':
-			message = `${utility.makePathReadable(validationError.field)} ${validationError.enumMessage}.`;
-			break;
-		case 'dependencies':
-			message = `Having ${utility.makePathReadable(validationError.field)} requires that ${utility.makePathReadable(validationError.dependency)} be provided.`;
-			break;
-		case 'anyOf':
-			message = `Either ${this.makeAnyOfMessage(validationError.anyOfFields)} is a required field.`;
-			break;
-		case 'length':
-			message = `${utility.makePathReadable(validationError.field)} is too long, must be ${validationError.expectedFieldType} chracters or shorter`;
-			break;
-		default:
-			message = this.generateFileErrors(validationError);
-			break;
-		}
-		this.errorMessages.push(message);
-		return message;
-
-	}
-
-	/**
-	 * Creates error messages for all file errors
-	 * @param {Object} error            - error object to be processed
-	 */
-	generateFileErrors(error) {
-		switch (error.errorType) {
-		case 'requiredFileMissing':
-			return `${utility.makePathReadable(error.field)} is a required file.`;
-		case 'invalidExtension':
-			return `${utility.makePathReadable(error.field)} must be one of the following extensions: ${error.expectedFieldType.join(', ')}.`;
-		case 'invalidMime':
-			return `${utility.makePathReadable(error.field)} must be one of the following mime types: ${error.expectedFieldType.join(', ')}.`;
-		case 'invalidSizeSmall':
-			return `${utility.makePathReadable(error.field)} cannot be an empty file.`;
-		case 'invalidSizeLarge':
-			return `${utility.makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
-		}
-	}
-
-	/**
 	 * Checks the length of all fields with a maxLength field in schema
 	 * @param  {Object} schema                          - Section of the validation schema being used
 	 * @param  {Object} input                           - User input being validated
@@ -518,6 +408,20 @@ class ValidationClass {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Combines all errors into one string which can be used to determine where all errors are at
+	 * @param  {Array} errorMessages - Array of error objects
+	 * @return {String}              - Error message containing all errors
+	 */
+	concatErrors(errorMessages) {
+
+		let errMessage = '';
+		errorMessages.forEach((message) => {
+			errMessage = `${errMessage}${message} `;
+		});
+		return errMessage.trim();
 	}
 
 	/**
