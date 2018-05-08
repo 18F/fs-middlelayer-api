@@ -17,6 +17,8 @@
 const AWSMock = require('mock-aws-s3');
 const chai = require('chai');
 const expect = chai.expect;
+const deref = require('deref');
+const dereferenceSchema = deref();
 
 const specialUses = {};
 
@@ -40,10 +42,10 @@ const errorFactory = factory.factory({
 	anyOfFields: undefined
 });
 
-function validationHelper(pathData, body, dereferenceSchema) {
+function validationHelper(pathData, body) {
 	const Validator = new specialUses.validate.ValidationClass(pathData, body);
 	Validator.selectValidationSchema();
-	Validator.routeRequestSchema = dereferenceSchema;
+	Validator.routeRequestSchema = dereferenceSchema(Validator.schemaToUse, [Validator.fullSchema], true);
 	Validator.getFieldValidationErrors();
 	for (let i = 0; i < Validator.errorArray.length; i++){
 		delete Validator.errorArray[i].message;
@@ -64,7 +66,7 @@ after(function(){
 
 describe('outfitters validation ', function(){
 	describe('ensure field is present', function(){
-		xit('should report issues when no body is provided', function(){
+		it('should report issues when no body is provided', function(){
 			const actual = validationHelper(outfittersObjects.pathData, {}, outfittersObjects.derefSchema);
 			const expected = [
 				errorFactory.create({field: 'region', errorType: 'missing'}),

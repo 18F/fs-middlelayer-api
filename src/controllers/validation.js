@@ -52,10 +52,6 @@ class ValidationClass {
 		const validationSchema = include(validationSchemaFile);
 		this.fullSchema = validationSchema;
 		this.schemaToUse = validationSchema[schemaToGet];
-		return {
-			'fullSchema': validationSchema,
-			'schemaToUse': validationSchema[schemaToGet]
-		};
 	}
 	/**
 	 * Removes label'instance' from 'property' field of validation errors. Used to make fields human readable
@@ -134,7 +130,6 @@ class ValidationClass {
 				const indexOfSuper = this.requiredFields.indexOf(key) + 1;
 
 				this.requiredFields.splice(indexOfSuper, 0, ...schema.properties[key].required.map(function (s) {
-					console.log(`key-s-${key}.${s}`);
 					return `${key}.${s}`;
 				}));
 				this.checkForExtraRequired(schema.properties[key]);
@@ -147,20 +142,19 @@ class ValidationClass {
 	 */
 	getAllRequired(schema) {
 		const keys = Object.keys(schema);
-		const self = this;
 		keys.forEach((key) => {
 			switch (key) {
 			case 'allOf':
 				schema.allOf.forEach((sch) => {
-					self.getAllRequired(sch);
+					this.getAllRequired(sch);
 				});
 				break;
 			case 'properties':
-				self.getAllRequired(schema.properties);
+				this.getAllRequired(schema.properties);
 				break;
 			case 'required':
-				self.requiredFields = self.requiredFields.concat(schema.required);
-				self.checkForExtraRequired(schema);
+				this.requiredFields = this.requiredFields.concat(schema.required);
+				this.checkForExtraRequired(schema);
 			}
 		});
 	}
@@ -203,17 +197,17 @@ class ValidationClass {
 	 * @param  {Object} missingError  - Missing Field Validation Errror object
 	 */
 	handleMissingError(missingError) {
+		this.requiredFields = [];
 		const field = this.combinePropArgument(missingError.cleanProperty, missingError.argument);
-		const self = this;
-		self.errorArray.push(this.makeErrorObject(field, 'missing'));
-		self.findField(this.routeRequestSchema, field.split('.'));
-		for (const i in self.requiredFields) {
-			if (self.requiredFields.hasOwnProperty(i)) {
-				self.requiredFields[i] = `${field}.${self.requiredFields[i]}`;
+		this.errorArray.push(this.makeErrorObject(field, 'missing'));
+		this.findField(this.routeRequestSchema, field.split('.'));
+		for (const i in this.requiredFields) {
+			if (this.requiredFields.hasOwnProperty(i)) {
+				this.requiredFields[i] = `${field}.${this.requiredFields[i]}`;
 			}
 		}
-		self.requiredFields.forEach((requiredField) => {
-			self.errorArray.push(self.makeErrorObject(requiredField, 'missing'));
+		this.requiredFields.forEach((requiredField) => {
+			this.errorArray.push(this.makeErrorObject(requiredField, 'missing'));
 		});
 	}
 
