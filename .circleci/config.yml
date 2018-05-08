@@ -34,12 +34,20 @@ jobs:
           command: npm run lint
       - run:
           name: Snyk vulnerability test
-          command: snyk test
+          command: |
+            sudo mkdir -p snyk
+            export DATE_STRING=`date +"%m-%d-%Y"`
+            snyk test #For human
+            sudo snyk test --json > snyk/snyk.json
+            sudo cat snyk/snyk.json | jq -r '.vulnerabilities[] | [.packageName, .severity, .cvssScore, .title,.disclosureTime, .description, .from[]] | @csv' > snyk/snyk-${DATE_STRING}.csv
+            cp .snyk snyk/snyk-policy
       - run:
           name: Run tests
           command: |
             npm run coverage
             ./node_modules/codecov/bin/codecov
+      - store_artifacts:
+          path: /snyk
       - run:
           name: Clean s3 bucket
           command: ./.circleci/clean-s3-bucket.sh
