@@ -38,8 +38,7 @@ jobs:
             mkdir -p a=rw snyk
             export DATE_STRING=`date +"%m-%d-%Y"`
             snyk test #For human
-            sudo snyk test --json > snyk/snyk.json
-            sudo cat snyk/snyk.json | jq -r '["Package", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Path"], (.vulnerabilities[] | [.packageName, .severity, .cvssScore, .title,.disclosureTime, .description, .from[]]) | @csv' > snyk/snyk-${DATE_STRING}.csv
+            snyk test --json > snyk/snyk.json | jq -r '["Package", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Path"], (.vulnerabilities[] | [.packageName, .severity, .cvssScore, .title,.disclosureTime, .description, .from[]]) | @csv' > snyk/snyk-${DATE_STRING}.csv
             cp .snyk snyk/snyk-policy
       - run:
           name: Run tests
@@ -91,3 +90,4 @@ workflows:
           filters:
             branches:
               only: master
+  
