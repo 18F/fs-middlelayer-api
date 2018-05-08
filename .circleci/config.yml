@@ -35,10 +35,12 @@ jobs:
       - run:
           name: Snyk vulnerability test
           command: |
+            set +x
             mkdir -p a=rw snyk
             export DATE_STRING=`date +"%m-%d-%Y"`
             snyk test #For human
-            snyk test --json > snyk/snyk.json | jq -r '["Package", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Path"], (.vulnerabilities[] | [.packageName, .severity, .cvssScore, .title,.disclosureTime, .description, .from[]]) | @csv' > snyk/snyk-${DATE_STRING}.csv
+            snyk test --json > snyk/snyk.json
+            sudo cat snyk/snyk.json | jq -r '["Package", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Path"], (.vulnerabilities[] | [.packageName, .severity, .cvssScore, .title,.disclosureTime, .description, .from[]]) | @csv' > snyk/snyk-${DATE_STRING}.csv
             cp .snyk snyk/snyk-policy
       - run:
           name: Run tests
@@ -46,7 +48,7 @@ jobs:
             npm run coverage
             ./node_modules/codecov/bin/codecov
       - store_artifacts:
-          path: snyk
+          path: /snyk
       - run:
           name: Clean s3 bucket
           command: ./.circleci/clean-s3-bucket.sh
