@@ -48,7 +48,7 @@ jobs:
             npm run coverage
             ./node_modules/codecov/bin/codecov
       - store_artifacts:
-          path: /snyk
+          path: snyk
       - run:
           name: Clean s3 bucket
           command: ./.circleci/clean-s3-bucket.sh
