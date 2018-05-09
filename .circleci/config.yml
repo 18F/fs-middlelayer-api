@@ -38,10 +38,12 @@ jobs:
             set +x
             mkdir -p a=rw snyk
             export DATE_STRING=`date +"%m-%d-%Y-%H-%M-%S"`
+            export SNYK_REPORT=snyk-${CIRCLE_PR_REPONAME}-${DATE_STRING}.csv
             snyk test #For human
             snyk test --json > snyk/snyk.json
-            sudo cat snyk/snyk.json | jq -r '["Package", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Path"], (.vulnerabilities[] | [.packageName, .severity, .cvssScore, .title,.disclosureTime, .description, .from[]]) | @csv' > snyk/snyk-${DATE_STRING}.csv
-            cp .snyk snyk/snyk-policy
+            sudo cat snyk/snyk.json  \
+            | jq -r '["Package", "CVE", "CWE", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Paths"], (.vulnerabilities[] | [.packageName, .identifiers.CVE[0], .identifiers.CWE[0], .severity, .cvssScore, .title,.disclosureTime, .description, .from[1], .from[2]] )| @csv' >  \
+            "snyk/${SNYK_REPORT}"
       - run:
           name: Run tests
           command: |
