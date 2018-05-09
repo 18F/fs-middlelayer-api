@@ -60,11 +60,11 @@ function makePathReadable(input) {
 }
 
 /**
-	 * Creates error message for format errors
-	 *
-	 * @param  {String} fullPath - path to field where error is at
-	 * @return {String}          - error message to be given to user
-	 */
+ * Creates error message for format errors
+ *
+ * @param  {String} fullPath - path to field where error is at
+ * @return {String}          - error message to be given to user
+ */
 function buildFormatErrorMessage(fullPath) {
 	const field = fullPath.substring(fullPath.lastIndexOf('.') + 1);
 	const readablePath = makePathReadable(fullPath);
