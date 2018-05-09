@@ -36,7 +36,7 @@ jobs:
           name: Snyk vulnerability test
           command: |
             set +x
-            mkdir -p -m a=rw snyk
+            mkdir -m a=rw snyk
             export DATE_STRING=`date +"%m-%d-%Y-%H-%M-%S"`
             snyk test #For human
             snyk test --json > snyk/snyk.json
