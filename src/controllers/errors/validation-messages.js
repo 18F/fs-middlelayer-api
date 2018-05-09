@@ -43,15 +43,10 @@ function makePathReadable(input) {
 	if (typeof input === 'string') {
 		const parts = input.split('.');
 		const readableParts = [];
-		let readablePath = '';
 		parts.forEach((field) => {
 			readableParts.push(makeFieldReadable(field));
 		});
-		readablePath = readableParts.shift();
-		readableParts.forEach((part) => {
-			readablePath = `${readablePath}/${part}`;
-		});
-		return readablePath;
+		return readableParts.join('/');
 	}
 	else {
 		return false;
