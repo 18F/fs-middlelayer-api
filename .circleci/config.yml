@@ -5,8 +5,6 @@ jobs:
       - image: circleci/node:8.9.4
         environment:
           DATABASE_URL: "postgres://ubuntu@localhost/circle_test"
-          DATE_STRING: date +"%m-%d-%Y-%H-%M-%S"
-          SNYK_REPORT: snyk-${CIRCLE_PR_REPONAME}-${DATE_STRING}.csv
       - image: postgres:9.6.3
         environment:
             POSTGRES_USER: "ubuntu"
@@ -37,15 +35,15 @@ jobs:
       - run:
           name: Snyk vulnerability test
           command: |
-            echo ${SNYK_REPORT}
-            # set +x
-            # mkdir -p a=rw snyk
-            # snyk test #For human
-            # snyk test --json > snyk/snyk.json
-            # sudo cat snyk/snyk.json  \
-            # | jq -r '["Package", "CVE", "CWE", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Paths"], (.vulnerabilities[] | [.packageName, .identifiers.CVE[0], .identifiers.CWE[0], .severity, .cvssScore, .title,.disclosureTime, .description, .from[1], .from[2]] )| @csv' >  \
-            # "snyk/${SNYK_REPORT}"
-            # ls snyk
+            set +x
+            mkdir -p a=rw snyk
+            export DATE_STRING=`date +"%m-%d-%Y-%H"`
+            export SNYK_REPORT=snyk-${CIRCLE_PR_REPONAME}-${DATE_STRING}.csv
+            snyk test #For human
+            snyk test --json > snyk/snyk.json
+            sudo cat snyk/snyk.json  \
+            | jq -r '["Package", "CVE", "CWE", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Paths"], (.vulnerabilities[] | [.packageName, .identifiers.CVE[0], .identifiers.CWE[0], .severity, .cvssScore, .title,.disclosureTime, .description, .from[1], .from[2]] )| @csv' >  \
+            "snyk/${SNYK_REPORT}"
       - run:
           name: Run tests
           command: |
@@ -56,7 +54,7 @@ jobs:
           command: ./.circleci/clean-s3-bucket.sh
       - run:
           name: Save Snyk Artifacts
-          command: ./.circleci/store-snyk.sh ${SNYK_REPORT}
+          command: ./.circleci/store-snyk.sh
 
   prod-deploy:
     docker:
