@@ -54,7 +54,7 @@ jobs:
           command: ./.circleci/clean-s3-bucket.sh
       - run:
           name: Save Snyk Artifacts
-          command: ./.circleci/store-snyk.sh
+          command: ./.circleci/store-snyk.sh ${SNYK_REPORT}
 
   prod-deploy:
     docker:
