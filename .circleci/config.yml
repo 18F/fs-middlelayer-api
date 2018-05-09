@@ -5,7 +5,7 @@ jobs:
       - image: circleci/node:8.9.4
         environment:
           DATABASE_URL: "postgres://ubuntu@localhost/circle_test"
-          DATE_STRING: `date +"%m-%d-%Y-%H-%M-%S"`
+          DATE_STRING: date +"%m-%d-%Y-%H-%M-%S"
           SNYK_REPORT: snyk-${CIRCLE_PR_REPONAME}-${DATE_STRING}.csv
       - image: postgres:9.6.3
         environment:
