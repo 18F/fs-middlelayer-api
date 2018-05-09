@@ -18,22 +18,22 @@ jobs:
           - fs-ml-deps-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - fs-ml-deps-
-      # - run:
-      #     name: Install dependencies
-      #     command: |
-      #       npm install
-      #       sudo npm install -g istanbul
-      #       sudo npm install -g snyk
-      # - save_cache:
-      #     paths:
-      #       - ./node_modules
-      #     key: fs-ml-deps-{{ checksum "package.json" }}
-      # - run:
-      #     name: Populate DB
-      #     command: npm run dba
-      # - run:
-      #     name: Lint check
-      #     command: npm run lint
+      - run:
+          name: Install dependencies
+          command: |
+            npm install
+            sudo npm install -g istanbul
+            sudo npm install -g snyk
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: fs-ml-deps-{{ checksum "package.json" }}
+      - run:
+          name: Populate DB
+          command: npm run dba
+      - run:
+          name: Lint check
+          command: npm run lint
       - run:
           name: Snyk vulnerability test
           command: |
@@ -46,17 +46,17 @@ jobs:
             # | jq -r '["Package", "CVE", "CWE", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Paths"], (.vulnerabilities[] | [.packageName, .identifiers.CVE[0], .identifiers.CWE[0], .severity, .cvssScore, .title,.disclosureTime, .description, .from[1], .from[2]] )| @csv' >  \
             # "snyk/${SNYK_REPORT}"
             # ls snyk
-      # - run:
-      #     name: Run tests
-      #     command: |
-      #       npm run coverage
-      #       ./node_modules/codecov/bin/codecov
-      # - run:
-      #     name: Clean s3 bucket
-      #     command: ./.circleci/clean-s3-bucket.sh
-      # - run:
-      #     name: Save Snyk Artifacts
-      #     command: ./.circleci/store-snyk.sh ${SNYK_REPORT}
+      - run:
+          name: Run tests
+          command: |
+            npm run coverage
+            ./node_modules/codecov/bin/codecov
+      - run:
+          name: Clean s3 bucket
+          command: ./.circleci/clean-s3-bucket.sh
+      - run:
+          name: Save Snyk Artifacts
+          command: ./.circleci/store-snyk.sh ${SNYK_REPORT}
 
   prod-deploy:
     docker:
