@@ -44,6 +44,7 @@ jobs:
             sudo cat snyk/snyk.json  \
             | jq -r '["Package", "CVE", "CWE", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Paths"], (.vulnerabilities[] | [.packageName, .identifiers.CVE[0], .identifiers.CWE[0], .severity, .cvssScore, .title,.disclosureTime, .description, .from[1], .from[2]] )| @csv' >  \
             "snyk/${SNYK_REPORT}"
+            ls snyk
       - run:
           name: Run tests
           command: |
