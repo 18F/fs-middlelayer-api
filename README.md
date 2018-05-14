@@ -15,6 +15,7 @@
 [![GitHub Issues](https://img.shields.io/github/issues/nci-ats/fs-middlelayer-api.svg)](https://github.com/nci-ats/fs-middlelayer-api/issues)
 [![Semver](https://img.shields.io/badge/SemVer-2.0-blue.svg)](http://semver.org/spec/v2.0.0.html)
 [![license](https://img.shields.io/badge/license-CC0--1.0-blue.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
+[![Known Vulnerabilities](https://snyk.io/test/github/18f/fs-middlelayer-api/badge.svg)](https://snyk.io/test/github/18f/fs-middlelayer-api)
 
 A repository for the development of an API to support the public facing ePermit system to connect to the related Forest Service database, the Special Use Data System (SUDS) located in the National Resource Management System.
 
