@@ -31,27 +31,27 @@ const error = require('./errors/error.js');
 /**
  * Uploads file to S3
  * @param  {Array}   fileInfo - Information about file, include the contents of it in hex
- * @param  {Function} callback - function to call after uploading
  */
-function uploadFile(fileInfo, callback){
+function uploadFile(fileInfo){
 	const s3 = new AWS.S3();
 
 	const params = {
-		Bucket: config.bucketName, 
+		Bucket: config.bucketName,
 		Key: fileInfo.keyname,
 		Body: fileInfo.buffer,
-		ACL: 'private' 
+		ACL: 'private'
 	};
-
-	s3.putObject(params, function(err) {
-		if (err) {
-			console.error(err);
-			return callback(err);
-		}
-		else {
-			return callback(null);
-		}      
+	return new Promise(function(fulfill, reject){
+		s3.putObject(params, function (err) {
+			if (err) {
+				console.error(err);
+				// error.sendError(req, res, 500, 'error while storing files in data store.');
+				return reject(err);
+			}
+			return fulfill;
+		});
 	});
+
 }
 
 /**
@@ -119,56 +119,36 @@ function getFilesZip(controlNumber, dbFiles, res){
 }
 
 /** Saves all information for a file upload to the DB and uploads the file to S3.
- * @param  {Object} req - request object
- * @param  {Object} res - response object
  * @param  {Array} possbileFiles - list of all files that can be uploaded for this permit type
  * @param  {Array} files - Files being uploaded and saved
  * @param  {String} controlNumber - Control number of the application being processed
  * @param  {Object} application - Body of application being submitted
- * @param  {Function} callback - Function to be called after attempting to save the files.
  */
-function saveAndUploadFiles(req, res, possbileFiles, files, controlNumber, application, callback) {
+function saveAndUploadFiles(possbileFiles, files, controlNumber, application) {
+	return new Promise(function(fulfill, reject){
+		const asyncTasks = [];
 
-	const asyncTasks = [];
+		possbileFiles.forEach((fileConstraints) => {
 
-	possbileFiles.forEach((fileConstraints) => {
+			asyncTasks.push(function () {
 
-		asyncTasks.push(function (callback) {
-
-			const key = Object.keys(fileConstraints)[0];
-			if (files[key]) {
-				const fileInfo = fileValidation.getFileInfo(files[key], fileConstraints);
-				fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
-				uploadFile(fileInfo, function (err) {
-					if (err) {
-						console.error(err);
-						return error.sendError(req, res, 500, 'error while storing files in data store.');
-					}
-					else {
-						db.saveFile(application.id, fileInfo, function (err) {
-							if (err) {
-								console.error(err);
-								return error.sendError(req, res, 500, 'error while saving file information to the database.');
-							}
-							else {
-								return callback(null);
-							}
+				const key = Object.keys(fileConstraints)[0];
+				if (files[key]) {
+					const fileInfo = fileValidation.getFileInfo(files[key], fileConstraints);
+					fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
+					uploadFile(fileInfo)
+						.then(()=> {
+							db.saveFile(application.id, fileInfo);
 						});
-					}
-				});
-			}
-			else {
-				return callback(null);
-			}
+				}
+			});
 		});
-	});
-	async.parallel(asyncTasks, function (err) {
-		if (err) {
-			return callback(err);
-		}
-		else {
-			return callback(null);
-		}
+		async.parallel(asyncTasks)
+		.then(()=> {
+			return fulfill();
+		}).catch((err) =>{
+			reject(err);
+		});
 	});
 }
 

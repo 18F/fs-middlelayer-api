@@ -14,7 +14,7 @@
 
 //*******************************************************************
 
-const AWSMock = require('mock-aws-s3');
+
 const chai = require('chai');
 const expect = chai.expect;
 const deref = require('deref');
@@ -52,17 +52,6 @@ function validationHelper(pathData, body) {
 	}
 	return Validator.errorArray;
 }
-
-before(function(){
-	AWSMock.config.basePath = '/tmp/buckets/'; // Can configure a basePath for your local buckets
-	const s3 = AWSMock.S3({
-		params: { Bucket: 'example' }
-	});
-});
-
-after(function(){
-
-});
 
 describe('outfitters validation ', function(){
 	describe('ensure field is present', function(){

@@ -51,46 +51,34 @@ function postApplication(req, res, reqData){
 	const possbileFiles = [];
 
 	const Validator = new validation.ValidationClass(pathData, body);
-	const errorObject = Validator.validateInput(possbileFiles, req);
+	const validationObject = Validator.validateInput(possbileFiles, req);
 
-	if (errorObject.errorArray.length !== 0){
-		return error.sendError(req, res, 400, errorObject.message, errorObject.errorArray);
+	if (validationObject.errorArray.length !== 0){
+		return error.sendError(req, res, 400, validationObject.message, validationObject.errorArray);
 	}
 	else {
-		NRMConnection.postToBasic(req, res, errorObject.routeRequestSchema, body)
+		NRMConnection.postToBasic(req, res, validationObject.routeRequestSchema, body)
 		.then((postObject)=>{
-			const toStoreInDB = db.getDataToStoreInDB(errorObject.routeRequestSchema, body);
+			const toStoreInDB = db.getDataToStoreInDB(validationObject.routeRequestSchema, body);
 			const controlNumber = postObject.POST['/application'].response.accinstCn;
 			toStoreInDB.controlNumber = controlNumber;
-			db.saveApplication(toStoreInDB, function(err, appl){
-				if (err){
-					console.error(err);
-					return error.sendError(req, res, 500, 'error while saving application in the database.');
-				}
-				else {
-					fileStore.saveAndUploadFiles(req, res, possbileFiles, req.files, controlNumber, appl, function(err){
-						if (err) {
-							console.error(err);
-							return error.sendError(req, res, 500, 'error while uploading files.');
-						}
-						else {
-
-							const jsonResponse = {};
-							jsonResponse.status = 'success';
-							jsonResponse.controlNumber = controlNumber;
-							console.log(JSON.stringify(postObject, null, 4));
-							return res.json(jsonResponse);
-
-						}
-					});
-				}
+			db.saveApplication(toStoreInDB)
+			.then((application) =>{
+				fileStore.saveAndUploadFiles(possbileFiles, req.files, controlNumber, application)
+			})
+			.then(()=>{
+				const successfulResponse = {
+					'status': 'sucess',
+					'controlNumber': controlNumber
+				};
+				console.log(postObject, null, 4);
+				return res.json(successfulResponse);
 			});
 		})
-		.catch((err)=>{
-
+		.catch((err) => {
 			console.error(err);
-			if (err instanceof DuplicateContactsError){
-				if (err.duplicateContacts){
+			if (err instanceof DuplicateContactsError) {
+				if (err.duplicateContacts) {
 					return error.sendError(req, res, 400, err.duplicateContacts.length + ' duplicate contacts found.', err.duplicateContacts);
 				}
 				else {
@@ -176,4 +164,3 @@ function routeRequest(req, res){
 // exports
 
 module.exports.routeRequest = routeRequest;
-

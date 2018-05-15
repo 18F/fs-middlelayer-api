@@ -27,24 +27,27 @@ const models = include('src/models');
  * @param  {Array}   uploadFile    - Information about file being saved
  * @param  {Function} callback      - function to be called after trying to save file
  */
-function saveFile(applicationId, uploadFile, callback){
-	models.files.create({
-		applicationId: applicationId,
-		fileType: uploadFile.filetypecode,
-		filePath: uploadFile.keyname,
-		fileName: uploadFile.filename,
-		fileOriginalname: uploadFile.originalname,
-		fileExt: uploadFile.ext,
-		fileSize: uploadFile.size,
-		fileMimetype: uploadFile.mimetype,
-		fileEncoding: uploadFile.encoding
-	})
-	.then(function() {
-		return callback(null);
-	})
-	.catch(function(err) {
-		console.error(err);
-		return callback(err);
+function saveFile(applicationId, uploadFile){
+	return new Promise(function (fulfill, reject) {
+		models.files.create({
+			applicationId: applicationId,
+			fileType: uploadFile.filetypecode,
+			filePath: uploadFile.keyname,
+			fileName: uploadFile.filename,
+			fileOriginalname: uploadFile.originalname,
+			fileExt: uploadFile.ext,
+			fileSize: uploadFile.size,
+			fileMimetype: uploadFile.mimetype,
+			fileEncoding: uploadFile.encoding
+		})
+			.then(function () {
+				return fulfill;
+			})
+			.catch(function (err) {
+				console.error(err);
+				// error.sendError(req, res, 500, 'error while saving file information to the database.');
+				return reject(err);
+			});
 	});
 }
 
@@ -130,14 +133,18 @@ function getApplication(cNum, callback){
  * @param  {Function} callback      - Function to call after saving application to DB
  */
 function saveApplication(toStore, callback) {
-	models.applications.create(toStore)
-	.then(function(appl) {
-		return callback(null, appl);
-	})
-	.catch(function(err) {
-		console.error(err);
-		return callback(err, null);
+	return new Promise(function(fulfill, reject){
+		models.applications.create(toStore)
+			.then((application) =>{
+				return fulfill(application);
+			})
+			.catch((err) =>{
+				console.error(err);
+				// error.sendError(req, res, 500, 'error while saving application in the database.');
+				reject(err);
+			});
 	});
+
 }
 
 /** checks if the field specifies that it should be stored in that location

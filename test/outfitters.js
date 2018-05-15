@@ -21,7 +21,8 @@ const request = require('supertest');
 const server = include('src/index.js');
 const util = include('test/utility.js');
 
-const AWSMock = require('mock-aws-s3');
+const AWS = require('aws-sdk-mock');
+const sinon = require('sinon');
 
 const factory = require('unionized');
 const tempOutfitterInput = include('test/data/testInputTempOutfitters.json');
@@ -58,10 +59,7 @@ const binaryParser = function (res, cb) {
 };
 
 function mockZip(){
-	AWSMock.config.basePath = '/tmp/buckets/'; // Can configure a basePath for your local buckets
-	const s3 = AWSMock.S3({
-		params: { Bucket: 'example' }
-	});
+	return '';
 }
 
 //*******************************************************************
@@ -98,6 +96,9 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 			}
 		});
 
+		AWS.mock('S3', 'putObject', {});
+		AWS.mock('S3', 'getObject', {});
+
 	});
 
 	after(function(done) {
@@ -110,6 +111,8 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 				return done();
 			}
 		});
+
+		AWS.restore('S3');
 
 	});
 
@@ -186,7 +189,6 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		});
 
 		it('should return valid json with error messages for an invalid file (invalid extension)', function(done) {
-
 			request(server)
 				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
 				.set('x-access-token', token)
@@ -254,7 +256,8 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		});
 
 		it('should return valid file when getting outfitters files using the controlNumber and fileName returned from POST', function(done) {
-
+			const getObjSpy = sinon.spy();
+			AWS.mock('S3', 'getObject', new Buffer(require('fs').readFileSync('./test/data/test_insuranceCertificate.docx')), getObjSpy);
 			request(server)
 			.get(`${testURL}${postControlNumber}/files/${postFileName}`)
 			.set('x-access-token', token)
