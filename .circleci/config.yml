@@ -95,14 +95,13 @@ workflows:
             branches:
               only: master
   nightly:
-    jobs:
-      - run-tests
-    triggers:
-      - schedule:
-          # every night at 2:11 AM UTC (10:11 PM ET)
-          cron: "11 02 * * *"
-          filters:
-            branches:
-              only:
-                - master
+      triggers:
+        - schedule:
+            cron: "0 0 * * *"
+            filters:
+              branches:
+                only:
+                  - master
+      jobs:
+        - run-tests
   
