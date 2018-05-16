@@ -77,7 +77,7 @@ jobs:
               then ./.cg-deploy/deploy.sh api-staging;
             fi
 
-   recycle-production:
+  recycle-production:
     docker:
       - image: circleci/node:8.9.4
     steps:
