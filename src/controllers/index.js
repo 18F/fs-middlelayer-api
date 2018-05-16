@@ -64,7 +64,7 @@ function postApplication(req, res, reqData){
 			toStoreInDB.controlNumber = controlNumber;
 			db.saveApplication(toStoreInDB)
 			.then((application) =>{
-				fileStore.saveAndUploadFiles(possbileFiles, req.files, controlNumber, application)
+				fileStore.saveAndUploadFiles(possbileFiles, req.files, controlNumber, application);
 			})
 			.then(()=>{
 				const successfulResponse = {

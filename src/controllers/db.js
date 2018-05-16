@@ -132,7 +132,7 @@ function getApplication(cNum, callback){
  * @param  {Object}   toStore       - object containing all of the fields to save to DB
  * @param  {Function} callback      - Function to call after saving application to DB
  */
-function saveApplication(toStore, callback) {
+function saveApplication(toStore) {
 	return new Promise(function(fulfill, reject){
 		models.applications.create(toStore)
 			.then((application) =>{
