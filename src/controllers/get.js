@@ -176,18 +176,13 @@ function getControlNumber(req, res, reqData) {
 
 		let basicData = {};
 		NRMConnection.getFromBasic(req, res, reqData.matches.controlNumber)
-			.then((appData) => {
-				basicData = appData;
+			.then((applicationDataFromNRM) => {
 
 				let jsonData = {};
-
 				const controlNumber = reqData.matches.controlNumber;
-
 				const jsonResponse = {};
 
-				const cnData = basicData;
-
-				if (basicData) {
+				if (applicationDataFromNRM) {
 
 					db.getApplication(controlNumber, function (err, appl, fileData) {
 						if (err) {
@@ -205,7 +200,7 @@ function getControlNumber(req, res, reqData) {
 									appl[fileType] = file.fileName;
 								});
 							}
-							jsonData = copyGenericInfo(cnData, appl, jsonData, pathData['x-getTemplate']);
+							jsonData = copyGenericInfo(applicationDataFromNRM, appl, jsonData, pathData['x-getTemplate']);
 							jsonData.controlNumber = controlNumber;
 
 							jsonResponse.status = 'success';
