@@ -58,6 +58,7 @@ jobs:
     docker:
       - image: circleci/node:8.9.4
     steps:
+      - checkout
       - run:
           name: Deploy
           command: |
