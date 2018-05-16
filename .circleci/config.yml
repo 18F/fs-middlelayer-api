@@ -104,4 +104,7 @@ workflows:
                   - master
       jobs:
         - run-tests
+        - prod-deploy:
+            requires:
+              - run-tests
   
