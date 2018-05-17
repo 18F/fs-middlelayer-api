@@ -49,31 +49,50 @@ describe('Function Tests: validation.js ', function(){
 		.to.be.equal('xyz');
 	});
 
-	it('makeErrorObject should return output object with supplied elements', function(){
+	it('pushErrorObject should return output object with supplied elements', function(){
 		const Validator = new validationJs.ValidationClass('', '');
-		expect(Validator.makeErrorObject('field', 'errorType', 'expectedFieldType', 'enumMessage', 'dependency', 'anyOfFields') )
-		.to.eql({
+		Validator.pushErrorObject({
 			field: 'field',
-			errorType:'errorType',
-			expectedFieldType:'expectedFieldType',
-			enumMessage:'enumMessage',
-			dependency:'dependency',
-			anyOfFields:'anyOfFields',
-			message: undefined
+			errorType: 'errorType',
+			expectedFieldType: 'expectedFieldType',
+			message: 'enumMessage',
+			dependency: 'dependency',
+			anyOfFields: 'anyOfFields'
 		});
+		expect(Validator.errorArray)
+		.to.eql(
+			[{
+				field: 'field',
+				errorType:'errorType',
+				expectedFieldType:'expectedFieldType',
+				dependency:'dependency',
+				anyOfFields:'anyOfFields',
+				message: ''
+			}]
+		);
 	});
 
 	it('makeErrorObj should return output object with supplied elements (not all)', function(){
 		const Validator = new validationJs.ValidationClass('', '');
-		expect(Validator.makeErrorObject('field', 'errorType', 'expectedFieldType', null, 'dependency', 'anyOfFields') )
-			.to.eql({
+		Validator.pushErrorObject({
+			field: 'field',
+			errorType: 'errorType',
+			expectedFieldType: 'expectedFieldType',
+			message: 'enumMessage',
+			dependency: 'dependency',
+			anyOfFields: 'anyOfFields'
+		});
+		expect(Validator.errorArray)
+			.to.eql(
+			[{
 				field: 'field',
 				errorType: 'errorType',
 				expectedFieldType: 'expectedFieldType',
 				dependency: 'dependency',
 				anyOfFields: 'anyOfFields',
-				message: undefined
-			});
+				message: ''
+			}]
+		);
 	});
 
 	it('concatErrors should return expected output', function(){

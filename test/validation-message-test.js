@@ -101,7 +101,7 @@ describe('Build error messages: ', function(){
 				'errorArray[]': 1,
 				'errorArray[0].field': 'applicantInfo.firstName',
 				'errorArray[0].errorType': 'enum',
-				'errorArray[0].enumMessage': 'with some enum message'
+				'errorArray[0].message': 'with some enum message'
 			}));
 		expect(actual)
 		.to.be.equal('Applicant Info/First Name with some enum message.');

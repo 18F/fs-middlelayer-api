@@ -36,7 +36,7 @@ function makeFieldReadable(input) {
 /**
  * Takes input like fieldOne.fieldTwo and converts it to Field One/Field Two to make it easier to read
  * @param  {String} input - path to field which has error
- * @return {String}       - human readable path to errored field
+ * @return {String|Boolean}       - human readable path to errored field or FALSE if not string
  */
 function makePathReadable(input) {
 
@@ -72,7 +72,7 @@ function buildFormatErrorMessage(fullPath) {
  * Creates error message for anyOf errors
  *
  * @param  {array} anyOfFields - list of fields, at least one being required.
- * @return {string}
+ * @return {string|Boolean} - return message or FALSE is not anyOfFields
  */
 function makeAnyOfMessage(anyOfFields){
 	if (anyOfFields){
@@ -93,6 +93,7 @@ function makeAnyOfMessage(anyOfFields){
 /**
 	 * Creates error messages for all file errors
 	 * @param {Object} error            - error object to be processed
+	 * @return {String}                 - message of error
 	 */
 function generateFileErrors(error) {
 	switch (error.errorType) {
@@ -107,12 +108,12 @@ function generateFileErrors(error) {
 	case 'invalidSizeLarge':
 		return `${makePathReadable(error.field)} cannot be larger than ${error.expectedFieldType} MB.`;
 	}
+	return '';
 }
 
 /**
  * Creates error messages for all field errors
- * @param  {Object} error              - error object to be processed
- * @param  {Array}  messages           - Array of all error messages to be returned
+ * @param  {Object} validationError          - error object to be processed
  * @return {String}                    - All field error messages concated together
  */
 function generateErrorMessage(validationError){
@@ -129,7 +130,7 @@ function generateErrorMessage(validationError){
 		message = buildFormatErrorMessage(validationError.field);
 		break;
 	case 'enum':
-		message = `${makePathReadable(validationError.field)} ${validationError.enumMessage}.`;
+		message = `${makePathReadable(validationError.field)} ${validationError.message}.`;
 		break;
 	case 'dependencies':
 		message = `Having ${makePathReadable(validationError.field)} requires that ${makePathReadable(validationError.dependency)} be provided.`;
