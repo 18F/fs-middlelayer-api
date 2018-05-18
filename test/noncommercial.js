@@ -1,8 +1,9 @@
+/* eslint no-undefined: 0 */
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -32,8 +33,7 @@ const bcrypt = require('bcrypt-nodejs');
 const db = include('src/controllers/db.js');
 const models = include('src/models');
 
-const adminUsername = 'admin' + (Math.floor((Math.random() * 1000000) + 1)).toString();
-const adminPassword = 'pwd' + (Math.floor((Math.random() * 1000000) + 1)).toString();
+const adminCredentials = util.makeUserEntry('admin');
 
 //*******************************************************************
 //Mock Input
@@ -43,19 +43,18 @@ const noncommercialFactory = factory.factory(noncommercialInput);
 //*******************************************************************
 
 describe('Integration tests - noncommercial', function(){
-	
+
 	let token;
 	let postControlNumber;
 
 	before(function(done) {
-
 		models.users.sync({ force: false });
 		const salt = bcrypt.genSaltSync(10);
-		const hash = bcrypt.hashSync(adminPassword, salt);
+		const hash = bcrypt.hashSync(adminCredentials.pwd, salt);
 
 		const adminUser = {
-			userName: adminUsername, 
-			passHash: hash, 
+			userName: adminCredentials.un,
+			passHash: hash,
 			userRole: 'admin'
 		};
 
@@ -64,20 +63,19 @@ describe('Integration tests - noncommercial', function(){
 				return false;
 			}
 			else {
-				
-				util.getToken(adminUsername, adminPassword, function(t){
+
+				util.getToken(adminCredentials.un, adminCredentials.pwd, function(t){
 					token = t;
 					return done();
 				});
-					
+
 			}
 		});
-	
 	});
 
 	after(function(done) {
-		
-		db.deleteUser(adminUsername, function(err){
+
+		db.deleteUser(adminCredentials.un, function(err){
 			if (err){
 				return false;
 			}
@@ -85,7 +83,7 @@ describe('Integration tests - noncommercial', function(){
 				return done();
 			}
 		});
-		
+
 	});
 
 	it('should return valid json with a 400 status code for noncommercial POST request without an applicantInfo object', function(done) {
@@ -119,7 +117,7 @@ describe('Integration tests - noncommercial', function(){
 	it('should return valid json with 400 status for noncommercial POST request (contact search - duplicate contacts error)', function(done) {
 		const noncommercialInput = noncommercialFactory.create();
 		noncommercialInput.applicantInfo.organizationName = 'Temp Organization';
-		noncommercialInput.applicantInfo.orgType = 'Corporation';
+		noncommercialInput.applicantInfo.orgType = 'CORPORATION';
 		request(server)
 			.post(testURL)
 			.set('x-access-token', token)
@@ -142,7 +140,7 @@ describe('Integration tests - noncommercial', function(){
 			.expect(200, done);
 
 	});
-	
+
 	it('should return valid json for noncommercial GET request for id', function(done) {
 
 		request(server)

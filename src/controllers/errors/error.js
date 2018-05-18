@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -42,7 +42,7 @@ function logging(req, message){
  * @param  {String} message - Error message to return
  * @param  {Array} errors  - Array of error objects to return
  */
-const sendError = function(req, res, code, message, errors){
+function sendError(req, res, code, message, errors){
 
 	const output = {
 		'status' : 'error',
@@ -54,9 +54,23 @@ const sendError = function(req, res, code, message, errors){
 
 	res.status(code).json(output);
 
-};
+}
+
+function nrmServiceError(req, res, err){
+	console.error(err);
+	if (err.statusCode && err.statusCode === 404){
+		return this.sendError(req, res, 503, 'underlying service unavailable.');
+	}
+	else if (err.error && err.error.code === 'ETIMEDOUT') {
+		return this.sendError(req, res, 504, 'underlying service has timed out.');
+	}
+	else {
+		return this.sendError(req, res, 500, 'Unknown server error.');
+	}
+}
 
 //*******************************************************************
 // exports
 
 module.exports.sendError = sendError;
+module.exports.nrmServiceError = nrmServiceError; 

@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -16,13 +16,12 @@
 
 const express = require('express');
 const router = express.Router();
-const include = require('include')(__dirname);
 
 const auth = require('./auth');
 const api = require('./api');
 
-const token = include('src/controllers/auth/token.js');
-const authorize = include('src/controllers/auth/authorize.js');
+const token = require('../controllers/auth/token.js');
+const authorize = require('../controllers/auth/authorize.js');
 
 //*******************************************************************
 // router

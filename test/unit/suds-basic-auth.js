@@ -5,7 +5,7 @@ const sinon = require('sinon');
 const request = require('request-promise');
 
 const testData = require('./suds-basic-auth.json');
-const basic = require('../../src/controllers/basic');
+const basic = require('../../src/controllers/nrmconnection');
 const SUDS_INFO = require('../../src/controllers/vcap.js').SUDS_INFO;
 
 function verifyArgsForSUDSAuthentication(args) {
