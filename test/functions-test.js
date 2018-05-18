@@ -94,13 +94,6 @@ describe('Function Tests: validation.js ', function(){
 			}]
 		);
 	});
-
-	it('concatErrors should return expected output', function(){
-		const Validator = new validationJs.ValidationClass('', '');
-		expect(Validator.concatErrors(['a', 'b']) )
-		.to.be.equal('a b');
-	});
-
 });
 
 //*******************************************************************

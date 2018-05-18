@@ -64,7 +64,7 @@ describe('Build error messages: ', function(){
 			noncommercialFactory.create());
 		messages.push(errorMessages.generateErrorMessage(errorFactoryOjbect.errorArray[0]));
 		messages.push(errorMessages.generateErrorMessage(errorFactoryOjbect.errorArray[1]));
-		const actual = Validator.concatErrors(messages);
+		const actual = `${messages[0]} ${messages[1]}`
 		expect(actual)
 		.to.be.equal('Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field.');
 	

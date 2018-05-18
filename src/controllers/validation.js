@@ -25,20 +25,26 @@ const dereferenceSchema = deref();
 const errors = require('./errors/validation-messages.js');
 const fileValidation = require('./fileValidation.js');
 
+/**
+* A class to validate the values and fields of an incoming API request
+* @class
+*/
 class ValidationClass {
 	/**
-	* @param  { Object } pathData - All data from swagger for the path that has been run
+	* The constructor for the validator class
+	* @param  {Object} pathData - All data from swagger for the path that has been run
 	* @param {Object} body - json body of the request being sent
 	*/
 	constructor(pathData, body){
 		this.pathData = pathData;
 		this.schemaValidator = new Validator();
 		this.errorArray = [];
+		this.requiredFields = [];
+		this.errorMessage = '';
 		this.routeRequestSchema = '';
 		this.fullSchema = {};
 		this.schemaToUse = {};
-		this.requiredFields = [];
-		this.errorMessages = [];
+
 		this.body = body;
 	}
 
@@ -89,11 +95,12 @@ class ValidationClass {
 
 	/**
 	 * Creates error object which can be read by error message building function
-	 * @param {Object} errorObject       - and error object of errors supplied
+	 * @param {Object} errorObject       - an object describing a validation error
+	 * @property {String} errorObject.message - a human readable message for each type of error
 	 */
 	pushErrorObject(errorObject) {
 		errorObject.message = errors.generateErrorMessage(errorObject);
-		this.errorMessages.push(errorObject.message);
+		this.errorMessage = `${this.errorMessage} ${errorObject.message}`;
 		this.errorArray.push(errorObject);
 	}
 
@@ -403,20 +410,6 @@ class ValidationClass {
 	}
 
 	/**
-	 * Combines all errors into one string which can be used to determine where all errors are at
-	 * @param  {Array} errorMessages - Array of error objects
-	 * @return {String}              - Error message containing all errors
-	 */
-	concatErrors(errorMessages) {
-
-		let errMessage = '';
-		errorMessages.forEach((message) => {
-			errMessage = `${errMessage}${message} `;
-		});
-		return errMessage.trim();
-	}
-
-	/**
 	 * Additional validation checks that can't be defined in the validation schema
 	 */
 	additionalValidation(){
@@ -460,8 +453,7 @@ class ValidationClass {
 				this.errorArray = this.errorArray.concat(fileValidationErrors);
 			});
 		}
-		const errorMessage = this.concatErrors(this.errorMessages);
-		return {'message': errorMessage, 'errorArray': this.errorArray, 'routeRequestSchema': this.routeRequestSchema};
+		return {'message': this.errorMessage.trim(), 'errorArray': this.errorArray, 'routeRequestSchema': this.routeRequestSchema};
 	}
 } // End of class
 
