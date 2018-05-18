@@ -56,16 +56,16 @@ function sendError(req, res, code, message, errors){
 
 }
 
-function basicServiceError(req, res, err){
+function nrmServiceError(req, res, err){
+	console.error(err);
 	if (err.statusCode && err.statusCode === 404){
-		console.error(err);
-		return error.sendError(req, res, 503, 'underlying service unavailable.');
+		return this.sendError(req, res, 503, 'underlying service unavailable.');
 	}
 	else if (err.error && err.error.code === 'ETIMEDOUT') {
-		return error.sendError(req, res, 504, 'underlying service has timed out.');
+		return this.sendError(req, res, 504, 'underlying service has timed out.');
 	}
 	else {
-		reject(err);
+		return this.sendError(req, res, 500, 'Unknown server error.');
 	}
 }
 
@@ -73,3 +73,4 @@ function basicServiceError(req, res, err){
 // exports
 
 module.exports.sendError = sendError;
+module.exports.nrmServiceError = nrmServiceError; 

@@ -23,7 +23,7 @@ This repository was partially developed under a task order of the Agile Blanket 
 
 ## Table of Contents
 
-- [Setup](#setup)
+- [Local Development](#local-development)
 - [Configuration](#configuration)
 - [Dependencies](#dependencies)
 - [Creating a new permit type](#creating-a-new-permit-type)
@@ -37,14 +37,14 @@ This repository was partially developed under a task order of the Agile Blanket 
 - [Automated tests](#automated-tests)
 - [Field validation](#field-validation)
 
-## Setup
+## Local Development
 
 1. Clone or download this repository.
 2. Run `npm install` to install application and all dependencies.
 3. Set the [environment variables](#environment-variables)
 4. Setup a database and run `npm run dba`.
 5. [Create a test user](#create-a-user).
-6. Run `npm start` to start Node.js server.
+6. Run `npm run watch` to start Node.js server.
 
 ## Dependencies
 
@@ -322,6 +322,7 @@ These are the environment variables that must be created on the Node.js server f
 - `VCAP_SERVICES=an object to replicate the bound services of the SUDS_API_URL and the S3 bucket`
 
 ### CI Environment variables
+
 Additional environment variable for Circle: SNYK_TOKEN
    
 ### Creating API User Accounts Using Environment Variables

@@ -582,8 +582,8 @@
     "phoneNumber": {
       "type": "object",
       "properties": {
-        "areaCode": { "type": "integer"},
-        "number": { "type": "integer"},
+        "areaCode": { "type": "string"},
+        "number": { "type": "string"},
         "extension": { "type": "string"},
         "phoneType": {"type": "string"}
       },

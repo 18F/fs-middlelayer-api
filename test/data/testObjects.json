@@ -90,27 +90,21 @@
                             "default": "",
                             "fromIntake": true,
                             "pattern": "^[0-9]{2}$",
-                            "store": [
-                                "middleLayer:region"
-                            ],
+                            "localStore":true,
                             "type": "string"
                         },
                         "forest": {
                             "default": "",
                             "fromIntake": true,
                             "pattern": "^[0-9]{2}$",
-                            "store": [
-                                "middleLayer:forest"
-                            ],
+                            "localStore":true,
                             "type": "string"
                         },
                         "district": {
                             "default": "",
                             "fromIntake": true,
                             "pattern": "^[0-9]{2}$",
-                            "store": [
-                                "middleLayer:district"
-                            ],
+                            "localStore": true,
                             "type": "string"
                         },
                         "securityId": {
@@ -122,10 +116,10 @@
                                 "forest",
                                 "district"
                             ],
-                            "store": [
-                                "basic:/application",
-                                "basic:/contact/address",
-                                "basic:/contact/phone"
+                            "basicStore": [
+                                "/application",
+                                "/contact/address",
+                                "/contact/phone"
                             ],
                             "type": "string"
                         },
@@ -138,8 +132,8 @@
                                 "forest",
                                 "district"
                             ],
-                            "store": [
-                                "basic:/application"
+                            "basicStore": [
+                                "/application"
                             ],
                             "type": "string"
                         },
@@ -152,8 +146,8 @@
                                 "forest",
                                 "district"
                             ],
-                            "store": [
-                                "basic:/application"
+                            "basicStore": [
+                                "/application"
                             ],
                             "type": "string"
                         },
@@ -166,8 +160,8 @@
                                 "forest",
                                 "00000"
                             ],
-                            "store": [
-                                "basic:/application"
+                            "basicStore": [
+                                "/application"
                             ],
                             "type": "string"
                         },
@@ -175,8 +169,8 @@
                             "basicField": "acres",
                             "default": 0,
                             "fromIntake": false,
-                            "store": [
-                                "basic:/application"
+                            "basicStore": [
+                                "/application"
                             ],
                             "type": "integer"
                         },
@@ -184,10 +178,10 @@
                             "basicField": "contact",
                             "default": "",
                             "fromIntake": false,
-                            "store": [
-                                "basic:/contact/phone",
-                                "basic:/contact/address",
-                                "basic:/contact/person"
+                            "basicStore": [
+                                "/application",
+                                "/contact/phone",
+                                "/contact/person"
                             ],
                             "type": "string"
                         }
@@ -211,8 +205,8 @@
                                             "default": "",
                                             "fromIntake": true,
                                             "maxLength": 255,
-                                            "store": [
-                                                "basic:/contact/person"
+                                            "basicStore": [
+                                                "/contact/person"
                                             ],
                                             "type": "string"
                                         },
@@ -221,8 +215,8 @@
                                             "default": "",
                                             "fromIntake": true,
                                             "maxLength": 255,
-                                            "store": [
-                                                "basic:/contact/person"
+                                            "basicStore": [
+                                                "/contact/person"
                                             ],
                                             "type": "string"
                                         },
@@ -234,8 +228,8 @@
                                                     "default": 0,
                                                     "fromIntake": true,
                                                     "format": "areaCodeFormat",
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "integer"
                                                 },
@@ -244,8 +238,8 @@
                                                     "default": 0,
                                                     "fromIntake": true,
                                                     "format": "phoneNumberFormat",
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "integer"
                                                 },
@@ -254,8 +248,8 @@
                                                     "default": "",
                                                     "fromIntake": true,
                                                     "pattern": "[\\d]+",
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "string"
                                                 },
@@ -263,8 +257,8 @@
                                                     "basicField": "phoneNumberType",
                                                     "default": "",
                                                     "fromIntake": true,
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "string"
                                                 }
@@ -283,8 +277,8 @@
                                                     "default": 0,
                                                     "fromIntake": true,
                                                     "format": "areaCodeFormat",
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "integer"
                                                 },
@@ -293,8 +287,8 @@
                                                     "default": 0,
                                                     "fromIntake": true,
                                                     "format": "phoneNumberFormat",
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "integer"
                                                 },
@@ -303,8 +297,8 @@
                                                     "default": "",
                                                     "fromIntake": true,
                                                     "pattern": "[\\d]+",
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "string"
                                                 },
@@ -312,8 +306,8 @@
                                                     "basicField": "phoneNumberType",
                                                     "default": "",
                                                     "fromIntake": true,
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "string"
                                                 }
@@ -329,8 +323,8 @@
                                             "default": "",
                                             "fromIntake": true,
                                             "pattern": "^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$",
-                                            "store": [
-                                                "basic:/contact/address"
+                                            "basicStore": [
+                                                "/contact/address"
                                             ],
                                             "type": "string"
                                         },
@@ -338,8 +332,8 @@
                                             "basicField": "address1",
                                             "default": "",
                                             "fromIntake": true,
-                                            "store": [
-                                                "basic:/contact/address"
+                                            "basicStore": [
+                                                "/contact/address"
                                             ],
                                             "type": "string"
                                         },
@@ -347,8 +341,8 @@
                                             "basicField": "address2",
                                             "default": "",
                                             "fromIntake": true,
-                                            "store": [
-                                                "basic:/contact/address"
+                                            "basicStore": [
+                                                "/contact/address"
                                             ],
                                             "type": "string"
                                         },
@@ -356,8 +350,8 @@
                                             "basicField": "cityName",
                                             "default": "",
                                             "fromIntake": true,
-                                            "store": [
-                                                "basic:/contact/address"
+                                            "basicStore": [
+                                                "/contact/address"
                                             ],
                                             "type": "string"
                                         },
@@ -366,8 +360,8 @@
                                             "default": "",
                                             "fromIntake": true,
                                             "pattern": "^(A[EKLPRSZ]|C[AOT]|D[CE]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHVJMY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$",
-                                            "store": [
-                                                "basic:/contact/address"
+                                            "basicStore": [
+                                                "/contact/address"
                                             ],
                                             "type": "string"
                                         },
@@ -376,17 +370,15 @@
                                             "default": "",
                                             "fromIntake": true,
                                             "pattern": "^[0-9]{5}$|^[0-9]{9}$",
-                                            "store": [
-                                                "basic:/contact/address"
+                                            "basicStore": [
+                                                "/contact/address"
                                             ],
                                             "type": "string"
                                         },
                                         "website": {
                                             "default": "",
                                             "fromIntake": true,
-                                            "store": [
-                                                "middleLayer:website"
-                                            ],
+                                            "localStore": true,
                                             "type": "string"
                                         }
                                     },
@@ -407,8 +399,8 @@
                                             "basicField": "contName",
                                             "default": "",
                                             "fromIntake": true,
-                                            "store": [
-                                                "basic:/contact/organization"
+                                            "basicStore": [
+                                                "/contact/organization"
                                             ],
                                             "type": "string"
                                         },
@@ -428,8 +420,8 @@
                                                 "Trust"
                                             ],
                                             "fromIntake": true,
-                                            "store": [
-                                                "basic:/contact/organization"
+                                            "basicStore": [
+                                                "/contact/organization"
                                             ],
                                             "type": "string"
                                         }
@@ -454,68 +446,54 @@
                                 "individualIsCitizen": {
                                     "default": false,
                                     "fromIntake": true,
-                                    "store": [
-                                        "middleLayer:individualIsCitizen"
-                                    ],
+                                    "localStore":true,
                                     "type": "boolean"
                                 },
                                 "smallBusiness": {
                                     "default": false,
                                     "fromIntake": true,
-                                    "store": [
-                                        "middleLayer:smallBusiness"
-                                    ],
+                                    "localStore": true,
                                     "type": "boolean"
                                 },
                                 "activityDescription": {
                                     "basicField": "purpose",
                                     "default": "",
                                     "fromIntake": true,
-                                    "store": [
-                                        "middleLayer:activityDescription",
-                                        "basic:/application"
+                                    "localStore": true,
+                                    "basicStore": [
+                                        "/application"
                                     ],
                                     "type": "string"
                                 },
                                 "advertisingURL": {
                                     "default": "",
                                     "fromIntake": true,
-                                    "store": [
-                                        "middleLayer:advertisingURL"
-                                    ],
+                                    "localStore": true,
                                     "type": "string"
                                 },
                                 "advertisingDescription": {
                                     "default": "",
                                     "fromIntake": true,
-                                    "store": [
-                                        "middleLayer:advertisingDescription"
-                                    ],
+                                    "localStore":true,
                                     "type": "string"
                                 },
                                 "clientCharges": {
                                     "default": "",
                                     "fromIntake": true,
-                                    "store": [
-                                        "middleLayer:clientCharges"
-                                    ],
+                                    "localStore": true,
                                     "type": "string"
                                 },
                                 "experienceList": {
                                     "default": "",
                                     "fromIntake": true,
-                                    "store": [
-                                        "middleLayer:experienceList"
-                                    ],
+                                    "localStore": true,
                                     "type": "string"
                                 },
                                 "guideDocumentation": {
                                     "filetypecode": "gud",
                                     "maxSize": 25,
                                     "requiredFile": false,
-                                    "store": [
-                                        "middleLayer:guideDocumentation"
-                                    ],
+                                    "localStore": true,
                                     "type": "file",
                                     "validExtensions": [
                                         "pdf",
@@ -528,9 +506,7 @@
                                     "filetypecode": "arf",
                                     "maxSize": 10,
                                     "requirequiredFilered": false,
-                                    "store": [
-                                        "middleLayer:acknowledgementOfRiskForm"
-                                    ],
+                                    "localStore": true,
                                     "type": "file",
                                     "validExtensions": [
                                         "pdf",
@@ -543,9 +519,7 @@
                                     "filetypecode": "inc",
                                     "maxSize": 10,
                                     "requiredFile": true,
-                                    "store": [
-                                        "middleLayer:insuranceCertificate"
-                                    ],
+                                    "localStore": true,
                                     "type": "file",
                                     "validExtensions": [
                                         "pdf",
@@ -558,9 +532,7 @@
                                     "filetypecode": "gse",
                                     "maxSize": 10,
                                     "requiredFile": true,
-                                    "store": [
-                                        "middleLayer:acknowledgementOfRiskForm"
-                                    ],
+                                    "localStore": true,
                                     "type": "file",
                                     "validExtensions": [
                                         "pdf",
@@ -573,9 +545,7 @@
                                     "filetypecode": "opp",
                                     "maxSize": 10,
                                     "requiredFile": true,
-                                    "store": [
-                                        "middleLayer:operatingPlan"
-                                    ],
+                                    "localStore": true,
                                     "type": "file",
                                     "validExtensions": [
                                         "pdf",
@@ -587,9 +557,9 @@
                                 "formName": {
                                     "basicField": "formName",
                                     "default": "FS-2700-4I",
-                                    "store": [
-                                        "middleLayer:formName",
-                                        "basic:/application"
+                                    "localStore": true,
+                                    "basicStore": [
+                                        "/application"
                                     ],
                                     "type": "string"
                                 }
@@ -686,27 +656,21 @@
                             "default": "",
                             "fromIntake": true,
                             "pattern": "^[0-9]{2}$",
-                            "store": [
-                                "middleLayer:region"
-                            ],
+                            "localStore": true,
                             "type": "string"
                         },
                         "forest": {
                             "default": "",
                             "fromIntake": true,
                             "pattern": "^[0-9]{2}$",
-                            "store": [
-                                "middleLayer:forest"
-                            ],
+                            "localStore": true,
                             "type": "string"
                         },
                         "district": {
                             "default": "",
                             "fromIntake": true,
                             "pattern": "^[0-9]{2}$",
-                            "store": [
-                                "middleLayer:district"
-                            ],
+                            "localStore": true,
                             "type": "string"
                         },
                         "securityId": {
@@ -718,10 +682,10 @@
                                 "forest",
                                 "district"
                             ],
-                            "store": [
-                                "basic:/application",
-                                "basic:/contact/address",
-                                "basic:/contact/phone"
+                            "basicStore": [
+                                "/application",
+                                "/contact/address",
+                                "/contact/phone"
                             ],
                             "type": "string"
                         },
@@ -734,8 +698,8 @@
                                 "forest",
                                 "district"
                             ],
-                            "store": [
-                                "basic:/application"
+                            "basicStore": [
+                                "/application"
                             ],
                             "type": "string"
                         },
@@ -748,8 +712,8 @@
                                 "forest",
                                 "district"
                             ],
-                            "store": [
-                                "basic:/application"
+                            "basicStore": [
+                                "/application"
                             ],
                             "type": "string"
                         },
@@ -762,8 +726,8 @@
                                 "forest",
                                 "00000"
                             ],
-                            "store": [
-                                "basic:/application"
+                            "basicStore": [
+                                "/application"
                             ],
                             "type": "string"
                         },
@@ -771,8 +735,8 @@
                             "basicField": "acres",
                             "default": 0,
                             "fromIntake": false,
-                            "store": [
-                                "basic:/application"
+                            "basicStore": [
+                                "/application"
                             ],
                             "type": "integer"
                         },
@@ -780,10 +744,10 @@
                             "basicField": "contact",
                             "default": "",
                             "fromIntake": false,
-                            "store": [
-                                "basic:/contact/phone",
-                                "basic:/contact/address",
-                                "basic:/contact/person"
+                            "basicStore": [
+                                "/contact/phone",
+                                "/contact/address",
+                                "/contact/person"
                             ],
                             "type": "string"
                         }
@@ -807,8 +771,8 @@
                                             "default": "",
                                             "fromIntake": true,
                                             "maxLength": 255,
-                                            "store": [
-                                                "basic:/contact/person"
+                                            "basicStore": [
+                                                "/contact/person"
                                             ],
                                             "type": "string"
                                         },
@@ -817,8 +781,8 @@
                                             "default": "",
                                             "fromIntake": true,
                                             "maxLength": 255,
-                                            "store": [
-                                                "basic:/contact/person"
+                                            "basicStore": [
+                                                "/contact/person"
                                             ],
                                             "type": "string"
                                         },
@@ -830,8 +794,8 @@
                                                     "default": 0,
                                                     "fromIntake": true,
                                                     "format": "areaCodeFormat",
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "integer"
                                                 },
@@ -840,8 +804,8 @@
                                                     "default": 0,
                                                     "fromIntake": true,
                                                     "format": "phoneNumberFormat",
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "integer"
                                                 },
@@ -850,8 +814,8 @@
                                                     "default": "",
                                                     "fromIntake": true,
                                                     "pattern": "[\\d]+",
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "string"
                                                 },
@@ -859,8 +823,8 @@
                                                     "basicField": "phoneNumberType",
                                                     "default": "",
                                                     "fromIntake": true,
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "string"
                                                 }
@@ -879,8 +843,8 @@
                                                     "default": 0,
                                                     "fromIntake": true,
                                                     "format": "areaCodeFormat",
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "integer"
                                                 },
@@ -889,8 +853,8 @@
                                                     "default": 0,
                                                     "fromIntake": true,
                                                     "format": "phoneNumberFormat",
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "integer"
                                                 },
@@ -899,8 +863,8 @@
                                                     "default": "",
                                                     "fromIntake": true,
                                                     "pattern": "[\\d]+",
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "string"
                                                 },
@@ -908,8 +872,8 @@
                                                     "basicField": "phoneNumberType",
                                                     "default": "",
                                                     "fromIntake": true,
-                                                    "store": [
-                                                        "basic:/contact/phone"
+                                                    "basicStore": [
+                                                        "/contact/phone"
                                                     ],
                                                     "type": "string"
                                                 }
@@ -925,8 +889,8 @@
                                             "default": "",
                                             "fromIntake": true,
                                             "pattern": "^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$",
-                                            "store": [
-                                                "basic:/contact/address"
+                                            "basicStore": [
+                                                "/contact/address"
                                             ],
                                             "type": "string"
                                         },
@@ -934,8 +898,8 @@
                                             "basicField": "address1",
                                             "default": "",
                                             "fromIntake": true,
-                                            "store": [
-                                                "basic:/contact/address"
+                                            "basicStore": [
+                                                "/contact/address"
                                             ],
                                             "type": "string"
                                         },
@@ -943,8 +907,8 @@
                                             "basicField": "address2",
                                             "default": "",
                                             "fromIntake": true,
-                                            "store": [
-                                                "basic:/contact/address"
+                                            "basicStore": [
+                                                "/contact/address"
                                             ],
                                             "type": "string"
                                         },
@@ -952,8 +916,8 @@
                                             "basicField": "cityName",
                                             "default": "",
                                             "fromIntake": true,
-                                            "store": [
-                                                "basic:/contact/address"
+                                            "basicStore": [
+                                                "/contact/address"
                                             ],
                                             "type": "string"
                                         },
@@ -962,8 +926,8 @@
                                             "default": "",
                                             "fromIntake": true,
                                             "pattern": "^(A[EKLPRSZ]|C[AOT]|D[CE]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHVJMY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$",
-                                            "store": [
-                                                "basic:/contact/address"
+                                            "basicStore": [
+                                                "/contact/address"
                                             ],
                                             "type": "string"
                                         },
@@ -972,17 +936,15 @@
                                             "default": "",
                                             "fromIntake": true,
                                             "pattern": "^[0-9]{5}$|^[0-9]{9}$",
-                                            "store": [
-                                                "basic:/contact/address"
+                                            "basicStore": [
+                                                "/contact/address"
                                             ],
                                             "type": "string"
                                         },
                                         "website": {
                                             "default": "",
                                             "fromIntake": true,
-                                            "store": [
-                                                "middleLayer:website"
-                                            ],
+                                            "localStore": true,
                                             "type": "string"
                                         }
                                     },
@@ -1003,8 +965,8 @@
                                             "basicField": "contName",
                                             "default": "",
                                             "fromIntake": true,
-                                            "store": [
-                                                "basic:/contact/organization"
+                                            "basicStore": [
+                                                "/contact/organization"
                                             ],
                                             "type": "string"
                                         },
@@ -1026,8 +988,8 @@
                                                 "Trust"
                                             ],
                                             "fromIntake": true,
-                                            "store": [
-                                                "basic:/contact/organization"
+                                            "basicStore": [
+                                                "/contact/organization"
                                             ],
                                             "type": "string"
                                         }
@@ -1055,51 +1017,41 @@
                                 "activityDescription": {
                                     "default": "",
                                     "fromIntake": true,
-                                    "store": [
-                                        "middleLayer:activityDescription"
-                                    ],
+                                    "localStore": true,
                                     "type": "string"
                                 },
                                 "locationDescription": {
                                     "default": "",
                                     "fromIntake": true,
-                                    "store": [
-                                        "middleLayer:locationDescription"
-                                    ],
+                                    "basicStore": true,
                                     "type": "string"
                                 },
                                 "startDateTime": {
                                     "default": "",
                                     "fromIntake": true,
                                     "pattern": "^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T(0\\d|1\\d|2[0-3]):(0\\d|1\\d|2[0-3]):(0\\d|1\\d|2[0-3])Z$",
-                                    "store": [
-                                        "middleLayer:startDatetime"
-                                    ],
+                                    "localStore": true,
                                     "type": "string"
                                 },
                                 "endDateTime": {
                                     "default": "",
                                     "fromIntake": true,
                                     "pattern": "^(19|20)\\d\\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])T(0\\d|1\\d|2[0-3]):(0\\d|1\\d|2[0-3]):(0\\d|1\\d|2[0-3])Z$",
-                                    "store": [
-                                        "middleLayer:endDatetime"
-                                    ],
+                                    "basicStore": true,
                                     "type": "string"
                                 },
                                 "numberParticipants": {
                                     "default": 0,
                                     "fromIntake": true,
-                                    "store": [
-                                        "middleLayer:numberParticipants"
-                                    ],
+                                    "localStore": true,
                                     "type": "integer"
                                 },
                                 "formName": {
                                     "basicField": "formName",
                                     "default": "FS-2700-3b",
-                                    "store": [
-                                        "middleLayer:formName",
-                                        "basic:/application"
+                                    "localStore": true,
+                                    "basicStore": [
+                                        "/application"
                                     ],
                                     "type": "string"
                                 }
@@ -1128,9 +1080,7 @@
                 "filetypecode": "inc",
                 "maxSize": 1,
                 "requiredFile": true,
-                "store": [
-                    "middleLayer:insuranceCertificate"
-                ],
+                "localStore": true,
                 "type": "file",
                 "validExtensions": [
                     "pdf",

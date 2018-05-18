@@ -12,6 +12,11 @@
 'use strict';
 
 //*******************************************************************
+// required modules
+
+const matchstick = require('matchstick');
+
+//*******************************************************************
 
 /** If body passed in as string, converts it to a JSON object
  * @param  {Object} req - request object
@@ -25,6 +30,36 @@ function getBody(req){
 	return inputPost;
 }
 
+/** Find the matching route in the routing schema for any request. If one is found, extract the useful information from it and return that information.
+ * @param  {Object} apiSchema - The whole routing schema, which contains the route used.
+ * @param  {String} reqPath - The path that was requested from the API
+ * @return {Object} Object describing the matching route, if any, in the routing schema. The path field contains the matched path listed in the routing schema. The tokens field contains all tokens, listed in the matched path. And the matches field contains the tokens with the values that have been given for them.
+ */
+function apiSchemaData(apiSchema, reqPath) {
+
+	if (apiSchema) {
+		for (const k in apiSchema.paths) {
+
+			if (apiSchema.paths.hasOwnProperty(k)) {
+
+				const ms = matchstick(k, 'template');
+				ms.match(reqPath);
+
+				if (ms.match(reqPath)) {
+
+					return {
+						path: k,
+						tokens: ms.tokens,
+						matches: ms.matches
+					};
+				}
+			}
+		}
+	}
+
+}
+
 //*******************************************************************
 
 module.exports.getBody = getBody;
+module.exports.apiSchemaData = apiSchemaData;
