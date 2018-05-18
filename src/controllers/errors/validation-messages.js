@@ -71,7 +71,7 @@ function buildFormatErrorMessage(fullPath) {
 /**
  * Creates error message for anyOf errors
  *
- * @param  {array} anyOfFields - list of fields, at least one being required.
+ * @param  {array?} anyOfFields - list of fields, at least one being required.
  * @return {string|Boolean} - return message or FALSE is not anyOfFields
  */
 function makeAnyOfMessage(anyOfFields){
