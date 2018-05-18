@@ -51,7 +51,6 @@
   "devDependencies": {
     "@types/node": "^10.1.2",
     "chai": "^3.5.0",
-    "codeclimate-test-reporter": "^0.5.0",
     "codecov": "^3.0.2",
     "eslint": "^3.19.0",
     "istanbul": "^0.4.5",
