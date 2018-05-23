@@ -64,7 +64,7 @@ describe('Build error messages: ', function(){
 			noncommercialFactory.create());
 		messages.push(errorMessages.generateErrorMessage(errorFactoryOjbect.errorArray[0]));
 		messages.push(errorMessages.generateErrorMessage(errorFactoryOjbect.errorArray[1]));
-		const actual = Validator.concatErrors(messages);
+		const actual = `${messages[0]} ${messages[1]}`
 		expect(actual)
 		.to.be.equal('Applicant Info/First Name is a required field. Applicant Info/Last Name is a required field.');
 	
@@ -101,7 +101,7 @@ describe('Build error messages: ', function(){
 				'errorArray[]': 1,
 				'errorArray[0].field': 'applicantInfo.firstName',
 				'errorArray[0].errorType': 'enum',
-				'errorArray[0].enumMessage': 'with some enum message'
+				'errorArray[0].message': 'with some enum message'
 			}));
 		expect(actual)
 		.to.be.equal('Applicant Info/First Name with some enum message.');
