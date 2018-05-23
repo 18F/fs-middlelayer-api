@@ -174,7 +174,6 @@ function getControlNumber(req, res, reqData) {
 	}
 	else {
 
-		let basicData = {};
 		NRMConnection.getFromBasic(req, res, reqData.matches.controlNumber)
 			.then((applicationDataFromNRM) => {
 
