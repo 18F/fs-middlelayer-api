@@ -9,3 +9,4 @@ applications:
     - fs-api-db
     - nrm-suds-url-service
     - auth-service
+    - new-relic

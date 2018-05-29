@@ -25,7 +25,7 @@ const fsr = require('file-stream-rotator');
 const mkdirp = require('mkdirp');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const SUDS_INFO = require('./controllers/vcap.js').SUDS_INFO;
+const vcapConstants = require('./controllers/vcap-constants.js');
 const moxai = require('moxai');
 
 const routes = require('./routes');
@@ -77,7 +77,7 @@ app.use('/schema/api.json', express.static('src/api.json'));
 //*******************************************************************
 // mocks
 
-if (SUDS_INFO.USING_MOCKS){
+if (vcapConstants.SUDS_INFO.USING_MOCKS){
 	app.use('/mocks', moxai({'dir': '../mocks', 'file': 'basic', 'random': true}));
 }
 

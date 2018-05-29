@@ -18,12 +18,12 @@ const AWS = require('aws-sdk');
 
 //*************************************************************
 // AWS
-const S3_INFO = require('./vcap.js').S3_INFO;
+const vcapConstants = require('./vcap-constants.js');
 
-const AWS_ACCESS_KEY_ID = S3_INFO.access_key_id;
-const AWS_SECRET_ACCESS_KEY = S3_INFO.secret_access_key;
-const AWS_REGION = S3_INFO.region;
-const AWS_BUCKET_NAME = S3_INFO.bucket;
+const AWS_ACCESS_KEY_ID = vcapConstants.s3.accessKeyId;
+const AWS_SECRET_ACCESS_KEY = vcapConstants.s3.secretAccessKey;
+const AWS_REGION = vcapConstants.s3.REGION;
+const AWS_BUCKET_NAME = vcapConstants.s3.BUCKET;
 
 AWS.config.update({
 	accessKeyId: AWS_ACCESS_KEY_ID,
