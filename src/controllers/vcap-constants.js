@@ -25,15 +25,15 @@ const middlelayerS3 = vcapServices.s3.find(element => {
 	return element.name === 'fs-api-s3';
 });
 
-vcapConstants.s3 = {};
+vcapConstants.s3 = {
+	REGION: middlelayerS3.credentials.region,
+	BUCKET: middlelayerS3.credentials.bucket
+};
 
 if (middlelayerS3.credentials.access_key_id && middlelayerS3.credentials.secret_access_key) {
 	vcapConstants.s3.accessKeyId = middlelayerS3.credentials.access_key_id;
 	vcapConstants.s3.secretAccessKey = middlelayerS3.credentials.secret_access_key;
 }
-vcapConstants.s3.REGION = middlelayerS3.credentials.region;
-vcapConstants.s3.BUCKET = middlelayerS3.credentials.bucket;
-
 /** jwt secret to generate auth tokens */
 const jwt = getUserProvided('auth-service');
 vcapConstants.JWT_SECRET_KEY = jwt.JWT_SECRET_KEY; 
