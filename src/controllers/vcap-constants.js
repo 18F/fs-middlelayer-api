@@ -34,6 +34,7 @@ if (middlelayerS3.credentials.access_key_id && middlelayerS3.credentials.secret_
 	vcapConstants.s3.accessKeyId = middlelayerS3.credentials.access_key_id;
 	vcapConstants.s3.secretAccessKey = middlelayerS3.credentials.secret_access_key;
 }
+
 /** jwt secret to generate auth tokens */
 const jwt = getUserProvided('auth-service');
 vcapConstants.JWT_SECRET_KEY = jwt.JWT_SECRET_KEY; 
