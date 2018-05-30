@@ -49,6 +49,10 @@ else {
 	SUDS_INFO.USING_MOCKS = false;
 }
 
+const newRelic = getUserProvided('new-relic');
+vcapConstants.NEW_RELIC_KEY = newRelic.key;
+vcapConstants.NEW_RELIC_APP_NAME = newRelic.app_name;
+
 vcapConstants.SUDS_INFO = SUDS_INFO;
 
 module.exports = vcapConstants;
