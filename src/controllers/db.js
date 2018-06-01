@@ -25,7 +25,6 @@ const models = include('src/models');
  * Saves information about file into DB
  * @param  {Number}   applicationId - Id of application file is associated with
  * @param  {Array}   uploadFile    - Information about file being saved
- * @param  {Function} callback      - function to be called after trying to save file
  */
 function saveFile(applicationId, uploadFile){
 	return new Promise(function (fulfill, reject) {
@@ -53,20 +52,21 @@ function saveFile(applicationId, uploadFile){
 
 /**
  * Gets file info from DB
- * @param  {String}   fp - Path to file in data store
+ * @param  {String}   filePath - Path to file in data store
  * @param  {Function} callback - Function to call after getting info back from DB
  */
-function getFile(fp, callback){
-
-	models.files.findOne({
-		where: {filePath: fp}
-	})
-	.then(function(file) {
-		return callback(null, file);
-	})
-	.catch(function(err) {
-		console.error(err);
-		return callback(err, null);
+function getFileInfoFromDB(filePath){
+	return new Promise((resolve, reject) => {
+		models.files.findOne({
+			where: { filePath: filePath }
+		})
+		.then((file) => {
+			resolve(file);
+		})
+		.catch((err) => {
+			console.error(err);
+			reject(err);
+		});
 	});
 }
 

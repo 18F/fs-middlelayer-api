@@ -58,9 +58,8 @@ function uploadFile(fileInfo){
  * Retreives file from S3
  * @param  {Number}   controlNumber - controlNumber of application file is associated with
  * @param  {String}   fileName      - name of file to retreive
- * @param  {Function} callback      - function to call after file has been retreived, or error returned
  */
-function getFile(controlNumber, fileName, callback){
+function getFile(controlNumber, fileName){
 	const s3 = new AWS.S3();
 	const filePath = `${controlNumber}/${fileName}`;
 
@@ -68,18 +67,19 @@ function getFile(controlNumber, fileName, callback){
 		Bucket: config.bucketName, 
 		Key: filePath
 	};
+	return new Promise((resolve, reject) => {
+		s3.getObject(getParams, function (err, data) {
+			if (err) {
+				console.error(err);
+				reject(err);
+			}
+			else {
+				return resolve(data);
+			}
 
-	s3.getObject(getParams, function(err, data) {
-
-		if (err) {
-			console.error(err);
-			return callback(err, null);
-		}
-		else {
-			return callback(null, data);
-		}
-
+		});
 	});
+
 }
 
 /**
@@ -168,34 +168,20 @@ function getControlNumberFileName(req, res, reqData) {
 
 	const filePath = controlNumber + '/' + fileName;
 
-	db.getFile(filePath, function (err, file) {
-
-		if (err) {
-			console.error(err);
-			error.sendError(req, res, 500, 'error while getting file from data store.');
-		}
-		else {
-			if (file) {
-
-				getFile(controlNumber, fileName, function (err, data) {
-
-					if (err) {
-						console.error(err);
-						error.sendError(req, res, 404, 'file not found in the database.');
-					}
-					else {
-						res.attachment(file.fileName);
-						res.send(data.Body);
-					}
-
-				});
-			}
-			else {
-				error.sendError(req, res, 404, 'file not found in the data store.');
-			}
-		}
+	db.getFileInfoFromDB(filePath).then((storedFileInfo) => {
+		getFile(controlNumber, fileName)
+		.then((fileData) =>{
+			res.attachment(storedFileInfo.fileName);
+			res.send(fileData.Body);
+		})
+		.catch((error) => {
+			console.error(error);
+			error.sendError(req, res, 404, 'file not found in the database.');
+		});
+	}).catch((error) =>{
+		console.error(error);
+		error.sendError(req, res, 500, 'error while getting file from data store.');
 	});
-
 }
 
 module.exports.getFilesZip = getFilesZip;
