@@ -87,9 +87,9 @@ jobs:
       - run: 
           name: Install cf cli
           command: |
-            export PATH=$HOME:$PATH
-            curl -L -o $HOME/cf.tgz "https://cli.run.pivotal.io/stable?release=linux64-binary&version=6.36.2"
-            tar xzvf $HOME/cf.tgz -C $HOME
+            curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar -zx
+            sudo mv cf /usr/local/bin
+            cf --version
       - run:
           name: Install cf-recycle-plugin 1.0.0 release
           command: |
@@ -112,6 +112,7 @@ workflows:
   build-deploy:
     jobs:
       - run-tests
+      - recycle-production
       - staging-deploy:
           requires:
             - run-tests
