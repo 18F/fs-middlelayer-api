@@ -36,6 +36,7 @@ const bcrypt = require('bcrypt-nodejs');
 const db = include('src/controllers/db.js');
 const models = include('src/models');
 
+
 const adminCredentials = util.makeUserEntry('admin');
 
 const specialUses = {};
@@ -71,7 +72,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 	let postControlNumber;
 	let postFileName;
 
-	before(function(done) {
+	beforeEach(function(done) {
 
 		models.users.sync({ force: false });
 		const salt = bcrypt.genSaltSync(10);
@@ -102,7 +103,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	});
 
-	after(function(done) {
+	afterEach(function(done) {
 
 		db.deleteUser(adminCredentials.un, function(err){
 			if (err){
@@ -256,9 +257,11 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 		});
 
-		xit('should return valid file when getting outfitters files using the controlNumber and fileName returned from POST', function(done) {
+		it('should return valid file when getting outfitters files using the controlNumber and fileName returned from POST', function(done) {
 			const getObjSpy = sinon.spy();
-			postFileName = 'fileNotAvailable.pdf';
+			const postFileName = 'insuranceCertificate.doc';
+			const dbStub = sinon.stub(db, 'getFileInfoFromDB').resolves({ 'fileName': postFileName});
+			AWS.restore('S3');
 			AWS.mock('S3', 'getObject', new Buffer(fs.readFileSync('./test/data/test_insuranceCertificate.docx')), getObjSpy);
 			request(server)
 			.get(`${testURL}${postControlNumber}/files/${postFileName}`)
@@ -266,6 +269,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 			.expect(200)
 			.expect(function(res){
 				if (res){
+					dbStub.restore();
 					return true;
 				} 
 				else {

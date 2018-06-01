@@ -170,6 +170,7 @@ function getControlNumberFileName(req, res, reqData) {
 	const fileName = reqData.matches.fileName;
 
 	const filePath = controlNumber + '/' + fileName;
+	console.log(filePath);
 
 	db.getFileInfoFromDB(filePath).then((storedFileInfo) => {
 		getFile(controlNumber, fileName)
