@@ -22,7 +22,7 @@ const bcrypt = require('bcrypt-nodejs');
 const models = include('src/models');
 const jwt = require('jsonwebtoken');
 const uuidV4 = require('uuid/v4');
-const JWT_SECRET_KEY = require('../vcap.js').JWT_SECRET_KEY;
+const vcapConstants = require('../vcap-constants.js');
 
 //*******************************************************************
 // passport
@@ -93,7 +93,7 @@ function generate(req, res, next) {
 	req.token = jwt.sign({
 		id: req.user.id,
 		role: req.user.role
-	}, JWT_SECRET_KEY, claims);
+	}, vcapConstants.JWT_SECRET_KEY, claims);
 
 	next();
 }

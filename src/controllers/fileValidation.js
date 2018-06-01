@@ -87,38 +87,57 @@ function checkForFilesInSchema(schema, postedFiles){
  * @param  {Array}  uploadFile            - Information about file, include the contents of it in hex
  * @param  {Object} validationConstraints - Description of how to validate file
  * @param  {String} fileName              - Name of file being validated
- * @param  {Object} classInstance		  - Class instance of validation
- * @return {Array}                        - Array of all error objects for this file
+ * @param  {Validator} Validator		  - Class instance of validation
+ * 
+ * @returns {Array}                       - returns the Validator Object's array
  */
 function validateFile(uploadFile, validationConstraints, fileName, Validator){
 
 	const fileInfo = getFileInfo(uploadFile, validationConstraints);
 	const constraints = validationConstraints[fileName];
 	const regex = `(^${constraints.validExtensions.join('$|^')}$)`;
-	const errObjs = [];
 
 	if (uploadFile){
 		if (fileInfo.ext && !fileInfo.ext.toLowerCase().match(regex)){
-			errObjs.push(Validator.makeErrorObject(fileInfo.filetype, 'invalidExtension', constraints.validExtensions));
+			Validator.pushErrorObject({
+				field: fileInfo.filetype,
+				errorType: 'invalidExtension',
+				expectedFieldType: constraints.validExtensions
+			});
 		}
 		else if (fileMimes.indexOf(fileInfo.mimetype) < 0){
-			errObjs.push(Validator.makeErrorObject(fileInfo.filetype, 'invalidMime', fileMimes));
+			Validator.pushErrorObject({
+				field: fileInfo.filetype, 
+				errorType: 'invalidMime',
+				expectedFieldType: fileMimes
+			});
 		}
 		if (fileInfo.size === 0){
-			errObjs.push(Validator.makeErrorObject(fileInfo.filetype, 'invalidSizeSmall', 0));
+			Validator.pushErrorObject({
+				field: fileInfo.filetype,
+				errorType: 'invalidSizeSmall',
+				expectedFieldType: 0
+			});
 		}
 		else {
 			const fileSizeInMegabytes = fileInfo.size / 1000000.0;
 			if (fileSizeInMegabytes > constraints.maxSize){
-				errObjs.push(Validator.makeErrorObject(fileInfo.filetype, 'invalidSizeLarge', constraints.maxSize));
+				Validator.pushErrorObject({
+					field: fileInfo.filetype, 
+					errorType: 'invalidSizeLarge', 
+					expectedFieldType: constraints.maxSize
+				});
 			}
 		}
 	}
 	else if (constraints.requiredFile){
-		errObjs.push(Validator.makeErrorObject(fileName, 'requiredFileMissing'));
+		Validator.pushErrorObject({
+			field: fileName, 
+			errorType: 'requiredFileMissing'
+		});
 	}
 
-	return errObjs;
+	return Validator.errorArray;
 	
 }
 

@@ -32,14 +32,6 @@ const testTempOutfittersBody = require('./data/testInputTempOutfitters.json');
 const testNoncommercialBody = require('./data/testInputNoncommercial.json');
 const tempOutfitterFactory = factory.factory(testTempOutfittersBody);
 const noncommercialFactory = factory.factory(testNoncommercialBody);
-const errorFactory = factory.factory({
-	field: undefined,
-	errorType: undefined,
-	expectedFieldType: undefined,
-	enumMessage: undefined,
-	dependency: undefined,
-	anyOfFields: undefined
-});
 
 function validationHelper(pathData, body) {
 	const Validator = new specialUses.validate.ValidationClass(pathData, body);
@@ -57,26 +49,26 @@ describe('outfitters validation ', function(){
 		it('should report issues when no body is provided', function(){
 			const actual = validationHelper(outfittersObjects.pathData, {}, outfittersObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'region', errorType: 'missing'}),
-				errorFactory.create({field: 'forest', errorType: 'missing'}),
-				errorFactory.create({field: 'district', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.firstName', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.lastName', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.dayPhone', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.dayPhone.areaCode', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.dayPhone.number', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.dayPhone.phoneType', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.emailAddress', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.mailingAddress', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.mailingCity', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.mailingZIP', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.mailingState', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.orgType', errorType: 'missing'}),
-				errorFactory.create({field: 'type', errorType: 'missing'}),
-				errorFactory.create({field: 'tempOutfitterFields', errorType: 'missing'}),
-				errorFactory.create({field: 'tempOutfitterFields.activityDescription', errorType: 'missing'}),
-				errorFactory.create({field: 'tempOutfitterFields.clientCharges', errorType: 'missing'})
+				{field: 'region', errorType: 'missing'},
+				{field: 'forest', errorType: 'missing'},
+				{field: 'district', errorType: 'missing'},
+				{field: 'applicantInfo', errorType: 'missing'},
+				{field: 'applicantInfo.firstName', errorType: 'missing'},
+				{field: 'applicantInfo.lastName', errorType: 'missing'},
+				{field: 'applicantInfo.dayPhone', errorType: 'missing'},
+				{field: 'applicantInfo.dayPhone.areaCode', errorType: 'missing'},
+				{field: 'applicantInfo.dayPhone.number', errorType: 'missing'},
+				{field: 'applicantInfo.dayPhone.phoneType', errorType: 'missing'},
+				{field: 'applicantInfo.emailAddress', errorType: 'missing'},
+				{field: 'applicantInfo.mailingAddress', errorType: 'missing'},
+				{field: 'applicantInfo.mailingCity', errorType: 'missing'},
+				{field: 'applicantInfo.mailingZIP', errorType: 'missing'},
+				{field: 'applicantInfo.mailingState', errorType: 'missing'},
+				{field: 'applicantInfo.orgType', errorType: 'missing'},
+				{field: 'type', errorType: 'missing'},
+				{field: 'tempOutfitterFields', errorType: 'missing'},
+				{field: 'tempOutfitterFields.activityDescription', errorType: 'missing'},
+				{field: 'tempOutfitterFields.clientCharges', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -86,19 +78,19 @@ describe('outfitters validation ', function(){
 				tempOutfitterFactory.create({ applicantInfo: undefined }), 
 				outfittersObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.firstName', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.lastName', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.dayPhone', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.dayPhone.areaCode', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.dayPhone.number', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.dayPhone.phoneType', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.emailAddress', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.mailingAddress', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.mailingCity', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.mailingZIP', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.mailingState', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.orgType', errorType: 'missing'})
+				{field: 'applicantInfo', errorType: 'missing'},
+				{field: 'applicantInfo.firstName', errorType: 'missing'},
+				{field: 'applicantInfo.lastName', errorType: 'missing'},
+				{field: 'applicantInfo.dayPhone', errorType: 'missing'},
+				{field: 'applicantInfo.dayPhone.areaCode', errorType: 'missing'},
+				{field: 'applicantInfo.dayPhone.number', errorType: 'missing'},
+				{field: 'applicantInfo.dayPhone.phoneType', errorType: 'missing'},
+				{field: 'applicantInfo.emailAddress', errorType: 'missing'},
+				{field: 'applicantInfo.mailingAddress', errorType: 'missing'},
+				{field: 'applicantInfo.mailingCity', errorType: 'missing'},
+				{field: 'applicantInfo.mailingZIP', errorType: 'missing'},
+				{field: 'applicantInfo.mailingState', errorType: 'missing'},
+				{field: 'applicantInfo.orgType', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -108,9 +100,9 @@ describe('outfitters validation ', function(){
 				tempOutfitterFactory.create({ tempOutfitterFields: undefined }),
 				outfittersObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'tempOutfitterFields', errorType: 'missing'}),
-				errorFactory.create({field: 'tempOutfitterFields.activityDescription', errorType: 'missing'}),
-				errorFactory.create({field: 'tempOutfitterFields.clientCharges', errorType: 'missing'})
+				{field: 'tempOutfitterFields', errorType: 'missing'},
+				{field: 'tempOutfitterFields.activityDescription', errorType: 'missing'},
+				{field: 'tempOutfitterFields.clientCharges', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -120,7 +112,7 @@ describe('outfitters validation ', function(){
 				tempOutfitterFactory.create({ 'applicantInfo.orgType': undefined }),
 				outfittersObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.orgType', errorType: 'missing'})
+				{field: 'applicantInfo.orgType', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -130,7 +122,7 @@ describe('outfitters validation ', function(){
 				tempOutfitterFactory.create({ 'tempOutfitterFields.activityDescription': undefined }),
 				outfittersObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'tempOutfitterFields.activityDescription', errorType: 'missing'})
+				{field: 'tempOutfitterFields.activityDescription', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -140,7 +132,7 @@ describe('outfitters validation ', function(){
 				tempOutfitterFactory.create({ 'tempOutfitterFields.clientCharges': undefined }),
 				outfittersObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'tempOutfitterFields.clientCharges', errorType: 'missing'})
+				{field: 'tempOutfitterFields.clientCharges', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -161,7 +153,7 @@ describe('outfitters validation ', function(){
 			Validator.checkForSmallBusiness();
 			const actual = Validator.errorArray;
 			const expected = [
-				errorFactory.create({field: 'tempOutfitterFields.smallBusiness', errorType: 'missing'})
+				{field: 'tempOutfitterFields.smallBusiness', errorType: 'missing'}
 			];
 			expected[0].message = 'Temp Outfitter Fields/Small Business is a required field.';
 			expect (actual).to.eql(expected);
@@ -174,7 +166,7 @@ describe('outfitters validation ', function(){
 			Validator.checkForIndividualIsCitizen();
 			const actual = Validator.errorArray;
 			const expected = [
-				errorFactory.create({field: 'tempOutfitterFields.individualIsCitizen', errorType: 'missing'})
+				{field: 'tempOutfitterFields.individualIsCitizen', errorType: 'missing'}
 			];
 			expected[0].message = 'Temp Outfitter Fields/Individual Is Citizen is a required field.';
 			expect (actual).to.eql(expected);
@@ -186,7 +178,7 @@ describe('outfitters validation ', function(){
 				tempOutfitterFactory.create({ 'tempOutfitterFields.activityDescription': 123 }),
 				outfittersObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'tempOutfitterFields.activityDescription', errorType: 'type', expectedFieldType:'string'})
+				{field: 'tempOutfitterFields.activityDescription', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -196,7 +188,7 @@ describe('outfitters validation ', function(){
 				tempOutfitterFactory.create({ 'tempOutfitterFields.clientCharges': 500 }),
 				outfittersObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'tempOutfitterFields.clientCharges', errorType: 'type', expectedFieldType:'string'})
+				{field: 'tempOutfitterFields.clientCharges', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -210,7 +202,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ region: undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'region', errorType: 'missing'})
+				{field: 'region', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -220,7 +212,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ forest: undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'forest', errorType: 'missing'})
+				{field: 'forest', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -230,7 +222,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ district: undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'district', errorType: 'missing'})
+				{field: 'district', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -240,7 +232,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.firstName': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.firstName', errorType: 'missing'})
+				{field: 'applicantInfo.firstName', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -250,7 +242,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.lastName': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.lastName', errorType: 'missing'})
+				{field: 'applicantInfo.lastName', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -260,10 +252,10 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.dayPhone': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.dayPhone', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.dayPhone.areaCode', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.dayPhone.number', errorType: 'missing'}),
-				errorFactory.create({field: 'applicantInfo.dayPhone.phoneType', errorType: 'missing'})
+				{field: 'applicantInfo.dayPhone', errorType: 'missing'},
+				{field: 'applicantInfo.dayPhone.areaCode', errorType: 'missing'},
+				{field: 'applicantInfo.dayPhone.number', errorType: 'missing'},
+				{field: 'applicantInfo.dayPhone.phoneType', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -273,7 +265,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.dayPhone.areaCode': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.dayPhone.areaCode', errorType: 'missing'})
+				{field: 'applicantInfo.dayPhone.areaCode', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -283,7 +275,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.dayPhone.number': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.dayPhone.number', errorType: 'missing'})
+				{field: 'applicantInfo.dayPhone.number', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -293,7 +285,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.dayPhone.phoneType': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.dayPhone.phoneType', errorType: 'missing'})
+				{field: 'applicantInfo.dayPhone.phoneType', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -303,7 +295,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.emailAddress': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.emailAddress', errorType: 'missing'})
+				{field: 'applicantInfo.emailAddress', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -313,7 +305,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.mailingAddress': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.mailingAddress', errorType: 'missing'})
+				{field: 'applicantInfo.mailingAddress', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -323,7 +315,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.mailingCity': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.mailingCity', errorType: 'missing'})
+				{field: 'applicantInfo.mailingCity', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -333,7 +325,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.mailingState': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.mailingState', errorType: 'missing'})
+				{field: 'applicantInfo.mailingState', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -343,7 +335,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.mailingZIP': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.mailingZIP', errorType: 'missing'})
+				{field: 'applicantInfo.mailingZIP', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -353,7 +345,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.orgType': 'Corporation' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.organizationName', errorType: 'missing'})
+				{field: 'applicantInfo.organizationName', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -363,7 +355,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'type': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'type', errorType: 'missing'})
+				{field: 'type', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -373,12 +365,12 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ noncommercialFields: undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'noncommercialFields', errorType: 'missing'}),
-				errorFactory.create({field: 'noncommercialFields.activityDescription', errorType: 'missing'}),
-				errorFactory.create({field: 'noncommercialFields.locationDescription', errorType: 'missing'}),
-				errorFactory.create({field: 'noncommercialFields.startDateTime', errorType: 'missing'}),
-				errorFactory.create({field: 'noncommercialFields.endDateTime', errorType: 'missing'}),
-				errorFactory.create({field: 'noncommercialFields.numberParticipants', errorType: 'missing'})
+				{field: 'noncommercialFields', errorType: 'missing'},
+				{field: 'noncommercialFields.activityDescription', errorType: 'missing'},
+				{field: 'noncommercialFields.locationDescription', errorType: 'missing'},
+				{field: 'noncommercialFields.startDateTime', errorType: 'missing'},
+				{field: 'noncommercialFields.endDateTime', errorType: 'missing'},
+				{field: 'noncommercialFields.numberParticipants', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -388,7 +380,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'noncommercialFields.activityDescription': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'noncommercialFields.activityDescription', errorType: 'missing'})
+				{field: 'noncommercialFields.activityDescription', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -398,7 +390,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'noncommercialFields.locationDescription': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'noncommercialFields.locationDescription', errorType: 'missing'})
+				{field: 'noncommercialFields.locationDescription', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -408,7 +400,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'noncommercialFields.startDateTime': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'noncommercialFields.startDateTime', errorType: 'missing'})
+				{field: 'noncommercialFields.startDateTime', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -418,7 +410,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'noncommercialFields.endDateTime': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'noncommercialFields.endDateTime', errorType: 'missing'})
+				{field: 'noncommercialFields.endDateTime', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -428,7 +420,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'noncommercialFields.numberParticipants': undefined }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'noncommercialFields.numberParticipants', errorType: 'missing'})
+				{field: 'noncommercialFields.numberParticipants', errorType: 'missing'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -440,7 +432,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.firstName': 123 }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.firstName', errorType: 'type', expectedFieldType:'string'})
+				{field: 'applicantInfo.firstName', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -450,7 +442,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.lastName': 123 }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.lastName', errorType: 'type', expectedFieldType:'string'})
+				{field: 'applicantInfo.lastName', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -460,7 +452,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.dayPhone.areaCode': 123 }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.dayPhone.areaCode', errorType: 'type', expectedFieldType:'string'})
+				{field: 'applicantInfo.dayPhone.areaCode', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -470,7 +462,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.dayPhone.number': 123 }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.dayPhone.number', errorType: 'type', expectedFieldType:'string'})
+				{field: 'applicantInfo.dayPhone.number', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -480,7 +472,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.dayPhone.phoneType': 1 }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.dayPhone.phoneType', errorType: 'type', expectedFieldType:'string'})
+				{field: 'applicantInfo.dayPhone.phoneType', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -490,7 +482,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.dayPhone.extension': 1 }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.dayPhone.extension', errorType: 'type', expectedFieldType:'string'})
+				{field: 'applicantInfo.dayPhone.extension', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -500,7 +492,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.emailAddress': 123 }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.emailAddress', errorType: 'type', expectedFieldType:'string'})
+				{field: 'applicantInfo.emailAddress', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -510,7 +502,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.mailingAddress': 123 }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.mailingAddress', errorType: 'type', expectedFieldType:'string'})
+				{field: 'applicantInfo.mailingAddress', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -520,7 +512,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.mailingCity': 123 }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.mailingCity', errorType: 'type', expectedFieldType:'string'})
+				{field: 'applicantInfo.mailingCity', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -530,7 +522,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.mailingState': 123 }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.mailingState', errorType: 'type', expectedFieldType:'string'})
+				{field: 'applicantInfo.mailingState', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -540,7 +532,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.mailingZIP': 123 }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.mailingZIP', errorType: 'type', expectedFieldType:'string'})
+				{field: 'applicantInfo.mailingZIP', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -550,7 +542,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'noncommercialFields.activityDescription': 123 }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'noncommercialFields.activityDescription', errorType: 'type', expectedFieldType:'string'})
+				{field: 'noncommercialFields.activityDescription', errorType: 'type', expectedFieldType:'string'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -563,7 +555,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.dayPhone.areaCode': '12' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.dayPhone.areaCode', errorType: 'format'})
+				{field: 'applicantInfo.dayPhone.areaCode', errorType: 'format'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -573,7 +565,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.dayPhone.number': '12' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.dayPhone.number', errorType: 'format'})
+				{field: 'applicantInfo.dayPhone.number', errorType: 'format'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -583,7 +575,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.mailingState': 'ORE' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.mailingState', errorType: 'format'})
+				{field: 'applicantInfo.mailingState', errorType: 'format'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -593,7 +585,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.mailingZIP': '123456' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.mailingZIP', errorType: 'format'})
+				{field: 'applicantInfo.mailingZIP', errorType: 'format'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -611,7 +603,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'region': '123' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'region', errorType: 'format'})
+				{field: 'region', errorType: 'format'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -621,7 +613,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'forest': '123' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'forest', errorType: 'format'})
+				{field: 'forest', errorType: 'format'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -631,7 +623,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'district': '123' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'district', errorType: 'format'})
+				{field: 'district', errorType: 'format'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -641,7 +633,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'noncommercialFields.startDateTime': '01-12-2012' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'noncommercialFields.startDateTime', errorType: 'format'})
+				{field: 'noncommercialFields.startDateTime', errorType: 'format'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -651,7 +643,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'noncommercialFields.endDateTime': '01-12-2012' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'noncommercialFields.endDateTime', errorType: 'format'})
+				{field: 'noncommercialFields.endDateTime', errorType: 'format'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -663,7 +655,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.emailAddress': 'invalid' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.emailAddress', errorType: 'format'})
+				{field: 'applicantInfo.emailAddress', errorType: 'format'}
 			];
 			expect (actual).to.eql(expected);
 		});
@@ -677,10 +669,7 @@ describe('noncommercial validation', function(){
 			const expected = [
 				{
 					field: 'type',
-					errorType: 'enum',
-					enumMessage: 'is not one of enum values: noncommercial,tempOutfitters',
-					anyOfFields: undefined,
-					dependency: undefined
+					errorType: 'enum'
 				}
 			];
 			expect (actual).to.eql(expected);
@@ -693,10 +682,7 @@ describe('noncommercial validation', function(){
 			const expected = [
 				{
 					field: 'applicantInfo.orgType',
-					errorType: 'enum',
-					enumMessage: 'is not one of enum values: Association,Corporation,Education,Federal Government,State Government,Local Govt,Married Common Property,Limited Liability Company (LLC),Limited Liability Partnership (LLP),Person,Trust',
-					anyOfFields: undefined,
-					dependency: undefined
+					errorType: 'enum'
 				}
 			];
 			expect (actual).to.eql(expected);
@@ -712,8 +698,7 @@ describe('noncommercial validation', function(){
 				{
 					field: 'applicantInfo.organizationName',
 					errorType: 'dependencies',
-					dependency:'applicantInfo.orgType',
-					anyOfFields:undefined
+					dependency:'applicantInfo.orgType'
 				}
 			];
 			expect (actual).to.eql(expected);
@@ -726,7 +711,7 @@ describe('noncommercial validation', function(){
 				noncommercialFactory.create({ 'applicantInfo.firstName': 'Josdfsdfsdfsdasdasdhnaaaaaaaaaaaaasasasasasaasaaaaasahbsdbahsdbhasdbasbdbahsdbasbdbashdbashjdbashdbahsdbahsdbahsdbashdbahsdbhasdbashdbahjsdbhasbdahsbdhasbdhabsdhjabsdhjasbdhjasbdhjasbdjhasbdjahsbdahsbdahsdbahsdbahjsbdhjasbdahsdbasbdahsdbahsbdahsdbjhasbdahsbdhjasdbahbdbdbb' }),
 				noncommercialObjects.derefSchema);
 			const expected = [
-				errorFactory.create({field: 'applicantInfo.firstName', errorType: 'length', expectedFieldType: 255})
+				{field: 'applicantInfo.firstName', errorType: 'length', expectedFieldType: 255}
 			];
 			expect (actual).to.eql(expected);
 		});

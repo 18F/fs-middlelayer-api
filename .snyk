@@ -6,13 +6,43 @@ ignore:
     - sequelize-cli > gulp > liftoff > findup-sync > micromatch > braces:
         reason: major updates coming
         expires: '2018-05-25T20:04:44.007Z'
+  'npm:base64url:20180511':
+    - jsonwebtoken > jws > base64url:
+        reason: mostly affects node v <4.x our app runs on LTS 8.9.4
+        expires: '2018-06-14T19:18:31.867Z'
+    - jsonwebtoken > jws > jwa > base64url:
+        reason: mostly affects node v <4.x our app runs on LTS 8.9.4
+        expires: '2018-06-14T19:18:31.867Z'
+    - jsonwebtoken > jws > jwa > ecdsa-sig-formatter > base64url:
+        reason: mostly affects node v <4.x our app runs on LTS 8.9.4
+        expires: '2018-06-14T19:18:31.867Z'
+  'npm:deep-extend:20180409':
+    - latest-version > package-json > registry-auth-token > rc > deep-extend:
+        reason: mostly affects node v <4.x our app runs on LTS 8.9.4
+        expires: '2018-06-14T19:12:38.886Z'
   'npm:lodash:20180130':
     - aws-s3-zipper > aws-sdk > xmlbuilder > lodash:
-        reason: soon to refactor out zip
-        expires: '2018-05-30T14:28:42.265Z'
+        reason: No user input
+        expires: '2018-06-15T00:16:34.881Z'
+      aws-s3-zipper > aws-sdk > xml2js > xmlbuilder > lodash:
+        reason: Should fix on aws-s3-zipper reinstall
+        expires: '2018-06-15T00:35:44.428Z'
     - aws-s3-zipper > archiver > lodash:
-        reason: soon to refactor out zip
-        expires: '2018-05-30T14:28:42.266Z'
+        reason: No user input
+        expires: '2018-06-15T00:16:34.881Z'
+    - aws-s3-zipper > archiver > archiver-utils > lodash:
+        reason: No user input
+        expires: '2018-06-15T00:16:34.881Z'
+    - aws-s3-zipper > archiver > zip-stream > lodash:
+        reason: No user input
+        expires: '2018-06-15T00:16:34.881Z'
+    - aws-s3-zipper > archiver > zip-stream > archiver-utils > lodash:
+        reason: No user input
+        expires: '2018-06-15T00:16:34.881Z'
+  'npm:mime:20170907':
+    - aws-s3-zipper > s3 > mime:
+        reason: No user input
+        expires: '2018-06-14T19:18:31.867Z'
 # patches apply the minimum changes required to fix a vulnerability
 patch:
   'npm:debug:20170905':

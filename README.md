@@ -15,6 +15,7 @@
 [![GitHub Issues](https://img.shields.io/github/issues/nci-ats/fs-middlelayer-api.svg)](https://github.com/nci-ats/fs-middlelayer-api/issues)
 [![Semver](https://img.shields.io/badge/SemVer-2.0-blue.svg)](http://semver.org/spec/v2.0.0.html)
 [![license](https://img.shields.io/badge/license-CC0--1.0-blue.svg)](https://creativecommons.org/publicdomain/zero/1.0/)
+[![Known Vulnerabilities](https://snyk.io/test/github/18f/fs-middlelayer-api/badge.svg)](https://snyk.io/test/github/18f/fs-middlelayer-api)
 
 A repository for the development of an API to support the public facing ePermit system to connect to the related Forest Service database, the Special Use Data System (SUDS) located in the National Resource Management System.
 
@@ -35,6 +36,7 @@ This repository was partially developed under a task order of the Agile Blanket 
 - [Schema spec](#schema-spec)
 - [Automated tests](#automated-tests)
 - [Field validation](#field-validation)
+- [Alert Monitoring](#alert-monitoring)
 
 ## Local Development
 
@@ -208,12 +210,12 @@ These steps define the process for creating a new permit type using Example Perm
           - `localStore {Boolean} default:false` whether to store the field in the database.
 
           - `madeOf` describes how to auto-populate the field, if fromIntake is false.
-            - `fields` lists the fields, and values which are to be used when auto-populating the field.
-                - `fromIntake` indicates whether this piece of the field is from the intake module or not
-                    - If `fromIntake` is true, `field` is expected in the same object, specifying the field where this part of the field should come from.
-                    - If `fromIntake` is false, `value` is expected in the same object, specifying what value is to be used in this part of the field.
-                -`function` describes the function that should be used on an array of all indicies of `fields`, current options are `concat`, `ePermitId`, and `contId`.
-                    - To add an option for this field, create a function in `src/controllers/autoPopulate.js` which takes an array as input and outputs a string. Next export that function at the end of the file like the existing functions. Then update the `buildAutoPopulatedFields` function in `src/controllers/basic.js` by adding a case to the switch/case statement for the name of the newly created function and then a call to that function inside the case statement.
+              - `fields` lists the fields, and values which are to be used when auto-populating the field.
+                  - `fromIntake` indicates whether this piece of the field is from the intake module or not
+                      - If `fromIntake` is true, `field` is expected in the same object, specifying the field where this part of the field should come from.
+                      - If `fromIntake` is false, `value` is expected in the same object, specifying what value is to be used in this part of the field.
+                  -`function` describes the function that should be used on an array of all indicies of `fields`, current options are `concat`, `ePermitId`, and `contId`.
+                      - To add an option for this field, create a function in `src/controllers/autoPopulate.js` which takes an array as input and outputs a string. Next export that function at the end of the file like the existing functions. Then update the `buildAutoPopulatedFields` function in `src/controllers/basic.js` by adding a case to the switch/case statement for the name of the newly created function and then a call to that function inside the case statement.
 
           Files:
           - `maxSize` is measured in megabytes
@@ -308,7 +310,6 @@ These are the properties for AWS S3 data storage, which is a bound service creat
 - `AWS_SECRET_ACCESS_KEY=<AWS secret key>`
 - `AWS_REGION=<AWS region>`
 - `AWS_BUCKET_NAME=<AWS S3 bucket name>`
-
 
 ## Environment Variables
 
@@ -484,6 +485,9 @@ The above code will require `fieldName2` if `fieldName` is present.
 ##### Adding error for field dependency
 
 No extra steps needed.
+
+## Alert Monitoring
+This project uses New Relic Monitoring for performance and uptime alerts. The application name and license keys are provided as environment variables that are accessed through the VCAP constants. This application uses the `newrelic` npm module.
 
 ## Contributing
 
