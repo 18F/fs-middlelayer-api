@@ -15,7 +15,6 @@
 // required modules
 
 const config = require('./storeConfig.js');
-const async = require('async');
 const zipper = require ('s3-zip');
 
 //*************************************************************
@@ -24,7 +23,7 @@ const zipper = require ('s3-zip');
 const AWS = config.getStoreObject();
 const fileValidation = require('./fileValidation.js');
 const db = require('./db.js');
-const error = require('./errors/error.js');
+const errorUtil = require('./errors/error.js');
 
 //*************************************************************
 
@@ -41,14 +40,13 @@ function uploadFile(fileInfo){
 		Body: fileInfo.buffer,
 		ACL: 'private'
 	};
-	return new Promise(function(fulfill, reject){
+	return new Promise((fulfill, reject) => {
 		s3.putObject(params, function (err) {
 			if (err) {
 				console.error(err);
-				// error.sendError(req, res, 500, 'error while storing files in data store.');
 				return reject(err);
 			}
-			return fulfill;
+			return fulfill();
 		});
 	});
 
@@ -71,12 +69,9 @@ function getFile(controlNumber, fileName){
 		s3.getObject(getParams, function (err, data) {
 			if (err) {
 				console.error(err);
-				reject(err);
+				return reject(err);
 			}
-			else {
-				return resolve(data);
-			}
-
+			return resolve(data);
 		});
 	});
 
@@ -125,31 +120,39 @@ function getFilesZip(controlNumber, dbFiles, res){
  * @param  {Object} application - Body of application being submitted
  */
 function saveAndUploadFiles(possbileFiles, files, controlNumber, application) {
-	return new Promise(function(fulfill, reject){
-		const asyncTasks = [];
+	const asyncTasks = [];
 
-		possbileFiles.forEach((fileConstraints) => {
+	possbileFiles.forEach((fileConstraints) => {
 
-			asyncTasks.push(function () {
-
+		asyncTasks.push(
+			new Promise((resolve, reject) => {
 				const key = Object.keys(fileConstraints)[0];
+
 				if (files[key]) {
 					const fileInfo = fileValidation.getFileInfo(files[key], fileConstraints);
 					fileInfo.keyname = `${controlNumber}/${fileInfo.filename}`;
+
 					uploadFile(fileInfo)
-						.then(()=> {
-							db.saveFile(application.id, fileInfo);
+						.then(() => {
+							db.saveFile(application.id, fileInfo)
+							.then(resolve())
+							.catch((err) => {
+								reject(err);
+							});
+						})
+						.catch((err) => {
+							reject(err);
 						});
 				}
-			});
-		});
-		async.parallel(asyncTasks)
-		.then(()=> {
-			return fulfill();
-		}).catch((err) =>{
-			reject(err);
-		});
+				else {
+					resolve();
+				}
+			})
+		);
 	});
+
+	return Promise.all(asyncTasks);
+
 }
 
 /** Controller for GET routes with a control number and a file name
@@ -170,17 +173,17 @@ function getControlNumberFileName(req, res, reqData) {
 
 	db.getFileInfoFromDB(filePath).then((storedFileInfo) => {
 		getFile(controlNumber, fileName)
-		.then((fileData) =>{
+		.then((fileData) => {
 			res.attachment(storedFileInfo.fileName);
 			res.send(fileData.Body);
 		})
 		.catch((error) => {
 			console.error(error);
-			error.sendError(req, res, 404, 'file not found in the database.');
+			errorUtil.sendError(req, res, 404, 'file not found in the database.');
 		});
 	}).catch((error) =>{
 		console.error(error);
-		error.sendError(req, res, 500, 'error while getting file from data store.');
+		errorUtil.sendError(req, res, 500, 'error while getting file from data store.');
 	});
 }
 

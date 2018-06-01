@@ -40,11 +40,10 @@ function saveFile(applicationId, uploadFile){
 			fileEncoding: uploadFile.encoding
 		})
 			.then(function () {
-				return fulfill;
+				return fulfill();
 			})
 			.catch(function (err) {
 				console.error(err);
-				// error.sendError(req, res, 500, 'error while saving file information to the database.');
 				return reject(err);
 			});
 	});
@@ -53,7 +52,6 @@ function saveFile(applicationId, uploadFile){
 /**
  * Gets file info from DB
  * @param  {String}   filePath - Path to file in data store
- * @param  {Function} callback - Function to call after getting info back from DB
  */
 function getFileInfoFromDB(filePath){
 	return new Promise((resolve, reject) => {
@@ -61,11 +59,11 @@ function getFileInfoFromDB(filePath){
 			where: { filePath: filePath }
 		})
 		.then((file) => {
-			resolve(file);
+			return resolve(file);
 		})
 		.catch((err) => {
 			console.error(err);
-			reject(err);
+			return reject(err);
 		});
 	});
 }
@@ -73,64 +71,65 @@ function getFileInfoFromDB(filePath){
 /**
  * Get info of multiple files from DB
  * @param  {Number}   appId - application Id of files to get
- * @param  {Function} callback      - Function to call after getting info back from DB
  */
-function getFiles(appId, callback){
-
-	models.files.findAll({
-		where: {applicationId: appId}
-	})
-	.then(function(files) {
-		return callback(null, files);
-	})
-	.catch(function(err) {
-		console.error(err);
-		return callback(err, null);
+function getFiles(appId){
+	return new Promise((resolve, reject) => {
+		models.files.findAll({
+			where: { applicationId: appId }
+		})
+		.then((file) => {
+			return resolve(file);
+		})
+		.catch((err) => {
+			console.error(err);
+			return reject(err);
+		});
 	});
 }
 
 /**
  * Gets application info from DB
- * @param  {Number}   cNum - control number of application to retreive
- * @param  {Function} callback      - Function to call after getting info back from DB
+ * @param  {Number}   controlNumber - control number of application to retreive
  */
-function getApplication(cNum, callback){
-
-	models.applications.findOne({
-		where: {
-			controlNumber: cNum
-		}
-	}).then(function(appl) {
-		if (appl){
-
-			getFiles(appl.id, function(fileErr, files) {
-				if (fileErr){
-					return callback(fileErr, null, null);
-				}
-				else {
-					if (files) {
-						return callback(null, appl, files);
-					}
-					else {
-						return callback(null, appl, null);
-					}
-				}
-			});
-
-		}
-		else {
-			return callback(null, null, null);
-		}
-	}).catch(function (err) {
-		console.error(err);
-		return callback(err, null, null);
+function getApplication(controlNum){
+	return new Promise((resolve, reject) => {
+		models.applications.findOne({
+			where: {
+				controlNumber: controlNum
+			}
+		}).then((application) => {
+			if (application) {
+				getFiles(application.id)
+					.then((files) => {
+						if (files) {
+							return resolve({
+								application: application,
+								files: files
+							});
+						}
+						return resolve({
+							application: application,
+							files: []
+						});
+					})
+					.catch((error) => {
+						return reject(error);
+					});
+			}
+			else {
+				reject({application: false});
+			}
+		}).catch((err) => {
+			console.error(err);
+			return reject(err);
+		});
 	});
+
 }
 
 /**
  * Save application data to DB
  * @param  {Object}   toStore       - object containing all of the fields to save to DB
- * @param  {Function} callback      - Function to call after saving application to DB
  */
 function saveApplication(toStore) {
 	return new Promise(function(fulfill, reject){
@@ -140,8 +139,7 @@ function saveApplication(toStore) {
 			})
 			.catch((err) =>{
 				console.error(err);
-				// error.sendError(req, res, 500, 'error while saving application in the database.');
-				reject(err);
+				return reject(err);
 			});
 	});
 
@@ -270,7 +268,7 @@ function deleteUser(username, callback) {
 module.exports.getDataToStoreInDB = getDataToStoreInDB;
 module.exports.getFieldsToStore = getFieldsToStore;
 module.exports.saveFile = saveFile;
-module.exports.getFile = getFile;
+module.exports.getFileInfoFromDB = getFileInfoFromDB;
 module.exports.getFiles = getFiles;
 module.exports.getApplication = getApplication;
 module.exports.saveApplication = saveApplication;

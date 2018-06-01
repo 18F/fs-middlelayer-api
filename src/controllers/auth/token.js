@@ -16,7 +16,7 @@
 const include = require('include')(__dirname);
 const jwt = require('jsonwebtoken');
 
-const error = include('src/controllers/errors/error.js');
+const errorUtil = include('src/controllers/errors/error.js');
 
 const vcapConstants = require('../vcap-constants.js');
 
@@ -43,7 +43,7 @@ function token(req, res, next){
 
 		jwt.verify(token, vcapConstants.JWT_SECRET_KEY, claims, function(err, decoded) {
 			if (err) {
-				error.sendError(req, res, 401, 'Failed to authenticate token.');
+				errorUtil.sendError(req, res, 401, 'Failed to authenticate token.');
 			}
 			else {
 				req.decoded = decoded;
@@ -53,7 +53,7 @@ function token(req, res, next){
 
 	}
 	else {
-		error.sendError(req, res, 403, 'No token provided.');
+		errorUtil.sendError(req, res, 403, 'No token provided.');
 	}
 
 }

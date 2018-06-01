@@ -20,7 +20,7 @@ const apiSchema = include('src/api.json');
 //*******************************************************************
 // other files
 
-const error = require('./errors/error.js');
+const errorUtil = require('./errors/error.js');
 const get = require('./get.js');
 const fileStore = require('./filestore.js');
 const db = require('./db.js');
@@ -54,7 +54,7 @@ function postApplication(req, res, reqData){
 	const validationObject = Validator.validateInput(possbileFiles, req);
 
 	if (validationObject.errorArray.length !== 0){
-		return error.sendError(req, res, 400, validationObject.message, validationObject.errorArray);
+		return errorUtil.sendError(req, res, 400, validationObject.message, validationObject.errorArray);
 	}
 	else {
 		NRMConnection.postToBasic(req, res, validationObject.routeRequestSchema, body)
@@ -64,34 +64,61 @@ function postApplication(req, res, reqData){
 			toStoreInDB.controlNumber = controlNumber;
 			db.saveApplication(toStoreInDB)
 			.then((application) =>{
-				fileStore.saveAndUploadFiles(possbileFiles, req.files, controlNumber, application);
-			})
-			.then(()=>{
-				const successfulResponse = {
-					'status': 'sucess',
-					'controlNumber': controlNumber
-				};
-				console.log(postObject, null, 4);
-				return res.json(successfulResponse);
+				fileStore.saveAndUploadFiles(possbileFiles, req.files, controlNumber, application)
+				.then(() => {
+					const successfulResponse = {
+						'status': 'sucess',
+						'controlNumber': controlNumber
+					};
+					return res.json(successfulResponse);
+				})
+				.catch(() => {
+					return errorUtil.sendError(req, res, 500, 'server error saving information.');
+				});
 			});
 		})
 		.catch((err) => {
 			console.error(err);
 			if (err instanceof DuplicateContactsError) {
 				if (err.duplicateContacts) {
-					return error.sendError(req, res, 400, err.duplicateContacts.length + ' duplicate contacts found.', err.duplicateContacts);
+					return errorUtil.sendError(req, res, 400, err.duplicateContacts.length + ' duplicate contacts found.', err.duplicateContacts);
 				}
 				else {
-					return error.sendError(req, res, 400, 'duplicate contacts found.');
+					return errorUtil.sendError(req, res, 400, 'duplicate contacts found.');
 				}
 			}
 			else {
-				return error.sendError(req, res, 500, 'unable to process request.');
+				return errorUtil.sendError(req, res, 500, 'unable to process request.');
 			}
 		});
 	}
 }
 
+/**
+ * Checks that a route request is a valid method and enpoit
+ * @param  {Object} req - User request object
+ * @param  {Object} res - Response object
+ * @param {string} apiPath - endpoint path of the request
+ * @param {String} reqMethod - REST method for the request
+ */
+function validateRoute(req, res, apiPath, reqMethod) {
+	if (!apiPath) {
+		return errorUtil.sendError(req, res, 404, 'Invalid endpoint.');
+	}
+
+	if (!apiSchema.paths[apiPath][reqMethod]) {
+		return errorUtil.sendError(req, res, 405, 'No endpoint method found.');
+	}
+
+	if (!apiSchema.paths[apiPath][reqMethod].responses) {
+		return errorUtil.sendError(req, res, 500, 'No endpoint responses found.');
+	}
+
+	if (!apiSchema.paths[apiPath][reqMethod].responses['200']) {
+		return errorUtil.sendError(req, res, 500, 'No endpoint success found.');
+	}
+	return true;
+}
 /**
  * Takes in request and calls functions based on what route was called
  * @param  {Object} req - User request object
@@ -103,60 +130,40 @@ function routeRequest(req, res){
 	const reqMethod = req.method.toLowerCase();
 
 	const apiReqData = util.apiSchemaData(apiSchema, reqPath);
+
 	if (apiReqData){
 		const apiPath = apiReqData.path;
 		const apiTokens = apiReqData.tokens;
 		const apiMatches = apiReqData.matches;
 
-		if (!apiPath) {
-			return error.sendError(req, res, 404, 'Invalid endpoint.');
-		}
-		else {
-			if (!apiSchema.paths[apiPath][reqMethod]) {
-				return error.sendError(req, res, 405, 'No endpoint method found.');
-			}
-			else {
-				if (!apiSchema.paths[apiPath][reqMethod].responses) {
-					return error.sendError(req, res, 500, 'No endpoint responses found.');
+		if (validateRoute(req, res, apiPath, reqMethod)) {
+			const schemaData = apiSchema.paths[apiPath][reqMethod];
+
+			const reqData = {
+				path: apiPath,
+				tokens: apiTokens,
+				matches: apiMatches,
+				schema: schemaData
+			};
+
+			if (reqMethod === 'get') {
+				if (apiTokens.includes('fileName')) {
+
+					fileStore.getControlNumberFileName(req, res, reqData);
+
 				}
 				else {
-					if (!apiSchema.paths[apiPath][reqMethod].responses['200']) {
-						return error.sendError(req, res, 500, 'No endpoint success found.');
-					}
-					else {
-
-						const schemaData = apiSchema.paths[apiPath][reqMethod];
-
-						const reqData = {
-							path: apiPath,
-							tokens: apiTokens,
-							matches: apiMatches,
-							schema: schemaData
-						};
-
-						if (reqMethod === 'get') {
-							if (apiTokens.includes('fileName')) {
-
-								fileStore.getControlNumberFileName(req, res, reqData);
-
-							}
-							else {
-
-								get.getControlNumber(req, res, reqData);
-							}
-
-						}
-						else if (reqMethod === 'post') {
-							postApplication(req, res, reqData);
-						}
-
-					}
+					get.getByControlNumber(req, res, reqData);
 				}
+
+			}
+			else if (reqMethod === 'post') {
+				postApplication(req, res, reqData);
 			}
 		}
 	}
 	else {
-		return error.sendError(req, res, 404, 'Invalid endpoint.');
+		return errorUtil.sendError(req, res, 404, 'Invalid endpoint.');
 	}
 }
 

@@ -14,7 +14,7 @@
 //*******************************************************************
 // required modules
 const include = require('include')(__dirname);
-const error = include('src/controllers/errors/error.js');
+const errorUtil = include('src/controllers/errors/error.js');
 
 //*******************************************************************
 // authorize
@@ -31,7 +31,7 @@ function authorize(req, res, next){
 		return next();
 	}
 
-	error.sendError(req, res, 403, 'Forbidden.');
+	errorUtil.sendError(req, res, 403, 'Forbidden.');
 }
 
 //*******************************************************************=
