@@ -115,7 +115,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	it('should return valid json for tempOutfitters POST (controlNumber to be used in GET)', function(done) {
 
-		this.timeout(15000);
+		this.timeout(5000);
 
 		request(server)
 			.post(testURL)
