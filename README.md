@@ -44,7 +44,8 @@ This repository was partially developed under a task order of the Agile Blanket 
 3. Set the [environment variables](#environment-variables)
 4. Setup a database and run `npm run dba`.
 5. [Create a test user](#create-a-user).
-6. Run `npm run watch` to start Node.js server.
+6. [Start a local Minio server](#start-local-minio-server).
+7. Run `npm run watch` to start Node.js server.
 
 ## Dependencies
 
@@ -246,6 +247,19 @@ This API uses the `passport-local` strategy. This strategy authenticates users w
 ### Create a user
 
 To create an API user account, run `node cmd/createUser.js -u <username> -p <password> -r <userrole>`. The user role is either 'user' or 'admin'. The ‘admin’ role has permission to access all routes, but the ‘user’ role does not currently have permission to access any routes.
+
+### Start a local Minio server
+
+1. [Install Minio](https://docs.minio.io/).
+2. Set the environment variables `MINIO_ACCESS_KEY` to `MINIOSERVER` and `MINIO_SECRET_KEY` to `MINIOSERVERSECRET`. These are literal values currently necessary to make local tests work.
+3. Start the minio server from a command line where the above environment variables are set.
+4. Visit http://localhost:9000/ in a browser and verify that Minio is running.
+5. In the `VCAP_SERVICES` environment variable, set
+
+    - `s3[0].credentials.access_key_id` to `MINIOSERVER`
+    - `s3[0].credentials.secret_access_key` to `MINIOSERVERSECRET`
+    - `s3[0].credentials.endpoint` to `http://0.0.0.0:9000` (add this key in `s3[0].credentials` if it doesn't exist already)
+6. Run `npm run coverage` and verify that the tests pass.
 
 ## Continuous integration and deployment
 

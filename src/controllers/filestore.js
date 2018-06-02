@@ -95,9 +95,17 @@ function getFilesZip(controlNumber, dbFiles, res){
 
 	const fileNames = [];
 
-	dbFiles.forEach((dbFile)=>{
-		fileNames.push(dbFile.filePath);
-	});
+	if (s3Client.config.credentials.accessKeyId === 'MINIOSERVER') {
+		dbFiles.forEach((dbFile)=>{
+			// Minio will add the paths again later, so we need to strip them here:
+			fileNames.push(dbFile.filePath.replace(filePath, ''));
+		});
+	}
+	else {
+		dbFiles.forEach((dbFile)=>{
+			fileNames.push(dbFile.filePath);
+		});
+	}
 
 	const archiveName = `${filePath}.zip`;
 
