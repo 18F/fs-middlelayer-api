@@ -6,7 +6,7 @@ const request = require('request-promise');
 
 const testData = require('./suds-basic-auth.json');
 const basic = require('../../src/controllers/nrmconnection');
-const SUDS_INFO = require('../../src/controllers/vcap.js').SUDS_INFO;
+const vcapConstants = require('../../src/controllers/vcap-constants.js');
 
 function verifyArgsForSUDSAuthentication(args) {
 	const url = args[0];
@@ -14,8 +14,8 @@ function verifyArgsForSUDSAuthentication(args) {
 	const json = args[1].json;
 
 	const SUDS_API_URL = `http://localhost:${process.env.PORT}/mocks`;
-	const SUDS_API_USERNAME = SUDS_INFO.username;
-	const SUDS_API_PASSWORD = SUDS_INFO.password;
+	const SUDS_API_USERNAME = vcapConstants.SUDS_INFO.username;
+	const SUDS_API_PASSWORD = vcapConstants.SUDS_INFO.password;
 
 	expect(url).to.equal(`${SUDS_API_URL}/login`);
 	expect(auth).to.have.property('user');
