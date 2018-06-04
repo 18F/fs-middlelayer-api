@@ -23,6 +23,7 @@ const models = include('src/models');
 const jwt = require('jsonwebtoken');
 const uuidV4 = require('uuid/v4');
 const vcapConstants = require('../vcap-constants.js');
+const logger = require('../utility.js').logger;
 
 //*******************************************************************
 // passport
@@ -36,6 +37,7 @@ passport.use(new Strategy(
 		}).then(function(user) {
 			if (user){
 				if (bcrypt.compareSync(pw, user.passHash)){
+					logger.info(`AUTHENTICATION: ${user.userName}:${user.userRole} authenicated session for the middlelayer.`);
 					done(null, {
 						id: user.userName,
 						role: user.userRole,
@@ -43,14 +45,16 @@ passport.use(new Strategy(
 					});
 				}
 				else {
+					logger.warn(`AUTHENTICATION: ${un} - a registered userName submitted bad password.`);
 					done(null, false);
 				}
 			}
 			else {
+				logger.warn(`AUTHENTICATION: ${un} - a not registered user attempted to log into the middlelayer.`);
 				done(null, false);
 			}
 		}).catch(function (err) {
-			console.error(err);
+			logger.warn('AUTHENTICATION: Error:', err);
 			done(null, false);
 		});
 	}
