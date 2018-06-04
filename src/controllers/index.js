@@ -45,7 +45,6 @@ const logger = require('./utility.js').logger;
  * @param  {Object} reqData.schema - Schema of the route requested
  */
 function postApplication(req, res, reqData){
-
 	const pathData = reqData.schema;
 
 	const body = util.getBody(req);
@@ -67,6 +66,7 @@ function postApplication(req, res, reqData){
 			.then((application) =>{
 				fileStore.saveAndUploadFiles(possbileFiles, req.files, controlNumber, application)
 				.then(() => {
+					util.logControllerAction(req, 'index.postApplication', controlNumber);
 					const successfulResponse = {
 						'status': 'sucess',
 						'controlNumber': controlNumber

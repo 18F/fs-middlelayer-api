@@ -18,7 +18,7 @@
 // other files
 const include = require('include')(__dirname);
 const models = include('src/models');
-const util = require('../controllers/utility');
+const errorUtil = require('./errors/error');
 
 //*******************************************************************
 
@@ -44,7 +44,7 @@ function saveFile(applicationId, uploadFile){
 				return fulfill();
 			})
 			.catch(function (err) {
-				util.rejectWithError(err, reject);
+				errorUtil.rejectWithError(err, reject);
 			});
 	});
 }
@@ -62,7 +62,7 @@ function getFileInfoFromDB(filePath){
 			return resolve(file);
 		})
 		.catch((err) => {
-			util.rejectWithError(err, reject);
+			errorUtil.rejectWithError(err, reject);
 		});
 	});
 }
@@ -80,7 +80,7 @@ function getFiles(appId){
 			return resolve(file);
 		})
 		.catch((err) => {
-			util.rejectWithError(err, reject);
+			errorUtil.rejectWithError(err, reject);
 		});
 	});
 }
@@ -111,14 +111,14 @@ function getApplication(controlNum){
 						});
 					})
 					.catch((error) => {
-						util.rejectWithError(error, reject);
+						errorUtil.rejectWithError(error, reject);
 					});
 			}
 			else {
-				util.rejectWithError({ application: false }, reject);
+				errorUtil.rejectWithError({ application: false }, reject);
 			}
 		}).catch((err) => {
-			util.rejectWithError(err, reject);
+			errorUtil.rejectWithError(err, reject);
 		});
 	});
 
@@ -135,7 +135,7 @@ function saveApplication(toStore) {
 				return fulfill(application);
 			})
 			.catch((err) =>{
-				util.rejectWithError(err, reject);
+				errorUtil.rejectWithError(err, reject);
 			});
 	});
 
@@ -233,7 +233,7 @@ function saveUser(user, callback) {
 		return callback(null, usr);
 	})
 	.catch(function(err) {
-		util.rejectWithError(err, callback);
+		errorUtil.rejectWithError(err, callback);
 	});
 }
 
@@ -255,7 +255,7 @@ function deleteUser(username, callback) {
 			return callback('row could not be be deleted');
 		}
 	}, function(err){
-		util.rejectWithError(err, callback);
+		errorUtil.rejectWithError(err, callback);
 	});
 }
 

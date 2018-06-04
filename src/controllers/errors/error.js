@@ -57,9 +57,15 @@ function getErrorHandle(req, res, err) {
 	return sendError(req, res, 500, 'error while getting application from the database.');
 }
 
+function rejectWithError(error, reject) {
+	logger.error(`Error: ${error}`);
+	reject(error);
+}
+
 //*******************************************************************
 // exports
 
 module.exports.sendError = sendError;
 module.exports.nrmServiceError = nrmServiceError; 
 module.exports.getErrorHandle = getErrorHandle;
+module.exports.rejectWithError = rejectWithError;

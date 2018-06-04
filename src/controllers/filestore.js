@@ -100,6 +100,7 @@ function getFilesZip(controlNumber, dbFiles, res){
 	res.set('Content-Disposition', 'attachment; filename=' + archiveName);
 
 	try {
+		util.logControllerAction({controlNumber: controlNumber}, 'fileStore.getFilesZip');
 		zipper
 			.archive({ s3: s3Client, bucket: config.bucketName }, filePath, fileNames)
 			.pipe(res);
@@ -137,11 +138,11 @@ function saveAndUploadFiles(possbileFiles, files, controlNumber, application) {
 							db.saveFile(application.id, fileInfo)
 							.then(resolve())
 							.catch((err) => {
-								reject(err);
+								errorUtil.rejectWithError(err, reject);
 							});
 						})
 						.catch((err) => {
-							util.rejectWithEror(err, reject);
+							errorUtil.rejectWithEror(err, reject);
 						});
 				}
 				else {

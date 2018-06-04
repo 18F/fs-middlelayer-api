@@ -6,7 +6,7 @@ const request = require('request-promise');
 const auth = require('./auth.js');
 const error = require('../errors/error.js');
 const logger = require('../utility.js').logger;
-const rejectWithError = require('../utility.js').rejectWithError;
+const rejectWithError = require('../errors/error.js').rejectWithError;
 
 //*******************************************************************
 

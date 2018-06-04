@@ -69,16 +69,24 @@ winston.add(winston.transports.Console, {
 
 const logger = winston;
 
-function rejectWithError(error, reject) {
-	logger.error(`Error: ${error}`);
-	reject(error);
-}
+/**
+* @function logControllerAction - logs a controller action
+* @param {Object} req - http request
+* @param {Object} controller - what controller was called
+* @param {String} controlNumber -
+*/
+function logControllerAction (req, controller, controlNumber) {
 
-module.exports = logger;
+	const userID = req.decoded.id;
+	const role = req.decoded.role;
+
+	logger.info(`CONTROLLER: ${req.method}:${controller} by ${userID}:${role} for ID: ${controlNumber}`);
+}
 
 //*******************************************************************
 
 module.exports.getBody = getBody;
 module.exports.apiSchemaData = apiSchemaData;
 module.exports.logger = logger;
-module.exports.rejectWithError = rejectWithError;
+module.exports.logControllerAction = logControllerAction;
+
