@@ -69,6 +69,11 @@ winston.add(winston.transports.Console, {
 
 const logger = winston;
 
+function rejectWithError(error, reject) {
+	logger.error(`Error: ${error}`);
+	reject(error);
+}
+
 module.exports = logger;
 
 //*******************************************************************
@@ -76,3 +81,4 @@ module.exports = logger;
 module.exports.getBody = getBody;
 module.exports.apiSchemaData = apiSchemaData;
 module.exports.logger = logger;
+module.exports.rejectWithError = rejectWithError;

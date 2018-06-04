@@ -16,6 +16,8 @@
 
 const config = require('./storeConfig.js');
 const zipper = require ('s3-zip');
+const logger = require('./utility.js').logger;
+const util = require('./utility');
 
 //*************************************************************
 // AWS
@@ -43,8 +45,7 @@ function uploadFile(fileInfo){
 	return new Promise((fulfill, reject) => {
 		s3.putObject(params, function (err) {
 			if (err) {
-				console.error(err);
-				return reject(err);
+				util.rejectWithEror(err, reject);
 			}
 			return fulfill();
 		});
@@ -68,8 +69,7 @@ function getFile(controlNumber, fileName){
 	return new Promise((resolve, reject) => {
 		s3.getObject(getParams, function (err, data) {
 			if (err) {
-				console.error(err);
-				return reject(err);
+				util.rejectWithEror(err, reject);
 			}
 			return resolve(data);
 		});
@@ -107,7 +107,7 @@ function getFilesZip(controlNumber, dbFiles, res){
 	} 
 	catch (e) {
 		const err = 'catched error: ' + e;
-		console.log(err);
+		logger.error('ERROR: ', err);
 		context.fail(err);
 	}
 	
@@ -141,7 +141,7 @@ function saveAndUploadFiles(possbileFiles, files, controlNumber, application) {
 							});
 						})
 						.catch((err) => {
-							reject(err);
+							util.rejectWithEror(err, reject);
 						});
 				}
 				else {
@@ -170,7 +170,6 @@ function getControlNumberFileName(req, res, reqData) {
 	const fileName = reqData.matches.fileName;
 
 	const filePath = controlNumber + '/' + fileName;
-	console.log(filePath);
 
 	db.getFileInfoFromDB(filePath).then((storedFileInfo) => {
 		getFile(controlNumber, fileName)
@@ -179,11 +178,11 @@ function getControlNumberFileName(req, res, reqData) {
 			res.send(fileData.Body);
 		})
 		.catch((error) => {
-			console.error(error);
+			logger.error('ERROR:', error);
 			errorUtil.sendError(req, res, 404, 'file not found in the database.');
 		});
 	}).catch((error) =>{
-		console.error(error);
+		logger.error('ERROR:', error);
 		errorUtil.sendError(req, res, 500, 'error while getting file from data store.');
 	});
 }

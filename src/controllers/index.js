@@ -28,6 +28,7 @@ const NRMConnection = require('./nrmconnection');
 const validation = require('./validation.js');
 const util = require('./utility.js');
 const DuplicateContactsError = require('./errors/duplicateContactsError.js');
+const logger = require('./utility.js').logger;
 
 //*******************************************************************
 // controller functions
@@ -78,7 +79,7 @@ function postApplication(req, res, reqData){
 			});
 		})
 		.catch((err) => {
-			console.error(err);
+			logger.error('ERROR:', err);
 			if (err instanceof DuplicateContactsError) {
 				if (err.duplicateContacts) {
 					return errorUtil.sendError(req, res, 400, err.duplicateContacts.length + ' duplicate contacts found.', err.duplicateContacts);

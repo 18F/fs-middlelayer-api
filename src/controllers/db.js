@@ -18,6 +18,7 @@
 // other files
 const include = require('include')(__dirname);
 const models = include('src/models');
+const util = require('../controllers/utility');
 
 //*******************************************************************
 
@@ -43,8 +44,7 @@ function saveFile(applicationId, uploadFile){
 				return fulfill();
 			})
 			.catch(function (err) {
-				console.error(err);
-				return reject(err);
+				util.rejectWithError(err, reject);
 			});
 	});
 }
@@ -62,8 +62,7 @@ function getFileInfoFromDB(filePath){
 			return resolve(file);
 		})
 		.catch((err) => {
-			console.error(err);
-			return reject(err);
+			util.rejectWithError(err, reject);
 		});
 	});
 }
@@ -81,8 +80,7 @@ function getFiles(appId){
 			return resolve(file);
 		})
 		.catch((err) => {
-			console.error(err);
-			return reject(err);
+			util.rejectWithError(err, reject);
 		});
 	});
 }
@@ -113,15 +111,14 @@ function getApplication(controlNum){
 						});
 					})
 					.catch((error) => {
-						return reject(error);
+						util.rejectWithError(error, reject);
 					});
 			}
 			else {
-				reject({application: false});
+				util.rejectWithError({ application: false }, reject);
 			}
 		}).catch((err) => {
-			console.error(err);
-			return reject(err);
+			util.rejectWithError(err, reject);
 		});
 	});
 
@@ -138,8 +135,7 @@ function saveApplication(toStore) {
 				return fulfill(application);
 			})
 			.catch((err) =>{
-				console.error(err);
-				return reject(err);
+				util.rejectWithError(err, reject);
 			});
 	});
 
@@ -237,8 +233,7 @@ function saveUser(user, callback) {
 		return callback(null, usr);
 	})
 	.catch(function(err) {
-		console.error(err);
-		return callback(err, null);
+		util.rejectWithError(err, callback);
 	});
 }
 
@@ -260,8 +255,7 @@ function deleteUser(username, callback) {
 			return callback('row could not be be deleted');
 		}
 	}, function(err){
-		console.error(err);
-		return callback(err);
+		util.rejectWithError(err, callback);
 	});
 }
 

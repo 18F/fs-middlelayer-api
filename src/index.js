@@ -97,7 +97,7 @@ const server = app.listen(PORT, function () {
 	const host = server.address().address;
 	const port = server.address().port;
 
-	console.log('\n  listening at http://%s:%s', host, port);
+	logger.info('\n  listening at http://%s:%s', host, port);
 
 });
 
