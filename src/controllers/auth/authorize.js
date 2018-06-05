@@ -15,6 +15,7 @@
 // required modules
 const include = require('include')(__dirname);
 const errorUtil = include('src/controllers/errors/error.js');
+const logger = require('../utility.js').logger;
 
 //*******************************************************************
 // authorize
@@ -28,6 +29,7 @@ const errorUtil = include('src/controllers/errors/error.js');
 function authorize(req, res, next){
 
 	if (req.decoded.role === 'admin'){
+		logger.info('AUTHENICATION: ');
 		return next();
 	}
 

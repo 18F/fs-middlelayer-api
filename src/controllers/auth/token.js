@@ -19,6 +19,7 @@ const jwt = require('jsonwebtoken');
 const errorUtil = include('src/controllers/errors/error.js');
 
 const vcapConstants = require('../vcap-constants.js');
+const logger = require('../utility.js').logger;
 
 //*******************************************************************
 // token
@@ -43,9 +44,11 @@ function token(req, res, next){
 
 		jwt.verify(token, vcapConstants.JWT_SECRET_KEY, claims, function(err, decoded) {
 			if (err) {
+				logger.info('AUTHENTICATION: Invalid token submitted to request.');
 				errorUtil.sendError(req, res, 401, 'Failed to authenticate token.');
 			}
 			else {
+				logger.info(`AUTHENTICATION: ${decoded.id} Valid token submitted to request.`);
 				req.decoded = decoded;
 				return next();
 			}

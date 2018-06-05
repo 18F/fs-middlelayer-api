@@ -15,6 +15,7 @@
 // required modules
 
 const matchstick = require('matchstick');
+const winston = require('winston');
 
 //*******************************************************************
 
@@ -59,7 +60,19 @@ function apiSchemaData(apiSchema, reqPath) {
 
 }
 
+winston.remove(winston.transports.Console);
+winston.add(winston.transports.Console, {
+	json: true,
+	colorize: true,
+	timestamp: true
+});
+
+const logger = winston;
+
+module.exports = logger;
+
 //*******************************************************************
 
 module.exports.getBody = getBody;
 module.exports.apiSchemaData = apiSchemaData;
+module.exports.logger = logger;
