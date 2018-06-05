@@ -17,7 +17,7 @@ const jsf = require('json-schema-faker');
 
 const db = require('./db.js');
 const NRMConnection = require('./nrmconnection');
-const error = require('./errors/error.js');
+const errorUtil = require('./errors/error.js');
 const fileStore = require('./filestore.js');
 //*******************************************************************
 
@@ -106,26 +106,72 @@ function buildGetResponse(cnData, applicationData, schemaData, jsonData, getSche
 			buildGetResponse(cnData, applicationData, schemaData[key], jsonData[key], getSchema[key]);
 		}
 	}
-
 }
 
 /**
  * @param  {Object} cnData - application data from Basic API
  * @param  {Object} applicationData - data about application, retreived from DB
- * @param  {Object} jsonData - object to be populated and returned to user
  * @param  {Object} outputSchema - schema used for GET requests
  * @return {Object} object populated with application data
  */
-function copyGenericInfo(cnData, applicationData, jsonData, outputSchema){
+function copyGenericInfo(cnData, applicationData, outputSchema){
 
 	jsf.option({useDefaultValue:true});
 	const schemaData = jsf(outputSchema);
 	delete schemaData.id;
 
-	jsonData = schemaData;
+	const jsonData = schemaData;
 	buildGetResponse(cnData, applicationData, schemaData, jsonData, outputSchema);
 
 	return jsonData;
+}
+
+/** Controller for GET routes with only a control number
+ * @param  {Object} req - request object
+ * @param  {Object} res - response object
+ * @param  {Object} controlNumber - controlNumber to retrieve
+*/
+function getFilesRoute(req, res, controlNumber){
+	const controlNumberShort = controlNumber.substr(0, controlNumber.length - 6);
+	db.getApplication(controlNumberShort)
+		.then((fileData) => {
+			fileStore.getFilesZip(controlNumberShort, fileData.files, res);
+		})
+		.catch((error) => {
+			errorUtil.getErrorHandle(req, res, error);
+		});
+}
+
+function getNRMPostProcess(req, res, applicationDataFromNRM, controlNumber, reqData) {
+	const pathData = reqData.schema;
+
+	const fileTypes = {
+		'gud': 'guideDocumentation',
+		'arf': 'acknowledgementOfRiskForm',
+		'inc': 'insuranceCertificate',
+		'gse': 'goodStandingEvidence',
+		'opp': 'operatingPlan'
+	};
+
+	db.getApplication(controlNumber)
+		.then((localApplicationData) => {
+			localApplicationData.files.forEach(function (file) {
+				const fileType = fileTypes[file.fileType];
+				localApplicationData.application[fileType] = file.fileName;
+			});
+
+			const responseData = copyGenericInfo(applicationDataFromNRM,
+				localApplicationData.application,
+				pathData['x-getTemplate']
+			);
+
+			responseData.controlNumber = controlNumber;
+			responseData.status = 'success';
+			res.json(responseData);
+		})
+		.catch((error) => {
+			errorUtil.getErrorHandle(req, res, error);
+		});
 }
 
 /** Controller for GET routes with only a control number
@@ -137,86 +183,22 @@ function copyGenericInfo(cnData, applicationData, jsonData, outputSchema){
  * @param  {Object} reqData.matches - Object with key pair values of all tokens present in the request
  * @param  {Object} reqData.schema - Schema of the route requested
  */
-function getControlNumber(req, res, reqData) {
-	const pathData = reqData.schema;
-	const fileTypes = {
-		'gud': 'guideDocumentation',
-		'arf': 'acknowledgementOfRiskForm',
-		'inc': 'insuranceCertificate',
-		'gse': 'goodStandingEvidence',
-		'opp': 'operatingPlan'
-	};
-
+function getByControlNumber(req, res, reqData) {
+	const controlNumber = reqData.matches.controlNumber;
 	const reqPath = `/${req.params[0]}`;
 
 	if (reqPath.indexOf('/files') !== -1) {
-		let controlNumber = reqData.matches.controlNumber;
-		controlNumber = controlNumber.substr(0, controlNumber.length - 6);
-
-		db.getApplication(controlNumber, function (err, appl, fileData) {
-
-			if (err) {
-				console.error(err);
-				return error.sendError(req, res, 500, 'error while getting application from the database.');
-			}
-
-			else if (fileData) {
-
-				fileStore.getFilesZip(controlNumber, fileData, res);
-
-			}
-			else {
-				error.sendError(req, res, 404, 'file not found in the database.');
-			}
-
-		});
-
+		getFilesRoute(req, res, reqData);
 	}
 	else {
-
-		NRMConnection.getFromBasic(req, res, reqData.matches.controlNumber)
-			.then((applicationDataFromNRM) => {
-
-				let jsonData = {};
-				const controlNumber = reqData.matches.controlNumber;
-				const jsonResponse = {};
-
-				if (applicationDataFromNRM) {
-
-					db.getApplication(controlNumber, function (err, appl, fileData) {
-						if (err) {
-							console.error(err);
-							return error.sendError(req, res, 500, 'error while getting application from the database.');
-						}
-						else {
-
-							if (!appl) {
-								return error.sendError(req, res, 404, 'application not found in the database.');
-							}
-							else if (fileData) {
-								fileData.forEach(function (file) {
-									const fileType = fileTypes[file.fileType];
-									appl[fileType] = file.fileName;
-								});
-							}
-							jsonData = copyGenericInfo(applicationDataFromNRM, appl, jsonData, pathData['x-getTemplate']);
-							jsonData.controlNumber = controlNumber;
-
-							jsonResponse.status = 'success';
-							const toReturn = Object.assign({}, jsonResponse, jsonData);
-
-							res.json(toReturn);
-						}
-					});
-				}
-			})
-			.catch((err) => {
-				console.error(err);
-				return error.sendError(req, res, 500, 'unable to process request.');
-			});
-
+		NRMConnection.getFromBasic(req, res, controlNumber)
+		.then((applicationDataFromNRM) => {
+			getNRMPostProcess(req, res, applicationDataFromNRM, controlNumber, reqData);
+		})
+		.catch((error) => {
+			errorUtil.getErrorHandle(req, res, error);
+		});
 	}
-
 }
 
-module.exports.getControlNumber = getControlNumber;
+module.exports.getByControlNumber = getByControlNumber;
