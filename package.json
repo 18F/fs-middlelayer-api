@@ -49,6 +49,7 @@
   },
   "homepage": "https://github.com/18F/fs-middlelayer-api#readme",
   "devDependencies": {
+    "aws-sdk-mock": "^2.0.0",
     "@types/node": "^10.1.2",
     "chai": "^3.5.0",
     "codecov": "^3.0.2",

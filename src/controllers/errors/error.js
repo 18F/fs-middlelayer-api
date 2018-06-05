@@ -69,8 +69,17 @@ function nrmServiceError(req, res, err){
 	}
 }
 
+function getErrorHandle(req, res, error) {
+	console.error(error);
+	if (error.message === '404') {
+		return sendError(req, res, 404, 'file not found in the database.');
+	}
+	return sendError(req, res, 500, 'error while getting application from the database.');
+}
+
 //*******************************************************************
 // exports
 
 module.exports.sendError = sendError;
 module.exports.nrmServiceError = nrmServiceError; 
+module.exports.getErrorHandle = getErrorHandle;
