@@ -25,7 +25,7 @@ function getToken() {
 			if (response.token) {
 				return fulfill(response.token);
 			}
-			errorUtil.rejectWithError(new Error('Invalid SUDS API token.'), reject);
+			errorUtil.rejectWithError(new Error('Unable to retrieve valide token from SUDS API.'), reject);
 		}).catch((err) => {
 			errorUtil.rejectWithError(err, reject);
 		});
