@@ -489,6 +489,9 @@ No extra steps needed.
 ## Alert Monitoring
 This project uses New Relic Monitoring for performance and uptime alerts. The application name and license keys are provided as environment variables that are accessed through the VCAP constants. This application uses the `newrelic` npm module.
 
+### Logs
+This application uses Winston library to format logs as JSON to the [cloud.gov Kibana](https://logs.fr.cloud.gov/) instance. The centralized logger is within the `src/services/utility.js` as the `logger` property. For route requests, the [expressWinston](https://www.npmjs.com/package/express-winston) library is used. For server controller actions the `src/services/utility.js:logControllerAction` should be used.
+
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md) for additional information.
