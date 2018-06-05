@@ -30,7 +30,7 @@ function sendError(req, res, code, message, errors){
 		errors
 	};
 
-	logger.error('ERROR:', req, message);
+	logger.error('ERROR:', req.url, req.method, message);
 
 	res.status(code).json(output);
 
@@ -57,10 +57,10 @@ function getErrorHandle(req, res, err) {
 	return sendError(req, res, 500, 'error while getting application from the database.');
 }
 /** reject with error
-@param {Object} error - error object
-@param {Object} reject - rejection from a promise
-@param {String} controller - string of where the controller occurred
-@reject {Object} error
+* @param {Object} error - error object
+* @param {Object} reject - rejection from a promise
+* @param {String} controller - string of where the controller occurred
+* @reject {Object} error
 */ 
 function rejectWithError(error, reject, controller) {
 	if (error.message === ''){

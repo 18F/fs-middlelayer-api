@@ -12,7 +12,7 @@ if (process.env.VCAP_SERVICES) {
 	vcapServices = JSON.parse(process.env.VCAP_SERVICES);
 } 
 else {
-	logger.log('VCAP SERVICES was unable to parse');
+	logger.info('VCAP SERVICES was unable to parse');
 }
 
 const getUserProvided = function (name) {
