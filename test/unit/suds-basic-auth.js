@@ -130,7 +130,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 
 			it('should ultimately reject with an error', () => {
 				return basic.getFromBasic().catch(finalResult => {
-					expect(finalResult.message).to.equal('Unable to retrieve valide token from SUDS API.');
+					expect(finalResult.message).to.equal('Unable to retrieve valid token from SUDS API.');
 					return notAnError;
 				}).then(err => {
 					if (err === notAnError) {
@@ -282,7 +282,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 
 			it('should ultimately reject with an error', () => {
 				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(finalResult => {
-					expect(finalResult.message).to.equal('Unable to retrieve valide token from SUDS API.');
+					expect(finalResult.message).to.equal('Unable to retrieve valid token from SUDS API.');
 					return notAnError;
 				}).then(err => {
 					if (err === notAnError) {

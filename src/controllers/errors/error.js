@@ -56,9 +56,17 @@ function getErrorHandle(req, res, err) {
 	}
 	return sendError(req, res, 500, 'error while getting application from the database.');
 }
-
-function rejectWithError(error, reject) {
-	logger.error(`Error: ${error}`);
+/** reject with error
+@param {Object} error - error object
+@param {Object} reject - rejection from a promise
+@param {String} controller - string of where the controller occurred
+@reject {Object} error
+*/ 
+function rejectWithError(error, reject, controller) {
+	if (error.message === ''){
+		error.message = 'Promise rejected in chain';
+	}
+	logger.error(`ERROR: ${error.message} in ${controller} controller`);
 	reject(error);
 }
 

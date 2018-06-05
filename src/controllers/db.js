@@ -44,7 +44,7 @@ function saveFile(applicationId, uploadFile){
 				return fulfill();
 			})
 			.catch(function (err) {
-				errorUtil.rejectWithError(err, reject);
+				errorUtil.rejectWithError(err, reject, 'db.saveFile');
 			});
 	});
 }
@@ -62,7 +62,7 @@ function getFileInfoFromDB(filePath){
 			return resolve(file);
 		})
 		.catch((err) => {
-			errorUtil.rejectWithError(err, reject);
+			errorUtil.rejectWithError(err, reject, 'db.getFileInfoFromDB');
 		});
 	});
 }
@@ -80,7 +80,7 @@ function getFiles(appId){
 			return resolve(file);
 		})
 		.catch((err) => {
-			errorUtil.rejectWithError(err, reject);
+			errorUtil.rejectWithError(err, reject, 'db.getFiles');
 		});
 	});
 }
@@ -111,14 +111,14 @@ function getApplication(controlNum){
 						});
 					})
 					.catch((error) => {
-						errorUtil.rejectWithError(error, reject);
+						errorUtil.rejectWithError(error, reject, 'db.getApplication:getFiles');
 					});
 			}
 			else {
-				errorUtil.rejectWithError({ application: false }, reject);
+				errorUtil.rejectWithError({ application: false }, reject, 'db.getApplication:noApplication');
 			}
 		}).catch((err) => {
-			errorUtil.rejectWithError(err, reject);
+			errorUtil.rejectWithError(err, reject, 'db.getApplication');
 		});
 	});
 
@@ -135,7 +135,7 @@ function saveApplication(toStore) {
 				return fulfill(application);
 			})
 			.catch((err) =>{
-				errorUtil.rejectWithError(err, reject);
+				errorUtil.rejectWithError(err, reject, 'db.saveApplication');
 			});
 	});
 
@@ -233,7 +233,7 @@ function saveUser(user, callback) {
 		return callback(null, usr);
 	})
 	.catch(function(err) {
-		errorUtil.rejectWithError(err, callback);
+		errorUtil.rejectWithError(err, callback, 'db.saveUser');
 	});
 }
 
@@ -255,7 +255,7 @@ function deleteUser(username, callback) {
 			return callback('row could not be be deleted');
 		}
 	}, function(err){
-		errorUtil.rejectWithError(err, callback);
+		errorUtil.rejectWithError(err, callback, 'db.deleteUser');
 	});
 }
 

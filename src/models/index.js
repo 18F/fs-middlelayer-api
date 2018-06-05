@@ -2,25 +2,14 @@
 
 const fs = require('fs');
 const path = require('path');
-const url = require('url');
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
 const Op = Sequelize.Op;
+const dbConfig = require('../../.sequelize.js');
 
 const db = {};
 
-const sequelizeOptions = {
-	dialect: url.parse(process.env.DATABASE_URL, true).protocol.split(':')[0],
-	operatorsAliases: Op
-};
-
-if (url.parse(process.env.DATABASE_URL, true).hostname !== 'localhost') {
-	sequelizeOptions.dialectOptions = {
-		ssl: true
-	};
-}
-
-const sequelize = new Sequelize(process.env.DATABASE_URL, sequelizeOptions);
+const sequelize = new Sequelize(dbConfig);
 
 fs
   .readdirSync(__dirname)

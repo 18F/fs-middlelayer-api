@@ -39,12 +39,12 @@ function getFromBasic(req, res, controlNumber){
 					return error.sendError(req, res, 504, 'underlying service has timed out.');
 				}
 				else {
-					rejectWithError(err, reject);
+					rejectWithError(err, reject, 'get.getFromBasic');
 				}
 			});
 		})
 			.catch((err) => { 
-				rejectWithError(err, reject);
+				rejectWithError(err, reject, 'get.getFromBasic');
 			});
 	});
 }

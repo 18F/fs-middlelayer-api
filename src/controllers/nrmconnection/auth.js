@@ -25,9 +25,9 @@ function getToken() {
 			if (response.token) {
 				return fulfill(response.token);
 			}
-			errorUtil.rejectWithError(new Error('Unable to retrieve valide token from SUDS API.'), reject);
+			errorUtil.rejectWithError(new Error('Unable to retrieve valid token from SUDS API.'), reject, 'auth.getToken.noToken');
 		}).catch((err) => {
-			errorUtil.rejectWithError(err, reject);
+			errorUtil.rejectWithError(err, reject, 'auth.getToken');
 		});
 	});
 }

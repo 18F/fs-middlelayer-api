@@ -138,11 +138,11 @@ function saveAndUploadFiles(possbileFiles, files, controlNumber, application) {
 							db.saveFile(application.id, fileInfo)
 							.then(resolve())
 							.catch((err) => {
-								errorUtil.rejectWithError(err, reject);
+								errorUtil.rejectWithError(err, reject, 'filestore.saveAndUpload.saveFile');
 							});
 						})
 						.catch((err) => {
-							errorUtil.rejectWithEror(err, reject);
+							errorUtil.rejectWithEror(err, reject, 'filestore.saveAndUpload.uploadFile');
 						});
 				}
 				else {

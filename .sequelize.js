@@ -1,6 +1,8 @@
 require('dotenv').config();
 
 const url = require('url');
+const logger = require('./src/controllers/utility.js').logger;
+logger.info('SEQUELIZE initiated');
 
 const dbParams = url.parse(process.env.DATABASE_URL, true);
 const dbAuth = dbParams.auth.split(':');
@@ -17,7 +19,9 @@ const dbConfig = {
 	port: dbParams.port,
 	ssl: false,
 	dialect: dbParams.protocol.split(':')[0],
-	logging: console.log,
+	logging: function (sql, sequelizeObject) {
+		logger.info(`SEQUELIZE: ${sql}`);
+	},
 	seederStorage: 'sequelize',
 	operatorAliases: false
 };
