@@ -20,12 +20,11 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 
-const path = require('path');
-const fsr = require('file-stream-rotator');
-const mkdirp = require('mkdirp');
-const morgan = require('morgan');
+const logger = require('./controllers/utility.js').logger;
+const loggerParams = { json: true, colorize: true, timestamp: true };
+const expressWinston = require('express-winston');
 const bodyParser = require('body-parser');
-const SUDS_INFO = require('./controllers/vcap.js').SUDS_INFO;
+const vcapConstants = require('./controllers/vcap-constants.js');
 const moxai = require('moxai');
 
 const routes = require('./routes');
@@ -50,17 +49,21 @@ app.use(bodyParser.urlencoded({extended: true}));
 // **********************************************************
 // log
 
-const logDirectory = path.join(__dirname, '../log');
+/** Logging middlelayer */
+if (logger.levels[logger.level] >= 2) {
+	app.use(expressWinston.logger({
+		transports: [
+			new logger.transports.Console(loggerParams)
+		],
+		requestWhitelist: expressWinston.requestWhitelist.concat('body')
+	}));
+}
 
-mkdirp(logDirectory);
-
-const accessLogStream = fsr.getStream({
-	filename: logDirectory + '/fs-epermit-api-%DATE%.log',
-	frequency: 'daily',
-	verbose: false
-});
-
-app.use(morgan('combined', {stream: accessLogStream}));
+app.use(expressWinston.errorLogger({
+	transports: [
+		new logger.transports.Console(loggerParams)
+	]
+}));
 
 //*******************************************************************
 // public
@@ -77,7 +80,7 @@ app.use('/schema/api.json', express.static('src/api.json'));
 //*******************************************************************
 // mocks
 
-if (SUDS_INFO.USING_MOCKS){
+if (vcapConstants.SUDS_INFO.USING_MOCKS){
 	app.use('/mocks', moxai({'dir': '../mocks', 'file': 'basic', 'random': true}));
 }
 

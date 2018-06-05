@@ -16,7 +16,7 @@ const error = require('../errors/error.js');
  */
 function getFromBasic(req, res, controlNumber){
 
-	return new Promise(function (fulfill, reject){
+	return new Promise(function (fulfill, reject) {
 
 		auth.getToken()
 		.then(function(sudsToken) {

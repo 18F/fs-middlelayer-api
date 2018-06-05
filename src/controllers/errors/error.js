@@ -10,29 +10,9 @@
 //*******************************************************************
 
 'use strict';
+const logger = require('../utility.js').logger;
 
 //*******************************************************************
-
-/**
- * Creates JSON response for any error, given a message. Also logs the error.
- * @param  {Object} req     - User request object
- * @param  {String} message - Error message to output
- */
-function logging(req, message){
-
-	const attemptedRoute = req.originalUrl;
-	const browser = req.get('user-agent');
-	const referer = req.get('referer');
-
-	const errorLog = {};
-	errorLog.route = attemptedRoute;
-	errorLog.browser = browser;
-	errorLog.referer = referer;
-	errorLog.errorMessage = message;
-
-	console.error(errorLog);
-
-}
 
 /**
  * Returns error message, and any error objects to user
@@ -50,7 +30,7 @@ function sendError(req, res, code, message, errors){
 		errors
 	};
 
-	logging(req, message);
+	logger.error(req, message);
 
 	res.status(code).json(output);
 
@@ -69,8 +49,17 @@ function nrmServiceError(req, res, err){
 	}
 }
 
+function getErrorHandle(req, res, error) {
+	console.error(error);
+	if (error.message === '404') {
+		return sendError(req, res, 404, 'file not found in the database.');
+	}
+	return sendError(req, res, 500, 'error while getting application from the database.');
+}
+
 //*******************************************************************
 // exports
 
 module.exports.sendError = sendError;
 module.exports.nrmServiceError = nrmServiceError; 
+module.exports.getErrorHandle = getErrorHandle;
