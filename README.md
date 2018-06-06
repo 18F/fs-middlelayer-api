@@ -255,7 +255,7 @@ To create an API user account, run `node cmd/createUser.js -u <username> -p <pas
 3. Run `mc config host add myminio http://0.0.0.0:9000 MINIOSERVER MINIOSERVERSECRET`.
 4. Run `mc mb myminio/cg-62009640-385b-4fb3-98c2-d4d829b98737` (this bucket name must match whatever is in the `.env` file).
 5. Start the minio server from a command line where the above environment variables are set.
-6. Visit http://localhost:9000/ in a browser and verify that Minio is running.
+6. Visit `http://localhost:9000/` in a browser and verify that Minio is running.
 7. In the `VCAP_SERVICES` environment variable, set
 
     - `s3[0].credentials.access_key_id` to `MINIOSERVER`
