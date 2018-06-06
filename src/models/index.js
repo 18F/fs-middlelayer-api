@@ -14,7 +14,8 @@ const sequelizeOptions = {
 	operatorsAliases: Op
 };
 
-if (url.parse(process.env.DATABASE_URL, true).hostname !== 'localhost') {
+if (url.parse(process.env.DATABASE_URL, true).hostname !== 'localhost' &&
+        url.parse(process.env.DATABASE_URL, true).hostname !== 'postgres') {
 	sequelizeOptions.dialectOptions = {
 		ssl: true
 	};
