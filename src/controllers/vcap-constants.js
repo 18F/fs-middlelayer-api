@@ -3,6 +3,8 @@
  * @module vcap-constants
  */
 
+const logger = require('./utility.js').logger;
+
 const vcapConstants = {};
 /** VCAP environment variables are used by cloud.gov to pass in instance specific settings. */
 let vcapServices;
@@ -10,7 +12,7 @@ if (process.env.VCAP_SERVICES) {
 	vcapServices = JSON.parse(process.env.VCAP_SERVICES);
 } 
 else {
-	console.log('VCAP SERVICES was unable to parse');
+	logger.info('VCAP SERVICES was unable to parse');
 }
 
 const getUserProvided = function (name) {

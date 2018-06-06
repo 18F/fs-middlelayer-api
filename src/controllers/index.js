@@ -28,6 +28,7 @@ const NRMConnection = require('./nrmconnection');
 const validation = require('./validation.js');
 const util = require('./utility.js');
 const DuplicateContactsError = require('./errors/duplicateContactsError.js');
+const logger = require('./utility.js').logger;
 
 //*******************************************************************
 // controller functions
@@ -44,7 +45,6 @@ const DuplicateContactsError = require('./errors/duplicateContactsError.js');
  * @param  {Object} reqData.schema - Schema of the route requested
  */
 function postApplication(req, res, reqData){
-
 	const pathData = reqData.schema;
 
 	const body = util.getBody(req);
@@ -66,6 +66,7 @@ function postApplication(req, res, reqData){
 			.then((application) =>{
 				fileStore.saveAndUploadFiles(possbileFiles, req.files, controlNumber, application)
 				.then(() => {
+					util.logControllerAction(req, 'index.postApplication', controlNumber);
 					const successfulResponse = {
 						'status': 'sucess',
 						'controlNumber': controlNumber
@@ -78,7 +79,7 @@ function postApplication(req, res, reqData){
 			});
 		})
 		.catch((err) => {
-			console.error(err);
+			logger.error('ERROR:', err);
 			if (err instanceof DuplicateContactsError) {
 				if (err.duplicateContacts) {
 					return errorUtil.sendError(req, res, 400, err.duplicateContacts.length + ' duplicate contacts found.', err.duplicateContacts);

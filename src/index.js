@@ -49,13 +49,16 @@ app.use(bodyParser.urlencoded({extended: true}));
 // **********************************************************
 // log
 
+expressWinston.requestWhitelist = ['url', 'headers.host', 'method', 'httpVersion', 'originalUrl', 'query', 'referer'];
+
 /** Logging middlelayer */
 if (logger.levels[logger.level] >= 2) {
 	app.use(expressWinston.logger({
 		transports: [
 			new logger.transports.Console(loggerParams)
 		],
-		requestWhitelist: expressWinston.requestWhitelist.concat('body')
+		bodyWhitelist: ['contCn'],
+		ignoredRoutes: ['/mocks']
 	}));
 }
 
@@ -97,7 +100,7 @@ const server = app.listen(PORT, function () {
 	const host = server.address().address;
 	const port = server.address().port;
 
-	console.log('\n  listening at http://%s:%s', host, port);
+	logger.info('\n  listening at http://%s:%s', host, port);
 
 });
 

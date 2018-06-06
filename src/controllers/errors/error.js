@@ -30,14 +30,14 @@ function sendError(req, res, code, message, errors){
 		errors
 	};
 
-	logger.error(req, message);
+	logger.error('ERROR:', req.url, req.method, message);
 
 	res.status(code).json(output);
 
 }
 
 function nrmServiceError(req, res, err){
-	console.error(err);
+	logger.error('ERROR:', err);
 	if (err.statusCode && err.statusCode === 404){
 		return this.sendError(req, res, 503, 'underlying service unavailable.');
 	}
@@ -49,12 +49,25 @@ function nrmServiceError(req, res, err){
 	}
 }
 
-function getErrorHandle(req, res, error) {
-	console.error(error);
-	if (error.message === '404') {
+function getErrorHandle(req, res, err) {
+	logger.error('ERROR:', err);
+	if (err.message === '404') {
 		return sendError(req, res, 404, 'file not found in the database.');
 	}
 	return sendError(req, res, 500, 'error while getting application from the database.');
+}
+/** reject with error
+* @param {Object} error - error object
+* @param {Object} reject - rejection from a promise
+* @param {String} controller - string of where the controller occurred
+* @reject {Object} error
+*/ 
+function rejectWithError(error, reject, controller) {
+	if (error.message === ''){
+		error.message = 'Promise rejected in chain';
+	}
+	logger.error(`ERROR: ${error.message} in ${controller} controller`);
+	reject(error);
 }
 
 //*******************************************************************
@@ -63,3 +76,4 @@ function getErrorHandle(req, res, error) {
 module.exports.sendError = sendError;
 module.exports.nrmServiceError = nrmServiceError; 
 module.exports.getErrorHandle = getErrorHandle;
+module.exports.rejectWithError = rejectWithError;
