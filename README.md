@@ -250,16 +250,18 @@ To create an API user account, run `node cmd/createUser.js -u <username> -p <pas
 
 ### Start a local Minio server
 
-1. [Install Minio](https://docs.minio.io/).
+1. [Install Minio](https://docs.minio.io/) and the [Minio client](https://docs.minio.io/docs/minio-client-complete-guide).
 2. Set the environment variables `MINIO_ACCESS_KEY` to `MINIOSERVER` and `MINIO_SECRET_KEY` to `MINIOSERVERSECRET`. These are literal values currently necessary to make local tests work.
-3. Start the minio server from a command line where the above environment variables are set.
-4. Visit http://localhost:9000/ in a browser and verify that Minio is running.
-5. In the `VCAP_SERVICES` environment variable, set
+3. Run `mc config host add myminio http://0.0.0.0:9000 MINIOSERVER MINIOSERVERSECRET`.
+4. Run `mc mb myminio/cg-62009640-385b-4fb3-98c2-d4d829b98737` (this bucket name must match whatever is in the `.env` file).
+5. Start the minio server from a command line where the above environment variables are set.
+6. Visit http://localhost:9000/ in a browser and verify that Minio is running.
+7. In the `VCAP_SERVICES` environment variable, set
 
     - `s3[0].credentials.access_key_id` to `MINIOSERVER`
     - `s3[0].credentials.secret_access_key` to `MINIOSERVERSECRET`
     - `s3[0].credentials.endpoint` to `http://0.0.0.0:9000` (add this key in `s3[0].credentials` if it doesn't exist already)
-6. Run `npm run coverage` and verify that the tests pass.
+8. Run `npm run coverage` and verify that the tests pass.
 
 ## Continuous integration and deployment
 
