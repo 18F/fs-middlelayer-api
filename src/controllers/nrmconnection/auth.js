@@ -5,6 +5,7 @@
 const request = require('request-promise');
 
 const vcapConstants = require('../vcap-constants.js');
+const errorUtil = require('../errors/error.js');
 /**
  * Promise function as to hit the /login function
  * @return {Promise}      - if fufilled a jwt token to pass on future requests
@@ -24,9 +25,9 @@ function getToken() {
 			if (response.token) {
 				return fulfill(response.token);
 			}
-			reject(new Error('Token not in data returned from SUDS basic API'));
-		}).catch(function(err) {
-			reject(err);
+			errorUtil.rejectWithError(new Error('Unable to retrieve valid token from SUDS API.'), reject, 'auth.getToken.noToken');
+		}).catch((err) => {
+			errorUtil.rejectWithError(err, reject, 'auth.getToken');
 		});
 	});
 }

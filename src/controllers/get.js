@@ -19,6 +19,8 @@ const db = require('./db.js');
 const NRMConnection = require('./nrmconnection');
 const errorUtil = require('./errors/error.js');
 const fileStore = require('./filestore.js');
+const util = require('./utility.js');
+
 //*******************************************************************
 
 /** Populates fields at the top level of an application
@@ -167,6 +169,7 @@ function getNRMPostProcess(req, res, applicationDataFromNRM, controlNumber, reqD
 
 			responseData.controlNumber = controlNumber;
 			responseData.status = 'success';
+			util.logControllerAction(req, 'get.getNRMPostProcess');
 			res.json(responseData);
 		})
 		.catch((error) => {

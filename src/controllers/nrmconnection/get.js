@@ -5,6 +5,8 @@
 const request = require('request-promise');
 const auth = require('./auth.js');
 const error = require('../errors/error.js');
+const logger = require('../utility.js').logger;
+const rejectWithError = require('../errors/error.js').rejectWithError;
 
 //*******************************************************************
 
@@ -29,19 +31,21 @@ function getFromBasic(req, res, controlNumber){
 			})
 			.catch(function(err){
 				if (err.statusCode && err.statusCode === 404){
-					console.error(err);
+					logger.error('ERROR:', error);
 					return error.sendError(req, res, 503, 'underlying service unavailable.');
 				}
 				else if (err.error && err.error.code === 'ETIMEDOUT') {
-					console.error(err);
+					logger.error('ERROR:', error);
 					return error.sendError(req, res, 504, 'underlying service has timed out.');
 				}
 				else {
-					reject(err);
+					rejectWithError(err, reject, 'get.getFromBasic');
 				}
 			});
 		})
-		.catch(reject);
+			.catch((err) => { 
+				rejectWithError(err, reject, 'get.getFromBasic');
+			});
 	});
 }
 

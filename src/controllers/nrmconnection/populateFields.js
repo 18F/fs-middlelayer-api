@@ -11,6 +11,8 @@
 
 'use strict';
 
+const logger = require('../utility.js').logger;
+
 //*******************************************************************
 // AUTO-POPULATE FUNCTIONS
 
@@ -135,7 +137,7 @@ function buildAutoPopulatedFields(basicFields, person, body){
 					fieldMakeUp.push(fieldValue);
 				}
 				else {
-					console.warn(`${madeOfField.field} does not exist. This may not be an issue if the field is optional.`);
+					logger.warn(`${madeOfField.field} does not exist. This may not be an issue if the field is optional.`);
 				}
 			}
 			else {
