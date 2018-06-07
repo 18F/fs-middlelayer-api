@@ -30,11 +30,11 @@ const middlelayerS3 = vcapServices.s3.find(element => {
 vcapConstants.s3 = {
 	REGION: middlelayerS3.credentials.region,
 	BUCKET: middlelayerS3.credentials.bucket,
-    ENDPOINT: ""
+    ENDPOINT: ''
 };
 
 if (middlelayerS3.credentials.endpoint) {
-	vcapConstants.s3.endpoint = middlelayerS3.credentials.endpoint;
+	vcapConstants.s3.ENDPOINT = middlelayerS3.credentials.endpoint;
 }
 
 if (middlelayerS3.credentials.access_key_id && middlelayerS3.credentials.secret_access_key) {

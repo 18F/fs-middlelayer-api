@@ -48,6 +48,13 @@ This repository was partially developed under a task order of the Agile Blanket 
 6. [Start a local Minio server](#start-local-minio-server).
 7. Run `npm run watch` to start Node.js server.
 
+## Local Docker Development
+
+1. Copy `docker.env` to `.env`.
+2. Run `cmd/docker-test.sh` to ensure the tests pass.
+3. Run `docker-compose up` to run the server locally; once started, it should be available at `http://localhost:3333`.
+4. The local Docker setup includes an admin user with the username `adminymouse` and the password `caution`.
+
 ## Dependencies
 
 Refer to application package and dependency trackers for additional dependency information:
