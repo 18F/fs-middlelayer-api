@@ -34,6 +34,15 @@ const routes = require('./routes');
 
 const PORT = process.env.PORT || 8000;
 
+//*****************************************************************
+// new relic config
+if (vcapConstants.NEW_RELIC_KEY && vcapConstants.NEW_RELIC_KEY.length > 0) {
+	logger.info(`Activating New Relic: ${vcapConstants.NEW_RELIC_APP_NAME}`);
+	require('newrelic'); // eslint-disable-line global-require
+} else {
+	logger.warn('Skipping New Relic Activation');
+}
+
 //*******************************************************************
 // express
 
