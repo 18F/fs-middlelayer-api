@@ -16,9 +16,10 @@
 const include = require('include')(__dirname);
 const jwt = require('jsonwebtoken');
 
-const error = include('src/controllers/errors/error.js');
+const errorUtil = include('src/controllers/errors/error.js');
 
-const JWT_SECRET_KEY = require('../vcap.js').JWT_SECRET_KEY;
+const vcapConstants = require('../vcap-constants.js');
+const logger = require('../utility.js').logger;
 
 //*******************************************************************
 // token
@@ -41,11 +42,13 @@ function token(req, res, next){
 			audience: 'fs-epermit-api-intake-users'
 		};
 
-		jwt.verify(token, JWT_SECRET_KEY, claims, function(err, decoded) {
+		jwt.verify(token, vcapConstants.JWT_SECRET_KEY, claims, function(err, decoded) {
 			if (err) {
-				error.sendError(req, res, 401, 'Failed to authenticate token.');
+				logger.info('AUTHENTICATION: Invalid token submitted to request.');
+				errorUtil.sendError(req, res, 401, 'Failed to authenticate token.');
 			}
 			else {
+				logger.info(`AUTHENTICATION: ${decoded.id} Valid token submitted to request.`);
 				req.decoded = decoded;
 				return next();
 			}
@@ -53,7 +56,7 @@ function token(req, res, next){
 
 	}
 	else {
-		error.sendError(req, res, 403, 'No token provided.');
+		errorUtil.sendError(req, res, 403, 'No token provided.');
 	}
 
 }

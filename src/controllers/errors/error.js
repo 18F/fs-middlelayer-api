@@ -10,29 +10,9 @@
 //*******************************************************************
 
 'use strict';
+const logger = require('../utility.js').logger;
 
 //*******************************************************************
-
-/**
- * Creates JSON response for any error, given a message. Also logs the error.
- * @param  {Object} req     - User request object
- * @param  {String} message - Error message to output
- */
-function logging(req, message){
-
-	const attemptedRoute = req.originalUrl;
-	const browser = req.get('user-agent');
-	const referer = req.get('referer');
-
-	const errorLog = {};
-	errorLog.route = attemptedRoute;
-	errorLog.browser = browser;
-	errorLog.referer = referer;
-	errorLog.errorMessage = message;
-
-	console.error(errorLog);
-
-}
 
 /**
  * Returns error message, and any error objects to user
@@ -50,14 +30,14 @@ function sendError(req, res, code, message, errors){
 		errors
 	};
 
-	logging(req, message);
+	logger.error('ERROR:', req.url, req.method, message);
 
 	res.status(code).json(output);
 
 }
 
 function nrmServiceError(req, res, err){
-	console.error(err);
+	logger.error('ERROR:', err);
 	if (err.statusCode && err.statusCode === 404){
 		return this.sendError(req, res, 503, 'underlying service unavailable.');
 	}
@@ -69,8 +49,31 @@ function nrmServiceError(req, res, err){
 	}
 }
 
+function getErrorHandle(req, res, err) {
+	logger.error('ERROR:', err);
+	if (err.message === '404') {
+		return sendError(req, res, 404, 'file not found in the database.');
+	}
+	return sendError(req, res, 500, 'error while getting application from the database.');
+}
+/** reject with error
+* @param {Object} error - error object
+* @param {Object} reject - rejection from a promise
+* @param {String} controller - string of where the controller occurred
+* @reject {Object} error
+*/ 
+function rejectWithError(error, reject, controller) {
+	if (error.message === ''){
+		error.message = 'Promise rejected in chain';
+	}
+	logger.error(`ERROR: ${error.message} in ${controller} controller`);
+	reject(error);
+}
+
 //*******************************************************************
 // exports
 
 module.exports.sendError = sendError;
 module.exports.nrmServiceError = nrmServiceError; 
+module.exports.getErrorHandle = getErrorHandle;
+module.exports.rejectWithError = rejectWithError;

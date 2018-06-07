@@ -4,22 +4,19 @@
 // required modules
 const request = require('request-promise');
 
-const SUDS_INFO = require('../vcap.js').SUDS_INFO;
-const SUDS_API_URL = SUDS_INFO.SUDS_API_URL;
-const SUDS_API_USERNAME = SUDS_INFO.username;
-const SUDS_API_PASSWORD = SUDS_INFO.password;
-
+const vcapConstants = require('../vcap-constants.js');
+const errorUtil = require('../errors/error.js');
 /**
  * Promise function as to hit the /login function
  * @return {Promise}      - if fufilled a jwt token to pass on future requests
  */
 function getToken() {
 	return new Promise(function(fulfill, reject) {
-		const authURL = `${SUDS_API_URL}/login`;
+		const authURL = `${vcapConstants.SUDS_INFO.SUDS_API_URL}/login`;
 		request.post(authURL, {
 			auth: {
-				user: SUDS_API_USERNAME,
-				pass: SUDS_API_PASSWORD,
+				user: vcapConstants.SUDS_INFO.username,
+				pass: vcapConstants.SUDS_INFO.password,
 				// Change to false if SUDS API requires digest
 				sendImmediately: true
 			},
@@ -28,9 +25,9 @@ function getToken() {
 			if (response.token) {
 				return fulfill(response.token);
 			}
-			reject(new Error('Token not in data returned from SUDS basic API'));
-		}).catch(function(err) {
-			reject(err);
+			errorUtil.rejectWithError(new Error('Unable to retrieve valid token from SUDS API.'), reject, 'auth.getToken.noToken');
+		}).catch((err) => {
+			errorUtil.rejectWithError(err, reject, 'auth.getToken');
 		});
 	});
 }
@@ -63,4 +60,4 @@ function getRequestOptions(uri, method = 'GET', body = null, sudsToken = '') {
 
 module.exports.getToken = getToken;
 module.exports.getRequestOptions = getRequestOptions;
-module.exports.SUDS_API_URL = SUDS_API_URL;
+module.exports.SUDS_API_URL = vcapConstants.SUDS_INFO.SUDS_API_URL;

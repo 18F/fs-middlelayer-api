@@ -15,6 +15,7 @@
 // required modules
 
 const matchstick = require('matchstick');
+const winston = require('winston');
 
 //*******************************************************************
 
@@ -59,7 +60,33 @@ function apiSchemaData(apiSchema, reqPath) {
 
 }
 
+winston.remove(winston.transports.Console);
+winston.add(winston.transports.Console, {
+	json: true,
+	colorize: true,
+	timestamp: true
+});
+
+const logger = winston;
+
+/**
+* @function logControllerAction - logs a controller action
+* @param {Object} req - http request
+* @param {Object} controller - what controller was called
+* @param {String} controlNumber -
+*/
+function logControllerAction (req, controller, controlNumber) {
+
+	const userID = req.decoded.id;
+	const role = req.decoded.role;
+
+	logger.info(`CONTROLLER: ${req.method}:${controller} by ${userID}:${role} for ID: ${controlNumber}`);
+}
+
 //*******************************************************************
 
 module.exports.getBody = getBody;
 module.exports.apiSchemaData = apiSchemaData;
+module.exports.logger = logger;
+module.exports.logControllerAction = logControllerAction;
+

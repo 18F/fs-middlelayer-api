@@ -18,6 +18,7 @@
 // other files
 const include = require('include')(__dirname);
 const models = include('src/models');
+const errorUtil = require('./errors/error');
 
 //*******************************************************************
 
@@ -25,119 +26,119 @@ const models = include('src/models');
  * Saves information about file into DB
  * @param  {Number}   applicationId - Id of application file is associated with
  * @param  {Array}   uploadFile    - Information about file being saved
- * @param  {Function} callback      - function to be called after trying to save file
  */
-function saveFile(applicationId, uploadFile, callback){
-	models.files.create({
-		applicationId: applicationId,
-		fileType: uploadFile.filetypecode,
-		filePath: uploadFile.keyname,
-		fileName: uploadFile.filename,
-		fileOriginalname: uploadFile.originalname,
-		fileExt: uploadFile.ext,
-		fileSize: uploadFile.size,
-		fileMimetype: uploadFile.mimetype,
-		fileEncoding: uploadFile.encoding
-	})
-	.then(function() {
-		return callback(null);
-	})
-	.catch(function(err) {
-		console.error(err);
-		return callback(err);
+function saveFile(applicationId, uploadFile){
+	return new Promise(function (fulfill, reject) {
+		models.files.create({
+			applicationId: applicationId,
+			fileType: uploadFile.filetypecode,
+			filePath: uploadFile.keyname,
+			fileName: uploadFile.filename,
+			fileOriginalname: uploadFile.originalname,
+			fileExt: uploadFile.ext,
+			fileSize: uploadFile.size,
+			fileMimetype: uploadFile.mimetype,
+			fileEncoding: uploadFile.encoding
+		})
+			.then(function () {
+				return fulfill();
+			})
+			.catch(function (err) {
+				errorUtil.rejectWithError(err, reject, 'db.saveFile');
+			});
 	});
 }
 
 /**
  * Gets file info from DB
- * @param  {String}   fp - Path to file in data store
- * @param  {Function} callback - Function to call after getting info back from DB
+ * @param  {String}   filePath - Path to file in data store
  */
-function getFile(fp, callback){
-
-	models.files.findOne({
-		where: {filePath: fp}
-	})
-	.then(function(file) {
-		return callback(null, file);
-	})
-	.catch(function(err) {
-		console.error(err);
-		return callback(err, null);
+function getFileInfoFromDB(filePath){
+	return new Promise((resolve, reject) => {
+		models.files.findOne({
+			where: { filePath: filePath }
+		})
+		.then((file) => {
+			return resolve(file);
+		})
+		.catch((err) => {
+			errorUtil.rejectWithError(err, reject, 'db.getFileInfoFromDB');
+		});
 	});
 }
 
 /**
  * Get info of multiple files from DB
  * @param  {Number}   appId - application Id of files to get
- * @param  {Function} callback      - Function to call after getting info back from DB
  */
-function getFiles(appId, callback){
-
-	models.files.findAll({
-		where: {applicationId: appId}
-	})
-	.then(function(files) {
-		return callback(null, files);
-	})
-	.catch(function(err) {
-		console.error(err);
-		return callback(err, null);
+function getFiles(appId){
+	return new Promise((resolve, reject) => {
+		models.files.findAll({
+			where: { applicationId: appId }
+		})
+		.then((file) => {
+			return resolve(file);
+		})
+		.catch((err) => {
+			errorUtil.rejectWithError(err, reject, 'db.getFiles');
+		});
 	});
 }
 
 /**
  * Gets application info from DB
- * @param  {Number}   cNum - control number of application to retreive
- * @param  {Function} callback      - Function to call after getting info back from DB
+ * @param  {Number}   controlNumber - control number of application to retreive
  */
-function getApplication(cNum, callback){
-
-	models.applications.findOne({
-		where: {
-			controlNumber: cNum
-		}
-	}).then(function(appl) {
-		if (appl){
-
-			getFiles(appl.id, function(fileErr, files) {
-				if (fileErr){
-					return callback(fileErr, null, null);
-				}
-				else {
-					if (files) {
-						return callback(null, appl, files);
-					}
-					else {
-						return callback(null, appl, null);
-					}
-				}
-			});
-
-		}
-		else {
-			return callback(null, null, null);
-		}
-	}).catch(function (err) {
-		console.error(err);
-		return callback(err, null, null);
+function getApplication(controlNum){
+	return new Promise((resolve, reject) => {
+		models.applications.findOne({
+			where: {
+				controlNumber: controlNum
+			}
+		}).then((application) => {
+			if (application) {
+				getFiles(application.id)
+					.then((files) => {
+						if (files) {
+							return resolve({
+								application: application,
+								files: files
+							});
+						}
+						return resolve({
+							application: application,
+							files: []
+						});
+					})
+					.catch((error) => {
+						errorUtil.rejectWithError(error, reject, 'db.getApplication:getFiles');
+					});
+			}
+			else {
+				errorUtil.rejectWithError({ application: false }, reject, 'db.getApplication:noApplication');
+			}
+		}).catch((err) => {
+			errorUtil.rejectWithError(err, reject, 'db.getApplication');
+		});
 	});
+
 }
 
 /**
  * Save application data to DB
  * @param  {Object}   toStore       - object containing all of the fields to save to DB
- * @param  {Function} callback      - Function to call after saving application to DB
  */
-function saveApplication(toStore, callback) {
-	models.applications.create(toStore)
-	.then(function(appl) {
-		return callback(null, appl);
-	})
-	.catch(function(err) {
-		console.error(err);
-		return callback(err, null);
+function saveApplication(toStore) {
+	return new Promise(function(fulfill, reject){
+		models.applications.create(toStore)
+			.then((application) =>{
+				return fulfill(application);
+			})
+			.catch((err) =>{
+				errorUtil.rejectWithError(err, reject, 'db.saveApplication');
+			});
 	});
+
 }
 
 /** checks if the field specifies that it should be stored in that location
@@ -232,8 +233,7 @@ function saveUser(user, callback) {
 		return callback(null, usr);
 	})
 	.catch(function(err) {
-		console.error(err);
-		return callback(err, null);
+		errorUtil.rejectWithError(err, callback, 'db.saveUser');
 	});
 }
 
@@ -255,15 +255,14 @@ function deleteUser(username, callback) {
 			return callback('row could not be be deleted');
 		}
 	}, function(err){
-		console.error(err);
-		return callback(err);
+		errorUtil.rejectWithError(err, callback, 'db.deleteUser');
 	});
 }
 
 module.exports.getDataToStoreInDB = getDataToStoreInDB;
 module.exports.getFieldsToStore = getFieldsToStore;
 module.exports.saveFile = saveFile;
-module.exports.getFile = getFile;
+module.exports.getFileInfoFromDB = getFileInfoFromDB;
 module.exports.getFiles = getFiles;
 module.exports.getApplication = getApplication;
 module.exports.saveApplication = saveApplication;

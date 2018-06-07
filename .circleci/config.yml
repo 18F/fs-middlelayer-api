@@ -1,3 +1,10 @@
+_run:
+ install_cf: &install_cf
+  name: Install cf cli
+  command: |
+    curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar -zx
+    sudo mv cf /usr/local/bin
+    
 version: 2
 jobs:
   run-tests:
@@ -61,6 +68,7 @@ jobs:
       - image: circleci/node:8.9.4
     steps:
       - checkout
+      - run: *install_cf
       - run:
           name: Deploy
           command: |
@@ -72,6 +80,7 @@ jobs:
       - image: circleci/node:8.9.4
     steps:
       - checkout
+      - run: *install_cf
       - run:
           name: Deploy
           command: |
@@ -83,6 +92,7 @@ jobs:
     docker:
       - image: circleci/node:8.9.4
     steps:
+      - run: *install_cf
       - run:
           name: Install cf-recycle-plugin 1.0.0 release
           command: |
@@ -92,7 +102,7 @@ jobs:
       - run:
           name: Login to cloud.gov Production
           command: |
-            CF_API=API="https://api.fr.cloud.gov"
+            CF_API="https://api.fr.cloud.gov"
             cf login -a ${CF_API} -u ${CF_USERNAME_PROD} -p ${CF_PASSWORD_PROD}
       - run:
           name: Recycle Production instances

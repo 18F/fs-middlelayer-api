@@ -19,7 +19,7 @@ const request = require('request-promise');
 // other files
 
 const db = require('../db.js');
-const error = require('../errors/error.js');
+const errorUtil = require('../errors/error.js');
 const DuplicateContactsError = require('../errors/duplicateContactsError.js');
 
 const auth = require('./auth');
@@ -167,8 +167,8 @@ function createContact(fieldsObj, person, apiCallLogObject, sudsToken){
 			apiCallLogObject.POST['/contact-phone'].response = res;
 			fulfill(res.contCn);
 		})
-		.catch(function(err){
-			reject(err);
+		.catch((err)  => {
+			errorUtil.rejectWithError(err, reject);
 		});
 	});
 }
@@ -282,7 +282,7 @@ function postToBasic(req, res, validationSchema, body){
 				fulfill(apiCallLogObject);
 			})
 			.catch(function(err){
-				error.nrmServiceError(req, res, err);
+				errorUtil.nrmServiceError(req, res, err);
 			});
 		})
 		.catch(reject);

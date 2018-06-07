@@ -14,7 +14,8 @@
 //*******************************************************************
 // required modules
 const include = require('include')(__dirname);
-const error = include('src/controllers/errors/error.js');
+const errorUtil = include('src/controllers/errors/error.js');
+const logger = require('../utility.js').logger;
 
 //*******************************************************************
 // authorize
@@ -28,10 +29,11 @@ const error = include('src/controllers/errors/error.js');
 function authorize(req, res, next){
 
 	if (req.decoded.role === 'admin'){
+		logger.info(`AUTHENICATION: ${req.decoded.id}:${req.decoded.role} authorized`);
 		return next();
 	}
 
-	error.sendError(req, res, 403, 'Forbidden.');
+	errorUtil.sendError(req, res, 403, 'Forbidden.');
 }
 
 //*******************************************************************=
