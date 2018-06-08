@@ -635,6 +635,10 @@
                 "madeOf":{
                     "fields":[
                         {
+                            "fromIntake":false,
+                            "field" : "EP-"
+                        },
+                        {
                             "fromIntake":true,
                             "field":"region"
                         },
