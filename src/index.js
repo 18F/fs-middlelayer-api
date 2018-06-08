@@ -16,15 +16,24 @@
 
 require('dotenv').config();
 
+//*****************************************************************
+// new relic config
+const logger = require('./controllers/utility.js').logger;
+const vcapConstants = require('./controllers/vcap-constants.js');
+if (vcapConstants.NEW_RELIC_KEY && vcapConstants.NEW_RELIC_KEY.length > 0) {
+	logger.info(`Activating New Relic: ${vcapConstants.NEW_RELIC_APP_NAME}`);
+	require('newrelic'); // eslint-disable-line global-require
+}
+else {
+	logger.warn('Skipping New Relic Activation');
+}
+
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
-
-const logger = require('./controllers/utility.js').logger;
 const loggerParams = { json: true, colorize: true, timestamp: true };
 const expressWinston = require('express-winston');
 const bodyParser = require('body-parser');
-const vcapConstants = require('./controllers/vcap-constants.js');
 const moxai = require('moxai');
 
 const routes = require('./routes');
@@ -33,15 +42,6 @@ const routes = require('./routes');
 // environment variables
 
 const PORT = process.env.PORT || 8000;
-
-//*****************************************************************
-// new relic config
-if (vcapConstants.NEW_RELIC_KEY && vcapConstants.NEW_RELIC_KEY.length > 0) {
-	logger.info(`Activating New Relic: ${vcapConstants.NEW_RELIC_APP_NAME}`);
-	require('newrelic'); // eslint-disable-line global-require
-} else {
-	logger.warn('Skipping New Relic Activation');
-}
 
 //*******************************************************************
 // express
