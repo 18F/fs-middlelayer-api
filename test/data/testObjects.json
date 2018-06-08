@@ -499,7 +499,9 @@
                                         "pdf",
                                         "doc",
                                         "docx",
-                                        "rtf"
+                                        "rtf",
+                                        "xls",
+                                        "xlsx"
                                     ]
                                 },
                                 "acknowledgementOfRiskForm": {

@@ -367,7 +367,14 @@
 							"requiredFile": false,
 							"localStore": true,
 							"type": "file",
-							"validExtensions": ["pdf", "doc", "docx", "rtf"]
+							"validExtensions": [
+								"pdf",
+								"doc",
+								"docx",
+								"rtf",
+								"xls",
+								"xlsx"
+							]
 						},
 						"acknowledgementOfRiskForm": {
 							"filetypecode": "arf",
