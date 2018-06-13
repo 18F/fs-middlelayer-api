@@ -8,8 +8,8 @@
     		"description":"Only used for properties of type object. Used for validation purposes to require that all of the fields listed be provided.",
     		"type":"object"
     	},
-    	"basicField":{
-    		"description":"Describes what the name of the field should be when sent to the basic API. Only required if the field will be sent to the basic API, if the field will be stored in just the DB or no where at all, this field will be ignored.",
+    	"SUDSField":{
+    		"description":"Describes what the name of the field should be when sent to the SUDS API. Only required if the field will be sent to the basic API, if the field will be stored in just the DB or no where at all, this field will be ignored.",
     		"type":"string"
     	},
     	"default":{

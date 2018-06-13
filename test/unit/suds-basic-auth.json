@@ -27,7 +27,7 @@
 					"type": "string"
 				},
 				"securityId": {
-					"basicField": "securityId",
+					"SUDSField": "securityId",
 					"default": "",
 					"fromIntake": false,
 					"madeOf": {
@@ -44,7 +44,7 @@
 					"type": "string"
 				},
 				"managingID": {
-					"basicField": "managingOrg",
+					"SUDSField": "managingOrg",
 					"default": "",
 					"fromIntake": false,
 					"madeOf": {
@@ -61,7 +61,7 @@
 					"type": "string"
 				},
 				"adminOrg": {
-					"basicField": "adminOrg",
+					"SUDSField": "adminOrg",
 					"default": "",
 					"fromIntake": false,
 					"madeOf": {
@@ -78,7 +78,7 @@
 					"type": "string"
 				},
 				"epermitId": {
-					"basicField": "epermitId",
+					"SUDSField": "epermitId",
 					"default": "",
 					"fromIntake": false,
 					"madeOf": {
@@ -95,21 +95,21 @@
 					"type": "string"
 				},
 				"acres": {
-					"basicField": "acres",
+					"SUDSField": "acres",
 					"default": 0,
 					"fromIntake": false,
 					"basicStore": ["/application"],
 					"type": "integer"
 				},
 				"contCn": {
-					"basicField": "contCn",
+					"SUDSField": "contCn",
 					"default": "",
 					"fromIntake": false,
 					"basicStore": ["/contact/phone", "/contact/address", "/application"],
 					"type": "string"
 				},
 				"contId": {
-					"basicField": "contId",
+					"SUDSField": "contId",
 					"default": "",
 					"fromIntake": false,
 					"madeOf": {
@@ -141,7 +141,7 @@
 						"type": "object",
 						"properties": {
 							"firstName": {
-								"basicField": "firstName",
+								"SUDSField": "firstName",
 								"default": "",
 								"fromIntake": true,
 								"maxLength": 255,
@@ -149,7 +149,7 @@
 								"type": "string"
 							},
 							"lastName": {
-								"basicField": "lastName",
+								"SUDSField": "lastName",
 								"default": "",
 								"fromIntake": true,
 								"maxLength": 255,
@@ -160,7 +160,7 @@
 								"type": "object",
 								"properties": {
 									"areaCode": {
-										"basicField": "areaCode",
+										"SUDSField": "areaCode",
 										"default": "0",
 										"fromIntake": true,
 										"pattern": "^[0-9]{3}$",
@@ -168,7 +168,7 @@
 										"type": "string"
 									},
 									"number": {
-										"basicField": "phoneNumber",
+										"SUDSField": "phoneNumber",
 										"default": "0",
 										"fromIntake": true,
 										"pattern": "^[0-9]{7}$",
@@ -176,7 +176,7 @@
 										"type": "string"
 									},
 									"extension": {
-										"basicField": "extension",
+										"SUDSField": "extension",
 										"default": "",
 										"fromIntake": true,
 										"pattern": "[\\d]+",
@@ -184,7 +184,7 @@
 										"type": "string"
 									},
 									"phoneType": {
-										"basicField": "phoneNumberType",
+										"SUDSField": "phoneNumberType",
 										"default": "",
 										"fromIntake": true,
 										"basicStore": ["/contact/phone"],
@@ -197,7 +197,7 @@
 								"type": "object",
 								"properties": {
 									"areaCode": {
-										"basicField": "areaCode",
+										"SUDSField": "areaCode",
 										"default": "0",
 										"fromIntake": true,
 										"pattern": "^[0-9]{3}$",
@@ -205,7 +205,7 @@
 										"type": "string"
 									},
 									"number": {
-										"basicField": "phoneNumber",
+										"SUDSField": "phoneNumber",
 										"default": "0",
 										"fromIntake": true,
 										"pattern": "^[0-9]{7}$",
@@ -213,7 +213,7 @@
 										"type": "string"
 									},
 									"extension": {
-										"basicField": "extension",
+										"SUDSField": "extension",
 										"default": "",
 										"fromIntake": true,
 										"pattern": "[\\d]+",
@@ -221,7 +221,7 @@
 										"type": "string"
 									},
 									"phoneType": {
-										"basicField": "phoneNumberType",
+										"SUDSField": "phoneNumberType",
 										"default": "",
 										"fromIntake": true,
 										"basicStore": ["/contact/phone"],
@@ -231,7 +231,7 @@
 								"required": ["areaCode", "number", "phoneType"]
 							},
 							"emailAddress": {
-								"basicField": "email",
+								"SUDSField": "email",
 								"default": "",
 								"fromIntake": true,
 								"pattern": "^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$",
@@ -239,28 +239,28 @@
 								"type": "string"
 							},
 							"mailingAddress": {
-								"basicField": "address1",
+								"SUDSField": "address1",
 								"default": "",
 								"fromIntake": true,
 								"basicStore": ["/contact/address"],
 								"type": "string"
 							},
 							"mailingAddress2": {
-								"basicField": "address2",
+								"SUDSField": "address2",
 								"default": "",
 								"fromIntake": true,
 								"basicStore": ["/contact/address"],
 								"type": "string"
 							},
 							"mailingCity": {
-								"basicField": "cityName",
+								"SUDSField": "cityName",
 								"default": "",
 								"fromIntake": true,
 								"basicStore": ["/contact/address"],
 								"type": "string"
 							},
 							"mailingState": {
-								"basicField": "stateCode",
+								"SUDSField": "stateCode",
 								"default": "",
 								"fromIntake": true,
 								"pattern": "^(A[EKLPRSZ]|C[AOT]|D[CE]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHVJMY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$",
@@ -268,7 +268,7 @@
 								"type": "string"
 							},
 							"mailingZIP": {
-								"basicField": "postalCode",
+								"SUDSField": "postalCode",
 								"default": "",
 								"fromIntake": true,
 								"pattern": "^[0-9]{5}$|^[0-9]{9}$",
@@ -282,7 +282,7 @@
 								"type": "string"
 							},
 							"countryName": {
-								"basicField": "countryName",
+								"SUDSField": "countryName",
 								"default": "United States of America",
 								"basicStore": ["/contact/address"],
 								"type": "string"
@@ -292,7 +292,7 @@
 					}, {
 						"properties": {
 							"organizationName": {
-								"basicField": "orgCode",
+								"SUDSField": "orgCode",
 								"default": "",
 								"fromIntake": true,
 								"basicStore": ["/contact/organization"],
@@ -330,7 +330,7 @@
 							"type": "boolean"
 						},
 						"activityDescription": {
-							"basicField": "purpose",
+							"SUDSField": "purpose",
 							"default": "",
 							"fromIntake": true,
 							"localStore": true,
@@ -409,7 +409,7 @@
 							"validExtensions": ["pdf", "doc", "docx", "rtf"]
 						},
 						"formName": {
-							"basicField": "formName",
+							"SUDSField": "formName",
 							"default": "FS-2700-4I",
 							"localStore": true,
 							"basicStore": ["/application"],
