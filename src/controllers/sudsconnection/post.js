@@ -93,8 +93,6 @@ function prepareBasicPost(validationSchema, body, person){
 	const fieldsToSendByEndpoint = assignFieldsToEndpoints(fieldsToPost);
 	const autoPopulateFields = populate.findAutoPopulatedFieldsFromSchema(fieldsToPost);
 	const populatedPostObject = populate.populateValues(fieldsToSendByEndpoint, body, autoPopulateFields, person);
-	console.log("intake values to send");
-	console.log(populatedPostObject);
 	return populatedPostObject;
 }
 
