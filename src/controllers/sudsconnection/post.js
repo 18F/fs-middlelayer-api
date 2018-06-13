@@ -226,7 +226,7 @@ function multipleContactsCheck(contId, matchingContacts, fieldsObj, person, apiC
  * @param  {Object} validationSchema - Schema object
  * @param  {Object} body - User input
  */
-function post(req, res, validationSchema, body){
+module.exports = function (req, res, validationSchema, body) {
 
 	return new Promise(function (fulfill, reject){
 
@@ -288,6 +288,4 @@ function post(req, res, validationSchema, body){
 		.catch(reject);
 	});
 
-}
-
-module.exports.post = post;
+};
