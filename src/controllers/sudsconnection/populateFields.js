@@ -158,7 +158,7 @@ function extractIntakeValue(intakeRequest, field, splitPath) {
 			bodyCopy = bodyCopy[path];
 		}
 	});
-	if (typeof bodyCopy !== Object){
+	if (typeof bodyCopy !== typeof {}){
 		return bodyCopy;
 	}
 	return field.default;
@@ -203,7 +203,8 @@ function populateValues(fieldsByEndpoint, intakeRequest, autoPopulatedFields, pe
 					if (!field.hasOwnProperty('sudsField')) {
 						sudsFieldName = field.sudsField;
 					}
-					requestsTobeSent[endpoint][sudsFieldName] = generateValue(field, intakeRequest, splitPath, person, fieldKey, autoPopulatedFields);
+					const generatedValue = generateValue(field, intakeRequest, splitPath, person, fieldKey, autoPopulatedFields);
+                    requestsTobeSent[endpoint][sudsFieldName] = generatedValue
 				}
 			}
 		}
