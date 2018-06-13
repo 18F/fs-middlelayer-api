@@ -19,7 +19,7 @@ require('dotenv').config();
 const chai = require('chai');
 const expect = chai.expect;
 
-const SUDSconnection =  require('../src/controllers/sudsconnection.js');
+const SUDSconnection =  require('../src/controllers/sudsconnection');
 
 //*******************************************************************
 describe('Tests that the following object field objects were populated properly', function(){
