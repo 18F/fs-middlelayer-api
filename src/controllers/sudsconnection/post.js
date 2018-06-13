@@ -66,8 +66,8 @@ function assignFieldsToEndpoints(fieldsToBasic){
 	const fieldsAssignedToEndpoints = {};
 	fieldsToBasic.forEach((field)=>{
 		const key = Object.keys(field)[0];
-		if (field[key].hasOwnProperty('basicStore')){
-			field[key].basicStore.forEach((location)=>{
+		if (field[key].hasOwnProperty('sudsEndpoint')){
+			field[key].sudsEndpoint.forEach((location)=>{
 				if (fieldsAssignedToEndpoints.hasOwnProperty(location)){
 					fieldsAssignedToEndpoints[location][key] = field[key];
 				}
@@ -89,7 +89,7 @@ function assignFieldsToEndpoints(fieldsToBasic){
  */
 function prepareBasicPost(validationSchema, body, person){
 	const fieldsToSend = [];
-	db.getFieldsToStore(validationSchema, fieldsToSend, '', 'basic');
+	db.getFieldsToStore(validationSchema, fieldsToSend, '', 'SUDS');
 	const fieldsToSendByEndpoint = assignFieldsToEndpoints(fieldsToSend);
 	const autoPopulateValues = populate.buildAutoPopulatedFields(fieldsToSend, person, body);
 	const populatedFieldsToSend = populate.populateValues(fieldsToSendByEndpoint, body, autoPopulateValues);
@@ -226,7 +226,7 @@ function multipleContactsCheck(contId, matchingContacts, fieldsObj, person, apiC
  * @param  {Object} validationSchema - Schema object
  * @param  {Object} body - User input
  */
-function postToBasic(req, res, validationSchema, body){
+module.exports = function (req, res, validationSchema, body) {
 
 	return new Promise(function (fulfill, reject){
 
@@ -282,12 +282,10 @@ function postToBasic(req, res, validationSchema, body){
 				fulfill(apiCallLogObject);
 			})
 			.catch(function(err){
-				errorUtil.nrmServiceError(req, res, err);
+				errorUtil.SUDSServiceError(req, res, err);
 			});
 		})
 		.catch(reject);
 	});
 
-}
-
-module.exports.postToBasic = postToBasic;
+};

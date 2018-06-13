@@ -13,5 +13,5 @@
 
 //*******************************************************************
 
-exports.postToBasic = require('./post.js').postToBasic;
-exports.getFromBasic = require('./get.js').getFromBasic;
+exports.post = require('./post.js');
+exports.get = require('./get.js');

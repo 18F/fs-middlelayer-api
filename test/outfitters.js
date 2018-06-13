@@ -36,7 +36,6 @@ const bcrypt = require('bcrypt-nodejs');
 const db = include('src/controllers/db.js');
 const models = include('src/models');
 
-
 const adminCredentials = util.makeUserEntry('admin');
 
 const specialUses = {};

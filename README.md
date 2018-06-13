@@ -112,7 +112,7 @@ These steps define the process for creating a new permit type using Example Perm
 
             "/permits/applications/special-uses/commercial/example-permit/": {
                 "post": {
-                    "x-validation":"validation.json#examplePermit",
+                    "x-validation":"translate.json#examplePermit",
                     "parameters": [          
                         {
                             "in": "formData",
@@ -142,26 +142,25 @@ These steps define the process for creating a new permit type using Example Perm
                     "required": ["region","forest","district"...]
                 }
 
-    4. The `validation.json` is a schema file for validating submitted data through `POST` routes.</br>
-        Example `POST` in `validation.json`:
+    4. The `translate.json` is a schema file for validating submitted data through `POST` routes.</br>
+        Example `POST` in `translate.json`:
 
                 "district": {
                     "default":"",
                     "fromIntake":true,
                     "pattern":"^[0-9]{2}$",
-                    "basicStore":true,
                     "type" : "string"
                 },
                 "firstName": {
-                    "basicField":"firstName",
+                    "sudsField":"firstName",
                     "default":"",
                     "fromIntake":true,
                     "maxLength":255,
-                    "basicStore":["/contact/person"],
+                    "sudsEndpoint":["/contact/person"],
                     "type": "string"
                 },
                 "securityId":{
-                    "basicField":"securityId",
+                    "sudsField":"securityId",
                     "default":"",
                     "fromIntake":false,
                     "madeOf":{
@@ -181,7 +180,7 @@ These steps define the process for creating a new permit type using Example Perm
                         ],
                         "function":"concat"
                     },
-                    "basicStore":["/application", "/contact/address", "/contact/phone"],
+                    "sudsEndpoint":["/application", "/contact/address", "/contact/phone"],
                     "type" : "string"
                 },
                 "exampleDocumentation": {
@@ -201,7 +200,7 @@ These steps define the process for creating a new permit type using Example Perm
 
           - `fromIntake {Boolean} default:true`: indicates whether the field will be directly populated with user input. If set to `false`, the API will populate this field using the strings and fields provided under `madeOf`.
 
-          - `basicStore {Boolean} default:false` describes which endpoints in the basic api, the fields will be sent to. Endpoint options include:
+          - `sudsEndpoint {Boolean} default:false` describes which endpoints in the basic api, the fields will be sent to. Endpoint options include:
               - `/application`
               - `/contact/person`
               - `/contact/address`
@@ -220,14 +219,14 @@ These steps define the process for creating a new permit type using Example Perm
           Files:
           - `maxSize` is measured in megabytes
 
-          If the store contains one of the `basic` type options, `basicField` attribute must be included. This is the name of the field used to submit this data to the Basic API.
+          If the store contains one of the `basic` type options, `sudsField` attribute must be included. This is the name of the field used to submit this data to the Basic API.
 
 2. Extend the schema, if necessary.
     1. If there are any new form fields not supported by the current middle-layer database, they can be added in the application table. To do this, create a new migration file (e.g., `06-alter-applications.js`) with the sequelize alter table script and save it under `dba/migrations/`. Also, update `src/models/applications.js` to include the new database fields. Please refer to the [Sequelize migrations documentation](http://docs.sequelizejs.com/en/latest/docs/migrations/) for information on altering an existing table.
     2. If there are routing changes, update `src/controllers/index.js`.
     3. If there are validation changes, update `src/controllers/validation.js` and/or `src/controllers/fileValidation.js` as needed.
     4. If there are any changes on how the files are to be stored, update `src/controllers/store.js`.
-    5. If there are any changes on how the requests are made to Basic API, update `src/controllers/nrmconnection` directory.
+    5. If there are any changes on how the requests are made to Basic API, update `src/controllers/sudsconnection` directory.
 
 ## Authentication process
 
@@ -402,7 +401,7 @@ Functional testing is managed through [HipTest](https://hiptest.net/). [Manual t
 
 ### Updating state abbreviations
 
-In [validation.json](../src/controllers/validation.json), in the `applicantInfoBase` schema under `mailingState`, there is a field called `pattern`.
+In [translate.json](../src/controllers/translate.json), in the `applicantInfoBase` schema under `mailingState`, there is a field called `pattern`.
 
 #### Adding a state
 

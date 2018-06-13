@@ -93,7 +93,7 @@ app.use('/schema/api.json', express.static('src/api.json'));
 // mocks
 
 if (vcapConstants.SUDS_INFO.USING_MOCKS){
-	app.use('/mocks', moxai({'dir': '../mocks', 'file': 'basic', 'random': true}));
+	app.use('/mocks', moxai({'dir': '../mocks', 'file': 'mock-SUDS', 'random': true}));
 }
 
 //*******************************************************************

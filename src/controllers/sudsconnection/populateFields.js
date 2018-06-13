@@ -50,13 +50,13 @@ function ePermitId(input){
 	return concat(input);
 }
 
-/** Finds basic API fields which are to be auto-populated
- * @param  {Array} basicFields - Fields(Objects) which are stored in SUDS
- * @return {Array} - Fields(Objects) which are to be auto-populated
+/** Finds SUDS API fields which are to be auto-populated
+ * @param  {Array} sudsFields - Fields(Objects) which are stored in SUDS
+ * @return {Array} alteredFields - Fields(Objects) which are to be auto-populated
  */
-function getAutoPopulatedFields(basicFields){
+function getAutoPopulatedFields(sudsFields){
 	const alteredFields = [];
-	basicFields.forEach((field)=>{
+	sudsFields.forEach((field)=>{
 		const key = Object.keys(field)[0];
 		if (!field[key].fromIntake && field[key].madeOf){
 			alteredFields.push(field);
@@ -124,8 +124,8 @@ function generateAutoPopulatedField(field, key, person, fieldMakeUp) {
  * @param  {Object} body   - user input
  * @return {Array}         - created values
  */
-function buildAutoPopulatedFields(basicFields, person, body){
-	const fieldsToBuild = getAutoPopulatedFields(basicFields);
+function buildAutoPopulatedFields(sudsFields, person, body){
+	const fieldsToBuild = getAutoPopulatedFields(sudsFields);
 	const output = {};
 	fieldsToBuild.forEach((field)=>{
 		const key = Object.keys(field)[0];
@@ -151,7 +151,7 @@ function buildAutoPopulatedFields(basicFields, person, body){
 }
 
 /**
- * Gets the data from all fields that are to be send to the basic API, also builds post object, used to pass data to basic api
+ * Gets the data from all fields that are to be send to the SUDS API, also builds post object, used to pass data to basic api
  * @param  {Array} fieldsToBasic - All fields in object form which will be sent to basicAPI
  * @param {Object} intakeRequest - body of the incoming post request
  * @param {Object} autoPopValues - field entries that did not come directly from a request
@@ -167,18 +167,18 @@ function populateValues(fieldsByEnpoint, intakeRequest, autoPopValues){
 					const field = fieldsByEnpoint[request][fieldKey];
 					const splitPath = fieldKey.split('.');
 					const fieldName = splitPath[splitPath.length - 1];
-					let basicFieldName = fieldName;
-					if (!field.hasOwnProperty('basicField')) {
-						basicFieldName = field.basicField;
+					let sudsFieldName = fieldName;
+					if (!field.hasOwnProperty('sudsField')) {
+						sudsFieldName = field.sudsField;
 					}
 					if (field.fromIntake && intakeRequest[fieldName]) {
-						requestsTobeSent[request][basicFieldName] = intakeRequest[fieldName];
+						requestsTobeSent[request][sudsFieldName] = intakeRequest[fieldName];
 					}
 					else if (autoPopValues[fieldKey]) {
-						requestsTobeSent[request][basicFieldName] = autoPopValues[fieldKey];
+						requestsTobeSent[request][sudsFieldName] = autoPopValues[fieldKey];
 					}
 					else {
-						requestsTobeSent[request][basicFieldName] = field.default;
+						requestsTobeSent[request][sudsFieldName] = field.default;
 					}
 				}
 			}

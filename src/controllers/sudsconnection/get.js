@@ -16,7 +16,7 @@ const rejectWithError = require('../errors/error.js').rejectWithError;
  * @param  {Object} pathData - All data from swagger for the path that has been run
  * @return {Object} - Data from the basic API about an application
  */
-function getFromBasic(req, res, controlNumber){
+module.exports = function (req, res, controlNumber) {
 
 	return new Promise(function (fulfill, reject) {
 
@@ -39,14 +39,13 @@ function getFromBasic(req, res, controlNumber){
 					return error.sendError(req, res, 504, 'underlying service has timed out.');
 				}
 				else {
-					rejectWithError(err, reject, 'get.getFromBasic');
+					rejectWithError(err, reject, 'get');
 				}
 			});
 		})
 			.catch((err) => { 
-				rejectWithError(err, reject, 'get.getFromBasic');
+				rejectWithError(err, reject, 'get');
 			});
 	});
-}
+};
 
-module.exports.getFromBasic = getFromBasic;

@@ -158,7 +158,7 @@
     },
     "/permits/applications/special-uses/noncommercial/": {
       "post": {
-        "x-validation":"controllers/validation.json#noncommercialApplication",
+        "x-validation":"controllers/translate.json#noncommercialApplication",
         "tags": [
           "Noncommercial Permit"
         ],
@@ -254,7 +254,8 @@
             "acknowledgementOfRiskForm": {"default":"", "intake":"middleLayer/acknowledgementOfRiskForm"},
             "insuranceCertificate": {"default":"", "intake":"middleLayer/insuranceCertificate"},
             "goodStandingEvidence": {"default":"", "intake":"middleLayer/goodStandingEvidence"},
-            "operatingPlan": {"default":"", "intake":"middleLayer/operatingPlan"}
+            "operatingPlan": {"default":"", "intake":"middleLayer/operatingPlan"},
+            "startDateTime": {"default":"", "intake": "middleLayer/startDateTime"}
           }
         },
         "tags": [
@@ -422,7 +423,7 @@
     },
     "/permits/applications/special-uses/commercial/temp-outfitters/": {
       "post": {
-        "x-validation":"controllers/validation.json#tempOutfitterApplication",
+        "x-validation":"controllers/translate.json#tempOutfitterApplication",
         "tags": [
           "Outfitter and Guide Permit"
         ],
@@ -616,6 +617,7 @@
       "advertisingURL": { "type": "string"},
       "advertisingDescription": { "type": "string"},
       "clientCharges": { "type": "string"},
+      "startDateTime": { "type": "string"},
       "experienceList": { "type": "string"}
       },
       "required": ["activityDescription","clientCharges","insuranceCertificate","goodStandingEvidence","operatingPlan"],
