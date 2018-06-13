@@ -112,7 +112,7 @@ These steps define the process for creating a new permit type using Example Perm
 
             "/permits/applications/special-uses/commercial/example-permit/": {
                 "post": {
-                    "x-validation":"validation.json#examplePermit",
+                    "x-validation":"translate.json#examplePermit",
                     "parameters": [          
                         {
                             "in": "formData",
@@ -142,8 +142,8 @@ These steps define the process for creating a new permit type using Example Perm
                     "required": ["region","forest","district"...]
                 }
 
-    4. The `validation.json` is a schema file for validating submitted data through `POST` routes.</br>
-        Example `POST` in `validation.json`:
+    4. The `translate.json` is a schema file for validating submitted data through `POST` routes.</br>
+        Example `POST` in `translate.json`:
 
                 "district": {
                     "default":"",
@@ -402,7 +402,7 @@ Functional testing is managed through [HipTest](https://hiptest.net/). [Manual t
 
 ### Updating state abbreviations
 
-In [validation.json](../src/controllers/validation.json), in the `applicantInfoBase` schema under `mailingState`, there is a field called `pattern`.
+In [translate.json](../src/controllers/translate.json), in the `applicantInfoBase` schema under `mailingState`, there is a field called `pattern`.
 
 #### Adding a state
 
