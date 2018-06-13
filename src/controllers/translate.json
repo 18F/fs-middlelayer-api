@@ -91,11 +91,47 @@
                 "type":"boolean"
             },
             "activityDescription": {
-                "sudsField":"purpose",
                 "default":"",
                 "fromIntake":true,
                 "localStore":true,
-                "sudsEndpoint":["/application"],
+                "type": "string"
+            },
+            "startDateTime": {
+                "default": "",
+                "fromIntake": true,
+                "pattern": "\\d{4}-[01]\\d-[0-3]\\dT[0-2]\\d:[0-5]\\d:[0-5]\\d([+-][0-2]\\d:[0-5]\\d|Z)",
+                "localStore": true,
+                "type": "string"
+            },
+            "purpose": {
+                "sudsField": "purpose",
+                "default": "",
+                "fromIntake": true,
+                "localStore": true,
+                "sudsEndpoint": [
+                    "/application"
+                ],
+                "madeOf": {
+                    "fields": [
+                        {
+                            "fromIntake": false,
+                            "value": ". \n Activity Description: "
+                        },
+                        {
+                            "fromIntake": true,
+                            "field": "tempOutfitterFields.activityDescription"
+                        },
+                        {
+                            "fromIntake": false,
+                            "value": ". \n Start Date Time: "
+                        },
+                        {
+                            "fromIntake": true,
+                            "field": "tempOutfitterFields.startDateTime"
+                        }
+                    ],
+                    "function": "contId"
+                },
                 "type": "string"
             },
             "advertisingURL": {

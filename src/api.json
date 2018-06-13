@@ -254,7 +254,8 @@
             "acknowledgementOfRiskForm": {"default":"", "intake":"middleLayer/acknowledgementOfRiskForm"},
             "insuranceCertificate": {"default":"", "intake":"middleLayer/insuranceCertificate"},
             "goodStandingEvidence": {"default":"", "intake":"middleLayer/goodStandingEvidence"},
-            "operatingPlan": {"default":"", "intake":"middleLayer/operatingPlan"}
+            "operatingPlan": {"default":"", "intake":"middleLayer/operatingPlan"},
+            "startDateTime": {"default":"", "intake": "middleLayer/startDateTime"}
           }
         },
         "tags": [
@@ -616,6 +617,7 @@
       "advertisingURL": { "type": "string"},
       "advertisingDescription": { "type": "string"},
       "clientCharges": { "type": "string"},
+      "startDateTime": { "type": "string"},
       "experienceList": { "type": "string"}
       },
       "required": ["activityDescription","clientCharges","insuranceCertificate","goodStandingEvidence","operatingPlan"],
