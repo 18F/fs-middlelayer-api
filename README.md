@@ -149,19 +149,18 @@ These steps define the process for creating a new permit type using Example Perm
                     "default":"",
                     "fromIntake":true,
                     "pattern":"^[0-9]{2}$",
-                    "basicStore":true,
                     "type" : "string"
                 },
                 "firstName": {
-                    "basicField":"firstName",
+                    "sudsField":"firstName",
                     "default":"",
                     "fromIntake":true,
                     "maxLength":255,
-                    "basicStore":["/contact/person"],
+                    "sudsEndpoint":["/contact/person"],
                     "type": "string"
                 },
                 "securityId":{
-                    "basicField":"securityId",
+                    "sudsField":"securityId",
                     "default":"",
                     "fromIntake":false,
                     "madeOf":{
@@ -181,7 +180,7 @@ These steps define the process for creating a new permit type using Example Perm
                         ],
                         "function":"concat"
                     },
-                    "basicStore":["/application", "/contact/address", "/contact/phone"],
+                    "sudsEndpoint":["/application", "/contact/address", "/contact/phone"],
                     "type" : "string"
                 },
                 "exampleDocumentation": {
@@ -201,7 +200,7 @@ These steps define the process for creating a new permit type using Example Perm
 
           - `fromIntake {Boolean} default:true`: indicates whether the field will be directly populated with user input. If set to `false`, the API will populate this field using the strings and fields provided under `madeOf`.
 
-          - `basicStore {Boolean} default:false` describes which endpoints in the basic api, the fields will be sent to. Endpoint options include:
+          - `sudsEndpoint {Boolean} default:false` describes which endpoints in the basic api, the fields will be sent to. Endpoint options include:
               - `/application`
               - `/contact/person`
               - `/contact/address`
@@ -220,7 +219,7 @@ These steps define the process for creating a new permit type using Example Perm
           Files:
           - `maxSize` is measured in megabytes
 
-          If the store contains one of the `basic` type options, `basicField` attribute must be included. This is the name of the field used to submit this data to the Basic API.
+          If the store contains one of the `basic` type options, `sudsField` attribute must be included. This is the name of the field used to submit this data to the Basic API.
 
 2. Extend the schema, if necessary.
     1. If there are any new form fields not supported by the current middle-layer database, they can be added in the application table. To do this, create a new migration file (e.g., `06-alter-applications.js`) with the sequelize alter table script and save it under `dba/migrations/`. Also, update `src/models/applications.js` to include the new database fields. Please refer to the [Sequelize migrations documentation](http://docs.sequelizejs.com/en/latest/docs/migrations/) for information on altering an existing table.

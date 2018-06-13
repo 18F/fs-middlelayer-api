@@ -51,12 +51,12 @@ function ePermitId(input){
 }
 
 /** Finds SUDS API fields which are to be auto-populated
- * @param  {Array} SUDSFields - Fields(Objects) which are stored in SUDS
- * @return {Array} - Fields(Objects) which are to be auto-populated
+ * @param  {Array} sudsFields - Fields(Objects) which are stored in SUDS
+ * @return {Array} alteredFields - Fields(Objects) which are to be auto-populated
  */
-function getAutoPopulatedFields(SUDSFields){
+function getAutoPopulatedFields(sudsFields){
 	const alteredFields = [];
-	SUDSFields.forEach((field)=>{
+	sudsFields.forEach((field)=>{
 		const key = Object.keys(field)[0];
 		if (!field[key].fromIntake && field[key].madeOf){
 			alteredFields.push(field);
@@ -124,8 +124,8 @@ function generateAutoPopulatedField(field, key, person, fieldMakeUp) {
  * @param  {Object} body   - user input
  * @return {Array}         - created values
  */
-function buildAutoPopulatedFields(SUDSFields, person, body){
-	const fieldsToBuild = getAutoPopulatedFields(SUDSFields);
+function buildAutoPopulatedFields(sudsFields, person, body){
+	const fieldsToBuild = getAutoPopulatedFields(sudsFields);
 	const output = {};
 	fieldsToBuild.forEach((field)=>{
 		const key = Object.keys(field)[0];
@@ -167,18 +167,18 @@ function populateValues(fieldsByEnpoint, intakeRequest, autoPopValues){
 					const field = fieldsByEnpoint[request][fieldKey];
 					const splitPath = fieldKey.split('.');
 					const fieldName = splitPath[splitPath.length - 1];
-					let SUDSFieldName = fieldName;
-					if (!field.hasOwnProperty('SUDSField')) {
-						SUDSFieldName = field.SUDSField;
+					let sudsFieldName = fieldName;
+					if (!field.hasOwnProperty('sudsField')) {
+						sudsFieldName = field.sudsField;
 					}
 					if (field.fromIntake && intakeRequest[fieldName]) {
-						requestsTobeSent[request][SUDSFieldName] = intakeRequest[fieldName];
+						requestsTobeSent[request][sudsFieldName] = intakeRequest[fieldName];
 					}
 					else if (autoPopValues[fieldKey]) {
-						requestsTobeSent[request][SUDSFieldName] = autoPopValues[fieldKey];
+						requestsTobeSent[request][sudsFieldName] = autoPopValues[fieldKey];
 					}
 					else {
-						requestsTobeSent[request][SUDSFieldName] = field.default;
+						requestsTobeSent[request][sudsFieldName] = field.default;
 					}
 				}
 			}
