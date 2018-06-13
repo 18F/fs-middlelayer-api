@@ -432,8 +432,8 @@
             },
             "phoneType": {
                 "sudsField":"phoneNumberType",
-                "default":"",
-                "fromIntake":true,
+                "default":"BUSINESS",
+                "fromIntake":false,
                 "sudsEndpoint":["/contact/phone"],
                 "type": "string"
             }
