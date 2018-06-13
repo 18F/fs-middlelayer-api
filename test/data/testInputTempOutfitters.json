@@ -29,7 +29,6 @@
         "advertisingURL": "www.sample.com",
         "advertisingDescription": "Sample Advertising",
         "clientCharges": "500",
-        "experienceList": "Sample List",
-        "startDateTime": "2013-01-12T12:00:00Z"
+        "experienceList": "Sample List"
     }
 }
