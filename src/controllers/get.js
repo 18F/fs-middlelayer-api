@@ -16,7 +16,7 @@
 const jsf = require('json-schema-faker');
 
 const db = require('./db.js');
-const NRMConnection = require('./nrmconnection');
+const SUDSConnection = require('./sudsconnection');
 const errorUtil = require('./errors/error.js');
 const fileStore = require('./filestore.js');
 const util = require('./utility.js');
@@ -144,7 +144,7 @@ function getFilesRoute(req, res, controlNumber){
 		});
 }
 
-function getNRMPostProcess(req, res, applicationDataFromNRM, controlNumber, reqData) {
+function getSUDSPostProcess(req, res, applicationDataFromSUDS, controlNumber, reqData) {
 	const pathData = reqData.schema;
 
 	const fileTypes = {
@@ -162,14 +162,14 @@ function getNRMPostProcess(req, res, applicationDataFromNRM, controlNumber, reqD
 				localApplicationData.application[fileType] = file.fileName;
 			});
 
-			const responseData = copyGenericInfo(applicationDataFromNRM,
+			const responseData = copyGenericInfo(applicationDataFromSUDS,
 				localApplicationData.application,
 				pathData['x-getTemplate']
 			);
 
 			responseData.controlNumber = controlNumber;
 			responseData.status = 'success';
-			util.logControllerAction(req, 'get.getNRMPostProcess');
+			util.logControllerAction(req, 'get.getSUDSPostProcess');
 			res.json(responseData);
 		})
 		.catch((error) => {
@@ -194,9 +194,9 @@ function getByControlNumber(req, res, reqData) {
 		getFilesRoute(req, res, reqData);
 	}
 	else {
-		NRMConnection.getFromBasic(req, res, controlNumber)
-		.then((applicationDataFromNRM) => {
-			getNRMPostProcess(req, res, applicationDataFromNRM, controlNumber, reqData);
+		SUDSConnection.get(req, res, controlNumber)
+		.then((applicationDataFromSUDS) => {
+			getSUDSPostProcess(req, res, applicationDataFromSUDS, controlNumber, reqData);
 		})
 		.catch((error) => {
 			errorUtil.getErrorHandle(req, res, error);

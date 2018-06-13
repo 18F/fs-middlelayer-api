@@ -36,13 +36,13 @@ function sendError(req, res, code, message, errors){
 
 }
 
-function nrmServiceError(req, res, err){
+function SUDSServiceError(req, res, err){
 	logger.error('ERROR:', err);
 	if (err.statusCode && err.statusCode === 404){
-		return this.sendError(req, res, 503, 'underlying service unavailable.');
+		return this.sendError(req, res, 503, 'underlying SUDS service unavailable.');
 	}
 	else if (err.error && err.error.code === 'ETIMEDOUT') {
-		return this.sendError(req, res, 504, 'underlying service has timed out.');
+		return this.sendError(req, res, 504, 'underlying SUDS service has timed out.');
 	}
 	else {
 		return this.sendError(req, res, 500, 'Unknown server error.');
@@ -74,6 +74,6 @@ function rejectWithError(error, reject, controller) {
 // exports
 
 module.exports.sendError = sendError;
-module.exports.nrmServiceError = nrmServiceError; 
+module.exports.SUDSServiceError = SUDSServiceError; 
 module.exports.getErrorHandle = getErrorHandle;
 module.exports.rejectWithError = rejectWithError;

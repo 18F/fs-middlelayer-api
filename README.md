@@ -227,7 +227,7 @@ These steps define the process for creating a new permit type using Example Perm
     2. If there are routing changes, update `src/controllers/index.js`.
     3. If there are validation changes, update `src/controllers/validation.js` and/or `src/controllers/fileValidation.js` as needed.
     4. If there are any changes on how the files are to be stored, update `src/controllers/store.js`.
-    5. If there are any changes on how the requests are made to Basic API, update `src/controllers/nrmconnection` directory.
+    5. If there are any changes on how the requests are made to Basic API, update `src/controllers/sudsconnection` directory.
 
 ## Authentication process
 

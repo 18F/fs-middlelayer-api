@@ -83,7 +83,7 @@
         "type":"boolean"
       },
     	"basicStore":{
-    		"description":"Array the endpoints that this field should be passed onto in NRM.",
+    		"description":"Array the endpoints that this field should be passed onto in NRM SUDS.",
     		"type":"array",
     		"items":{
     			"description":"String describing the location to store this field",

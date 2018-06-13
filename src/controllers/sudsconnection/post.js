@@ -226,7 +226,7 @@ function multipleContactsCheck(contId, matchingContacts, fieldsObj, person, apiC
  * @param  {Object} validationSchema - Schema object
  * @param  {Object} body - User input
  */
-function postToBasic(req, res, validationSchema, body){
+function post(req, res, validationSchema, body){
 
 	return new Promise(function (fulfill, reject){
 
@@ -282,7 +282,7 @@ function postToBasic(req, res, validationSchema, body){
 				fulfill(apiCallLogObject);
 			})
 			.catch(function(err){
-				errorUtil.nrmServiceError(req, res, err);
+				errorUtil.SUDSServiceError(req, res, err);
 			});
 		})
 		.catch(reject);
@@ -290,4 +290,4 @@ function postToBasic(req, res, validationSchema, body){
 
 }
 
-module.exports.postToBasic = postToBasic;
+module.exports.post = post;
