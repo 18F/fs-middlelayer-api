@@ -85,15 +85,17 @@ function assignFieldsToEndpoints(fieldsToBasic){
  * @param  {Object} validationSchema - validation schema for route requested
  * @param  {Object} body - user input
  * @param  {Boolean} person - whether application is for individual(true) or organization (false)
- * @return {Object} - All post objects
+ * @return {Object} - A nested object of the individual objects that will be sent to SUDS by endpoint
  */
 function prepareBasicPost(validationSchema, body, person){
-	const fieldsToSend = [];
-	db.getFieldsToStore(validationSchema, fieldsToSend, '', 'SUDS');
-	const fieldsToSendByEndpoint = assignFieldsToEndpoints(fieldsToSend);
-	const autoPopulateValues = populate.buildAutoPopulatedFields(fieldsToSend, person, body);
-	const populatedFieldsToSend = populate.populateValues(fieldsToSendByEndpoint, body, autoPopulateValues);
-	return populatedFieldsToSend;
+	const fieldsToPost = [];
+	db.getFieldsToStore(validationSchema, fieldsToPost, '', 'SUDS');
+	const fieldsToSendByEndpoint = assignFieldsToEndpoints(fieldsToPost);
+	const autoPopulateFields = populate.findAutoPopulatedFieldsFromSchema(fieldsToPost);
+	const populatedPostObject = populate.populateValues(fieldsToSendByEndpoint, body, autoPopulateFields, person);
+	console.log("intake values to send");
+	console.log(populatedPostObject);
+	return populatedPostObject;
 }
 
 /**
