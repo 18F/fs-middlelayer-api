@@ -147,7 +147,7 @@ function buildAutoPopulatedField(field, person, body){
  * Gets the value of an intake field that will be posted to SUDS
  * @param {Object} intakeRequest - body of the incoming post request
  * @param {Object} field - specific field to identify
- * @param {Arrary} autoPopFields - Array of fields that need to be autopopulated
+ * @param {Array} splitPath - Array of path elements for JSON object, e.g. ['applicantInfo', 'firstName']
  * @return {String| integer} - value of the field
  */
 function extractIntakeValue(intakeRequest, field, splitPath) {
@@ -178,7 +178,7 @@ function generateValue(field, intakeRequest, splitPath, person, fieldKey, autoPo
 		return extractIntakeValue(intakeRequest, field, splitPath);
 	}
 	if (autoPopulatedFields.includes(fieldKey)) {
-		return buildAutoPopulatedField(intakeRequest[fieldKey], person, intakeRequest);
+		return buildAutoPopulatedField(field, person, intakeRequest);
 	}
 	return field.default;
 }
@@ -203,7 +203,8 @@ function populateValues(fieldsByEndpoint, intakeRequest, autoPopulatedFields, pe
 					if (!field.hasOwnProperty('sudsField')) {
 						sudsFieldName = field.sudsField;
 					}
-					const generatedValue = generateValue(field, intakeRequest, splitPath, person, fieldKey, autoPopulatedFields);
+                    const autoPopulatedKeys = autoPopulatedFields.map(obj => { return Object.keys(obj)[0];})
+					const generatedValue = generateValue(field, intakeRequest, splitPath, person, fieldKey, autoPopulatedKeys);
                     requestsTobeSent[endpoint][sudsFieldName] = generatedValue
 				}
 			}
@@ -216,3 +217,4 @@ function populateValues(fieldsByEndpoint, intakeRequest, autoPopulatedFields, pe
 
 module.exports.populateValues = populateValues;
 module.exports.findAutoPopulatedFieldsFromSchema = findAutoPopulatedFieldsFromSchema;
+module.exports.generateAutoPopulatedField = generateAutoPopulatedField;
