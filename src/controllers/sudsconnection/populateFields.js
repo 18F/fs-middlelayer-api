@@ -1,7 +1,7 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___
- | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
+  ___ ___	   ___			   _ _	   _   ___ ___
+ | __/ __|  ___| _ \___ _ _ _ __ (_) |_	/_\ | _ \_ _|
  | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
@@ -19,7 +19,7 @@ const logger = require('../utility.js').logger;
 /**
  * Concats all indexs of input
  * @param  {Array} input - Array of strings to be joined together
- * @return {String}      - Single string made up of all indicies of input
+ * @return {String}	  - Single string made up of all indicies of input
  */
 function concat(input){
 	const output = input.join('');
@@ -29,7 +29,7 @@ function concat(input){
 /**
  * Ensures all characters of input are upper case then joins them
  * @param  {Array} input - Array of strings to be joined together
- * @return {String}      - Single string made up of all indicies of input
+ * @return {String}	  - Single string made up of all indicies of input
  */
 function contId(input){
 	return concat(
@@ -42,7 +42,7 @@ function contId(input){
 /**
  * Adds UNIX timestamp and then joins all elements of input
  * @param  {Array} input - Array of strings to be joined together
- * @return {String}      - Single string made up of all indicies of input
+ * @return {String}	  - Single string made up of all indicies of input
  */
 function ePermitId(input){
 	const timeStamp = + new Date();
@@ -67,8 +67,8 @@ function findAutoPopulatedFieldsFromSchema(sudsFields){
 
 /**
  * Given a path seperated by periods, return the field specified if it exists, else false.
- * @param  {String} path                  - String made of the path to the desired field, must be seperated by periods
- * @param  {Object} body                  - Object representing the user input
+ * @param  {String} path				  - String made of the path to the desired field, must be seperated by periods
+ * @param  {Object} body				  - Object representing the user input
  * @return {Boolean|String|Number|Object} - Contents of the field specified or false
  */
 function getFieldFromBody(path, body){
@@ -92,6 +92,9 @@ function getFieldFromBody(path, body){
  * @return {String} fieldValue - the string of the fieldValue
  */
 function generateAutoPopulatedField(field, person, fieldMakeUp) {
+	if (field === 'contId') {
+		console.log(field, person, fieldMakeUp);
+	}
 	let fieldValue;
 	switch (field.madeOf.function) {
 	case 'concat':
@@ -121,9 +124,12 @@ function generateAutoPopulatedField(field, person, fieldMakeUp) {
  * @param  {Array} fieldsToBuild - Array of objects representing Fields which need to be auto-populated
  * @param {boolean} person - Not sure?
  * @param  {Object} body   - user input
- * @return {Array}         - created values
+ * @return {Array}		 - created values
  */
 function buildAutoPopulatedField(field, person, body){
+	if (field === 'contId') {
+		console.log(field, person);
+	}
 	const fieldMakeUp = [];
 	field.madeOf.fields.forEach((madeOfField)=>{
 		if (madeOfField.fromIntake){
@@ -178,7 +184,8 @@ function generateValue(field, intakeRequest, splitPath, person, fieldKey, autoPo
 		return extractIntakeValue(intakeRequest, field, splitPath);
 	}
 	if (autoPopulatedFields.includes(fieldKey)) {
-		return buildAutoPopulatedField(field, person, intakeRequest);
+		const built = buildAutoPopulatedField(field, person, intakeRequest);
+		return built;
 	}
 	return field.default;
 }
@@ -200,12 +207,16 @@ function populateValues(fieldsByEndpoint, intakeRequest, autoPopulatedFields, pe
 					const field = fieldsByEndpoint[endpoint][fieldKey];
 					const splitPath = fieldKey.split('.');
 					let sudsFieldName = splitPath[splitPath.length - 1];
+					console.log(sudsFieldName, field.sudsField);
+					// TODO: figure out how the following clause makes sense.
 					if (!field.hasOwnProperty('sudsField')) {
 						sudsFieldName = field.sudsField;
 					}
-                    const autoPopulatedKeys = autoPopulatedFields.map(obj => { return Object.keys(obj)[0];})
+					const autoPopulatedKeys = autoPopulatedFields.map(obj => {
+						return Object.keys(obj)[0];
+					});
 					const generatedValue = generateValue(field, intakeRequest, splitPath, person, fieldKey, autoPopulatedKeys);
-                    requestsTobeSent[endpoint][sudsFieldName] = generatedValue
+					requestsTobeSent[endpoint][sudsFieldName] = generatedValue;
 				}
 			}
 		}

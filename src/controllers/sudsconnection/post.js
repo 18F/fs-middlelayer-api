@@ -288,7 +288,7 @@ function post(req, res, validationSchema, body) {
 		.catch(reject);
 	});
 
-};
+}
 
 module.exports.post = post;
 module.exports.prepareSudsPost = prepareSudsPost;
