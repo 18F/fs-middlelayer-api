@@ -119,9 +119,6 @@ describe('Tests that the following object field objects were populated properly'
 		const body = tempOutfitterFactory.create({
 			'applicantInfo': {
 				'dayPhone': {
-					'areaCode': '555',
-					'number': '1234567',
-					'extension': '0',
 					'phoneType': 'whatever'
 				}
 			}
@@ -132,7 +129,7 @@ describe('Tests that the following object field objects were populated properly'
 	});
 
 	xit('should set the fields in /contact/phone correctly', function(){
-		// TODO: enable this test when we're sure what contCn in /contact/phone shoule be.
+		// TODO: enable this test when we're sure what contCn in /contact/phone should be.
 		const body = tempOutfitterFactory.create({
 			'region': '23',
 			'forest': '17',
@@ -185,19 +182,23 @@ describe('Tests that the following object field objects were populated properly'
 	});
 
 	it('correctly builds a contID for an individual with a long name', function(){
-		// TODO: Verify that no special treatment for long names is expected.
+		// TODO: Verify what special treatment for long names is expected.
+        // firstName and lastName have limits of 255 characters in the schema, does this mean that the output should be firstName[:255] + ", " + lastName[:255]?
 		const body = tempOutfitterFactory.create({
 			'applicantInfo': {
-				'firstName': 'Metellus Lucullus Cicero',
-				'lastName': 'Funkhouser'
+				'firstName': 'During the whole of a dull, dark, and soundless day in the autumn of the year, when the clouds hung oppressively low in the heavens, I had been passing alone, on horseback, through a singularly dreary tract of country; and at length found myself, as the shades of the evening drew on, within view of the melancholy House of Usher.',
+				'lastName': 'A man stood upon a railroad bridge in northern Alabama, looking down into the swift water twenty feet below. The man\'s hands were behind his back, the wrists bound with a cord. A rope closely encircled his neck. It was attached to a stout cross-timber above his head and the slack fell to the level of his knees.'
 			}
 		});
 		const result = wrapSudsPrep(body);
+        expect(result['/contact/person'].contId.length).to.eql(512);
+        /*
 		expect(result['/contact/person']).to.eql({
-			'contId': 'FUNKHOUSER, METELLUS LUCULLUS CICERO',
-			'firstName': 'Metellus Lucullus Cicero',
-			'lastName': 'Funkhouser'
+			'contId': 'POE, DURING THE WHOLE OF A DULL, DARK, AND SOUNDLESS DAY IN THE AUTUMN OF THE YEAR, WHEN THE CLOUDS HUNG OPPRESSIVELY LOW IN THE HEAVENS, I HAD BEEN PASSING ALONE, ON HORSEBACK, THROUGH A SINGULARLY DREARY TRACT OF COUNTRY; AND AT LENGTH FOUND MYSELF, AS THE SHADES OF THE EVENING DREW ON, WITHIN VIEW OF THE MELANCHOLY HOUSE OF USHER.',
+            'firstName': 'During the whole of a dull, dark, and soundless day in the autumn of the year, when the clouds hung oppressively low in the heavens, I had been passing alone, on horseback, through a singularly dreary tract of country; and at length found myself, as the shades of the evening drew on, within view of the melancholy House of Usher.',
+			'lastName': 'Poe'
 		});
+        */
 	});
 
 	xit('correctly builds a contID for an organization', function(){
@@ -266,7 +267,123 @@ describe('Tests for db.getFieldsToStore', function(){
 		const result = wrapStoreFields(outfittersSchema);
 		expect(result.length).to.eql(28);
 	});
+
+	it('works on a basic schema with `properties`', function () {
+		const result = wrapStoreFields({
+            'properties':{
+                'firstName': {
+                    'sudsField':'firstName',
+                    'default':'',
+                    'fromIntake':true,
+                    'maxLength':255,
+                    'sudsEndpoint':['/contact/person'],
+                    'type': 'string'
+                }
+            }
+        });
+		expect(result.length).to.eql(1);
+		expect(result[0].firstName.maxLength).to.eql(255);
+	});
+
+	it('works on oneOf', function () {
+		const result = wrapStoreFields({
+            'oneOf': [{
+                'firstName': {
+                    'sudsField':'firstName',
+                    'default':'',
+                    'fromIntake':true,
+                    'maxLength':255,
+                    'sudsEndpoint':['/contact/person'],
+                    'type': 'string'
+                }
+            }]
+        });
+		expect(result.length).to.eql(1);
+		expect(result[0].firstName.maxLength).to.eql(255);
+	});
+
+	it('works on allOf', function () {
+        // TODO: Why do oneOf and allOf do the same thing?
+		const result = wrapStoreFields({
+            'allOf': [
+                {
+                    'firstName': {
+                        'sudsField':'firstName',
+                        'default':'',
+                        'fromIntake':true,
+                        'maxLength':255,
+                        'sudsEndpoint':['/contact/person'],
+                        'type': 'string'
+                    }
+                },
+                {
+                    'lastName': {
+                        'sudsField':'lastName',
+                        'default':'',
+                        'fromIntake':true,
+                        'maxLength':255,
+                        'sudsEndpoint':['/contact/person'],
+                        'type': 'string'
+                    }
+                }
+            ]
+        });
+		expect(result.length).to.eql(2);
+		expect(result[0].firstName.maxLength).to.eql(255);
+	});
+
+	it('works on a basic schema with `properties`', function () {
+		const result = wrapStoreFields({
+            'properties':{
+                'firstName': {
+                    'sudsField':'firstName',
+                    'default':'',
+                    'fromIntake':true,
+                    'maxLength':255,
+                    'sudsEndpoint':['/contact/person'],
+                    'type': 'string'
+                },
+                'lastName': {
+                    'sudsField':'lastName',
+                    'default':'',
+                    'fromIntake':true,
+                    'maxLength':255,
+                    'sudsEndpoint':['/contact/person'],
+                    'type': 'string'
+                }
+            }
+        });
+		expect(result.length).to.eql(2);
+		expect(result[0].firstName.maxLength).to.eql(255);
+		expect(result[1].lastName.maxLength).to.eql(255);
+	});
+
+	it('works on a schema without the above special keys', function () {
+		const result = wrapStoreFields({
+            'firstName': {
+                'sudsField':'firstName',
+                'default':'',
+                'fromIntake':true,
+                'maxLength':255,
+                'sudsEndpoint':['/contact/person'],
+                'type': 'string'
+            },
+            'lastName': {
+                'sudsField':'lastName',
+                'default':'',
+                'fromIntake':true,
+                'maxLength':255,
+                'sudsEndpoint':['/contact/person'],
+                'type': 'string'
+            }
+        });
+		expect(result.length).to.eql(2);
+		expect(result[0].firstName.maxLength).to.eql(255);
+		expect(result[1].lastName.maxLength).to.eql(255);
+	});
+
 });
+
 
 /**
  * Handle autoPolutated values based on what type of field
