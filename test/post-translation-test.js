@@ -124,7 +124,7 @@ describe('Tests that the following object field objects were populated properly'
 			}
 		});
 		const result = wrapSudsPrep(body);
-		expect(result['/contact/phone'].phoneType).to.eql('BUSINESS');
+		expect(result['/contact/phone'].phoneNumberType).to.eql('BUSINESS');
 
 	});
 
@@ -211,8 +211,6 @@ describe('Tests that the following object field objects were populated properly'
 			}
 		});
 		clog(body);
-		console.log('-------');
-		console.log(body.applicantInfo);
 		expect(expected);
 		const result = wrapSudsPrep(body, { 'person': false });
 		expect(result['/contact/person']).to.eql({
@@ -234,8 +232,7 @@ describe('Tests that the following object field objects were populated properly'
 			}
 		});
 		const result = wrapSudsPrep(body);
-		//clog(body);
-		expect(result['/application'].activityDescription).to.eql(descr);
+		expect(result['/application'].purpose).to.eql(descr);
 	});
 	
 	xit('populate a nested field fromIntake:true', function () {
@@ -447,7 +444,7 @@ xdescribe('Tests the generateAutoPopulatedField function', function(){
 //*******************************************************************
 //
 //*******************************************************************
-xdescribe('Tests the populateValues function', function(){
+describe('Tests the populateValues function', function(){
 
 	it('should return empty given empty parameters', function(){
 		expect(populateValues({}, {}, {}, true))
@@ -480,7 +477,7 @@ xdescribe('Tests the populateValues function', function(){
 				'lastName': ''
 			}
 		};
-		expect(populateValues(fieldsByEndpointSample, {}, {}, true))
+		expect(populateValues(fieldsByEndpointSample, {}, [], true))
 			.to.eql(expected);
 	});
 
@@ -499,7 +496,7 @@ xdescribe('Tests the populateValues function', function(){
 				'lastName': 'Doe'
 			}
 		};
-		expect(populateValues(fieldsByEndpointSample, intakeRequestSample, {}, true))
+		expect(populateValues(fieldsByEndpointSample, intakeRequestSample, [], true))
 			.to.eql(expected);
 	});
 
@@ -517,7 +514,7 @@ xdescribe('Tests the populateValues function', function(){
 				'lastName': ''
 			}
 		};
-		expect(populateValues(fieldsByEndpointSample, intakeRequestSample, {}, true))
+		expect(populateValues(fieldsByEndpointSample, intakeRequestSample, [], true))
 			.to.eql(expected);
 	});
 

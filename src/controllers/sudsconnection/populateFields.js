@@ -208,8 +208,7 @@ function populateValues(fieldsByEndpoint, intakeRequest, autoPopulatedFields, pe
 					const splitPath = fieldKey.split('.');
 					let sudsFieldName = splitPath[splitPath.length - 1];
 					console.log(sudsFieldName, field.sudsField);
-					// TODO: figure out how the following clause makes sense.
-					if (!field.hasOwnProperty('sudsField')) {
+					if (field.hasOwnProperty('sudsField')) {
 						sudsFieldName = field.sudsField;
 					}
 					const autoPopulatedKeys = autoPopulatedFields.map(obj => {
