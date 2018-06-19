@@ -33,6 +33,7 @@ const tempOutfitterInput = include('test/data/testInputTempOutfitters.json');
 const noncommercialInput = include('test/data/testInputNoncommercial.json');
 const translateSchema = include('./src/controllers/translate.json');
 const outfittersSchema = Deref(translateSchema.tempOutfitterApplication, [translateSchema], true);
+const noncommercialSchema = Deref(translateSchema.noncommercialApplication, [translateSchema], true);
 
 const tempOutfitterFactory = factory.factory(tempOutfitterInput);
 const noncommercialFactory = factory.factory(noncommercialInput);
@@ -212,7 +213,7 @@ describe('Tests that the following object field objects were populated properly'
 		expect(result['/application'].purpose).to.eql(descr);
 	});
 	
-	it('populate a nested field fromIntake:true', function () {
+	xit('populate a nested field fromIntake:true', function () {
         // TODO: Depends on verified details for prior test.
 	});
 
@@ -226,6 +227,15 @@ describe('Tests that the following object field objects were populated properly'
 		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/application'].purpose).to.eql(descr);
 
+	});
+
+	it('add line breaks to a field with "linebreak" in the body ', function(){
+		const body = noncommercialFactory.create();
+		console.log(body);
+
+		const result = wrapSudsPrep(body, noncommercialSchema, false);
+		const expected = 'Activity Description:  noncommercialFields.activityDescription. \n Location Description:  noncommercialFields.locationDescription. \n Start Date Time:  noncommercialFields.startDateTime. \n End Date Time:  noncommercialFields.endDateTime. \n Number Participants:  noncommercialFields.numberParticipants. \n Number Spectators:  noncommercialFields.numberSpectators.';
+		expect(result['/application'].purpose).to.eql(expected);
 	});
 });
 
@@ -398,7 +408,7 @@ function generateAutoPopulatedField(field, person, fieldMakeUp) {
 */
 
 //*******************************************************************
-xdescribe('Tests the generateAutoPopulatedField function', function(){
+describe('Tests the generateAutoPopulatedField function', function(){
 	it('should return appropriate contId', function () {
 		const field = {
 			'sudsField': 'contId',
