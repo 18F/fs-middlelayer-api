@@ -91,7 +91,6 @@ function wrapSudsPrep(body, validationSchema, person) {
 	if (Object.keys(validationSchema).length > 0){
 		usingSchema = validationSchema;
 	}
-	console.log(usingSchema);
 	return prepareSudsPost(usingSchema, body, person);
 }
  
@@ -194,7 +193,6 @@ describe('Tests that the following object field objects were populated properly'
 				'orgType': 'Association'
 			}
 		});
-		clog(body);
 		expect(expected);
 		const result = wrapSudsPrep(body, {}, false);
 		expect(result['/contact/organization'].contId).to.eql('RAYMIFASOLATIDOE');
@@ -232,7 +230,6 @@ describe('Tests that the following object field objects were populated properly'
 
 	it('add line breaks to a field with "linebreak" in the body ', function(){
 		const body = noncommercialFactory.create();
-		console.log(body);
 
 		const result = wrapSudsPrep(body, noncommercialSchema, true);
         const expected = [
@@ -432,8 +429,6 @@ describe('Tests the generateAutoPopulatedField function', function(){
 		const person = true;
 		const fieldMakeUp = ['Doe', 'John'];
 		const result = generateAutoPopulatedField(field, person, fieldMakeUp);
-		console.log('HI');
-		console.log(result);
 
 	});
 
