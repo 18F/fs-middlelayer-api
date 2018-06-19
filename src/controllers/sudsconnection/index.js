@@ -13,5 +13,5 @@
 
 //*******************************************************************
 
-exports.post = require('./post.js');
+exports.post = require('./post.js').post;
 exports.get = require('./get.js');

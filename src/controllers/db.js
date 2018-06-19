@@ -165,6 +165,7 @@ function getFieldsToStore(schema, fieldsToStore, path, saveLocation){
 	const keys = Object.keys(schema);
 	keys.forEach((key)=>{
 		switch (key){
+        // TODO: Why do these two do the same thing? 2018-06-15
 		case 'allOf':
 		case 'oneOf':
 			for (let i = 0; i < schema[key].length; i++){

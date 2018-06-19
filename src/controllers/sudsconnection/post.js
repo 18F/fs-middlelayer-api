@@ -85,15 +85,15 @@ function assignFieldsToEndpoints(fieldsToBasic){
  * @param  {Object} validationSchema - validation schema for route requested
  * @param  {Object} body - user input
  * @param  {Boolean} person - whether application is for individual(true) or organization (false)
- * @return {Object} - All post objects
+ * @return {Object} - A nested object of the individual objects that will be sent to SUDS by endpoint
  */
-function prepareBasicPost(validationSchema, body, person){
-	const fieldsToSend = [];
-	db.getFieldsToStore(validationSchema, fieldsToSend, '', 'SUDS');
-	const fieldsToSendByEndpoint = assignFieldsToEndpoints(fieldsToSend);
-	const autoPopulateValues = populate.buildAutoPopulatedFields(fieldsToSend, person, body);
-	const populatedFieldsToSend = populate.populateValues(fieldsToSendByEndpoint, body, autoPopulateValues);
-	return populatedFieldsToSend;
+function prepareSudsPost(validationSchema, body, person){
+	const fieldsToPost = [];
+	db.getFieldsToStore(validationSchema, fieldsToPost, '', 'SUDS');
+	const fieldsToSendByEndpoint = assignFieldsToEndpoints(fieldsToPost);
+	const autoPopulateFields = populate.findAutoPopulatedFieldsFromSchema(fieldsToPost);
+	const populatedPostObject = populate.populateValues(fieldsToSendByEndpoint, body, autoPopulateFields, person);
+	return populatedPostObject;
 }
 
 /**
@@ -226,7 +226,7 @@ function multipleContactsCheck(contId, matchingContacts, fieldsObj, person, apiC
  * @param  {Object} validationSchema - Schema object
  * @param  {Object} body - User input
  */
-module.exports = function (req, res, validationSchema, body) {
+function post(req, res, validationSchema, body) {
 
 	return new Promise(function (fulfill, reject){
 
@@ -248,14 +248,14 @@ module.exports = function (req, res, validationSchema, body) {
 		.then(function(sudsToken) {
 
 			const person = isAppFromPerson(body);
-			const fieldsInBasicPostFormat = prepareBasicPost(validationSchema, body, person);
+			const fieldsInSudsPostFormat = prepareSudsPost(validationSchema, body, person);
 			const contactGETOptions = setContactGETOptions(body.applicantInfo, person, sudsToken, apiCallLogObject);
 			apiCallLogObject = contactGETOptions.apiCallLogObject;
 
 			request.get(contactGETOptions.requestParams)
 			.then(function(res){
 				apiCallLogObject.GET[contactGETOptions.logUri].response = res;
-				const contId = getContId(fieldsInBasicPostFormat, person);
+				const contId = getContId(fieldsInSudsPostFormat, person);
 				if (res.length === 1  && res[0].contCn){
 					if (contId === res[0].contId){
 						return new Promise(function(resolve){
@@ -263,18 +263,18 @@ module.exports = function (req, res, validationSchema, body) {
 						});
 					}
 					else {
-						return createContact(fieldsInBasicPostFormat, person, apiCallLogObject, sudsToken);
+						return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
 					}
 				}
 				else if (res.length > 1){
-					return multipleContactsCheck(contId, res, fieldsInBasicPostFormat, person, apiCallLogObject, sudsToken);
+					return multipleContactsCheck(contId, res, fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
 				}
 				else {
-					return createContact(fieldsInBasicPostFormat, person, apiCallLogObject, sudsToken);
+					return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
 				}
 			})
 			.then(function(contCn){
-				return createApplication(fieldsInBasicPostFormat, contCn, apiCallLogObject, sudsToken);
+				return createApplication(fieldsInSudsPostFormat, contCn, apiCallLogObject, sudsToken);
 			})
 			.then(function(response){
 				const applResponse  = response;
@@ -288,4 +288,7 @@ module.exports = function (req, res, validationSchema, body) {
 		.catch(reject);
 	});
 
-};
+}
+
+module.exports.post = post;
+module.exports.prepareSudsPost = prepareSudsPost;
