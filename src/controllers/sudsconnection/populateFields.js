@@ -84,17 +84,11 @@ function getFieldFromBody(path, body){
 	}
 }
 
-function contId(person, fieldMakeUp){
+function contId(person, fieldMakeUp) {
 	if (person) {
-		if (fieldMakeUp.length > 3) {
-			fieldMakeUp.pop();
-		}
-		return upperCaseJoin(fieldMakeUp);
-	}
-	else {
-		const toUse = [];
-		toUse.push(fieldMakeUp.pop());
-		return upperCaseJoin(toUse);
+		return upperCaseJoin(fieldMakeUp.slice(0, 3));
+	} else {
+		return upperCaseJoin(fieldMakeUp.slice(-1));
 	}
 }
 
