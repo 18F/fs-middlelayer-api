@@ -188,6 +188,20 @@ function generateValue(field, intakeRequest, splitPath, person, fieldKey, autoPo
 	return field.default;
 }
 
+/** 
+ * Alter the name of a field being sent to SUDS if specified in translate.json
+ * @param {Object} field - the field to be populated
+ * @param {Array} splitPath - an array of the path in the schema
+ * @returns {String} fieldname - the key of the field that will be sent to SUDS
+*/
+function getFieldName(field, splitPath){
+	let fieldName = splitPath[splitPath.length - 1];
+	if (field.hasOwnProperty('sudsField')) {
+		fieldName = field.sudsField;
+	}
+	return fieldName;
+}
+
 /**
  * Gets the data from all fields that are to be send to the SUDS API, also builds post object, used to pass data to basic api
  * @param  {Array} fieldsToBasic - All fields in object form which will be sent to basicAPI
@@ -204,10 +218,7 @@ function populateValues(fieldsByEndpoint, intakeRequest, autoPopulatedFields, pe
 				if (fieldsByEndpoint[endpoint].hasOwnProperty(fieldKey)){
 					const field = fieldsByEndpoint[endpoint][fieldKey];
 					const splitPath = fieldKey.split('.');
-					let sudsFieldName = splitPath[splitPath.length - 1];
-					if (field.hasOwnProperty('sudsField')) {
-						sudsFieldName = field.sudsField;
-					}
+					const sudsFieldName = getFieldName(field, splitPath);
 					const autoPopulatedKeys = autoPopulatedFields.map(obj => {
 						return Object.keys(obj)[0];
 					});
