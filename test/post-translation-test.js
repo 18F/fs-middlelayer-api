@@ -129,11 +129,12 @@ describe('Tests that the following object field objects were populated properly'
 			}
 		});
 		const result = wrapSudsPrep(body, {}, true);
-		expect(result['/contact/phone'].phone).to.eql({
+		expect(result['/contact/phone']).to.eql({
 			'areaCode': '555',
-			'number': '1234567',
+            'contCn': '',
+			'phoneNumber': '1234567',
 			'extension': '0',
-			'phoneType': 'BUSINESS',
+			'phoneNumberType': 'BUSINESS',
 			'securityId': '2317'
 		});
 
