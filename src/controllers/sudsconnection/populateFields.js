@@ -106,10 +106,12 @@ function generateAutoPopulatedField(field, person, fieldMakeUp) {
 				fieldMakeUp.pop();
 			}
 			fieldValue = contId(fieldMakeUp);
+			console.log("I AM A PERSON");
 		}
 		else {
 			const toUse = [];
 			toUse.push(fieldMakeUp.pop());
+			console.log("I AM NOT PERSON", toUse);
 			fieldValue = contId(toUse);
 		}
 		break;
@@ -198,6 +200,7 @@ function generateValue(field, intakeRequest, splitPath, person, fieldKey, autoPo
  * @return {Object} - Array of endpoints with which fields should go in them
  */
 function populateValues(fieldsByEndpoint, intakeRequest, autoPopulatedFields, person){
+	console.log('popped value', person)
 	const requestsTobeSent = {};
 	for (const endpoint in fieldsByEndpoint){
 		if (fieldsByEndpoint.hasOwnProperty(endpoint)){

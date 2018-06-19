@@ -88,6 +88,7 @@ function assignFieldsToEndpoints(fieldsToBasic){
  * @return {Object} - A nested object of the individual objects that will be sent to SUDS by endpoint
  */
 function prepareSudsPost(validationSchema, body, person){
+	console.log('prep person', person);
 	const fieldsToPost = [];
 	db.getFieldsToStore(validationSchema, fieldsToPost, '', 'SUDS');
 	const fieldsToSendByEndpoint = assignFieldsToEndpoints(fieldsToPost);

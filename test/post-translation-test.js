@@ -39,23 +39,6 @@ const noncommercialFactory = factory.factory(noncommercialInput);
 //*******************************************************************
 //
 
-/** Takes fields to be stored, creates post objects and populated with user input
- * @param  {Object} validationSchema - validation schema for route requested
- * @param  {Object} body - user input
- * @param  {Boolean} person - whether application is for individual(true) or organization (false)
- * @return {Object} - A nested object of the individual objects that will be sent to SUDS by endpoint
- */
-/*
-function prepareSudsPost(validationSchema, body, person){
-	const fieldsToPost = [];
-	db.getFieldsToStore(validationSchema, fieldsToPost, '', 'SUDS');
-	const fieldsToSendByEndpoint = assignFieldsToEndpoints(fieldsToPost);
-	const autoPopulateFields = populate.findAutoPopulatedFieldsFromSchema(fieldsToPost);
-	const populatedPostObject = populate.populateValues(fieldsToSendByEndpoint, body, autoPopulateFields, person);
-	return populatedPostObject;
-}
-*/
-
 const expected = {
 	'/application': {
 		securityId:'',
@@ -102,11 +85,13 @@ const expected = {
  *				  * {Boolean} person - whether application is for individual(true) or organization (false), defaults to true
  * @return {Object} - A nested object of the individual objects that will be sent to SUDS by endpoint
  */
-function wrapSudsPrep(body, options) {
-	const opts = options || {};
-	const validationSchema = opts.validationSchema || outfittersSchema;
-	const person = opts.person || true;
-	return prepareSudsPost(validationSchema, body, person);
+function wrapSudsPrep(body, validationSchema, person) {
+	let usingSchema = outfittersSchema;
+	if (Object.keys(validationSchema).length > 0){
+		usingSchema = validationSchema;
+	}
+	console.log(validationSchema);
+	return prepareSudsPost(usingSchema, body, person);
 }
  
 function clog (stuff) {  // eslint-disable-line
@@ -123,12 +108,12 @@ describe('Tests that the following object field objects were populated properly'
 				}
 			}
 		});
-		const result = wrapSudsPrep(body);
+		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/contact/phone'].phoneNumberType).to.eql('BUSINESS');
 
 	});
 
-	xit('should set the fields in /contact/phone correctly', function(){
+	it('should set the fields in /contact/phone correctly', function(){
 		// TODO: enable this test when we're sure what contCn in /contact/phone should be.
 		const body = tempOutfitterFactory.create({
 			'region': '23',
@@ -142,7 +127,7 @@ describe('Tests that the following object field objects were populated properly'
 				}
 			}
 		});
-		const result = wrapSudsPrep(body);
+		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/contact/phone'].phone).to.eql({
 			'areaCode': '555',
 			'number': '1234567',
@@ -158,7 +143,7 @@ describe('Tests that the following object field objects were populated properly'
 			'region': '23',
 			'forest': '17'
 		});
-		const result = wrapSudsPrep(body);
+		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/contact/phone'].securityId).to.eql('2317');
 		expect(result['/contact/address'].securityId).to.eql('2317');
 		expect(result['/application'].securityId).to.eql('2317');
@@ -173,7 +158,7 @@ describe('Tests that the following object field objects were populated properly'
 			}
 		});
 		expect(expected);
-		const result = wrapSudsPrep(body);
+		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/contact/person']).to.eql({
 			'contId': 'DOE, JOHN',
 			'firstName': 'John',
@@ -181,7 +166,7 @@ describe('Tests that the following object field objects were populated properly'
 		});
 	});
 
-	it('correctly builds a contID for an individual with an org name', function(){
+	it('correctly builds a contID for an individual with an org name present', function(){
 		const body = tempOutfitterFactory.create({
 			'applicantInfo': {
 				'firstName': 'smoouch',
@@ -189,7 +174,7 @@ describe('Tests that the following object field objects were populated properly'
 				'organizationName': 'Sonicals fires time squad'
 			}
 		});
-		const result = wrapSudsPrep(body);
+		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/contact/person']).to.eql({
 			'contId': 'MCGEE, SMOOUCH',
 			'firstName': 'smoouch',
@@ -197,24 +182,20 @@ describe('Tests that the following object field objects were populated properly'
 		});
 	});
 
-	xit('correctly builds a contID for an organization', function(){
+	it('correctly builds a contID for an organization', function(){
 		// TODO: Enable this test when we verify what the contId for an organization should be; code and schema make it look like it might be either the same as for an individual (which is a little odd) or the organization type (which would be very odd).
 		const body = tempOutfitterFactory.create({
 			'applicantInfo': {
 				'firstName': 'John',
 				'lastName': 'Doe',
-				'organizationName': 'RayMiFaSoLaTiDoe'
+				'organizationName': 'RayMiFaSoLaTiDoe',
+				'orgType': 'Association'
 			}
 		});
 		clog(body);
 		expect(expected);
-		const result = wrapSudsPrep(body, { 'person': false });
-		expect(result['/contact/person']).to.eql({
-			'contId': 'DOE, JOHN',
-			'firstName': 'John',
-			'lastName': 'Doe'
-		});
-		expect(result['/contact/organization'].contId).to.eql('DOE, JOHNRAYMIFASOLATIDOE');
+		const result = wrapSudsPrep(body, {}, false);
+		expect(result['/contact/organization'].contId).to.eql('RAYMIFASOLATIDOE');
 
 	});
 
@@ -227,20 +208,23 @@ describe('Tests that the following object field objects were populated properly'
 				'activityDescription': descr
 			}
 		});
-		const result = wrapSudsPrep(body);
+		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/application'].purpose).to.eql(descr);
 	});
 	
-	xit('populate a nested field fromIntake:true', function () {
+	it('populate a nested field fromIntake:true', function () {
         // TODO: Depends on verified details for prior test.
 	});
 
 	it('rename an intake field that has a different "sudsField" name', function () {
-		const body = noncommercialFactory.create();
-		const result = wrapSudsPrep(body);
-		//clog(body);
-		//clog(result);
-		//expect(result['/application'].activityDescription).to.eql(descr);
+		const descr = 'Rename me rename me rename me.';
+		const body = tempOutfitterFactory.create({
+			'tempOutfitterFields': {
+				'activityDescription': descr
+			}
+		});
+		const result = wrapSudsPrep(body, {}, true);
+		expect(result['/application'].purpose).to.eql(descr);
 
 	});
 });
