@@ -181,24 +181,20 @@ describe('Tests that the following object field objects were populated properly'
 		});
 	});
 
-	it('correctly builds a contID for an individual with a long name', function(){
-		// TODO: Verify what special treatment for long names is expected.
-        // firstName and lastName have limits of 255 characters in the schema, does this mean that the output should be firstName[:255] + ", " + lastName[:255]?
+	it('correctly builds a contID for an individual with an org name', function(){
 		const body = tempOutfitterFactory.create({
 			'applicantInfo': {
-				'firstName': 'During the whole of a dull, dark, and soundless day in the autumn of the year, when the clouds hung oppressively low in the heavens, I had been passing alone, on horseback, through a singularly dreary tract of country; and at length found myself, as the shades of the evening drew on, within view of the melancholy House of Usher.',
-				'lastName': 'A man stood upon a railroad bridge in northern Alabama, looking down into the swift water twenty feet below. The man\'s hands were behind his back, the wrists bound with a cord. A rope closely encircled his neck. It was attached to a stout cross-timber above his head and the slack fell to the level of his knees.'
+				'firstName': 'smoouch',
+				'lastName': 'mcgee',
+				'organizationName': 'Sonicals fires time squad'
 			}
 		});
 		const result = wrapSudsPrep(body);
-        expect(result['/contact/person'].contId.length).to.eql(512);
-        /*
 		expect(result['/contact/person']).to.eql({
-			'contId': 'POE, DURING THE WHOLE OF A DULL, DARK, AND SOUNDLESS DAY IN THE AUTUMN OF THE YEAR, WHEN THE CLOUDS HUNG OPPRESSIVELY LOW IN THE HEAVENS, I HAD BEEN PASSING ALONE, ON HORSEBACK, THROUGH A SINGULARLY DREARY TRACT OF COUNTRY; AND AT LENGTH FOUND MYSELF, AS THE SHADES OF THE EVENING DREW ON, WITHIN VIEW OF THE MELANCHOLY HOUSE OF USHER.',
-            'firstName': 'During the whole of a dull, dark, and soundless day in the autumn of the year, when the clouds hung oppressively low in the heavens, I had been passing alone, on horseback, through a singularly dreary tract of country; and at length found myself, as the shades of the evening drew on, within view of the melancholy House of Usher.',
-			'lastName': 'Poe'
+			'contId': 'MCGEE, SMOOUCH',
+			'firstName': 'smoouch',
+			'lastName': 'mcgee'
 		});
-        */
 	});
 
 	xit('correctly builds a contID for an organization', function(){
