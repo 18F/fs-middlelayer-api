@@ -31,7 +31,7 @@ function concat(input){
  * @param  {Array} input - Array of strings to be joined together
  * @return {String}	  - Single string made up of all indicies of input
  */
-function contId(input){
+function upperCaseJoin(input){
 	return concat(
 		input.map((i)=>{
 			return i.toUpperCase();
@@ -84,6 +84,20 @@ function getFieldFromBody(path, body){
 	}
 }
 
+function contId(person, fieldMakeUp){
+	if (person) {
+		if (fieldMakeUp.length > 3) {
+			fieldMakeUp.pop();
+		}
+		return upperCaseJoin(fieldMakeUp);
+	}
+	else {
+		const toUse = [];
+		toUse.push(fieldMakeUp.pop());
+		return upperCaseJoin(toUse);
+	}
+}
+
 /**
  * Handle autoPolutated values based on what type of field
  * @param {Object} field - field to evaluated
@@ -98,17 +112,7 @@ function generateAutoPopulatedField(field, person, fieldMakeUp) {
 		fieldValue = concat(fieldMakeUp);
 		break;
 	case 'contId':
-		if (person) {
-			if (fieldMakeUp.length > 3) {
-				fieldMakeUp.pop();
-			}
-			fieldValue = contId(fieldMakeUp);
-		}
-		else {
-			const toUse = [];
-			toUse.push(fieldMakeUp.pop());
-			fieldValue = contId(toUse);
-		}
+		fieldValue = contId(person, fieldMakeUp);
 		break;
 	case 'ePermitId':
 		fieldValue = ePermitId(fieldMakeUp);

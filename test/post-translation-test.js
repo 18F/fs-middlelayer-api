@@ -212,8 +212,11 @@ describe('Tests that the following object field objects were populated properly'
 		expect(result['/application'].purpose).to.eql(descr);
 	});
 	
-	xit('populate a nested field fromIntake:true', function () {
+	it('populate a nested field fromIntake:true', function () {
 		// TODO: Depends on verified details for prior test.
+		const body = tempOutfitterFactory.create({});
+		const result = wrapSudsPrep(body, {}, true);
+		expect(result['/contact/phone'].areaCode).to.eql('202');
 	});
 
 	it('rename an intake field that has a different "sudsField" name', function () {
