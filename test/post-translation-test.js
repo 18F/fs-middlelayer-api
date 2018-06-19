@@ -130,7 +130,7 @@ describe('Tests that the following object field objects were populated properly'
 		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/contact/phone']).to.eql({
 			'areaCode': '555',
-            'contCn': '',
+			'contCn': '',
 			'phoneNumber': '1234567',
 			'extension': '0',
 			'phoneNumberType': 'BUSINESS',
@@ -201,7 +201,7 @@ describe('Tests that the following object field objects were populated properly'
 
 	it('populates a toplevel field fromIntake:true', function(){
 		// TODO: Verify that this means top-level in one of the output keys, and not top-level in the input.
-        // If it's top-level in the input, what top-level fields in the input are present in the output?
+		// If it's top-level in the input, what top-level fields in the input are present in the output?
 		const descr = 'Five friends go to a cabin in the woods. Bad things happen.';
 		const body = tempOutfitterFactory.create({
 			'tempOutfitterFields': {
@@ -213,7 +213,7 @@ describe('Tests that the following object field objects were populated properly'
 	});
 	
 	xit('populate a nested field fromIntake:true', function () {
-        // TODO: Depends on verified details for prior test.
+		// TODO: Depends on verified details for prior test.
 	});
 
 	it('rename an intake field that has a different "sudsField" name', function () {
@@ -232,14 +232,14 @@ describe('Tests that the following object field objects were populated properly'
 		const body = noncommercialFactory.create();
 
 		const result = wrapSudsPrep(body, noncommercialSchema, true);
-        const expected = [
-            'Activity Description: PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS.',
-            'Location Description: string.',
-            'Start Date Time: 2013-01-12T12:00:00Z.',
-            'End Date Time: 2013-01-19T12:00:00Z.',
-            'Number Participants: 45.',
-            'Number Spectators: .'
-        ].join(' \n ');
+		const expected = [
+			'Activity Description: PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS.',
+			'Location Description: string.',
+			'Start Date Time: 2013-01-12T12:00:00Z.',
+			'End Date Time: 2013-01-19T12:00:00Z.',
+			'Number Participants: 45.',
+			'Number Spectators: .'
+		].join(' \n ');
 		expect(result['/application'].purpose).to.eql(expected);
 	});
 });
@@ -262,89 +262,89 @@ describe('Tests for db.getFieldsToStore', function(){
 
 	it('works on a basic schema with `properties`', function () {
 		const result = wrapStoreFields({
-            'properties':{
-                'firstName': {
-                    'sudsField':'firstName',
-                    'default':'',
-                    'fromIntake':true,
-                    'maxLength':255,
-                    'sudsEndpoint':['/contact/person'],
-                    'type': 'string'
-                }
-            }
-        });
+			'properties':{
+				'firstName': {
+					'sudsField':'firstName',
+					'default':'',
+					'fromIntake':true,
+					'maxLength':255,
+					'sudsEndpoint':['/contact/person'],
+					'type': 'string'
+				}
+			}
+		});
 		expect(result.length).to.eql(1);
 		expect(result[0].firstName.maxLength).to.eql(255);
 	});
 
 	it('works on oneOf', function () {
 		const result = wrapStoreFields({
-            'oneOf': [{
-                'firstName': {
-                    'sudsField':'firstName',
-                    'default':'',
-                    'fromIntake':true,
-                    'maxLength':255,
-                    'sudsEndpoint':['/contact/person'],
-                    'type': 'string'
-                }
-            }]
-        });
+			'oneOf': [{
+				'firstName': {
+					'sudsField':'firstName',
+					'default':'',
+					'fromIntake':true,
+					'maxLength':255,
+					'sudsEndpoint':['/contact/person'],
+					'type': 'string'
+				}
+			}]
+		});
 		expect(result.length).to.eql(1);
 		expect(result[0].firstName.maxLength).to.eql(255);
 	});
 
 	it('works on allOf', function () {
-        // TODO: Why do oneOf and allOf do the same thing?
+		// TODO: Why do oneOf and allOf do the same thing?
 		const result = wrapStoreFields({
-            'allOf': [
-                {
-                    'firstName': {
-                        'sudsField':'firstName',
-                        'default':'',
-                        'fromIntake':true,
-                        'maxLength':255,
-                        'sudsEndpoint':['/contact/person'],
-                        'type': 'string'
-                    }
-                },
-                {
-                    'lastName': {
-                        'sudsField':'lastName',
-                        'default':'',
-                        'fromIntake':true,
-                        'maxLength':255,
-                        'sudsEndpoint':['/contact/person'],
-                        'type': 'string'
-                    }
-                }
-            ]
-        });
+			'allOf': [
+				{
+					'firstName': {
+						'sudsField':'firstName',
+						'default':'',
+						'fromIntake':true,
+						'maxLength':255,
+						'sudsEndpoint':['/contact/person'],
+						'type': 'string'
+					}
+				},
+				{
+					'lastName': {
+						'sudsField':'lastName',
+						'default':'',
+						'fromIntake':true,
+						'maxLength':255,
+						'sudsEndpoint':['/contact/person'],
+						'type': 'string'
+					}
+				}
+			]
+		});
 		expect(result.length).to.eql(2);
 		expect(result[0].firstName.maxLength).to.eql(255);
 	});
 
 	it('works on a basic schema with `properties`', function () {
 		const result = wrapStoreFields({
-            'properties':{
-                'firstName': {
-                    'sudsField':'firstName',
-                    'default':'',
-                    'fromIntake':true,
-                    'maxLength':255,
-                    'sudsEndpoint':['/contact/person'],
-                    'type': 'string'
-                },
-                'lastName': {
-                    'sudsField':'lastName',
-                    'default':'',
-                    'fromIntake':true,
-                    'maxLength':255,
-                    'sudsEndpoint':['/contact/person'],
-                    'type': 'string'
-                }
-            }
-        });
+			'properties':{
+				'firstName': {
+					'sudsField':'firstName',
+					'default':'',
+					'fromIntake':true,
+					'maxLength':255,
+					'sudsEndpoint':['/contact/person'],
+					'type': 'string'
+				},
+				'lastName': {
+					'sudsField':'lastName',
+					'default':'',
+					'fromIntake':true,
+					'maxLength':255,
+					'sudsEndpoint':['/contact/person'],
+					'type': 'string'
+				}
+			}
+		});
 		expect(result.length).to.eql(2);
 		expect(result[0].firstName.maxLength).to.eql(255);
 		expect(result[1].lastName.maxLength).to.eql(255);
@@ -352,30 +352,29 @@ describe('Tests for db.getFieldsToStore', function(){
 
 	it('works on a schema without the above special keys', function () {
 		const result = wrapStoreFields({
-            'firstName': {
-                'sudsField':'firstName',
-                'default':'',
-                'fromIntake':true,
-                'maxLength':255,
-                'sudsEndpoint':['/contact/person'],
-                'type': 'string'
-            },
-            'lastName': {
-                'sudsField':'lastName',
-                'default':'',
-                'fromIntake':true,
-                'maxLength':255,
-                'sudsEndpoint':['/contact/person'],
-                'type': 'string'
-            }
-        });
+			'firstName': {
+				'sudsField':'firstName',
+				'default':'',
+				'fromIntake':true,
+				'maxLength':255,
+				'sudsEndpoint':['/contact/person'],
+				'type': 'string'
+			},
+			'lastName': {
+				'sudsField':'lastName',
+				'default':'',
+				'fromIntake':true,
+				'maxLength':255,
+				'sudsEndpoint':['/contact/person'],
+				'type': 'string'
+			}
+		});
 		expect(result.length).to.eql(2);
 		expect(result[0].firstName.maxLength).to.eql(255);
 		expect(result[1].lastName.maxLength).to.eql(255);
 	});
 
 });
-
 
 /**
  * Handle autoPolutated values based on what type of field
@@ -412,29 +411,6 @@ function generateAutoPopulatedField(field, person, fieldMakeUp) {
 }
 */
 
-//*******************************************************************
-describe('Tests the generateAutoPopulatedField function', function(){
-	it('should return appropriate contId', function () {
-		const field = {
-			'sudsField': 'contId',
-			'default':'',
-			'fromIntake': false,
-			'madeOf': {
-				'function': 'contId',
-				'fields': ['lastName', 'firstName']
-			},
-			'sudsEndpoint':['/contact/person'],
-			'type': 'string'
-		};
-		const person = true;
-		const fieldMakeUp = ['Doe', 'John'];
-		const result = generateAutoPopulatedField(field, person, fieldMakeUp);
-
-	});
-
-});
-
-//*******************************************************************
 //
 //*******************************************************************
 describe('Tests the populateValues function', function(){
