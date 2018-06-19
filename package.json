@@ -8,7 +8,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "test": "snyk test && mocha test --recursive --exit",
+    "test": "mocha test --recursive --exit",
     "test:mock": "npm --mock=Y run test",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive --exit",
     "lint": "npm-run-all -c -s lint:es lint:es:out lint:md lint:tsc",
