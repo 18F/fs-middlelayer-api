@@ -220,6 +220,35 @@ function multipleContactsCheck(contId, matchingContacts, fieldsObj, person, apiC
 	}
 }
 
+/** Handles all the information for a contact Post
+ * @param  {Object} req - Request Object
+ * @param  {Object} res - Response Object
+ * @param  {Object} validationSchema - Schema object
+ * @param  {Object} body - User input
+ */
+function managePostContacts(apiCallLogObject, contactGETOptions, res, person, sudsToken, fieldsInSudsPostFormat){
+	{
+		apiCallLogObject.GET[contactGETOptions.logUri].response = res;
+		const contId = getContId(fieldsInSudsPostFormat, person);
+		if (res.length === 1 && res[0].contCn) {
+			if (contId === res[0].contId) {
+				return new Promise(function (resolve) {
+					resolve(res[0].contCn);
+				});
+			}
+			else {
+				return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
+			}
+		}
+		else if (res.length > 1) {
+			return multipleContactsCheck(contId, res, fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
+		}
+		else {
+			return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
+		}
+	}
+}
+
 /** Sends requests needed to create an application via the Basic API
  * @param  {Object} req - Request Object
  * @param  {Object} res - Response Object
@@ -253,26 +282,9 @@ function post(req, res, validationSchema, body) {
 			apiCallLogObject = contactGETOptions.apiCallLogObject;
 
 			request.get(contactGETOptions.requestParams)
-			.then(function(res){
-				apiCallLogObject.GET[contactGETOptions.logUri].response = res;
-				const contId = getContId(fieldsInSudsPostFormat, person);
-				if (res.length === 1  && res[0].contCn){
-					if (contId === res[0].contId){
-						return new Promise(function(resolve){
-							resolve(res[0].contCn);
-						});
-					}
-					else {
-						return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
-					}
-				}
-				else if (res.length > 1){
-					return multipleContactsCheck(contId, res, fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
-				}
-				else {
-					return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
-				}
-			})
+				.then((res) => {
+					managePostContacts(apiCallLogObject, contactGETOptions, res, person, sudsToken, fieldsInSudsPostFormat);
+				})
 			.then(function(contCn){
 				return createApplication(fieldsInSudsPostFormat, contCn, apiCallLogObject, sudsToken);
 			})
