@@ -145,7 +145,6 @@ function getFilesRoute(req, res, controlNumber){
 }
 
 function getSUDSPostProcess(req, res, applicationDataFromSUDS, controlNumber, reqData) {
-	const pathData = reqData.schema;
 
 	const fileTypes = {
 		'gud': 'guideDocumentation',
@@ -164,7 +163,7 @@ function getSUDSPostProcess(req, res, applicationDataFromSUDS, controlNumber, re
 
 			const responseData = copyGenericInfo(applicationDataFromSUDS,
 				localApplicationData.application,
-				pathData['x-getTemplate']
+				reqData.schema['x-getTemplate']
 			);
 
 			responseData.controlNumber = controlNumber;
