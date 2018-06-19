@@ -91,7 +91,7 @@ function wrapSudsPrep(body, validationSchema, person) {
 	if (Object.keys(validationSchema).length > 0){
 		usingSchema = validationSchema;
 	}
-	console.log(validationSchema);
+	console.log(usingSchema);
 	return prepareSudsPost(usingSchema, body, person);
 }
  
@@ -234,8 +234,15 @@ describe('Tests that the following object field objects were populated properly'
 		const body = noncommercialFactory.create();
 		console.log(body);
 
-		const result = wrapSudsPrep(body, noncommercialSchema, false);
-		const expected = 'Activity Description:  noncommercialFields.activityDescription. \n Location Description:  noncommercialFields.locationDescription. \n Start Date Time:  noncommercialFields.startDateTime. \n End Date Time:  noncommercialFields.endDateTime. \n Number Participants:  noncommercialFields.numberParticipants. \n Number Spectators:  noncommercialFields.numberSpectators.';
+		const result = wrapSudsPrep(body, noncommercialSchema, true);
+        const expected = [
+            'Activity Description: PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS.',
+            'Location Description: string.',
+            'Start Date Time: 2013-01-12T12:00:00Z.',
+            'End Date Time: 2013-01-19T12:00:00Z.',
+            'Number Participants: 45.',
+            'Number Spectators: .'
+        ].join(' \n ');
 		expect(result['/application'].purpose).to.eql(expected);
 	});
 });

@@ -92,7 +92,7 @@ function getFieldFromBody(path, body){
  * @return {String} fieldValue - the string of the fieldValue
  */
 function generateAutoPopulatedField(field, person, fieldMakeUp) {
-	if (field === 'contId') {
+	if (field.sudsName === 'contId') {
 		console.log(field, person, fieldMakeUp);
 	}
 	let fieldValue;
@@ -200,7 +200,7 @@ function generateValue(field, intakeRequest, splitPath, person, fieldKey, autoPo
  * @return {Object} - Array of endpoints with which fields should go in them
  */
 function populateValues(fieldsByEndpoint, intakeRequest, autoPopulatedFields, person){
-	console.log('popped value', person)
+	console.log('popped person value', person)
 	const requestsTobeSent = {};
 	for (const endpoint in fieldsByEndpoint){
 		if (fieldsByEndpoint.hasOwnProperty(endpoint)){
