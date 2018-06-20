@@ -283,7 +283,7 @@ function post(req, res, validationSchema, body) {
 
 			request.get(contactGETOptions.requestParams)
 				.then((res) => {
-					managePostContacts(apiCallLogObject, contactGETOptions, res, person, sudsToken, fieldsInSudsPostFormat);
+					return managePostContacts(apiCallLogObject, contactGETOptions, res, person, sudsToken, fieldsInSudsPostFormat);	
 				})
 			.then(function(contCn){
 				return createApplication(fieldsInSudsPostFormat, contCn, apiCallLogObject, sudsToken);
