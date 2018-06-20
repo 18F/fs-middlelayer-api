@@ -39,17 +39,6 @@ function upperCaseJoin(input){
 	);
 }
 
-/**
- * Adds UNIX timestamp and then joins all elements of input
- * @param  {Array} input - Array of strings to be joined together
- * @return {String}	  - Single string made up of all indicies of input
- */
-function ePermitId(input){
-	const timeStamp = + new Date();
-	input.push(timeStamp);
-	return concat(input);
-}
-
 /** Finds SUDS API fields which are to be auto-populated
  * @param  {Array} sudsFields - Fields(Objects) which are stored in SUDS
  * @return {Array} alteredFields - Fields(Objects) which are to be auto-populated
@@ -87,7 +76,8 @@ function getFieldFromBody(path, body){
 function contId(person, fieldMakeUp) {
 	if (person) {
 		return upperCaseJoin(fieldMakeUp.slice(0, 3));
-	} else {
+	}
+	else {
 		return upperCaseJoin(fieldMakeUp.slice(-1));
 	}
 }
@@ -101,16 +91,11 @@ function contId(person, fieldMakeUp) {
  */
 function generateAutoPopulatedField(field, person, fieldMakeUp) {
 	let fieldValue;
-	switch (field.madeOf.function) {
-	case 'concat':
-		fieldValue = concat(fieldMakeUp);
-		break;
-	case 'contId':
+	if (field.madeOf.function === 'contId') {
 		fieldValue = contId(person, fieldMakeUp);
-		break;
-	case 'ePermitId':
-		fieldValue = ePermitId(fieldMakeUp);
-		break;
+	}
+	else if (field.madeOf.function === 'concat') {
+		fieldValue = concat(fieldMakeUp);
 	}
 	return fieldValue;
 }

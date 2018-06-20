@@ -392,41 +392,6 @@ describe('Tests for db.getFieldsToStore', function(){
 
 });
 
-/**
- * Handle autoPolutated values based on what type of field
- * @param {Object} field - field to evaluated
- * @param {Boolean} person - whether the input is for an individual or an organization?
- * @param {Array} fieldMakeUp - array of the subfields or strings that comprise the field
- * @return {String} fieldValue - the string of the fieldValue
- */
-/*
-function generateAutoPopulatedField(field, person, fieldMakeUp) {
-	let fieldValue;
-	switch (field.madeOf.function) {
-	case 'concat':
-		fieldValue = concat(fieldMakeUp);
-		break;
-	case 'contId':
-		if (person) {
-			if (fieldMakeUp.length > 3) {
-				fieldMakeUp.pop();
-			}
-			fieldValue = contId(fieldMakeUp);
-		}
-		else {
-			const toUse = [];
-			toUse.push(fieldMakeUp.pop());
-			fieldValue = contId(toUse);
-		}
-		break;
-	case 'ePermitId':
-		fieldValue = ePermitId(fieldMakeUp);
-		break;
-	}
-	return fieldValue;
-}
-*/
-
 //
 //*******************************************************************
 describe('Tests the populateValues function', function(){
