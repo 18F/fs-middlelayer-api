@@ -55,14 +55,14 @@ function ePermitId(input){
  * @return {Array} alteredFields - Fields(Objects) which are to be auto-populated
  */
 function findAutoPopulatedFieldsFromSchema(sudsFields){
-	const autoPopultatedFields = [];
+	const autoPopulatedFields = [];
 	sudsFields.forEach((field)=>{
 		const key = Object.keys(field)[0];
 		if (!field[key].fromIntake && field[key].madeOf){
-			autoPopultatedFields.push(field);
+			autoPopulatedFields.push(field);
 		}
 	});
-	return autoPopultatedFields;
+	return autoPopulatedFields;
 }
 
 /**
