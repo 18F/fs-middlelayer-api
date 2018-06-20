@@ -262,7 +262,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 			.get(`${testURL}${postControlNumber}/`)
 			.set('x-access-token', token)
 			.expect(function(res){
-                expect(res.body.intakeId).to.equal('90');
+                expect(res.body.intakeId).to.equal(90);
             })
 			.expect(200, done);
 		});

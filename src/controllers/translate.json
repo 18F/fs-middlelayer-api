@@ -567,7 +567,7 @@
                 "default":"",
                 "fromIntake":true,
                 "localStore":true,
-                "type" : "string"
+                "type" : "integer"
             },
             "region": {
                 "default":"",

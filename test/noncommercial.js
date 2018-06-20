@@ -158,7 +158,7 @@ describe('Integration tests - noncommercial', function(){
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
             .expect(function (res) {
-                expect(res.body.intakeId).to.equal('90');
+                expect(res.body.intakeId).to.equal(90);
             })
 			.expect(200, done);
 
