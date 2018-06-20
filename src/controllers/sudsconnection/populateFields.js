@@ -76,7 +76,8 @@ function getFieldFromBody(path, body){
 function contId(person, fieldMakeUp) {
 	if (person) {
 		return upperCaseJoin(fieldMakeUp.slice(0, 3));
-	} else {
+	}
+    else {
 		return upperCaseJoin(fieldMakeUp.slice(-1));
 	}
 }
@@ -92,7 +93,8 @@ function generateAutoPopulatedField(field, person, fieldMakeUp) {
 	let fieldValue;
     if (field.madeOf.function === 'contId') {
 		fieldValue = contId(person, fieldMakeUp);
-    } else if (field.madeOf.function === 'concat') {
+    }
+    else if (field.madeOf.function === 'concat') {
 		fieldValue = concat(fieldMakeUp);
 	}
 	return fieldValue;
