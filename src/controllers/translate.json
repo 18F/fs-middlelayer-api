@@ -92,13 +92,39 @@
             },
             "activityDescription": {
                 "default":"",
-                "sudsField": "purpose",
-                "fromIntake":true,
+                "fromIntake": true,
                 "localStore":true,
-                "type": "string",
+                "type": "string"
+            },
+            "purpose": {
+                "sudsField": "purpose",
+                "default": "",
+                "fromIntake": false,
+                "madeOf": {
+                    "fields": [
+                        {
+                            "fromIntake": false,
+                            "value": "ID on Open Forest platform: "
+                        },
+                        {
+                            "fromIntake": true,
+                            "field": "intakeId"
+                        },
+                        {
+                            "fromIntake": false,
+                            "value": ". \n"
+                        },
+                        {
+                            "fromIntake": true,
+                            "field": "tempOutfitterFields.activityDescription"
+                        }
+                    ],
+                    "function": "concat"
+                },
                 "sudsEndpoint": [
                     "/application"
-                ]                
+                ], 
+                "type": "string"
             },
             "advertisingURL": {
                 "default":"",
@@ -345,7 +371,15 @@
                     "fields":[
                         {
                             "fromIntake":false,
-                            "value":"Activity Description: "
+                            "value":"ID on Open Forest platform: "
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"intakeId"
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":". \n Activity Description: "
                         },
                         {
                             "fromIntake":true,
@@ -529,6 +563,12 @@
         "id":"/commonFields",
         "type":"object",
         "properties":{
+            "intakeId": {
+                "default":"",
+                "fromIntake":true,
+                "localStore":true,
+                "type" : "string"
+            },
             "region": {
                 "default":"",
                 "fromIntake":true,
@@ -618,7 +658,7 @@
                     "fields":[
                         {
                             "fromIntake":false,
-                            "field" : "EP-"
+                            "value" : "EP-"
                         },
                         {
                             "fromIntake":true,
@@ -627,9 +667,17 @@
                         {
                             "fromIntake":true,
                             "field":"forest"
+                        },
+                        {
+                            "fromIntake":false,
+                            "value" : "-"
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"intakeId"
                         }
                     ],
-                    "function":"ePermitId"
+                    "function":"concat"
                 },
                 "sudsEndpoint":["/application"],
                 "type" : "string"
