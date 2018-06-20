@@ -21,7 +21,8 @@ module.exports = function(sequelize, DataTypes) {
 		experienceList: { type: DataTypes.STRING(512), field: 'experience_list' },
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'created' },
 		updatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'updated' },
-		numberSpectators: { type: DataTypes.INTEGER, field: 'number_spectators' }
+		numberSpectators: { type: DataTypes.INTEGER, field: 'number_spectators' },
+		intakeId: { type: DataTypes.STRING(255), field: 'intake_id' }
 	}, {
 		timestamps  : true
 	}, {

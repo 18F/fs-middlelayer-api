@@ -208,12 +208,15 @@ describe('Tests that the following object field objects were populated properly'
 				'activityDescription': descr
 			}
 		});
+		const expected = [
+            'ID on Open Forest platform: 90.',
+            'Five friends go to a cabin in the woods. Bad things happen.'
+        ].join(' \n');
 		const result = wrapSudsPrep(body, {}, true);
-		expect(result['/application'].purpose).to.eql(descr);
+		expect(result['/application'].purpose).to.eql(expected);
 	});
 	
 	it('populate a nested field fromIntake:true', function () {
-		// TODO: Depends on verified details for prior test.
 		const body = tempOutfitterFactory.create({});
 		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/contact/phone'].areaCode).to.eql('202');
@@ -227,15 +230,19 @@ describe('Tests that the following object field objects were populated properly'
 			}
 		});
 		const result = wrapSudsPrep(body, {}, true);
-		expect(result['/application'].purpose).to.eql(descr);
+		const expected = [
+            'ID on Open Forest platform: 90.',
+            'Rename me rename me rename me.'
+        ].join(' \n');
+		expect(result['/application'].purpose).to.eql(expected);
 
 	});
 
-	it('add line breaks to a field with "linebreak" in the body ', function(){
+	it('generates the purpose field correctly and adds line breaks to a field with "linebreak" in the body ', function(){
 		const body = noncommercialFactory.create();
-
 		const result = wrapSudsPrep(body, noncommercialSchema, true);
 		const expected = [
+            'ID on Open Forest platform: 90.',
 			'Activity Description: PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS.',
 			'Location Description: string.',
 			'Start Date Time: 2013-01-12T12:00:00Z.',
@@ -244,6 +251,12 @@ describe('Tests that the following object field objects were populated properly'
 			'Number Spectators: .'
 		].join(' \n ');
 		expect(result['/application'].purpose).to.eql(expected);
+	});
+
+	it('populates ePermitId correctly', function () {
+		const body = tempOutfitterFactory.create({});
+		const result = wrapSudsPrep(body, {}, true);
+		expect(result['/application'].epermitId).to.eql('EP-3850-90');
 	});
 });
 

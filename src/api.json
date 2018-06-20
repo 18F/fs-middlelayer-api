@@ -67,6 +67,7 @@
       "get": {
         "x-mockOutput":"test/data/basicGET.json",
         "x-getTemplate":{
+          "intakeId":{"default":"", "intake":"middleLayer/intakeId"},
           "controlNumber":{"default":"", "intake":"accinstCn"},
           "region": {"default":"", "intake":"middleLayer/region"},
           "forest": {"default":"", "intake":"middleLayer/forest"},
@@ -209,6 +210,7 @@
       "get": {
         "x-mockOutput":"test/data/basicGET.json",
         "x-getTemplate":{
+          "intakeId":{"default":"", "intake":"middleLayer/intakeId"},
           "controlNumber":{"default":"", "intake":"accinstCn"},
           "region": {"default":"", "intake":"middleLayer/region"},
           "forest": {"default":"", "intake":"middleLayer/forest"},
@@ -626,6 +628,7 @@
     "noncommercialPermit": {
       "type": "object",
       "properties": {
+        "intakeId": { "type" : "string" },
         "region": { "type" : "string" },
         "forest": { "type" : "string" },
         "district": { "type" : "string" },
@@ -654,6 +657,7 @@
     "noncommercialPermitGet": {
       "type": "object",
       "properties": {
+        "intakeId": { "type": "string" },
         "controlNumber": {"type": "integer"},
         "region": { "type" : "string" },
         "forest": { "type" : "string" },
@@ -682,6 +686,7 @@
     "tempOutfitterPermit": {
       "type": "object",
        "properties": {
+        "intakeId": { "type" : "string" },
         "region": { "type" : "string" },
         "forest": { "type" : "string" },
         "district": { "type" : "string" },
@@ -710,6 +715,7 @@
     "tempOutfitterPermitGet": {
       "type": "object",
        "properties": {
+        "intakeId": { "type": "integer"},
         "controlNumber": { "type": "integer"},
         "region": { "type" : "string" },
         "forest": { "type" : "string" },

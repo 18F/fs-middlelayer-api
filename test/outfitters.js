@@ -256,6 +256,17 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 		});
 
+		it('should return intakeId in json when getting outfitters permit using the controlNumber returned from POST', function(done) {
+
+			request(server)
+			.get(`${testURL}${postControlNumber}/`)
+			.set('x-access-token', token)
+			.expect(function(res){
+                expect(res.body.intakeId).to.equal('90');
+            })
+			.expect(200, done);
+		});
+
 		it('should return valid file when getting outfitters files using the controlNumber and fileName returned from POST', function(done) {
 			const getObjSpy = sinon.spy();
 			const postFileName = 'insuranceCertificate.doc';
