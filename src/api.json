@@ -628,7 +628,7 @@
     "noncommercialPermit": {
       "type": "object",
       "properties": {
-        "intakeId": { "type" : "string" },
+        "intakeId": { "type" : "integer" },
         "region": { "type" : "string" },
         "forest": { "type" : "string" },
         "district": { "type" : "string" },
@@ -657,7 +657,7 @@
     "noncommercialPermitGet": {
       "type": "object",
       "properties": {
-        "intakeId": { "type": "string" },
+        "intakeId": { "type": "integer" },
         "controlNumber": {"type": "integer"},
         "region": { "type" : "string" },
         "forest": { "type" : "string" },
@@ -686,7 +686,7 @@
     "tempOutfitterPermit": {
       "type": "object",
        "properties": {
-        "intakeId": { "type" : "string" },
+        "intakeId": { "type" : "integer" },
         "region": { "type" : "string" },
         "forest": { "type" : "string" },
         "district": { "type" : "string" },

@@ -22,7 +22,7 @@ module.exports = function(sequelize, DataTypes) {
 		createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'created' },
 		updatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, field: 'updated' },
 		numberSpectators: { type: DataTypes.INTEGER, field: 'number_spectators' },
-		intakeId: { type: DataTypes.STRING(255), field: 'intake_id' }
+		intakeId: { type: DataTypes.INTEGER, field: 'intake_id' }
 	}, {
 		timestamps  : true
 	}, {
