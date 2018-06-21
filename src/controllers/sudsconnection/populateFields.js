@@ -69,10 +69,17 @@ function getFieldFromBody(path, body){
 		return body;
 	}
 	else {
+		logger.warn(`${path} does not exist. This may not be an issue if the field is optional.`);
 		return false;
 	}
 }
 
+/**
+ * Given a boolean and an array of strings, passes some subset of those strings to upperCaseJoin and returns the result
+ * @param  {Boolean} person				- Whether to join last name, comma, and first name or just use organization name.
+ * @param  {Array} fieldMakeUp			- Should be first name, comma, last name, and organization name.
+ * @return {String}						- The uppercased joined fields.
+ */
 function contId(person, fieldMakeUp) {
 	if (person) {
 		return upperCaseJoin(fieldMakeUp.slice(0, 3));
@@ -113,9 +120,6 @@ function buildAutoPopulatedField(field, person, body){
 			const fieldValue = getFieldFromBody(madeOfField.field, body);
 			if (fieldValue){
 				fieldMakeUp.push(fieldValue);
-			}
-			else {
-				logger.warn(`${madeOfField.field} does not exist. This may not be an issue if the field is optional.`);
 			}
 		}
 		else {
