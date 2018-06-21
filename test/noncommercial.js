@@ -1,8 +1,8 @@
 /* eslint no-undefined: 0 */
 /*
 
-  ___ ___       ___               _ _       _   ___ ___
- | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
+  ___ ___	   ___			   _ _	   _   ___ ___
+ | __/ __|  ___| _ \___ _ _ _ __ (_) |_	/_\ | _ \_ _|
  | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
@@ -157,9 +157,9 @@ describe('Integration tests - noncommercial', function(){
 			.get(`${testURL}${postControlNumber}/`)
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
-            .expect(function (res) {
-                expect(res.body.intakeId).to.equal(90);
-            })
+			.expect(function (res) {
+				expect(res.body.intakeId).to.equal(90);
+			})
 			.expect(200, done);
 
 	});
