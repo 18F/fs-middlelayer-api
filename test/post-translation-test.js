@@ -397,7 +397,7 @@ describe('Tests for db.getFieldsToStore', function(){
 describe('Tests the populateValues function', function(){
 
 	it('should return empty given empty parameters', function(){
-		expect(populateValues({}, {}, {}, true))
+		expect(populateValues({}, {}, [], true))
 			.to.eql({});
 	});
 

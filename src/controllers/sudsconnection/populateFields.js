@@ -22,8 +22,7 @@ const logger = require('../utility.js').logger;
  * @return {String}	  - Single string made up of all indicies of input
  */
 function concat(input){
-	const output = input.join('');
-	return output;
+	return input.join('');
 }
 
 /**
@@ -81,12 +80,8 @@ function getFieldFromBody(path, body){
  * @return {String}						- The uppercased joined fields.
  */
 function contId(person, fieldMakeUp) {
-	if (person) {
-		return upperCaseJoin(fieldMakeUp.slice(0, 3));
-	}
-	else {
-		return upperCaseJoin(fieldMakeUp.slice(-1));
-	}
+	const fields = person ? fieldMakeUp.slice(0, 3) : fieldMakeUp.slice(-1);
+	return upperCaseJoin(fields);
 }
 
 /**
@@ -97,14 +92,12 @@ function contId(person, fieldMakeUp) {
  * @return {String} fieldValue - the string of the fieldValue
  */
 function generateAutoPopulatedField(field, person, fieldMakeUp) {
-	let fieldValue;
 	if (field.madeOf.function === 'contId') {
-		fieldValue = contId(person, fieldMakeUp);
+		return contId(person, fieldMakeUp);
 	}
 	else if (field.madeOf.function === 'concat') {
-		fieldValue = concat(fieldMakeUp);
+		return concat(fieldMakeUp);
 	}
-	return fieldValue;
 }
 
 /** Given list of fields which must be auto-populate, returns values to store
@@ -113,20 +106,10 @@ function generateAutoPopulatedField(field, person, fieldMakeUp) {
  * @param  {Object} body   - user input
  * @return {Array}		 - created values
  */
-function buildAutoPopulatedField(field, person, body){
-	const fieldMakeUp = [];
-	field.madeOf.fields.forEach((madeOfField)=>{
-		if (madeOfField.fromIntake){
-			const fieldValue = getFieldFromBody(madeOfField.field, body);
-			if (fieldValue){
-				fieldMakeUp.push(fieldValue);
-			}
-		}
-		else {
-			fieldMakeUp.push(madeOfField.value);
-		}
-	});
-	
+function buildAutoPopulatedField (field, person, body) {
+	const getValue = (body, madeOfField) => madeOfField.fromIntake ? getFieldFromBody(madeOfField.field, body) : madeOfField.value;
+	const fieldMakeUp = field.madeOf.fields.map((madeOfField) => getValue(body, madeOfField)).filter(i => i);
+
 	return generateAutoPopulatedField(field, person, fieldMakeUp);
 }
 
@@ -155,16 +138,16 @@ function extractIntakeValue(intakeRequest, field, splitPath) {
  * Populates an individual field value 
  * @param  {Object} field - Schema information about a specific field
  * @param {Object} intakeRequest - body of the incoming post request
- * @param {Array} splitPath - an array of the object keys to that field
- * @param {Arrary} autoPopFields - Array of fields that need to be autopopulated
+ * @param {Arrary} autoPopulatedKeys - Array of fields that need to be autopopulated
  * @param {String} fieldKey - key of the field that will be field that the data will be extracted for
  * @return {String|integer} - value of the field
  */
-function generateValue(field, intakeRequest, splitPath, person, fieldKey, autoPopulatedFields) {
+function generateValue(fieldKey, field, intakeRequest, { person, autoPopulatedKeys }) {
+	const splitPath = fieldKey.split('.');
 	if (field.fromIntake) {
 		return extractIntakeValue(intakeRequest, field, splitPath);
 	}
-	if (autoPopulatedFields.includes(fieldKey)) {
+	if (autoPopulatedKeys.includes(fieldKey)) {
 		const built = buildAutoPopulatedField(field, person, intakeRequest);
 		return built;
 	}
@@ -177,40 +160,32 @@ function generateValue(field, intakeRequest, splitPath, person, fieldKey, autoPo
  * @param {Array} splitPath - an array of the path in the schema
  * @returns {String} fieldname - the key of the field that will be sent to SUDS
 */
-function getFieldName(field, splitPath){
-	let fieldName = splitPath[splitPath.length - 1];
-	if (field.hasOwnProperty('sudsField')) {
-		fieldName = field.sudsField;
-	}
-	return fieldName;
+function getFieldName(field, splitPath) {
+	return field.hasOwnProperty('sudsField') ? field.sudsField : splitPath.slice(-1);
 }
 
 /**
  * Gets the data from all fields that are to be send to the SUDS API, also builds post object, used to pass data to basic api
- * @param  {Array} fieldsToBasic - All fields in object form which will be sent to basicAPI
+ * @param  {Array} fieldsByEndpoint - All fields in object form which will be sent to basicAPI
  * @param {Object} intakeRequest - body of the incoming post request
  * @param {Arrary} autoPopFields - Array of fields that need to be autopopulated
  * @return {Object} - Array of endpoints with which fields should go in them
  */
 function populateValues(fieldsByEndpoint, intakeRequest, autoPopulatedFields, person){
 	const requestsTobeSent = {};
-	for (const endpoint in fieldsByEndpoint){
-		if (fieldsByEndpoint.hasOwnProperty(endpoint)){
-			requestsTobeSent[endpoint] = {};
-			for (const fieldKey in fieldsByEndpoint[endpoint]){
-				if (fieldsByEndpoint[endpoint].hasOwnProperty(fieldKey)){
-					const field = fieldsByEndpoint[endpoint][fieldKey];
-					const splitPath = fieldKey.split('.');
-					const sudsFieldName = getFieldName(field, splitPath);
-					const autoPopulatedKeys = autoPopulatedFields.map(obj => {
-						return Object.keys(obj)[0];
-					});
-					const generatedValue = generateValue(field, intakeRequest, splitPath, person, fieldKey, autoPopulatedKeys);
-					requestsTobeSent[endpoint][sudsFieldName] = generatedValue;
-				}
-			}
-		}
-	}
+	const autoPopulatedKeys = autoPopulatedFields.map(obj => Object.keys(obj)[0]);
+	Object.keys(fieldsByEndpoint).forEach((endpoint) => {
+		requestsTobeSent[endpoint] = {};
+		Object.keys(fieldsByEndpoint[endpoint]).forEach((fieldKey) => {
+			const field = fieldsByEndpoint[endpoint][fieldKey];
+
+			const generatedValue = generateValue(fieldKey, field, intakeRequest, { person: person, autoPopulatedKeys: autoPopulatedKeys });
+
+			const splitPath = fieldKey.split('.');
+			const sudsFieldName = getFieldName(field, splitPath);
+			requestsTobeSent[endpoint][sudsFieldName] = generatedValue;
+		});
+	});
 	return requestsTobeSent;
 }
 
