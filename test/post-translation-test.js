@@ -27,7 +27,6 @@ const util = require('util');
 const db = require('../src/controllers/db.js');
 const prepareSudsPost = require('../src/controllers/sudsconnection/post.js').prepareSudsPost;
 const populateValues = require('../src/controllers/sudsconnection/populateFields.js').populateValues;
-const generateAutoPopulatedField = require('../src/controllers/sudsconnection/populateFields.js').generateAutoPopulatedField;
 
 const tempOutfitterInput = include('test/data/testInputTempOutfitters.json');
 const noncommercialInput = include('test/data/testInputNoncommercial.json');
@@ -209,9 +208,9 @@ describe('Tests that the following object field objects were populated properly'
 			}
 		});
 		const expected = [
-            'ID on Open Forest platform: 90.',
-            'Five friends go to a cabin in the woods. Bad things happen.'
-        ].join(' \n');
+			'ID on Open Forest platform: 90.',
+			'Five friends go to a cabin in the woods. Bad things happen.'
+		].join(' \n');
 		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/application'].purpose).to.eql(expected);
 	});
@@ -231,9 +230,9 @@ describe('Tests that the following object field objects were populated properly'
 		});
 		const result = wrapSudsPrep(body, {}, true);
 		const expected = [
-            'ID on Open Forest platform: 90.',
-            'Rename me rename me rename me.'
-        ].join(' \n');
+			'ID on Open Forest platform: 90.',
+			'Rename me rename me rename me.'
+		].join(' \n');
 		expect(result['/application'].purpose).to.eql(expected);
 
 	});
@@ -242,7 +241,7 @@ describe('Tests that the following object field objects were populated properly'
 		const body = noncommercialFactory.create();
 		const result = wrapSudsPrep(body, noncommercialSchema, true);
 		const expected = [
-            'ID on Open Forest platform: 90.',
+			'ID on Open Forest platform: 90.',
 			'Activity Description: PROVIDING WHITEWATER OUTFITTING AND GUIDING ACTIVITIES ON NATIONAL FOREST LANDS.',
 			'Location Description: string.',
 			'Start Date Time: 2013-01-12T12:00:00Z.',
