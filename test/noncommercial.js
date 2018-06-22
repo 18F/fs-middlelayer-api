@@ -157,9 +157,9 @@ describe('Integration tests - noncommercial', function(){
 			.get(`${testURL}${postControlNumber}/`)
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
-            .expect(function (res) {
-                expect(res.body.intakeId).to.equal(90);
-            })
+			.expect(function (res) {
+				expect(res.body.intakeId).to.equal(90);
+			})
 			.expect(200, done);
 
 	});
