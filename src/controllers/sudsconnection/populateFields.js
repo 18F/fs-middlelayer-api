@@ -143,13 +143,12 @@ function extractIntakeValue(intakeRequest, field, splitPath) {
  * @return {String|integer} - value of the field
  */
 function generateValue(fieldKey, field, intakeRequest, { person, autoPopulatedKeys }) {
-	const splitPath = fieldKey.split('.');
 	if (field.fromIntake) {
+		const splitPath = fieldKey.split('.');
 		return extractIntakeValue(intakeRequest, field, splitPath);
 	}
 	if (autoPopulatedKeys.includes(fieldKey)) {
-		const built = buildAutoPopulatedField(field, person, intakeRequest);
-		return built;
+		return buildAutoPopulatedField(field, person, intakeRequest);
 	}
 	return field.default;
 }
@@ -179,7 +178,7 @@ function populateValues(fieldsByEndpoint, intakeRequest, autoPopulatedFields, pe
 		Object.keys(fieldsByEndpoint[endpoint]).forEach((fieldKey) => {
 			const field = fieldsByEndpoint[endpoint][fieldKey];
 
-			const generatedValue = generateValue(fieldKey, field, intakeRequest, { person: person, autoPopulatedKeys: autoPopulatedKeys });
+			const generatedValue = generateValue(fieldKey, field, intakeRequest, { person, autoPopulatedKeys });
 
 			const splitPath = fieldKey.split('.');
 			const sudsFieldName = getFieldName(field, splitPath);
