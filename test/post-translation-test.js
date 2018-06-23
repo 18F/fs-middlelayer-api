@@ -627,6 +627,7 @@ describe('tests the managePostContacts function.', function () {
 
 
 	it('should throw an error if contacts returned by GET on contactGETOptions.requestParams match', async () => {
+		let errorThrown = false;
 		const person = true;
 		const response = [responseFactory.create(), responseFactory.create()];
 		try {
@@ -635,7 +636,9 @@ describe('tests the managePostContacts function.', function () {
 		catch (error) {
 			expect(error.name).to.eql('DuplicateContactsError');
 			expect(error.message).to.eql('2 duplicate contacts found!');
+			errorThrown = true;
 		}
+		expect(errorThrown).to.eql(true);
 	});
 
 	it('should return contCn for org application, non-matching single contact return by GET on contactGETOptions.requestParams', async () => {
