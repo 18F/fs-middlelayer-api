@@ -189,14 +189,17 @@ function multipleContactsCheck(contId, matchingContacts, fieldsObj, person, apiC
 	});
 
 	if (duplicateContacts.length === 0){
+		// None of the matching contacts have contIds that match the one passed in, so create a new contact and return its contCn
 		return createContact(fieldsObj, person, apiCallLogObject, sudsToken);
 	}
 	else if (duplicateContacts.length === 1){
+			// Only one of the duplicate contacts matches, so return its contCn
 		return new Promise(function(resolve){
 			resolve(tmpContCn);
 		});
 	}
 	else {
+		// We can't distinguish between the duplicates, so throw an error.
 		throw new DuplicateContactsError(duplicateContacts);
 	}
 }
@@ -206,27 +209,30 @@ function multipleContactsCheck(contId, matchingContacts, fieldsObj, person, apiC
  * @param  {Object} res - Response Object
  * @param  {Object} validationSchema - Schema object
  * @param  {Object} body - User input
+ * @return {Promise}	 - returns Promise, but AFAICT all the promises ultimately resolve to returning a contact control number.
  */
 function managePostContacts(apiCallLogObject, contactGETOptions, res, person, sudsToken, fieldsInSudsPostFormat){
-	{
-		apiCallLogObject.GET[contactGETOptions.logUri].response = res;
-		const contId = getContId(fieldsInSudsPostFormat, person);
-		if (res.length === 1 && res[0].contCn) {
-			if (contId === res[0].contId) {
-				return new Promise(function (resolve) {
-					resolve(res[0].contCn);
-				});
-			}
-			else {
-				return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
-			}
-		}
-		else if (res.length > 1) {
-			return multipleContactsCheck(contId, res, fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
+	apiCallLogObject.GET[contactGETOptions.logUri].response = res;
+	const contId = getContId(fieldsInSudsPostFormat, person);
+	if (res.length === 1 && res[0].contCn) {
+		if (contId === res[0].contId) {
+			// The contIds from the fieldsInSudsPostFormat and the only response match, so return the first response's contCn:
+			return new Promise(function (resolve) {
+				resolve(res[0].contCn);
+			});
 		}
 		else {
+			// The contIds from the fieldsInSudsPostFormat and the only response do not match, so create a new contact and return its contCn
 			return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
 		}
+	}
+	else if (res.length > 1) {
+		// Multiple contacts, so resolve them in a separate function.
+		return multipleContactsCheck(contId, res, fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
+	}
+	else {
+		// Something unexpected, so create a new contact and return its contCn (I think this can only happen if an object is passed in as responses, instead of an array.
+		return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
 	}
 }
 
@@ -261,11 +267,14 @@ function post(req, res, validationSchema, body) {
 			const fieldsInSudsPostFormat = prepareSudsPost(validationSchema, body, person);
 			const contactGETOptions = setContactGETOptions(body.applicantInfo, person, sudsToken, apiCallLogObject);
 			apiCallLogObject = contactGETOptions.apiCallLogObject;
+			console.log('33333');
+			console.log(contactGETOptions.requestParams);
+			console.log('44444');
 
 			request.get(contactGETOptions.requestParams)
-				.then((res) => {
-					return managePostContacts(apiCallLogObject, contactGETOptions, res, person, sudsToken, fieldsInSudsPostFormat);	
-				})
+			.then((res) => {
+				return managePostContacts(apiCallLogObject, contactGETOptions, res, person, sudsToken, fieldsInSudsPostFormat);	
+			})
 			.then(function(contCn){
 				return createApplication(fieldsInSudsPostFormat, contCn, apiCallLogObject, sudsToken);
 			})
@@ -286,3 +295,5 @@ function post(req, res, validationSchema, body) {
 module.exports.post = post;
 module.exports.prepareSudsPost = prepareSudsPost;
 module.exports.setContactGETOptions = setContactGETOptions;
+module.exports.managePostContacts = managePostContacts;
+
