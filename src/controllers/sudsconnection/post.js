@@ -186,16 +186,16 @@ function managePostContacts(apiCallLogObject, contactGETOptions, res, person, su
 	 * if no matches, return createContact
 	 */
 	apiCallLogObject.GET[contactGETOptions.logUri].response = res;
-	if (!res.filter) {
-		return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
-	}
-	const contId = getContId(fieldsInSudsPostFormat, person);
-	const matches = res.filter((contact) => contact.contId === contId && contact.contCn);
-	if (matches.length == 1) {
-		return new Promise((resolve) => resolve(matches[0].contCn));
-	}
-	else if (matches.length > 1) {
-		throw new DuplicateContactsError(res);
+
+	if (res.length) {
+		const contId = getContId(fieldsInSudsPostFormat, person);
+		const matches = res.filter((contact) => contact.contId === contId && contact.contCn);
+		if (matches.length === 1) {
+			return new Promise((resolve) => resolve(matches[0].contCn));
+		}
+		else if (matches.length > 1) {
+			throw new DuplicateContactsError(res);
+		}
 	}
 	
 	return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
