@@ -576,10 +576,16 @@ describe('tests the managePostContacts function.', function () {
 		return result;
 	}
 
-
 	it('should return contCn for person applications, non-matching single contact returned by GET on contactGETOptions.requestParams', async () => {
 		const person = true;
 		const response = [responseFactory.create()];
+		const result = await managePostContactsWrapper({}, person, response);
+		expect(result).to.match(contCnPattern);
+	});
+
+	it('should return contCn for person application if no contacts are returned by GET on contactGETOptions.requestParams', async () => {
+		const person = true;
+		const response = [];
 		const result = await managePostContactsWrapper({}, person, response);
 		expect(result).to.match(contCnPattern);
 	});
@@ -624,7 +630,6 @@ describe('tests the managePostContacts function.', function () {
 		const result = await managePostContactsWrapper({'applicantInfo': {'firstName': 'Philip', 'lastName': 'Marlowe'}}, person, response);
 		expect(result).to.match(contCnPattern);
 	});
-
 
 	it('should throw an error if contacts returned by GET on contactGETOptions.requestParams match', async () => {
 		let errorThrown = false;
