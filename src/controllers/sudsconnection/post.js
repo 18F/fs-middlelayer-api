@@ -170,40 +170,6 @@ function createApplication(fieldsObj, contCN, apiCallLogObject, sudsToken){
 	return request.post(createApplicationOptions);
 }
 
-/** handle if multiple contacts are found
-* @param {String} - contId - ID of the contact
-* @param {Array} matchingContacts - response body array of potential contacts with that ContName
-* @param {Boolean} person - whether the applicaion is from an individual or not
-* @param {String} token - JWT token from SUDS
-* @param {Object} apiCallLogObject - running log of the requests
-*/
-function multipleContactsCheck(contId, matchingContacts, fieldsObj, person, apiCallLogObject, sudsToken){
-	const duplicateContacts = [];
-	let tmpContCn;
-
-	matchingContacts.forEach((contact)=>{
-		if (contId === contact.contId){
-			duplicateContacts.push(contact);
-			tmpContCn = contact.contCn;
-		}
-	});
-
-	if (duplicateContacts.length === 0){
-		// None of the matching contacts have contIds that match the one passed in, so create a new contact and return its contCn
-		return createContact(fieldsObj, person, apiCallLogObject, sudsToken);
-	}
-	else if (duplicateContacts.length === 1){
-			// Only one of the duplicate contacts matches, so return its contCn
-		return new Promise(function(resolve){
-			resolve(tmpContCn);
-		});
-	}
-	else {
-		// We can't distinguish between the duplicates, so throw an error.
-		throw new DuplicateContactsError(duplicateContacts);
-	}
-}
-
 /** Handles all the information for a contact Post
  * @param  {Object} req - Request Object
  * @param  {Object} res - Response Object
@@ -211,29 +177,29 @@ function multipleContactsCheck(contId, matchingContacts, fieldsObj, person, apiC
  * @param  {Object} body - User input
  * @return {Promise}	 - returns Promise, but AFAICT all the promises ultimately resolve to returning a contact control number.
  */
-function managePostContacts(apiCallLogObject, contactGETOptions, res, person, sudsToken, fieldsInSudsPostFormat){
+function managePostContacts(apiCallLogObject, contactGETOptions, res, person, sudsToken, fieldsInSudsPostFormat) {
+	/* Set the apiCalLLogObject
+	 * get contId
+	 * check for multiple
+	 *	 if multiple, go through dupes and get matching contCns, and if still more than one, throw error.
+	 *	 if not multiple, get contCn from matches.
+	 * if no matches, return createContact
+	 */
 	apiCallLogObject.GET[contactGETOptions.logUri].response = res;
-	const contId = getContId(fieldsInSudsPostFormat, person);
-	if (res.length === 1 && res[0].contCn) {
-		if (contId === res[0].contId) {
-			// The contIds from the fieldsInSudsPostFormat and the only response match, so return the first response's contCn:
-			return new Promise(function (resolve) {
-				resolve(res[0].contCn);
-			});
-		}
-		else {
-			// The contIds from the fieldsInSudsPostFormat and the only response do not match, so create a new contact and return its contCn
-			return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
-		}
-	}
-	else if (res.length > 1) {
-		// Multiple contacts, so resolve them in a separate function.
-		return multipleContactsCheck(contId, res, fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
-	}
-	else {
-		// Something unexpected, so create a new contact and return its contCn (I think this can only happen if an object is passed in as responses, instead of an array.
+	if (!res.filter) {
 		return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
 	}
+	const contId = getContId(fieldsInSudsPostFormat, person);
+	const matches = res.filter((contact) => contact.contId === contId && contact.contCn);
+	if (matches.length == 1) {
+		return new Promise((resolve) => resolve(matches[0].contCn));
+	}
+	else if (matches.length > 1) {
+		throw new DuplicateContactsError(res);
+	}
+	
+	return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
+
 }
 
 /** Sends requests needed to create an application via the Basic API
