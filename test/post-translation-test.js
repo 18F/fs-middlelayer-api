@@ -572,8 +572,10 @@ describe('tests the managePostContacts function.', function () {
 		const contactGetOptions = setContactGETOptions(testInfo.applicantInfo, person, token, apiObj);
 		const fieldsInSudsPostFormat = wrapSudsPrep(testInfo, noncommercialSchema, person);
 		const result = await managePostContacts(apiObj, contactGetOptions, response, person, token, fieldsInSudsPostFormat);
+		expect(apiObj.GET[contactGetOptions.logUri].response).to.eql(response);
 		return result;
 	}
+
 
 	it('should return contCn for person applications, non-matching single contact returned by GET on contactGETOptions.requestParams', async () => {
 		const person = true;
@@ -609,6 +611,21 @@ describe('tests the managePostContacts function.', function () {
 		expect(result).to.not.eql(marloweContCn);
 	});
 
+	it('should return contCn for person applications, creating a new contCn if response is incorrectly an object and not an array', async () => {
+		const person = true;
+		const response = {};
+		const result = await managePostContactsWrapper({'applicantInfo': {'firstName': 'Philippe', 'lastName': 'Marlowe'}}, person, response);
+		expect(result).to.match(contCnPattern);
+	});
+
+	it('should return contCn for person applications, creating a new contCn if response object has no contCn value', async () => {
+		const person = true;
+		const response = [responseFactory.create({'contCn': ''})];
+		const result = await managePostContactsWrapper({'applicantInfo': {'firstName': 'Philip', 'lastName': 'Marlowe'}}, person, response);
+		expect(result).to.match(contCnPattern);
+	});
+
+
 	it('should throw an error if contacts returned by GET on contactGETOptions.requestParams match', async () => {
 		const person = true;
 		const response = [responseFactory.create(), responseFactory.create()];
@@ -619,13 +636,6 @@ describe('tests the managePostContacts function.', function () {
 			expect(error.name).to.eql('DuplicateContactsError');
 			expect(error.message).to.eql('2 duplicate contacts found!');
 		}
-	});
-
-	it('should return contCn for person applications, creating a new contCn if response is incorrectly an object and not an array', async () => {
-		const person = true;
-		const response = {};
-		const result = await managePostContactsWrapper({'applicantInfo': {'firstName': 'Philippe', 'lastName': 'Marlowe'}}, person, response);
-		expect(result).to.match(contCnPattern);
 	});
 
 	it('should return contCn for org application, non-matching single contact return by GET on contactGETOptions.requestParams', async () => {
