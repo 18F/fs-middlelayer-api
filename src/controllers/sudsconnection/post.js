@@ -171,11 +171,13 @@ function createApplication(fieldsObj, contCN, apiCallLogObject, sudsToken){
 }
 
 /** Handles all the information for a contact Post
- * @param  {Object} req - Request Object
- * @param  {Object} res - Response Object
- * @param  {Object} validationSchema - Schema object
- * @param  {Object} body - User input
- * @return {Promise}	 - returns Promise, but AFAICT all the promises ultimately resolve to returning a contact control number.
+ * @param  {Object} apiCallLogObject			- Object used to log API calls.
+ * @param  {Object} contactGETOptions	   		- Parameters for GET request for contact.
+ * @param  {Object} res					 		- The response from the reqest for the contact.
+ * @param  {Boolean} person				 		- True if the contact is an individual, false otherwise.
+ * @param  {String} sudsToken			   		- Authentication token for interacting with SUDS.
+ * @param  {Object} fieldsInSudsPostFormat  	- Object containing fields in the shape expected by SUDS.
+ * @return {Promise}							- returns Promise; all promises ultimately resolve to returning a contact control number.
  */
 function managePostContacts(apiCallLogObject, contactGETOptions, res, person, sudsToken, fieldsInSudsPostFormat) {
 	/* Set the apiCalLLogObject
