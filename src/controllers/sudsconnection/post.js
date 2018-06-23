@@ -267,9 +267,6 @@ function post(req, res, validationSchema, body) {
 			const fieldsInSudsPostFormat = prepareSudsPost(validationSchema, body, person);
 			const contactGETOptions = setContactGETOptions(body.applicantInfo, person, sudsToken, apiCallLogObject);
 			apiCallLogObject = contactGETOptions.apiCallLogObject;
-			console.log('33333');
-			console.log(contactGETOptions.requestParams);
-			console.log('44444');
 
 			request.get(contactGETOptions.requestParams)
 			.then((res) => {
