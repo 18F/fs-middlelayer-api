@@ -38,7 +38,7 @@ function isAppFromPerson(body){
 }
 
 /**
- * Creates request for Basic API calls to create contact
+ * Creates request for SUDS API calls to create contact
  * @param  {Object} res		 - Response of previous request
  * @param  {Object} apiCallLogObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @param  {Object} fieldsObj   - Object containing post objects to be sent to basic api
@@ -58,13 +58,13 @@ function postRequest(res, apiCallLogObject, fieldsObj, responseKey, requestKey, 
 }
 
 /**
- * Gets the data from all fields that are to be send to the basic API, also builds post object, used to pass data to basic api
+ * Gets the data from all fields that are to be send to the SUDS API, also builds post object, used to pass data to SUDS api
  * @param  {Array} fieldsToBasic - All fields in object form which will be sent to basicAPI
  * @return {Object} - Array of endpoints with which fields should go in them
  */
-function assignFieldsToEndpoints(fieldsToBasic){
+function assignFieldsToEndpoints(fieldsToSUDS){
 	const fieldsAssignedToEndpoints = {};
-	fieldsToBasic.forEach((field)=>{
+	fieldsToSUDS.forEach((field)=>{
 		const key = Object.keys(field)[0];
 		if (field[key].hasOwnProperty('sudsEndpoint')){
 			field[key].sudsEndpoint.forEach((location)=>{
@@ -171,6 +171,14 @@ function createApplication(fieldsObj, contCN, apiCallLogObject, sudsToken){
 }
 
 /** Handles all the information for a contact Post
+ *
+ * Set the apiCallLogObject
+ * get contId
+ * check for multiple
+ *	 if multiple, go through dupes and get matching contCns, and if still more than one, throw error.
+ *	 if not multiple, get contCn from matches.
+ * if no matches, return createContact
+ * 
  * @param  {Object} apiCallLogObject			- Object used to log API calls.
  * @param  {Object} contactGETOptions	   		- Parameters for GET request for contact.
  * @param  {Object} res					 		- The response from the reqest for the contact.
@@ -180,13 +188,6 @@ function createApplication(fieldsObj, contCN, apiCallLogObject, sudsToken){
  * @return {Promise}							- returns Promise; all promises ultimately resolve to returning a contact control number.
  */
 function managePostContacts(apiCallLogObject, contactGETOptions, res, person, sudsToken, fieldsInSudsPostFormat) {
-	/* Set the apiCalLLogObject
-	 * get contId
-	 * check for multiple
-	 *	 if multiple, go through dupes and get matching contCns, and if still more than one, throw error.
-	 *	 if not multiple, get contCn from matches.
-	 * if no matches, return createContact
-	 */
 	apiCallLogObject.GET[contactGETOptions.logUri].response = res;
 
 	if (res.length) {

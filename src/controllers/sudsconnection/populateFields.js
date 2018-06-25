@@ -1,7 +1,7 @@
 /*
 
-  ___ ___	   ___			   _ _	   _   ___ ___
- | __/ __|  ___| _ \___ _ _ _ __ (_) |_	/_\ | _ \_ _|
+  ___ ___       ___               _ _       _   ___ ___
+ | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
  | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
@@ -95,9 +95,7 @@ function generateAutoPopulatedField(field, person, fieldMakeUp) {
 	if (field.madeOf.function === 'contId') {
 		return contId(person, fieldMakeUp);
 	}
-	else if (field.madeOf.function === 'concat') {
-		return concat(fieldMakeUp);
-	}
+	return concat(fieldMakeUp);
 }
 
 /** Given list of fields which must be auto-populate, returns values to store
@@ -108,7 +106,7 @@ function generateAutoPopulatedField(field, person, fieldMakeUp) {
  */
 function buildAutoPopulatedField (field, person, body) {
 	const getValue = (body, madeOfField) => madeOfField.fromIntake ? getFieldFromBody(madeOfField.field, body) : madeOfField.value;
-	const fieldMakeUp = field.madeOf.fields.map((madeOfField) => getValue(body, madeOfField)).filter(i => i);
+	const fieldMakeUp = field.madeOf.fields.map((madeOfField) => getValue(body, madeOfField)).filter(i => i); // getValue on all the fields, and strip the falsy results.
 
 	return generateAutoPopulatedField(field, person, fieldMakeUp);
 }
@@ -142,7 +140,7 @@ function extractIntakeValue(intakeRequest, field, splitPath) {
  * @param {String} fieldKey - key of the field that will be field that the data will be extracted for
  * @return {String|integer} - value of the field
  */
-function generateValue(fieldKey, field, intakeRequest, { person, autoPopulatedKeys }) {
+function generateValue(fieldKey, field, intakeRequest, person, autoPopulatedKeys) {
 	if (field.fromIntake) {
 		const splitPath = fieldKey.split('.');
 		return extractIntakeValue(intakeRequest, field, splitPath);
@@ -178,7 +176,7 @@ function populateValues(fieldsByEndpoint, intakeRequest, autoPopulatedFields, pe
 		Object.keys(fieldsByEndpoint[endpoint]).forEach((fieldKey) => {
 			const field = fieldsByEndpoint[endpoint][fieldKey];
 
-			const generatedValue = generateValue(fieldKey, field, intakeRequest, { person, autoPopulatedKeys });
+			const generatedValue = generateValue(fieldKey, field, intakeRequest, person, autoPopulatedKeys);
 
 			const splitPath = fieldKey.split('.');
 			const sudsFieldName = getFieldName(field, splitPath);
