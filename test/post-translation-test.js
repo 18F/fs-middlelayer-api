@@ -1,8 +1,8 @@
 /* eslint no-undefined: 0 */
 /*
 
-  ___ ___	   ___			   _ _	   _   ___ ___ 
- | __/ __|  ___| _ \___ _ _ _ __ (_) |_	/_\ | _ \_ _|
+  ___ ___       ___               _ _       _   ___ ___ 
+ | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
  | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
@@ -22,10 +22,14 @@ const deref = require('deref');
 const Deref = deref();
 const expect = chai.expect;
 const factory = require('unionized');
+const server = include('src/index.js'); // eslint-disable-line
+// Linting on above line disabled because without it you can't run mocha on this test file on its own, even though the variable isn't used in this file.
 const util = require('util');
 
+const auth = require('../src/controllers/sudsconnection/auth.js');
 const db = require('../src/controllers/db.js');
 const prepareSudsPost = require('../src/controllers/sudsconnection/post.js').prepareSudsPost;
+const setContactGETOptions = require('../src/controllers/sudsconnection/post.js').setContactGETOptions;
 const populateValues = require('../src/controllers/sudsconnection/populateFields.js').populateValues;
 
 const tempOutfitterInput = include('test/data/testInputTempOutfitters.json');
@@ -396,7 +400,7 @@ describe('Tests for db.getFieldsToStore', function(){
 describe('Tests the populateValues function', function(){
 
 	it('should return empty given empty parameters', function(){
-		expect(populateValues({}, {}, {}, true))
+		expect(populateValues({}, {}, [], true))
 			.to.eql({});
 	});
 
@@ -467,6 +471,52 @@ describe('Tests the populateValues function', function(){
 			.to.eql(expected);
 	});
 
+});
+
+//*******************************************************************
+
+describe('tests the setContactGETOptions function.', function () {
+
+	const token = 'asdf';
+	const getApiObj = () => {
+		return {
+			GET: {
+				'/contact/lastname/{lastName}': { request: null },
+				'/contact/orgcode/{orgCode}': { request: null } }
+		};
+	}; // have to use function to recreate this this in each test because deep properties make copying awkward
+	
+	it('should return appropriate info for person applications.', function () {
+		const apiObj = getApiObj();
+		const testInfo = noncommercialFactory.create();
+		const person = true;
+		const result = setContactGETOptions(testInfo.applicantInfo, person, token, apiObj);
+		expect(result.logUri).to.eql('/contact/lastname/{lastName}');
+		expect(result.apiCallLogObject.GET['/contact/lastname/{lastName}']).to.eql({ request: { lastName: 'Doe' } });
+		expect(result.apiCallLogObject.GET['/contact/orgcode/{orgCode}']).to.eql({ request: null });
+		expect(result.requestParams).to.eql({
+			method: 'GET',
+			uri: `${auth.SUDS_API_URL}/contact/lastname/Doe`,
+			json: true,
+			headers: { Authorization: 'Bearer asdf' }
+		});
+	});
+
+	it('should return appropriate info for organization applications.', function () {
+		const apiObj = getApiObj();
+		const testInfo = noncommercialFactory.create({ 'applicantInfo.organizationName': 'Umbrella Corp' });
+		const person = false;
+		const result = setContactGETOptions(testInfo.applicantInfo, person, token, apiObj);
+		expect(result.logUri).to.eql('/contact/orgcode/{orgCode}');
+		expect(result.apiCallLogObject.GET['/contact/orgcode/{orgCode}']).to.eql({ request: { orgCode: 'Umbrella Corp' } });
+		expect(result.apiCallLogObject.GET['/contact/lastname/{lastName}']).to.eql({ request: null });
+		expect(result.requestParams).to.eql({
+			method: 'GET',
+			uri: `${auth.SUDS_API_URL}/contact/orgcode/Umbrella Corp`,
+			json: true,
+			headers: { Authorization: 'Bearer asdf' }
+		});
+	});
 });
 
 //*******************************************************************
