@@ -36,7 +36,6 @@ const bcrypt = require('bcrypt-nodejs');
 const db = include('src/controllers/db.js');
 const models = include('src/models');
 
-
 const adminCredentials = util.makeUserEntry('admin');
 
 const specialUses = {};
@@ -70,7 +69,8 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 
 	let token;
 	let postControlNumber;
-	let postFileName;
+	let postFileName; //eslint-disable-line no-unused-vars
+	// eslint complains about postFileName not being used, but it's used below.
 
 	beforeEach(function(done) {
 
@@ -255,6 +255,17 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 			})
 			.expect(200, done);
 
+		});
+
+		it('should return intakeId in json when getting outfitters permit using the controlNumber returned from POST', function(done) {
+
+			request(server)
+			.get(`${testURL}${postControlNumber}/`)
+			.set('x-access-token', token)
+			.expect(function(res){
+				expect(res.body.intakeId).to.equal(90);
+			})
+			.expect(200, done);
 		});
 
 		it('should return valid file when getting outfitters files using the controlNumber and fileName returned from POST', function(done) {

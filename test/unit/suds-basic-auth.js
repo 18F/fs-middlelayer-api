@@ -5,7 +5,7 @@ const sinon = require('sinon');
 const request = require('request-promise');
 
 const testData = require('./suds-basic-auth.json');
-const basic = require('../../src/controllers/nrmconnection');
+const SUDSConnection = require('../../src/controllers/sudsconnection');
 const vcapConstants = require('../../src/controllers/vcap-constants.js');
 
 function verifyArgsForSUDSAuthentication(args) {
@@ -30,10 +30,10 @@ function verifyArgsForSUDSAuthentication(args) {
 // a call to the /login SUDS endpoint, that the results of that call are
 // handled correctly, and that subsequent calls to the SUDS API include a
 // bearer token in the Authorization header.  It does NOT test the correct
-// behavior of the getFromBasic() or postToBasic() methods otherwise.
+// behavior of the getFromBasic() or post() methods otherwise.
 
-describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
-	describe('getFromBasic()', () => {
+describe('unit test - src/controllers/SUDSConnection.js - SUDS authentication', () => {
+	describe('get()', () => {
 		describe('error getting token', () => {
 			const error = new Error();
 			const notAnError = { };
@@ -52,7 +52,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should make one post request', () => {
-				return basic.getFromBasic().catch(() => {
+				return SUDSConnection.get().catch(() => {
 					expect(request.post.callCount).to.equal(1);
 					return notAnError;
 				}).then(err => {
@@ -64,7 +64,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should correctly request a SUDS authentication token', () => {
-				return basic.getFromBasic().catch(() => {
+				return SUDSConnection.get().catch(() => {
 					verifyArgsForSUDSAuthentication(request.post.args[0]);
 					return notAnError;
 				}).then(err => {
@@ -76,7 +76,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should ultimately reject with the expected value', () => {
-				return basic.getFromBasic().catch(finalResult => {
+				return SUDSConnection.get().catch(finalResult => {
 					expect(finalResult).to.equal(error);
 					return notAnError;
 				}).then(err => {
@@ -105,7 +105,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should make one post request', () => {
-				return basic.getFromBasic().catch(() => {
+				return SUDSConnection.get().catch(() => {
 					expect(request.post.callCount).to.equal(1);
 					return notAnError;
 				}).then(err => {
@@ -117,7 +117,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should correctly request a SUDS authentication token', () => {
-				return basic.getFromBasic().catch(() => {
+				return SUDSConnection.get().catch(() => {
 					verifyArgsForSUDSAuthentication(request.post.args[0]);
 					return notAnError;
 				}).then(err => {
@@ -129,7 +129,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should ultimately reject with an error', () => {
-				return basic.getFromBasic().catch(finalResult => {
+				return SUDSConnection.get().catch(finalResult => {
 					expect(finalResult.message).to.equal('Unable to retrieve valid token from SUDS API.');
 					return notAnError;
 				}).then(err => {
@@ -159,27 +159,27 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should make one GET and one POST requests', () => {
-				return basic.getFromBasic().then(() => {
+				return SUDSConnection.get().then(() => {
 					expect(request.post.callCount).to.equal(1);
 					expect(request.get.callCount).to.equal(1);
 				});
 			});
 
 			it('should correctly request a SUDS authentication token', () => {
-				return basic.getFromBasic().then(() => {
+				return SUDSConnection.get().then(() => {
 					verifyArgsForSUDSAuthentication(request.post.args[0]);
 				});
 			});
 
 			it('should ultimately resolve with the expected value', () => {
-				return basic.getFromBasic().then(finalResult => {
+				return SUDSConnection.get().then(finalResult => {
 					expect(finalResult).to.equal('hello world');
 				});
 			});
 		});
 	});
 
-	describe('postToBasic()', () => {
+	describe('post()', () => {
 		describe('error getting token', () => {
 			const error = new Error();
 			const notAnError = { };
@@ -201,7 +201,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should make one GET request', () => {
-				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(() => {
+				return SUDSConnection.post({}, {}, testData.schema, testData.body).catch(() => {
 					expect(request.post.callCount).to.equal(1);
 					return notAnError;
 				}).then(err => {
@@ -213,7 +213,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should correctly request a SUDS authentication token', () => {
-				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(() => {
+				return SUDSConnection.post({}, {}, testData.schema, testData.body).catch(() => {
 					verifyArgsForSUDSAuthentication(request.post.args[0]);
 					return notAnError;
 				}).then(err => {
@@ -225,7 +225,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should ultimately reject with the expected value', () => {
-				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(finalResult => {
+				return SUDSConnection.post({}, {}, testData.schema, testData.body).catch(finalResult => {
 					expect(finalResult).to.equal(error);
 					return notAnError;
 				}).then(err => {
@@ -257,7 +257,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should make one POST request', () => {
-				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(() => {
+				return SUDSConnection.post({}, {}, testData.schema, testData.body).catch(() => {
 					expect(request.post.callCount).to.equal(1);
 					return notAnError;
 				}).then(err => {
@@ -269,7 +269,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should correctly request a SUDS authentication token', () => {
-				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(() => {
+				return SUDSConnection.post({}, {}, testData.schema, testData.body).catch(() => {
 					verifyArgsForSUDSAuthentication(request.post.args[0]);
 					return notAnError;
 				}).then(err => {
@@ -281,7 +281,7 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should ultimately reject with an error', () => {
-				return basic.postToBasic({}, {}, testData.schema, testData.body).catch(finalResult => {
+				return SUDSConnection.post({}, {}, testData.schema, testData.body).catch(finalResult => {
 					expect(finalResult.message).to.equal('Unable to retrieve valid token from SUDS API.');
 					return notAnError;
 				}).then(err => {
@@ -312,20 +312,20 @@ describe('unit test - src/controllers/basic.js - SUDS authentication', () => {
 			});
 
 			it('should make one GET and one POST requests', () => {
-				return basic.postToBasic({}, {}, testData.schema, testData.body).then(() => {
+				return SUDSConnection.post({}, {}, testData.schema, testData.body).then(() => {
 					expect(request.post.callCount).to.equal(5);
 					expect(request.get.callCount).to.equal(1);
 				});
 			});
 
 			it('should correctly request a SUDS authentication token', () => {
-				return basic.postToBasic({}, {}, testData.schema, testData.body).then(() => {
+				return SUDSConnection.post({}, {}, testData.schema, testData.body).then(() => {
 					verifyArgsForSUDSAuthentication(request.post.args[0]);
 				});
 			});
 
 			it('should ultimately resolve with the expected value', () => {
-				return basic.postToBasic({}, {}, testData.schema, testData.body).then(finalResult => {
+				return SUDSConnection.post({}, {}, testData.schema, testData.body).then(finalResult => {
 					expect(finalResult).to.be.an('object');
 				});
 			});

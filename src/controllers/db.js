@@ -146,7 +146,7 @@ function saveApplication(toStore) {
 * @param {Object} schemaKey - field to check about storage
 */
 function checkIfStore(saveLocation, schemaKey){
-	if (saveLocation === 'basic' && schemaKey.hasOwnProperty('basicStore')){
+	if (saveLocation === 'SUDS' && schemaKey.hasOwnProperty('sudsEndpoint')){
 		return true;
 	}
 	if (saveLocation === 'middleLayer' && schemaKey.hasOwnProperty('localStore') && schemaKey.type !== 'file'){

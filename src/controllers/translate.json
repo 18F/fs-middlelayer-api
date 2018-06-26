@@ -33,14 +33,14 @@
             {
                 "properties": {
                     "organizationName": {
-                        "basicField":"orgCode",
+                        "sudsField":"orgCode",
                         "default":"",
                         "fromIntake":true,
-                        "basicStore":["/contact/organization"],
+                        "sudsEndpoint":["/contact/organization"],
                         "type": "string"
                     },
                     "orgType":{
-                      "basicField":"orgType",
+                      "sudsField":"orgType",
                         "description":"Organization Type",
                         "enum":[
                             "Association",
@@ -65,7 +65,7 @@
                             "function":"contId"
                         },
                         "fromIntake":false,
-                        "basicStore":["/contact/organization"],
+                        "sudsEndpoint":["/contact/organization"],
                         "type":"string"
                     }
                 },
@@ -91,11 +91,39 @@
                 "type":"boolean"
             },
             "activityDescription": {
-                "basicField":"purpose",
                 "default":"",
-                "fromIntake":true,
+                "fromIntake": true,
                 "localStore":true,
-                "basicStore":["/application"],
+                "type": "string"
+            },
+            "purpose": {
+                "sudsField": "purpose",
+                "default": "",
+                "fromIntake": false,
+                "madeOf": {
+                    "fields": [
+                        {
+                            "fromIntake": false,
+                            "value": "ID on Open Forest platform: "
+                        },
+                        {
+                            "fromIntake": true,
+                            "field": "intakeId"
+                        },
+                        {
+                            "fromIntake": false,
+                            "value": ". \n"
+                        },
+                        {
+                            "fromIntake": true,
+                            "field": "tempOutfitterFields.activityDescription"
+                        }
+                    ],
+                    "function": "concat"
+                },
+                "sudsEndpoint": [
+                    "/application"
+                ], 
                 "type": "string"
             },
             "advertisingURL": {
@@ -190,10 +218,10 @@
                 ]
             },
             "formName":{
-                "basicField":"formName",
+                "sudsField":"formName",
                 "default":"FS-2700-4I",
                 "localStore":true,
-                "basicStore": ["/application"],
+                "sudsEndpoint": ["/application"],
                 "type":"string"
             }
         },
@@ -242,14 +270,14 @@
             {
                 "properties": {
                     "organizationName": {
-                        "basicField":"orgCode",
+                        "sudsField":"orgCode",
                         "default":"",
                         "fromIntake":true,
-                        "basicStore":["/contact/organization"],
+                        "sudsEndpoint":["/contact/organization"],
                         "type": "string"
                     },
                     "orgType":{
-                        "basicField":"orgType",
+                        "sudsField":"orgType",
                         "default":"",
                         "enum":[
                             "Association",
@@ -274,7 +302,7 @@
                             "function":"contId"
                         },
                         "fromIntake":false,
-                        "basicStore":["/contact/organization"],
+                        "sudsEndpoint":["/contact/organization"],
                         "type":"string"
                     }
                 },
@@ -328,22 +356,30 @@
                 "type": "integer"
             },
             "formName":{
-                "basicField":"formName",
+                "sudsField":"formName",
                 "default":"FS-2700-3B",
                 "fromIntake":false,
                 "localStore":true,
-                "basicStore": ["/application"],
+                "sudsEndpoint": ["/application"],
                 "type":"string"
             },
             "purpose":{
-                "basicField":"purpose",
+                "sudsField":"purpose",
                 "default":"",
                 "fromIntake":false,
                 "madeOf":{
                     "fields":[
                         {
                             "fromIntake":false,
-                            "value":"Activity Description: "
+                            "value":"ID on Open Forest platform: "
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"intakeId"
+                        },
+                        {
+                            "fromIntake":false,
+                            "value":". \n Activity Description: "
                         },
                         {
                             "fromIntake":true,
@@ -351,11 +387,7 @@
                         },
                         {
                             "fromIntake":false,
-                            "value":". "
-                        },
-                        {
-                            "fromIntake":false,
-                            "value":"Location Description: "
+                            "value":". \n Location Description: "
                         },
                         {
                             "fromIntake":true,
@@ -363,11 +395,7 @@
                         },
                         {
                             "fromIntake":false,
-                            "value":". "
-                        },
-                        {
-                            "fromIntake":false,
-                            "value":"Start Date Time: "
+                            "value":". \n Start Date Time: "
                         },
                         {
                             "fromIntake":true,
@@ -375,11 +403,7 @@
                         },
                         {
                             "fromIntake":false,
-                            "value":". "
-                        },
-                        {
-                            "fromIntake":false,
-                            "value":"End Date Time: "
+                            "value":". \n End Date Time: "
                         },
                         {
                             "fromIntake":true,
@@ -387,11 +411,7 @@
                         },
                         {
                             "fromIntake":false,
-                            "value":". "
-                        },
-                        {
-                            "fromIntake":false,
-                            "value":"Number Participants: "
+                            "value":". \n Number Participants: "
                         },
                         {
                             "fromIntake":true,
@@ -399,11 +419,7 @@
                         },
                         {
                             "fromIntake":false,
-                            "value":". "
-                        },
-                        {
-                            "fromIntake":false,
-                            "value":"Number Spectators: "
+                            "value":". \n Number Spectators: "
                         },
                         {
                             "fromIntake":true,
@@ -416,7 +432,7 @@
                     ],
                     "function":"concat"
                 },
-                "basicStore":["/application"],
+                "sudsEndpoint":["/application"],
                 "type":"string"
             }
         },
@@ -427,34 +443,34 @@
         "type": "object",
         "properties": {
             "areaCode": {
-                "basicField":"areaCode",
+                "sudsField":"areaCode",
                 "default":"0",
                 "fromIntake":true,
                 "pattern":"^[0-9]{3}$",
-                "basicStore":["/contact/phone"],
+                "sudsEndpoint":["/contact/phone"],
                 "type": "string"
             },
             "number": {
-                "basicField":"phoneNumber",
+                "sudsField":"phoneNumber",
                 "default":"0",
                 "fromIntake":true,
                 "pattern":"^[0-9]{7}$",
-                "basicStore":["/contact/phone"],
+                "sudsEndpoint":["/contact/phone"],
                 "type": "string"
             },
             "extension": {
-                "basicField":"extension",
+                "sudsField":"extension",
                 "default":"",
                 "fromIntake":true,
                 "pattern": "[\\d]+",
-                "basicStore":["/contact/phone"],
+                "sudsEndpoint":["/contact/phone"],
                 "type": "string"
             },
             "phoneType": {
-                "basicField":"phoneNumberType",
-                "default":"",
-                "fromIntake":true,
-                "basicStore":["/contact/phone"],
+                "sudsField":"phoneNumberType",
+                "default":"BUSINESS",
+                "fromIntake":false,
+                "sudsEndpoint":["/contact/phone"],
                 "type": "string"
             }
         },
@@ -466,66 +482,66 @@
         "type":"object",
         "properties":{
             "firstName": {
-                "basicField":"firstName",
+                "sudsField":"firstName",
                 "default":"",
                 "fromIntake":true,
                 "maxLength":255,
-                "basicStore":["/contact/person"],
+                "sudsEndpoint":["/contact/person"],
                 "type": "string"
             },
             "lastName": {
-                "basicField":"lastName",
+                "sudsField":"lastName",
                 "default":"",
                 "fromIntake":true,
                 "maxLength":255,
-                "basicStore":["/contact/person"],
+                "sudsEndpoint":["/contact/person"],
                 "type": "string"
             },
             "eveningPhone": { "$ref": "phoneNumber" },
             "dayPhone": { "$ref": "phoneNumber" },
             "emailAddress": {
-                "basicField":"email",
+                "sudsField":"email",
                 "default":"",
                 "fromIntake":true,
                 "pattern":"^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$",
-                "basicStore":["/contact/address"],
+                "sudsEndpoint":["/contact/address"],
                 "type": "string"
             },
             "mailingAddress": {
-                "basicField":"address1",
+                "sudsField":"address1",
                 "default":"",
                 "fromIntake":true,
-                "basicStore":["/contact/address"],
+                "sudsEndpoint":["/contact/address"],
                 "type": "string"
             },
             "mailingAddress2": {
-                "basicField":"address2",
+                "sudsField":"address2",
                 "default":"",
                 "fromIntake":true,
-                "basicStore":["/contact/address"],
+                "sudsEndpoint":["/contact/address"],
                 "type": "string"
             },
             "mailingCity": {
-                "basicField":"cityName",
+                "sudsField":"cityName",
                 "default":"",
                 "fromIntake":true,
-                "basicStore":["/contact/address"],
+                "sudsEndpoint":["/contact/address"],
                 "type": "string"
             },
             "mailingState": {
-                "basicField":"stateCode",
+                "sudsField":"stateCode",
                 "default":"",
                 "fromIntake":true,
                 "pattern":"^(A[EKLPRSZ]|C[AOT]|D[CE]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHVJMY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])$",
-                "basicStore":["/contact/address"],
+                "sudsEndpoint":["/contact/address"],
                 "type": "string"
             },
             "mailingZIP": {
-                "basicField":"postalCode",
+                "sudsField":"postalCode",
                 "default":"",
                 "fromIntake":true,
                 "pattern":"^[0-9]{5}$|^[0-9]{9}$",
-                "basicStore":["/contact/address"],
+                "sudsEndpoint":["/contact/address"],
                 "type": "string"
             },
             "website":{
@@ -535,9 +551,9 @@
                 "type": "string"
             },
             "countryName":{
-                "basicField":"countryName",
+                "sudsField":"countryName",
                 "default":"United States of America",
-                "basicStore":["/contact/address"],
+                "sudsEndpoint":["/contact/address"],
                 "type": "string"
             }
         },
@@ -547,6 +563,12 @@
         "id":"/commonFields",
         "type":"object",
         "properties":{
+            "intakeId": {
+                "default":"",
+                "fromIntake":true,
+                "localStore":true,
+                "type" : "integer"
+            },
             "region": {
                 "default":"",
                 "fromIntake":true,
@@ -569,7 +591,7 @@
                 "type" : "string"
             },
             "securityId":{
-                "basicField":"securityId",
+                "sudsField":"securityId",
                 "default":"",
                 "fromIntake":false,
                 "madeOf":{
@@ -585,11 +607,11 @@
                     ],
                     "function":"concat"
                 },
-                "basicStore":["/application", "/contact/address", "/contact/phone"],
+                "sudsEndpoint":["/application", "/contact/address", "/contact/phone"],
                 "type" : "string"
             },
             "managingID":{
-                "basicField":"managingOrg",
+                "sudsField":"managingOrg",
                 "default":"",
                 "fromIntake":false,
                 "madeOf":{
@@ -605,11 +627,11 @@
                     ],
                     "function":"concat"
                 },
-                "basicStore":["/application"],
+                "sudsEndpoint":["/application"],
                 "type" : "string"
             },
             "adminOrg":{
-                "basicField":"adminOrg",
+                "sudsField":"adminOrg",
                 "default":"",
                 "fromIntake":false,
                 "madeOf":{
@@ -625,15 +647,19 @@
                     ],
                     "function":"concat"
                 },
-                "basicStore":["/application"],
+                "sudsEndpoint":["/application"],
                 "type" : "string"
             },
             "epermitId":{
-                "basicField":"epermitId",
+                "sudsField":"epermitId",
                 "default":"",
                 "fromIntake":false,
                 "madeOf":{
                     "fields":[
+                        {
+                            "fromIntake":false,
+                            "value" : "EP-"
+                        },
                         {
                             "fromIntake":true,
                             "field":"region"
@@ -641,29 +667,37 @@
                         {
                             "fromIntake":true,
                             "field":"forest"
+                        },
+                        {
+                            "fromIntake":false,
+                            "value" : "-"
+                        },
+                        {
+                            "fromIntake":true,
+                            "field":"intakeId"
                         }
                     ],
-                    "function":"ePermitId"
+                    "function":"concat"
                 },
-                "basicStore":["/application"],
+                "sudsEndpoint":["/application"],
                 "type" : "string"
             },
             "acres":{
-                "basicField":"acres",
+                "sudsField":"acres",
                 "default":0,
                 "fromIntake":false,
-                "basicStore":["/application"],
+                "sudsEndpoint":["/application"],
                 "type" : "integer"
             },
             "contCn":{
-                "basicField":"contCn",
+                "sudsField":"contCn",
                 "default":"",
                 "fromIntake":false,
-                "basicStore":["/contact/phone", "/contact/address", "/application"],
+                "sudsEndpoint":["/contact/phone", "/contact/address", "/application"],
                 "type" : "string"
             },
             "contId":{
-                "basicField":"contId",
+                "sudsField":"contId",
                 "default":"",
                 "fromIntake":false,
                 "madeOf":{
@@ -687,7 +721,7 @@
                     ],
                     "function":"contId"
                 },
-                "basicStore":["/contact/person", "/contact/organization"],
+                "sudsEndpoint":["/contact/person", "/contact/organization"],
                 "type" : "string"
             }
         },

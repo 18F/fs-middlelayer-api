@@ -16,7 +16,7 @@
 const jsf = require('json-schema-faker');
 
 const db = require('./db.js');
-const NRMConnection = require('./nrmconnection');
+const SUDSConnection = require('./sudsconnection');
 const errorUtil = require('./errors/error.js');
 const fileStore = require('./filestore.js');
 const util = require('./utility.js');
@@ -25,7 +25,7 @@ const util = require('./utility.js');
 
 /** Populates fields at the top level of an application
  * @param  {String} intakeField - field in cnData to get the input value.
- * @param  {Object} cnData - application data from Basic API
+ * @param  {Object} cnData - application data from SUDS API
  * @param  {Object} getSchema - schema used for GET requests
  * @param  {Object} jsonData - object to be populated and returned to user
  * @param  {String} key - field in jsonData to populated
@@ -44,7 +44,7 @@ function getTopLevelField(intakeField, cnData, getSchema, jsonData, key){
 
 }
 /** Populates fields a sublevel of an application
- * @param  {Object} cnData - application data from Basic API
+ * @param  {Object} cnData - application data from SUDS API
  * @param  {Object} getSchema - schema used for GET requests
  * @param  {Object} jsonData - object to be populated and returned to user
  * @param  {String} key - field in jsonData to populated
@@ -75,7 +75,7 @@ function getSubLevelField(cnData, getSchema, key, jsonData){
 }
 
 /**
- * @param  {Object} cnData - application data from Basic API
+ * @param  {Object} cnData - application data from SUDS API
  * @param  {Object} applicationData - data about application, retreived from DB
  * @param  {Object} schemaData - object filled with the default values for a GET request
  * @param  {Object} jsonData - object to be populated and returned to user
@@ -111,7 +111,7 @@ function buildGetResponse(cnData, applicationData, schemaData, jsonData, getSche
 }
 
 /**
- * @param  {Object} cnData - application data from Basic API
+ * @param  {Object} cnData - application data from SUDS API
  * @param  {Object} applicationData - data about application, retreived from DB
  * @param  {Object} outputSchema - schema used for GET requests
  * @return {Object} object populated with application data
@@ -144,8 +144,7 @@ function getFilesRoute(req, res, controlNumber){
 		});
 }
 
-function getNRMPostProcess(req, res, applicationDataFromNRM, controlNumber, reqData) {
-	const pathData = reqData.schema;
+function getSUDSPostProcess(req, res, applicationDataFromSUDS, controlNumber, reqData) {
 
 	const fileTypes = {
 		'gud': 'guideDocumentation',
@@ -162,14 +161,14 @@ function getNRMPostProcess(req, res, applicationDataFromNRM, controlNumber, reqD
 				localApplicationData.application[fileType] = file.fileName;
 			});
 
-			const responseData = copyGenericInfo(applicationDataFromNRM,
+			const responseData = copyGenericInfo(applicationDataFromSUDS,
 				localApplicationData.application,
-				pathData['x-getTemplate']
+				reqData.schema['x-getTemplate']
 			);
 
 			responseData.controlNumber = controlNumber;
 			responseData.status = 'success';
-			util.logControllerAction(req, 'get.getNRMPostProcess');
+			util.logControllerAction(req, 'get.getSUDSPostProcess');
 			res.json(responseData);
 		})
 		.catch((error) => {
@@ -194,9 +193,9 @@ function getByControlNumber(req, res, reqData) {
 		getFilesRoute(req, res, reqData);
 	}
 	else {
-		NRMConnection.getFromBasic(req, res, controlNumber)
-		.then((applicationDataFromNRM) => {
-			getNRMPostProcess(req, res, applicationDataFromNRM, controlNumber, reqData);
+		SUDSConnection.get(req, res, controlNumber)
+		.then((applicationDataFromSUDS) => {
+			getSUDSPostProcess(req, res, applicationDataFromSUDS, controlNumber, reqData);
 		})
 		.catch((error) => {
 			errorUtil.getErrorHandle(req, res, error);

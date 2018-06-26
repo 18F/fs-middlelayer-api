@@ -21,7 +21,9 @@ const fileMimes = [
 	'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 	'application/msword',
 	'text/rtf',
-	'application/pdf'
+	'application/pdf',
+	'application/vnd.ms-excel',
+	'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 ];
 
 /**

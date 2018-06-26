@@ -1,15 +1,15 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Non-Object Property",
-    "description": "A property listed under validation.json",
+    "description": "A property listed under translate.json",
     "type": "object",
     "properties":{
     	"allOf":{
     		"description":"Only used for properties of type object. Used for validation purposes to require that all of the fields listed be provided.",
     		"type":"object"
     	},
-    	"basicField":{
-    		"description":"Describes what the name of the field should be when sent to the basic API. Only required if the field will be sent to the basic API, if the field will be stored in just the DB or no where at all, this field will be ignored.",
+    	"sudsField":{
+    		"description":"Describes what the name of the field should be when sent to the SUDS API. Only required if the field will be sent to the basic API, if the field will be stored in just the DB or no where at all, this field will be ignored.",
     		"type":"string"
     	},
     	"default":{
@@ -82,8 +82,8 @@
         "description":"Whether the field should be stored in the database.",
         "type":"boolean"
       },
-    	"basicStore":{
-    		"description":"Array the endpoints that this field should be passed onto in NRM.",
+    	"sudsEndpoint":{
+    		"description":"Array the endpoints that this field should be passed onto in NRM SUDS.",
     		"type":"array",
     		"items":{
     			"description":"String describing the location to store this field",
