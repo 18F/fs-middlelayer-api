@@ -232,13 +232,13 @@ describe('Tests that the following object field objects were populated properly'
 
 	it('correctly builds a contID for an organization with a long name', function(){
 		// TODO: Enable this test when we verify what the contId for an organization should be; code and schema make it look like it might be either the same as for an individual (which is a little odd) or the organization type (which would be very odd).
-        const dispossessed = [
-            'There was a wall. It did not look important. It was built of uncut rocks roughly mortared',
-            'An adult could look right over it, and even a child could climb it',
-            'Where it crossed the roadway, instead of having a gate it degenerated into mere geometry, a line, an idea of boundary',
-            'But the idea was real. It was important',
-            'For seven generations there had been nothing in the world more important than that wall.'
-        ].join('. ');
+		const dispossessed = [
+			'There was a wall. It did not look important. It was built of uncut rocks roughly mortared',
+			'An adult could look right over it, and even a child could climb it',
+			'Where it crossed the roadway, instead of having a gate it degenerated into mere geometry, a line, an idea of boundary',
+			'But the idea was real. It was important',
+			'For seven generations there had been nothing in the world more important than that wall.'
+		].join('. ');
 		const body = tempOutfitterFactory.create({
 			'applicantInfo': {
 				'firstName': 'John',
