@@ -81,7 +81,7 @@ function getFieldFromBody(path, body){
  */
 function contId(person, fieldMakeUp) {
 	const fields = person ? fieldMakeUp.slice(0, 3) : fieldMakeUp.slice(-1);
-	return upperCaseJoin(fields);
+	return upperCaseJoin(fields).slice(0,30);
 }
 
 /**
