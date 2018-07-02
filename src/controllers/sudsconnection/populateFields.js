@@ -80,8 +80,39 @@ function getFieldFromBody(path, body){
  * @return {String}						- The uppercased joined fields.
  */
 function contId(person, fieldMakeUp) {
-	const fields = person ? fieldMakeUp.slice(0, 3) : fieldMakeUp.slice(-1);
-	return upperCaseJoin(fields);
+	const totalLength = 30;
+	const separatorLength = 2;
+	const nameLength = (totalLength - separatorLength) / 2;
+
+	if (!person || fieldMakeUp.length < 2) {
+		return upperCaseJoin(fieldMakeUp.slice(-1)).slice(0, totalLength);
+	}
+	const firstName = fieldMakeUp[0];
+	const lastName = fieldMakeUp[2];
+	if ((firstName.length + lastName.length + separatorLength) <= totalLength) {
+		return upperCaseJoin(fieldMakeUp.slice(0, 3));
+	}
+	else if (firstName.length >= nameLength && lastName.length >= nameLength) {
+		return upperCaseJoin([
+			fieldMakeUp[0].slice(0, nameLength),
+			fieldMakeUp[1],
+			fieldMakeUp[2].slice(0, nameLength)
+		]);
+	}
+	else if (firstName.length < nameLength) {
+		return upperCaseJoin([
+			fieldMakeUp[0],
+			fieldMakeUp[1],
+			fieldMakeUp[2].slice(0, (nameLength * 2) - fieldMakeUp[0].length)
+		]);
+	}
+	else { // This should mean that lastName.length < nameLength
+		return upperCaseJoin([
+			fieldMakeUp[0].slice(0, (nameLength * 2) - fieldMakeUp[2].length),
+			fieldMakeUp[1],
+			fieldMakeUp[2]
+		]);
+	}
 }
 
 /**
