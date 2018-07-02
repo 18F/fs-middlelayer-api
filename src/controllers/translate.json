@@ -53,7 +53,7 @@
                             "Limited Liability Company",
                             "Limited Partnership",
                             "Person",
-                            "Non Profit Org"
+                            "Non Profit Org",
                             "Trust"
                         ],
                         "madeOf":{
@@ -291,6 +291,7 @@
                             "Limited Liability Company",
                             "Limited Partnership",
                             "Person",
+                            "Non Profit Org",
                             "Trust"
                         ],
                         "madeOf":{
