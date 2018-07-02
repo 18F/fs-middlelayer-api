@@ -190,13 +190,20 @@ describe('outfitters validation ', function(){
 			expect(actual).to.eql([]);
 		});
 
-
 		it('should report no issues when org type is a trust', function () {
 			const actual = validationHelper(outfittersObjects.pathData,
 				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Trust' }),
 				outfittersObjects.derefSchema);
 			expect(actual).to.eql([]);
 		});
+
+		it('should report no issues when org type is non profit org', function () {
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Non Profit Org' }),
+				outfittersObjects.derefSchema);
+			expect(actual).to.eql([]);
+		});
+
 
 		it('should report issues when no tempOutfitterFields/activity description is provided', function(){
 			const actual = validationHelper(outfittersObjects.pathData,

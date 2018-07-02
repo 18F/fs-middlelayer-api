@@ -53,6 +53,7 @@
                             "Limited Liability Company",
                             "Limited Partnership",
                             "Person",
+                            "Non Profit Org"
                             "Trust"
                         ],
                         "madeOf":{
