@@ -170,6 +170,82 @@ describe('Tests that the following object field objects were populated properly'
 		});
 	});
 
+	it('correctly builds a contID for an individual with a long name', function(){
+		const usher = [
+			'During the whole of a dull, dark, and soundless day in the autumn of the year',
+			'when the clouds hung oppressively low in the heavens, I had been passing alone',
+			'on horseback, through a singularly dreary tract of country; and at length found myself',
+			'as the shades of the evening drew on, within view of the melancholy House of Usher.'
+		].join(', ');
+		const sleep = [
+			'It was about eleven o’clock in the morning, mid October, with the sun not shining',
+			'and a look of hard wet rain in the clearness of the foothills. I was wearing my',
+			'powder-blue suit, with dark blue shirt, tie and display handkerchief, black brogues',
+			', black wool socks with dark blue clocks on them.',
+			'I was neat, clean, shaved and sober, and I didn’t care who knew it.'
+		].join('');
+
+		const body = tempOutfitterFactory.create({
+			'applicantInfo': {
+				'firstName': usher,
+				'lastName': sleep
+			}
+		});
+		expect(expected);
+		const result = wrapSudsPrep(body, {}, true);
+		expect(result['/contact/person']).to.eql({
+			'contId': 'IT WAS ABOUT E, DURING THE WHO',
+			'firstName': usher,
+			'lastName': sleep
+		});
+	});
+
+	it('correctly builds a contID for an individual with a long first name', function(){
+		const usher = [
+			'During the whole of a dull, dark, and soundless day in the autumn of the year',
+			'when the clouds hung oppressively low in the heavens, I had been passing alone',
+			'on horseback, through a singularly dreary tract of country; and at length found myself',
+			'as the shades of the evening drew on, within view of the melancholy House of Usher.'
+		].join(', ');
+
+		const body = tempOutfitterFactory.create({
+			'applicantInfo': {
+				'firstName': usher,
+				'lastName': 'June'
+			}
+		});
+		expect(expected);
+		const result = wrapSudsPrep(body, {}, true);
+		expect(result['/contact/person']).to.eql({
+			'contId': 'JUNE, DURING THE WHOLE OF A DU',
+			'firstName': usher,
+			'lastName': 'June'
+		});
+	});
+
+	it('correctly builds a contID for an individual with a long last name', function(){
+		const usher = [
+			'During the whole of a dull, dark, and soundless day in the autumn of the year',
+			'when the clouds hung oppressively low in the heavens, I had been passing alone',
+			'on horseback, through a singularly dreary tract of country; and at length found myself',
+			'as the shades of the evening drew on, within view of the melancholy House of Usher.'
+		].join(', ');
+
+		const body = tempOutfitterFactory.create({
+			'applicantInfo': {
+				'firstName': 'Jane',
+				'lastName': usher
+			}
+		});
+		expect(expected);
+		const result = wrapSudsPrep(body, {}, true);
+		expect(result['/contact/person']).to.eql({
+			'contId': 'DURING THE WHOLE OF A DU, JANE',
+			'firstName': 'Jane',
+			'lastName': usher
+		});
+	});
+
 	it('correctly builds a contID for an individual with an org name present', function(){
 		const body = tempOutfitterFactory.create({
 			'applicantInfo': {
@@ -196,9 +272,29 @@ describe('Tests that the following object field objects were populated properly'
 				'orgType': 'Association'
 			}
 		});
-		expect(expected);
 		const result = wrapSudsPrep(body, {}, false);
 		expect(result['/contact/organization'].contId).to.eql('RAYMIFASOLATIDOE');
+	});
+
+	it('correctly builds a contID for an organization with a long name', function(){
+		const dispossessed = [
+			'There was a wall. It did not look important. It was built of uncut rocks roughly mortared',
+			'An adult could look right over it, and even a child could climb it',
+			'Where it crossed the roadway, instead of having a gate it degenerated into mere geometry, a line, an idea of boundary',
+			'But the idea was real. It was important',
+			'For seven generations there had been nothing in the world more important than that wall.'
+		].join('. ');
+		const body = tempOutfitterFactory.create({
+			'applicantInfo': {
+				'firstName': 'John',
+				'lastName': 'Doe',
+				'organizationName': dispossessed,
+				'orgType': 'Association'
+			}
+		});
+		expect(expected);
+		const result = wrapSudsPrep(body, {}, false);
+		expect(result['/contact/organization'].contId).to.eql('THERE WAS A WALL. IT DID NOT L');
 
 	});
 
