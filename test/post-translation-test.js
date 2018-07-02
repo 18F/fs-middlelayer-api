@@ -194,9 +194,55 @@ describe('Tests that the following object field objects were populated properly'
 		expect(expected);
 		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/contact/person']).to.eql({
-			'contId': 'IT WAS ABOUT ELEVEN O’CLOCK IN',
+			'contId': 'IT WAS ABOUT E, DURING THE WHO',
 			'firstName': usher,
 			'lastName': sleep
+		});
+	});
+
+	it('correctly builds a contID for an individual with a long first name', function(){
+		const usher = [
+			'During the whole of a dull, dark, and soundless day in the autumn of the year',
+			'when the clouds hung oppressively low in the heavens, I had been passing alone',
+			'on horseback, through a singularly dreary tract of country; and at length found myself',
+			'as the shades of the evening drew on, within view of the melancholy House of Usher.'
+		].join(', ');
+
+		const body = tempOutfitterFactory.create({
+			'applicantInfo': {
+				'firstName': usher,
+				'lastName': 'June'
+			}
+		});
+		expect(expected);
+		const result = wrapSudsPrep(body, {}, true);
+		expect(result['/contact/person']).to.eql({
+			'contId': 'JUNE, DURING THE WHOLE OF A DU',
+			'firstName': usher,
+			'lastName': 'June',
+		});
+	});
+
+	it('correctly builds a contID for an individual with a long last name', function(){
+		const usher = [
+			'During the whole of a dull, dark, and soundless day in the autumn of the year',
+			'when the clouds hung oppressively low in the heavens, I had been passing alone',
+			'on horseback, through a singularly dreary tract of country; and at length found myself',
+			'as the shades of the evening drew on, within view of the melancholy House of Usher.'
+		].join(', ');
+
+		const body = tempOutfitterFactory.create({
+			'applicantInfo': {
+				'firstName': 'Jane',
+				'lastName': usher
+			}
+		});
+		expect(expected);
+		const result = wrapSudsPrep(body, {}, true);
+		expect(result['/contact/person']).to.eql({
+			'contId': 'DURING THE WHOLE OF A DU, JANE',
+			'firstName': 'Jane',
+			'lastName': usher
 		});
 	});
 
@@ -231,7 +277,6 @@ describe('Tests that the following object field objects were populated properly'
 	});
 
 	it('correctly builds a contID for an organization with a long name', function(){
-		// TODO: Enable this test when we verify what the contId for an organization should be; code and schema make it look like it might be either the same as for an individual (which is a little odd) or the organization type (which would be very odd).
 		const dispossessed = [
 			'There was a wall. It did not look important. It was built of uncut rocks roughly mortared',
 			'An adult could look right over it, and even a child could climb it',
