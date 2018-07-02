@@ -219,7 +219,7 @@ describe('Tests that the following object field objects were populated properly'
 		expect(result['/contact/person']).to.eql({
 			'contId': 'JUNE, DURING THE WHOLE OF A DU',
 			'firstName': usher,
-			'lastName': 'June',
+			'lastName': 'June'
 		});
 	});
 
