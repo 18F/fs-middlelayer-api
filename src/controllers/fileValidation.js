@@ -23,7 +23,9 @@ const fileMimes = [
 	'text/rtf',
 	'application/pdf',
 	'application/vnd.ms-excel',
-	'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+	'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+	'image/jpeg',
+	'image/png'
 ];
 
 /**

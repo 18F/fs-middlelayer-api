@@ -256,7 +256,8 @@
             "acknowledgementOfRiskForm": {"default":"", "intake":"middleLayer/acknowledgementOfRiskForm"},
             "insuranceCertificate": {"default":"", "intake":"middleLayer/insuranceCertificate"},
             "goodStandingEvidence": {"default":"", "intake":"middleLayer/goodStandingEvidence"},
-            "operatingPlan": {"default":"", "intake":"middleLayer/operatingPlan"}
+            "operatingPlan": {"default":"", "intake":"middleLayer/operatingPlan"},
+            "locationMap": {"default":"", "intake":"middleLayer/locationMap"}
           }
         },
         "tags": [
@@ -478,6 +479,13 @@
             "name": "operatingPlan",
             "description": "temp-outfitter operatingPlan file upload",
             "required": true,
+            "type": "file"
+          },
+          {
+            "in": "formData",
+            "name": "locationMap",
+            "description": "temp-outfitter locationMap file upload",
+            "required": false,
             "type": "file"
           },
           {

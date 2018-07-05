@@ -169,7 +169,7 @@
             "acknowledgementOfRiskForm": {
                 "filetypecode":"arf",
                 "maxSize": 10,
-                "requirequiredFilered":false,
+                "requiredFile":false,
                 "localStore":true,
                 "type": "file",
                 "validExtensions":[
@@ -216,6 +216,18 @@
                     "doc",
                     "docx",
                     "rtf"
+                ]
+            },
+            "locationMap": {
+                "filetypecode":"lom",
+                "maxSize": 10,
+                "requiredFile":false,
+                "localStore":true,
+                "type": "file",
+                "validExtensions":[
+                    "pdf",
+                    "png",
+                    "jpg"
                 ]
             },
             "formName":{

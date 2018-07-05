@@ -57,6 +57,13 @@
                     "type": "file"
                 },
                 {
+                    "in": "formData",
+                    "name": "locationMap",
+                    "description": "temp-outfitter locationMap file upload",
+                    "required": false,
+                    "type": "file"
+                },
+                {
                     "name": "x-access-token",
                     "in": "header",
                     "description": "access token",
@@ -555,6 +562,18 @@
                                         "doc",
                                         "docx",
                                         "rtf"
+                                    ]
+                                },
+                                "locationMap": {
+                                    "filetypecode": "lom",
+                                    "maxSize": 10,
+                                    "requiredFile": false,
+                                    "localStore": true,
+                                    "type": "file",
+                                    "validExtensions": [
+                                        "pdf",
+                                        "png",
+                                        "jpg"
                                     ]
                                 },
                                 "formName": {
