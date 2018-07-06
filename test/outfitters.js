@@ -152,7 +152,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 		it('should return errors for file that is too large', function(){
 			const Validator = new specialUses.validation.ValidationClass({}, {});
 			expect (
-				
+
 				specialUses.fileValidate.validateFile(tempOutfitterObjects.file.uploadFile_20MB, tempOutfitterObjects.file.validationConstraints, 'insuranceCertificate', Validator).length
 			)
 			.to.be.equal(1);
@@ -202,6 +202,25 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 				.expect(function(res){
 
 					expect(res.body.message).to.equal('Operating Plan must be one of the following extensions: pdf, doc, docx, rtf.');
+
+				})
+				.expect(400, done);
+
+		});
+
+		it('should return valid json with error messages when an invalid image type is used for location map', function(done) {
+			request(server)
+				.post('/permits/applications/special-uses/commercial/temp-outfitters/')
+				.set('x-access-token', token)
+				.field('body', JSON.stringify(tempOutfitterFactory.create()))
+				.attach('insuranceCertificate', './test/data/test_insuranceCertificate.docx')
+				.attach('goodStandingEvidence', './test/data/test_goodStandingEvidence.docx')
+				.attach('operatingPlan', './test/data/test_operatingPlan.docx')
+				.attach('locationMap', './test/data/test_locationMap.gif')
+				.expect('Content-Type', /json/)
+				.expect(function(res){
+
+					expect(res.body.message).to.equal('Location Map must be one of the following extensions: pdf, png, jpg.');
 
 				})
 				.expect(400, done);
@@ -282,7 +301,7 @@ describe('API Routes: permits/special-uses/commercial/outfitters', function() {
 				if (res){
 					dbStub.restore();
 					return true;
-				} 
+				}
 				else {
 					return false;
 				}
