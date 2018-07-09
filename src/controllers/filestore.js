@@ -93,7 +93,8 @@ function getFilesZip(controlNumber, dbFiles, res){
 	if (s3Client.config.credentials.accessKeyId === 'MINIOSERVER') {
 		dbFiles.forEach((dbFile)=>{
 			// Minio will add the paths again later, so we need to strip them here:
-			fileNames.push(dbFile.filePath.replace(filePath, ''));
+            // It's possible that later Minio upgrades will make this branch unnecessary.
+			fileNames.push(dbFile.filePath);
 		});
 	}
 	else {

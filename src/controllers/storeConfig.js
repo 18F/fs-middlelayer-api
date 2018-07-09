@@ -24,7 +24,7 @@ const AWS_ACCESS_KEY_ID = vcapConstants.s3.accessKeyId;
 const AWS_SECRET_ACCESS_KEY = vcapConstants.s3.secretAccessKey;
 const AWS_REGION = vcapConstants.s3.REGION;
 const AWS_BUCKET_NAME = vcapConstants.s3.BUCKET;
-const AWS_ENDPOINT = vcapConstants.s3.endpoint;
+const AWS_ENDPOINT = vcapConstants.s3.ENDPOINT;
 
 AWS.config.update({
 	accessKeyId: AWS_ACCESS_KEY_ID,

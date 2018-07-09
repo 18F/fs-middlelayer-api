@@ -30,7 +30,7 @@ const middlelayerS3 = vcapServices.s3.find(element => {
 vcapConstants.s3 = {
 	REGION: middlelayerS3.credentials.region,
 	BUCKET: middlelayerS3.credentials.bucket,
-    ENDPOINT: ''
+	ENDPOINT: ''
 };
 
 if (middlelayerS3.credentials.endpoint) {
