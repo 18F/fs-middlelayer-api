@@ -141,12 +141,25 @@ describe('Integration tests - noncommercial', function(){
 
 	});
 
-	it('should return valid json for noncommercial GET request for id', function(done) {
+	it('should return valid json for noncommercial GET request by control number', function(done) {
 
 		request(server)
 			.get(`${testURL}${postControlNumber}/`)
 			.set('x-access-token', token)
 			.expect('Content-Type', /json/)
+			.expect(200, done);
+
+	});
+
+	it('should return an intakeId field in the json for noncommercial GET request by control number', function(done) {
+
+		request(server)
+			.get(`${testURL}${postControlNumber}/`)
+			.set('x-access-token', token)
+			.expect('Content-Type', /json/)
+			.expect(function (res) {
+				expect(res.body.intakeId).to.equal(90);
+			})
 			.expect(200, done);
 
 	});

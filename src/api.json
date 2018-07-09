@@ -67,6 +67,7 @@
       "get": {
         "x-mockOutput":"test/data/basicGET.json",
         "x-getTemplate":{
+          "intakeId":{"default":"", "intake":"middleLayer/intakeId"},
           "controlNumber":{"default":"", "intake":"accinstCn"},
           "region": {"default":"", "intake":"middleLayer/region"},
           "forest": {"default":"", "intake":"middleLayer/forest"},
@@ -158,7 +159,7 @@
     },
     "/permits/applications/special-uses/noncommercial/": {
       "post": {
-        "x-validation":"controllers/validation.json#noncommercialApplication",
+        "x-validation":"controllers/translate.json#noncommercialApplication",
         "tags": [
           "Noncommercial Permit"
         ],
@@ -209,6 +210,7 @@
       "get": {
         "x-mockOutput":"test/data/basicGET.json",
         "x-getTemplate":{
+          "intakeId":{"default":"", "intake":"middleLayer/intakeId"},
           "controlNumber":{"default":"", "intake":"accinstCn"},
           "region": {"default":"", "intake":"middleLayer/region"},
           "forest": {"default":"", "intake":"middleLayer/forest"},
@@ -254,7 +256,8 @@
             "acknowledgementOfRiskForm": {"default":"", "intake":"middleLayer/acknowledgementOfRiskForm"},
             "insuranceCertificate": {"default":"", "intake":"middleLayer/insuranceCertificate"},
             "goodStandingEvidence": {"default":"", "intake":"middleLayer/goodStandingEvidence"},
-            "operatingPlan": {"default":"", "intake":"middleLayer/operatingPlan"}
+            "operatingPlan": {"default":"", "intake":"middleLayer/operatingPlan"},
+            "locationMap": {"default":"", "intake":"middleLayer/locationMap"}
           }
         },
         "tags": [
@@ -422,7 +425,7 @@
     },
     "/permits/applications/special-uses/commercial/temp-outfitters/": {
       "post": {
-        "x-validation":"controllers/validation.json#tempOutfitterApplication",
+        "x-validation":"controllers/translate.json#tempOutfitterApplication",
         "tags": [
           "Outfitter and Guide Permit"
         ],
@@ -476,6 +479,13 @@
             "name": "operatingPlan",
             "description": "temp-outfitter operatingPlan file upload",
             "required": true,
+            "type": "file"
+          },
+          {
+            "in": "formData",
+            "name": "locationMap",
+            "description": "temp-outfitter locationMap file upload",
+            "required": false,
             "type": "file"
           },
           {
@@ -626,6 +636,7 @@
     "noncommercialPermit": {
       "type": "object",
       "properties": {
+        "intakeId": { "type" : "integer" },
         "region": { "type" : "string" },
         "forest": { "type" : "string" },
         "district": { "type" : "string" },
@@ -654,6 +665,7 @@
     "noncommercialPermitGet": {
       "type": "object",
       "properties": {
+        "intakeId": { "type": "integer" },
         "controlNumber": {"type": "integer"},
         "region": { "type" : "string" },
         "forest": { "type" : "string" },
@@ -682,6 +694,7 @@
     "tempOutfitterPermit": {
       "type": "object",
        "properties": {
+        "intakeId": { "type" : "integer" },
         "region": { "type" : "string" },
         "forest": { "type" : "string" },
         "district": { "type" : "string" },
@@ -710,6 +723,7 @@
     "tempOutfitterPermitGet": {
       "type": "object",
        "properties": {
+        "intakeId": { "type": "integer"},
         "controlNumber": { "type": "integer"},
         "region": { "type" : "string" },
         "forest": { "type" : "string" },

@@ -46,11 +46,7 @@ jobs:
             mkdir -p a=rw snyk
             export DATE_STRING=`date +"%m-%d-%Y-%H"`
             export SNYK_REPORT=snyk-${CIRCLE_PR_REPONAME}-${DATE_STRING}.csv
-            snyk test #For human
-            snyk test --json > snyk/snyk.json
-            sudo cat snyk/snyk.json  \
-            | jq -r '["Package", "CVE", "CWE", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Paths"], (.vulnerabilities[] | [.packageName, .identifiers.CVE[0], .identifiers.CWE[0], .severity, .cvssScore, .title,.disclosureTime, .description, .from[1], .from[2]] )| @csv' >  \
-            "snyk/${SNYK_REPORT}"
+            snyk test
       - run:
           name: Run tests
           command: |
@@ -59,9 +55,6 @@ jobs:
       - run:
           name: Clean s3 bucket
           command: ./.circleci/clean-s3-bucket.sh
-      - run:
-          name: Save Snyk Artifacts
-          command: ./.circleci/store-snyk.sh
 
   prod-deploy:
     docker:
@@ -87,6 +80,35 @@ jobs:
             if [ "${CIRCLE_PROJECT_USERNAME}" == "18F" ];
               then ./.cg-deploy/deploy.sh api-staging;
             fi
+
+  nightly-snyk:
+    docker:
+        - image: circleci/node:8.9.4
+    steps:
+      - checkout- checkout
+      - restore_cache:
+          keys:
+          - fs-ml-deps-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - fs-ml-deps-
+      - run:
+          name: Install dependencies
+          command: |
+            npm install
+            sudo npm install -g snyk
+      - run:
+          name: Snyk check and upload
+          command: |
+            set +x
+            mkdir -p a=rw snyk
+            export DATE_STRING=`date +"%m-%d-%Y-%H"`
+            export SNYK_REPORT=snyk-${CIRCLE_PR_REPONAME}-${DATE_STRING}.csv
+            snyk test #For human
+            snyk test --json > snyk/snyk.json
+            sudo cat snyk/snyk.json  \
+            | jq -r '["Package", "CVE", "CWE", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Paths"], (.vulnerabilities[] | [.packageName, .identifiers.CVE[0], .identifiers.CWE[0], .severity, .cvssScore, .title,.disclosureTime, .description, .from[1], .from[2]] )| @csv' >  \
+            "snyk/${SNYK_REPORT}"
+            ./.circleci/store-snyk.sh
 
   recycle-production:
     docker:
@@ -136,8 +158,6 @@ workflows:
                 only:
                   - master
       jobs:
-        - run-tests
-        - recycle-production:
-            requires:
-              - run-tests
+        - nightly-snyk
+        - recycle-production
   

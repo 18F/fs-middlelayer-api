@@ -30,7 +30,7 @@ const populate = require('./populateFields.js');
 /**
  * Returns whether application is for an individual.
  * @param  {Object}  body - User input
- * @return {Boolean}      - Whether application is for an individual
+ * @return {Boolean}	  - Whether application is for an individual
  */
 function isAppFromPerson(body){
 	const output = (!body.applicantInfo.orgType || body.applicantInfo.orgType.toUpperCase() === 'PERSON');
@@ -38,14 +38,14 @@ function isAppFromPerson(body){
 }
 
 /**
- * Creates request for Basic API calls to create contact
- * @param  {Object} res         - Response of previous request
+ * Creates request for SUDS API calls to create contact
+ * @param  {Object} res		 - Response of previous request
  * @param  {Object} apiCallLogObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @param  {Object} fieldsObj   - Object containing post objects to be sent to basic api
  * @param  {String} responseKey - Key in apiCallLogObject for the response object of the previous request
  * @param  {String} requestKey  - Key in apiCallLogObject for the request object of this request
  * @param  {String} requestPath - Path from basic API route this response needs to be sent to
- * @return {Promise}            - Promise to be fulfilled
+ * @return {Promise}			- Promise to be fulfilled
  */
 function postRequest(res, apiCallLogObject, fieldsObj, responseKey, requestKey, requestPath, sudsToken){
 	apiCallLogObject.POST[responseKey].response = res;
@@ -58,23 +58,20 @@ function postRequest(res, apiCallLogObject, fieldsObj, responseKey, requestKey, 
 }
 
 /**
- * Gets the data from all fields that are to be send to the basic API, also builds post object, used to pass data to basic api
+ * Gets the data from all fields that are to be send to the SUDS API, also builds post object, used to pass data to SUDS api
  * @param  {Array} fieldsToBasic - All fields in object form which will be sent to basicAPI
  * @return {Object} - Array of endpoints with which fields should go in them
  */
-function assignFieldsToEndpoints(fieldsToBasic){
+function assignFieldsToEndpoints(fieldsToSUDS){
 	const fieldsAssignedToEndpoints = {};
-	fieldsToBasic.forEach((field)=>{
+	fieldsToSUDS.forEach((field)=>{
 		const key = Object.keys(field)[0];
-		if (field[key].hasOwnProperty('basicStore')){
-			field[key].basicStore.forEach((location)=>{
-				if (fieldsAssignedToEndpoints.hasOwnProperty(location)){
-					fieldsAssignedToEndpoints[location][key] = field[key];
-				}
-				else {
+		if (field[key].hasOwnProperty('sudsEndpoint')){
+			field[key].sudsEndpoint.forEach((location)=>{
+				if (!fieldsAssignedToEndpoints.hasOwnProperty(location)){
 					fieldsAssignedToEndpoints[location] = {};
-					fieldsAssignedToEndpoints[location][key] = field[key];
 				}
+				fieldsAssignedToEndpoints[location][key] = field[key];
 			});
 		}
 	});
@@ -85,15 +82,15 @@ function assignFieldsToEndpoints(fieldsToBasic){
  * @param  {Object} validationSchema - validation schema for route requested
  * @param  {Object} body - user input
  * @param  {Boolean} person - whether application is for individual(true) or organization (false)
- * @return {Object} - All post objects
+ * @return {Object} - A nested object of the individual objects that will be sent to SUDS by endpoint
  */
-function prepareBasicPost(validationSchema, body, person){
-	const fieldsToSend = [];
-	db.getFieldsToStore(validationSchema, fieldsToSend, '', 'basic');
-	const fieldsToSendByEndpoint = assignFieldsToEndpoints(fieldsToSend);
-	const autoPopulateValues = populate.buildAutoPopulatedFields(fieldsToSend, person, body);
-	const populatedFieldsToSend = populate.populateValues(fieldsToSendByEndpoint, body, autoPopulateValues);
-	return populatedFieldsToSend;
+function prepareSudsPost(validationSchema, body, person){
+	const fieldsToPost = [];
+	db.getFieldsToStore(validationSchema, fieldsToPost, '', 'SUDS'); // mutates fieldsToPost
+	const fieldsToSendByEndpoint = assignFieldsToEndpoints(fieldsToPost);
+	const autoPopulateFields = populate.findAutoPopulatedFieldsFromSchema(fieldsToPost);
+	const populatedPostObject = populate.populateValues(fieldsToSendByEndpoint, body, autoPopulateFields, person);
+	return populatedPostObject;
 }
 
 /**
@@ -104,16 +101,8 @@ function prepareBasicPost(validationSchema, body, person){
  * @param {Object} apiCallLogObject - running log of the requests
  */
 function setContactGETOptions(applicantInfo, person, token, apiCallLogObject){
-	let endpoint;
-	let contact;
-	if (person){
-		contact = applicantInfo.lastName;
-		endpoint = 'lastName';
-	}
-	else {
-		contact = applicantInfo.organizationName;
-		endpoint = 'orgCode';
-	}
+	const endpoint = person ? 'lastName' : 'orgCode';
+	const contact = person ? applicantInfo.lastName : applicantInfo.organizationName;
 	const requestUri = `${auth.SUDS_API_URL}/contact/${endpoint.toLowerCase()}/${contact}`;
 	const logUri = `/contact/${endpoint.toLowerCase()}/{${endpoint}}`;
 	const sumReq = {};
@@ -128,30 +117,22 @@ function setContactGETOptions(applicantInfo, person, token, apiCallLogObject){
  * Gets the contId to be used if a contact is created so it can be compared to the results of the contact GET request
  * @param  {Object} fieldsObj - Object containing post objects to be sent to basic api
  * @param  {Boolean} person   - Whether the application is for a person or not
- * @return {String}           - ContId for this application
+ * @return {String}		   - ContId for this application
  */
 function getContId(fieldsObj, person){
-	if (person){
-		return fieldsObj['/contact/person'].contId;
-	}
-	else {
-		return fieldsObj['/contact/organization'].contId;
-	}
+	return person ? fieldsObj['/contact/person'].contId : fieldsObj['/contact/organization'].contId;
 }
 
 /**
  * Calls basic API to create a contact in SUDS
  * @param  {Object} fieldsObj  - Object containing post objects to be sent to basic api
- * @param  {boolean} person    - Boolean indicating whether the contract being created is for a person or not
+ * @param  {boolean} person	- Boolean indicating whether the contract being created is for a person or not
  * @param  {Object} apiCallLogObject - Object used to save the request and response for each post to the basic api. Used for testing purposes.
  * @return {Promise}		   - Promise to be fulfilled
  */
 function createContact(fieldsObj, person, apiCallLogObject, sudsToken){
 	return new Promise(function(fulfill, reject){
-		let endpoint = '/contact/person';
-		if (!person){
-			endpoint = '/contact/organization';
-		}
+		const endpoint = person ? '/contact/person' : '/contact/organization';
 		const contactField = fieldsObj[endpoint];
 		const createPersonOrOrgURL = auth.SUDS_API_URL + endpoint;
 		apiCallLogObject.POST[endpoint].request = contactField;
@@ -176,9 +157,9 @@ function createContact(fieldsObj, person, apiCallLogObject, sudsToken){
 /**
  * Calls basic API to create an application in SUDS
  * @param  {Object} fieldsObj   - Object containing post objects to be sent to basic api
- * @param  {Number} contCN      - Contact control number of contact associated with this application
+ * @param  {Number} contCN	  - Contact control number of contact associated with this application
  * @param  {Object} apiCallLogObject  - Object used to save the request and response for each post to the basic api. Used for testing purposes.
- * @return {Promise}            - Promise to be fulfilled
+ * @return {Promise}			- Promise to be fulfilled
  */
 function createApplication(fieldsObj, contCN, apiCallLogObject, sudsToken){
 	const createApplicationURL = `${auth.SUDS_API_URL}/application`;
@@ -189,35 +170,39 @@ function createApplication(fieldsObj, contCN, apiCallLogObject, sudsToken){
 	return request.post(createApplicationOptions);
 }
 
-/** handle if multiple contacts are found
-* @param {String} - contId - ID of the contact
-* @param {Array} matchingContacts - response body array of potential contacts with that ContName
-* @param {Boolean} person - whether the applicaion is from an individual or not
-* @param {String} token - JWT token from SUDS
-* @param {Object} apiCallLogObject - running log of the requests
-*/
-function multipleContactsCheck(contId, matchingContacts, fieldsObj, person, apiCallLogObject, sudsToken){
-	const duplicateContacts = [];
-	let tmpContCn;
+/** Handles all the information for a contact Post
+ *
+ * Set the apiCallLogObject
+ * get contId
+ * check for multiple
+ *	 if multiple, go through dupes and get matching contCns, and if still more than one, throw error.
+ *	 if not multiple, get contCn from matches.
+ * if no matches, return createContact
+ * 
+ * @param  {Object} apiCallLogObject			- Object used to log API calls.
+ * @param  {Object} contactGETOptions	   		- Parameters for GET request for contact.
+ * @param  {Object} res					 		- The response from the reqest for the contact.
+ * @param  {Boolean} person				 		- True if the contact is an individual, false otherwise.
+ * @param  {String} sudsToken			   		- Authentication token for interacting with SUDS.
+ * @param  {Object} fieldsInSudsPostFormat  	- Object containing fields in the shape expected by SUDS.
+ * @return {Promise}							- returns Promise; all promises ultimately resolve to returning a contact control number.
+ */
+function managePostContacts(apiCallLogObject, contactGETOptions, res, person, sudsToken, fieldsInSudsPostFormat) {
+	apiCallLogObject.GET[contactGETOptions.logUri].response = res;
 
-	matchingContacts.forEach((contact)=>{
-		if (contId === contact.contId){
-			duplicateContacts.push(contact);
-			tmpContCn = contact.contCn;
+	if (res.length) {
+		const contId = getContId(fieldsInSudsPostFormat, person);
+		const matches = res.filter((contact) => contact.contId === contId && contact.contCn);
+		if (matches.length === 1) {
+			return new Promise((resolve) => resolve(matches[0].contCn));
 		}
-	});
+		else if (matches.length > 1) {
+			throw new DuplicateContactsError(res);
+		}
+	}
+	
+	return createContact(fieldsInSudsPostFormat, person, apiCallLogObject, sudsToken);
 
-	if (duplicateContacts.length === 0){
-		return createContact(fieldsObj, person, apiCallLogObject, sudsToken);
-	}
-	else if (duplicateContacts.length === 1){
-		return new Promise(function(resolve){
-			resolve(tmpContCn);
-		});
-	}
-	else {
-		throw new DuplicateContactsError(duplicateContacts);
-	}
 }
 
 /** Sends requests needed to create an application via the Basic API
@@ -226,7 +211,7 @@ function multipleContactsCheck(contId, matchingContacts, fieldsObj, person, apiC
  * @param  {Object} validationSchema - Schema object
  * @param  {Object} body - User input
  */
-function postToBasic(req, res, validationSchema, body){
+function post(req, res, validationSchema, body) {
 
 	return new Promise(function (fulfill, reject){
 
@@ -248,33 +233,16 @@ function postToBasic(req, res, validationSchema, body){
 		.then(function(sudsToken) {
 
 			const person = isAppFromPerson(body);
-			const fieldsInBasicPostFormat = prepareBasicPost(validationSchema, body, person);
+			const fieldsInSudsPostFormat = prepareSudsPost(validationSchema, body, person);
 			const contactGETOptions = setContactGETOptions(body.applicantInfo, person, sudsToken, apiCallLogObject);
 			apiCallLogObject = contactGETOptions.apiCallLogObject;
 
 			request.get(contactGETOptions.requestParams)
-			.then(function(res){
-				apiCallLogObject.GET[contactGETOptions.logUri].response = res;
-				const contId = getContId(fieldsInBasicPostFormat, person);
-				if (res.length === 1  && res[0].contCn){
-					if (contId === res[0].contId){
-						return new Promise(function(resolve){
-							resolve(res[0].contCn);
-						});
-					}
-					else {
-						return createContact(fieldsInBasicPostFormat, person, apiCallLogObject, sudsToken);
-					}
-				}
-				else if (res.length > 1){
-					return multipleContactsCheck(contId, res, fieldsInBasicPostFormat, person, apiCallLogObject, sudsToken);
-				}
-				else {
-					return createContact(fieldsInBasicPostFormat, person, apiCallLogObject, sudsToken);
-				}
+			.then((res) => {
+				return managePostContacts(apiCallLogObject, contactGETOptions, res, person, sudsToken, fieldsInSudsPostFormat);	
 			})
 			.then(function(contCn){
-				return createApplication(fieldsInBasicPostFormat, contCn, apiCallLogObject, sudsToken);
+				return createApplication(fieldsInSudsPostFormat, contCn, apiCallLogObject, sudsToken);
 			})
 			.then(function(response){
 				const applResponse  = response;
@@ -282,7 +250,7 @@ function postToBasic(req, res, validationSchema, body){
 				fulfill(apiCallLogObject);
 			})
 			.catch(function(err){
-				errorUtil.nrmServiceError(req, res, err);
+				errorUtil.SUDSServiceError(req, res, err);
 			});
 		})
 		.catch(reject);
@@ -290,4 +258,8 @@ function postToBasic(req, res, validationSchema, body){
 
 }
 
-module.exports.postToBasic = postToBasic;
+module.exports.post = post;
+module.exports.prepareSudsPost = prepareSudsPost;
+module.exports.setContactGETOptions = setContactGETOptions;
+module.exports.managePostContacts = managePostContacts;
+

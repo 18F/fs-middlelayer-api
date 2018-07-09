@@ -1,4 +1,5 @@
 {
+    "intakeId": 90,
     "region": "38",
     "forest": "50",
     "district": "50",
@@ -18,7 +19,7 @@
         "mailingCity": "Washington",
         "mailingState": "DC",
         "mailingZIP": "12345",
-        "orgType": "Limited Liability Company (LLC)",
+        "orgType": "Limited Liability Company",
         "organizationName":"ABC Company"
     },
     "type": "tempOutfitters",
