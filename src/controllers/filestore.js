@@ -94,7 +94,7 @@ function getFilesZip(controlNumber, dbFiles, res){
 		dbFiles.forEach((dbFile)=>{
 			// Minio will add the paths again later, so we need to strip them here:
             // It's possible that later Minio upgrades will make this branch unnecessary.
-			fileNames.push(dbFile.filePath);
+			fileNames.push(dbFile.filePath.replace(filePath, ''));
 		});
 	}
 	else {
