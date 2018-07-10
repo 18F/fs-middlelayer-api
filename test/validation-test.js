@@ -74,8 +74,8 @@ describe('outfitters validation ', function(){
 		});
 
 		it('should report issues when no applicantInfo object is provided-q', function(){
-			const actual = validationHelper(outfittersObjects.pathData, 
-				tempOutfitterFactory.create({ applicantInfo: undefined }), 
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ applicantInfo: undefined }),
 				outfittersObjects.derefSchema);
 			const expected = [
 				{field: 'applicantInfo', errorType: 'missing'},
@@ -199,7 +199,7 @@ describe('outfitters validation ', function(){
 
 		it('should report no issues when org type is non profit org', function () {
 			const actual = validationHelper(outfittersObjects.pathData,
-				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Non Profit Org' }),
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Non profit org' }),
 				outfittersObjects.derefSchema);
 			expect(actual).to.eql([]);
 		});
