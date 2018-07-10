@@ -300,7 +300,7 @@
 							},
 							"orgType": {
 								"description": "Organization Type",
-								"enum": ["Association", "Corporation", "Education", "Federal Government", "State Government", "Local Govt", "Married Common Property", "Limited Liability Company (LLC)", "Limited Liability Partnership (LLP)", "Person", "Trust"],
+								"enum": ["Association", "Corporation", "Educational and Research", "Federal Govt", "State Govt", "Local Govt", "Married Common Property", "Limited Liability Company", "Limited Partnership", "Person", "Trust"],
 								"fromIntake": true,
 								"sudsEndpoint": ["/contact/organization"],
 								"type": "string"

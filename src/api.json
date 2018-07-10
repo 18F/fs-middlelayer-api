@@ -443,7 +443,7 @@
             "name": "body",
             "description": "temp-outfitter permit information",
             "schema": {
-              "$ref": "#/definitions/tempOutfitterPermit"   
+              "$ref": "#/definitions/tempOutfitterPermit"
             },
             "type":"string",
             "required": true
@@ -534,13 +534,13 @@
           "enum":[
             "Association",
             "Corporation",
-            "Education",
-            "Federal Government",
-            "State Government",
+            "Educational and Research",
+            "Federal Govt",
+            "State Govt",
             "Local Govt",
             "Married Common Property",
-            "Limited Liability Company (LLC)",
-            "Limited Liability Partnership (LLP)",
+            "Limited Liability Company",
+            "Limited Partnership",
             "Person",
             "Trust"
           ]
@@ -572,13 +572,13 @@
           "enum":[
             "Association",
             "Corporation",
-            "Education",
-            "Federal Government",
-            "State Government",
+            "Educational and Research",
+            "Federal Govt",
+            "State Govt",
             "Local Govt",
             "Married Common Property",
-            "Limited Liability Company (LLC)",
-            "Limited Liability Partnership (LLP)",
+            "Limited Liability Company",
+            "Limited Partnership",
             "Person",
             "Trust"
           ]
@@ -676,7 +676,7 @@
           "$ref": "#/definitions/applicantInfoNoncommercial"
         },
         "type": {
-          "type": "string", 
+          "type": "string",
           "default": "noncommercial",
           "enum":[
             "noncommercial"
@@ -704,7 +704,7 @@
           "$ref": "#/definitions/applicantInfoTempOutfitter"
         },
         "type": {
-          "type": "string", 
+          "type": "string",
           "enum":[
             "tempOutfitters",
             "noncommercial"
@@ -734,9 +734,9 @@
           "$ref": "#/definitions/applicantInfoTempOutfitter"
         },
         "type": {
-          "type": "string", 
+          "type": "string",
           "default": "tempOutfitterGuide",
-          "enum":[            
+          "enum":[
             "tempOutfitterGuide"
           ]
         },
