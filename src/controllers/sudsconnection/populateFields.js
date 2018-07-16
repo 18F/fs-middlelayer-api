@@ -75,44 +75,34 @@ function getFieldFromBody(path, body){
 
 /**
  * Given a boolean and an array of strings, passes some subset of those strings to upperCaseJoin and returns the result
+ * The resulting string is all-uppercase, and can be at most 30 characters long.
+ * What we want is to use as much of both first name and last name as possible.
  * @param  {Boolean} person				- Whether to join last name, comma, and first name or just use organization name.
- * @param  {Array} fieldMakeUp			- Should be first name, comma, last name, and organization name.
+ * @param  {Array} fieldMakeUp			- Should be last name, comma, first name, and organization name.
  * @return {String}						- The uppercased joined fields.
  */
 function contId(person, fieldMakeUp) {
 	const totalLength = 30;
-	const separatorLength = 2;
-	const nameLength = (totalLength - separatorLength) / 2;
-
 	if (!person || fieldMakeUp.length < 2) {
 		return upperCaseJoin(fieldMakeUp.slice(-1)).slice(0, totalLength);
 	}
-	const firstName = fieldMakeUp[0];
-	const lastName = fieldMakeUp[2];
-	if ((firstName.length + lastName.length + separatorLength) <= totalLength) {
-		return upperCaseJoin(fieldMakeUp.slice(0, 3));
+
+	const [lastName, separator, firstName] = fieldMakeUp;
+	const bothNamesLength = totalLength - separator.length;
+	const oneNameLength = bothNamesLength / 2;
+	let firstNameLength, lastNameLength;
+
+	if (firstName.length > lastName.length) {
+		firstNameLength = Math.max(oneNameLength, bothNamesLength - lastName.length);
+		lastNameLength = bothNamesLength - firstNameLength;
 	}
-	else if (firstName.length >= nameLength && lastName.length >= nameLength) {
-		return upperCaseJoin([
-			fieldMakeUp[0].slice(0, nameLength),
-			fieldMakeUp[1],
-			fieldMakeUp[2].slice(0, nameLength)
-		]);
+	else {
+		lastNameLength = Math.max(oneNameLength, bothNamesLength - firstName.length);
+		firstNameLength = bothNamesLength - lastNameLength;
 	}
-	else if (firstName.length < nameLength) {
-		return upperCaseJoin([
-			fieldMakeUp[0],
-			fieldMakeUp[1],
-			fieldMakeUp[2].slice(0, (nameLength * 2) - fieldMakeUp[0].length)
-		]);
-	}
-	else { // This should mean that lastName.length < nameLength
-		return upperCaseJoin([
-			fieldMakeUp[0].slice(0, (nameLength * 2) - fieldMakeUp[2].length),
-			fieldMakeUp[1],
-			fieldMakeUp[2]
-		]);
-	}
+	const firstNameChunk = firstName.slice(0, firstNameLength);
+	const lastNameChunk = lastName.slice(0, lastNameLength);
+	return upperCaseJoin([lastNameChunk, separator, firstNameChunk]);
 }
 
 /**
