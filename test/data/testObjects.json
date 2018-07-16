@@ -424,7 +424,7 @@
                                                 "Limited Liability Company",
                                                 "Limited Partnership",
                                                 "Person",
-                                                "Non Profit Org",
+                                                "Non profit org",
                                                 "Trust"
                                             ],
                                             "fromIntake": true,
@@ -1007,7 +1007,7 @@
                                                 "Limited Liability Company",
                                                 "Limited Partnership",
                                                 "Person",
-                                                "Non Profit Org",
+                                                "Non profit org",
                                                 "Trust"
                                             ],
                                             "fromIntake": true,
