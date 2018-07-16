@@ -24,11 +24,15 @@ const AWS_ACCESS_KEY_ID = vcapConstants.s3.accessKeyId;
 const AWS_SECRET_ACCESS_KEY = vcapConstants.s3.secretAccessKey;
 const AWS_REGION = vcapConstants.s3.REGION;
 const AWS_BUCKET_NAME = vcapConstants.s3.BUCKET;
+const AWS_ENDPOINT = vcapConstants.s3.ENDPOINT;
 
 AWS.config.update({
 	accessKeyId: AWS_ACCESS_KEY_ID,
 	secretAccessKey: AWS_SECRET_ACCESS_KEY,
-	region: AWS_REGION
+	s3ForcePathStyle: true,
+	signatureVersion: 'v4',
+	region: AWS_REGION,
+	endpoint: AWS_ENDPOINT
 });
 
 function getStoreConfig(){
@@ -36,7 +40,8 @@ function getStoreConfig(){
 		accessKeyId: AWS_ACCESS_KEY_ID,
 		secretAccessKey: AWS_SECRET_ACCESS_KEY,
 		region: AWS_REGION,
-		bucket: AWS_BUCKET_NAME
+		bucket: AWS_BUCKET_NAME,
+		endpoint: AWS_ENDPOINT
 	};
 	return config;
 }

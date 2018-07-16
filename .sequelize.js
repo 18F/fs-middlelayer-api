@@ -63,7 +63,8 @@ const dbConfig = {
 };
 
 if (dbParams.hostname !== 'localhost' &&
-	dbParams.hostname !== '127.0.0.1') {
+	dbParams.hostname !== '127.0.0.1' &&
+    dbParams.hostname !== 'postgres') {
 	dbConfig.ssl = true;
 	dbConfig.dialectOptions = {
 		ssl:{

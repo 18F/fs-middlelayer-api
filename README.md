@@ -45,7 +45,15 @@ This repository was partially developed under a task order of the Agile Blanket 
 3. Set the [environment variables](#environment-variables)
 4. Setup a database and run `npm run dba`.
 5. [Create a test user](#create-a-user).
-6. Run `npm run watch` to start Node.js server.
+6. [Start a local Minio server](#start-local-minio-server).
+7. Run `npm run watch` to start Node.js server.
+
+## Local Docker Development
+
+1. Copy `docker.env` to `.env`.
+2. Run `cmd/docker-test.sh` to ensure the tests pass.
+3. Run `docker-compose up` to run the server locally; once started, it should be available at `http://localhost:3333`.
+4. The local Docker setup includes an admin user with the username `adminymouse` and the password `caution`.
 
 ## Dependencies
 
@@ -246,6 +254,24 @@ This API uses the `passport-local` strategy. This strategy authenticates users w
 ### Create a user
 
 To create an API user account, run `node cmd/createUser.js -u <username> -p <password> -r <userrole>`. The user role is either 'user' or 'admin'. The ‘admin’ role has permission to access all routes, but the ‘user’ role does not currently have permission to access any routes.
+
+### Start a local Minio server
+
+1. [Install Minio](https://docs.minio.io/) and the [Minio client](https://docs.minio.io/docs/minio-client-complete-guide).
+2. Set the environment variables `MINIO_ACCESS_KEY` to `MINIOSERVER` and `MINIO_SECRET_KEY` to `MINIOSERVERSECRET`. These are literal values currently necessary to make local tests work.
+3. Run `mc config host add myminio http://0.0.0.0:9000 MINIOSERVER MINIOSERVERSECRET`.
+4. Run `mc mb myminio/dockerbucket` (this bucket name must match whatever is in the `.env` file).
+5. Start the minio server from a command line where the above environment variables are set.
+   From the base project directory, create a `storage` directory and then run `minio server storage` to start the server.
+   (`docker-compose up minio` should also work, if you have Docker running.)
+6. Visit `http://localhost:9000/` in a browser and verify that Minio is running.
+7. In the `VCAP_SERVICES` environment variable, set
+
+    - `s3[0].credentials.access_key_id` to `MINIOSERVER`.
+    - `s3[0].credentials.secret_access_key` to `MINIOSERVERSECRET`.
+    - `s3[0].credentials.region` to `us-east-1`.
+    - `s3[0].credentials.endpoint` to `http://0.0.0.0:9000` (add this key in `s3[0].credentials` if it doesn't exist already).
+8. Run `npm run coverage` and verify that the tests pass.
 
 ## Continuous integration and deployment
 
