@@ -74,8 +74,8 @@ describe('outfitters validation ', function(){
 		});
 
 		it('should report issues when no applicantInfo object is provided-q', function(){
-			const actual = validationHelper(outfittersObjects.pathData, 
-				tempOutfitterFactory.create({ applicantInfo: undefined }), 
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ applicantInfo: undefined }),
 				outfittersObjects.derefSchema);
 			const expected = [
 				{field: 'applicantInfo', errorType: 'missing'},
@@ -116,6 +116,94 @@ describe('outfitters validation ', function(){
 			];
 			expect (actual).to.eql(expected);
 		});
+
+		it('should report issues when org type is not in the list of acceptable org types', function () {
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Limited Liability Partnership' }),
+				outfittersObjects.derefSchema);
+			const expected = [
+				{ field: 'applicantInfo.orgType', errorType: 'enum' }
+			];
+			expect(actual).to.eql(expected);
+		});
+
+		it('should report no issues when org type is a corporation', function () {
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Corporation' }),
+				outfittersObjects.derefSchema);
+			expect(actual).to.eql([]);
+		});
+
+		it('should report no issues when org type is an Association', function () {
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Association' }),
+				outfittersObjects.derefSchema);
+			expect(actual).to.eql([]);
+		});
+
+		it('should report no issues when org type is for educational purposes', function () {
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Educational and Research' }),
+				outfittersObjects.derefSchema);
+			expect(actual).to.eql([]);
+		});
+
+		it('should report no issues when org type is los Federales', function () {
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Federal Govt' }),
+				outfittersObjects.derefSchema);
+			expect(actual).to.eql([]);
+		});
+
+		it('should report no issues when org type is a State Govt', function () {
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'State Govt' }),
+				outfittersObjects.derefSchema);
+			expect(actual).to.eql([]);
+		});
+
+		it('should report no issues when org type is a local Govt', function () {
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Local Govt' }),
+				outfittersObjects.derefSchema);
+			expect(actual).to.eql([]);
+		});
+
+		it('should report no issues when org type is Married Common Property', function () {
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Married Common Property' }),
+				outfittersObjects.derefSchema);
+			expect(actual).to.eql([]);
+		});
+
+		it('should report no issues when org type is Limited Liability Company', function () {
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Limited Liability Company' }),
+				outfittersObjects.derefSchema);
+			expect(actual).to.eql([]);
+		});
+
+		it('should report no issues when org type is Limited Partnership', function () {
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Limited Partnership' }),
+				outfittersObjects.derefSchema);
+			expect(actual).to.eql([]);
+		});
+
+		it('should report no issues when org type is a trust', function () {
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Trust' }),
+				outfittersObjects.derefSchema);
+			expect(actual).to.eql([]);
+		});
+
+		it('should report no issues when org type is non profit org', function () {
+			const actual = validationHelper(outfittersObjects.pathData,
+				tempOutfitterFactory.create({ 'applicantInfo.orgType': 'Non profit org' }),
+				outfittersObjects.derefSchema);
+			expect(actual).to.eql([]);
+		});
+
 
 		it('should report issues when no tempOutfitterFields/activity description is provided', function(){
 			const actual = validationHelper(outfittersObjects.pathData,

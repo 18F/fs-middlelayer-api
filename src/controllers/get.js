@@ -151,7 +151,8 @@ function getSUDSPostProcess(req, res, applicationDataFromSUDS, controlNumber, re
 		'arf': 'acknowledgementOfRiskForm',
 		'inc': 'insuranceCertificate',
 		'gse': 'goodStandingEvidence',
-		'opp': 'operatingPlan'
+		'opp': 'operatingPlan',
+		'lom': 'locationMap'
 	};
 
 	db.getApplication(controlNumber)

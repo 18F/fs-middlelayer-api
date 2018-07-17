@@ -85,7 +85,7 @@ jobs:
     docker:
         - image: circleci/node:8.9.4
     steps:
-      - checkout- checkout
+      - checkout
       - restore_cache:
           keys:
           - fs-ml-deps-{{ checksum "package.json" }}

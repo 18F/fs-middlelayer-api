@@ -45,14 +45,15 @@
                         "enum":[
                             "Association",
                             "Corporation",
-                            "Education",
-                            "Federal Government",
-                            "State Government",
+                            "Educational and Research",
+                            "Federal Govt",
+                            "State Govt",
                             "Local Govt",
                             "Married Common Property",
-                            "Limited Liability Company (LLC)",
-                            "Limited Liability Partnership (LLP)",
+                            "Limited Liability Company",
+                            "Limited Partnership",
                             "Person",
+                            "Non profit org",
                             "Trust"
                         ],
                         "madeOf":{
@@ -123,7 +124,7 @@
                 },
                 "sudsEndpoint": [
                     "/application"
-                ], 
+                ],
                 "type": "string"
             },
             "advertisingURL": {
@@ -168,7 +169,7 @@
             "acknowledgementOfRiskForm": {
                 "filetypecode":"arf",
                 "maxSize": 10,
-                "requirequiredFilered":false,
+                "requiredFile":false,
                 "localStore":true,
                 "type": "file",
                 "validExtensions":[
@@ -215,6 +216,18 @@
                     "doc",
                     "docx",
                     "rtf"
+                ]
+            },
+            "locationMap": {
+                "filetypecode":"lom",
+                "maxSize": 10,
+                "requiredFile":false,
+                "localStore":true,
+                "type": "file",
+                "validExtensions":[
+                    "pdf",
+                    "png",
+                    "jpg"
                 ]
             },
             "formName":{
@@ -282,14 +295,15 @@
                         "enum":[
                             "Association",
                             "Corporation",
-                            "Education",
-                            "Federal Government",
-                            "State Government",
+                            "Educational and Research",
+                            "Federal Govt",
+                            "State Govt",
                             "Local Govt",
                             "Married Common Property",
-                            "Limited Liability Company (LLC)",
-                            "Limited Liability Partnership (LLP)",
+                            "Limited Liability Company",
+                            "Limited Partnership",
                             "Person",
+                            "Non profit org",
                             "Trust"
                         ],
                         "madeOf":{
