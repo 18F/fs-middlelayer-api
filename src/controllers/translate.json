@@ -676,6 +676,29 @@
                 },
                 "sudsEndpoint":["/contact/person", "/contact/organization"],
                 "type" : "string"
+            },
+            "contName": {
+                "sudsField": "contName",
+                "default": "",
+                "fromIntake": false,
+                "sudsEndpoint": [
+                    "/contact/person",
+                    "/contact/organization"
+                ],
+                "madeOf": {
+                    "fields": [
+                        {
+                            "fromIntake": true,
+                            "field": "applicantInfo.lastName"
+                        },
+                        {
+                            "fromIntake": true,
+                            "field": "applicantInfo.organizationName"
+                        }
+                    ],
+                    "function": "contName"
+                },
+                "type": "string"
             }
         },
         "required": ["region", "forest", "district"]

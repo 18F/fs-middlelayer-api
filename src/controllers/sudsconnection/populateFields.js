@@ -106,6 +106,20 @@ function contId(person, fieldMakeUp) {
 }
 
 /**
+ * @function contName
+ * @param {Boolean} person - whether the input is for an individual or an organization?
+ * @param {Array} fieldMakeUp - array of the subfields or strings that comprise the field
+ * @return {String} fieldValue - the string of the fieldValue
+ */
+function contName(person, fieldMakeUp){
+	let index = 1; // if orgname
+	if (person) {
+		index = 0; // set to lastname
+	}
+	return fieldMakeUp[index].slice(0, 60); 
+}
+
+/**
  * Handle autoPolutated values based on what type of field
  * @param {Object} field - field to evaluated
  * @param {Boolean} person - whether the input is for an individual or an organization?
@@ -115,6 +129,10 @@ function contId(person, fieldMakeUp) {
 function generateAutoPopulatedField(field, person, fieldMakeUp) {
 	if (field.madeOf.function === 'contId') {
 		return contId(person, fieldMakeUp);
+	}
+
+	if (field.madeOf.function === 'contName') {
+		return contName(person, fieldMakeUp);
 	}
 	return concat(fieldMakeUp);
 }

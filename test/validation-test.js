@@ -204,7 +204,6 @@ describe('outfitters validation ', function(){
 			expect(actual).to.eql([]);
 		});
 
-
 		it('should report issues when no tempOutfitterFields/activity description is provided', function(){
 			const actual = validationHelper(outfittersObjects.pathData,
 				tempOutfitterFactory.create({ 'tempOutfitterFields.activityDescription': undefined }),

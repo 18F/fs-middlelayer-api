@@ -165,6 +165,7 @@ describe('Tests that the following object field objects were populated properly'
 		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/contact/person']).to.eql({
 			'contId': 'DOE, JOHN',
+			'contName': 'Doe',
 			'firstName': 'John',
 			'lastName': 'Doe'
 		});
@@ -195,6 +196,7 @@ describe('Tests that the following object field objects were populated properly'
 		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/contact/person']).to.eql({
 			'contId': 'IT WAS ABOUT E, DURING THE WHO',
+			'contName': sleep.slice(0, 60),
 			'firstName': usher,
 			'lastName': sleep
 		});
@@ -218,6 +220,7 @@ describe('Tests that the following object field objects were populated properly'
 		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/contact/person']).to.eql({
 			'contId': 'JUNE, DURING THE WHOLE OF A DU',
+			'contName': 'June',
 			'firstName': usher,
 			'lastName': 'June'
 		});
@@ -241,6 +244,7 @@ describe('Tests that the following object field objects were populated properly'
 		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/contact/person']).to.eql({
 			'contId': 'DURING THE WHOLE OF A DU, JANE',
+			'contName': 'During the whole of a dull, dark, and soundless day in the a',
 			'firstName': 'Jane',
 			'lastName': usher
 		});
@@ -257,13 +261,13 @@ describe('Tests that the following object field objects were populated properly'
 		const result = wrapSudsPrep(body, {}, true);
 		expect(result['/contact/person']).to.eql({
 			'contId': 'MCGEE, SMOOUCH',
+			'contName': 'mcgee',
 			'firstName': 'smoouch',
 			'lastName': 'mcgee'
 		});
 	});
 
 	it('correctly builds a contID for an organization', function(){
-		// TODO: Enable this test when we verify what the contId for an organization should be; code and schema make it look like it might be either the same as for an individual (which is a little odd) or the organization type (which would be very odd).
 		const body = tempOutfitterFactory.create({
 			'applicantInfo': {
 				'firstName': 'John',
@@ -274,6 +278,7 @@ describe('Tests that the following object field objects were populated properly'
 		});
 		const result = wrapSudsPrep(body, {}, false);
 		expect(result['/contact/organization'].contId).to.eql('RAYMIFASOLATIDOE');
+		expect(result['/contact/organization'].contName).to.eql('RayMiFaSoLaTiDoe');
 	});
 
 	it('correctly builds a contID for an organization with a long name', function(){
@@ -295,6 +300,7 @@ describe('Tests that the following object field objects were populated properly'
 		expect(expected);
 		const result = wrapSudsPrep(body, {}, false);
 		expect(result['/contact/organization'].contId).to.eql('THERE WAS A WALL. IT DID NOT L');
+		expect(result['/contact/organization'].contName).to.eql('There was a wall. It did not look important. It was built of');
 
 	});
 
@@ -372,7 +378,7 @@ function wrapStoreFields(schema) {
 describe('Tests for db.getFieldsToStore', function(){
 	it('does something', function () {
 		const result = wrapStoreFields(outfittersSchema);
-		expect(result.length).to.eql(28);
+		expect(result.length).to.eql(29);
 	});
 
 	it('works on a basic schema with `properties`', function () {
