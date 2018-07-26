@@ -18,7 +18,8 @@
         "mailingAddress": "ON ANW 0953",
         "mailingCity": "ALBANY",
         "mailingState": "OR",
-        "mailingZIP": "97321"
+        "mailingZIP": "97321",
+        "orgType":"Person"
     },
     "type": "noncommercial",
     "noncommercialFields": {

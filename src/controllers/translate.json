@@ -7,7 +7,7 @@
             {
                 "properties":{
                     "applicantInfo": {
-                        "$ref": "tempOutfitterApplicantInfo"
+                        "$ref": "applicantInfo"
                     },
                     "type": {
                         "type": "string",
@@ -24,56 +24,6 @@
                 "required": ["applicantInfo", "type", "tempOutfitterFields"]
             }
         ]
-    },
-    "tempOutfitterApplicantInfo": {
-        "id": "/tempOutfitterApplicantInfo",
-        "type": "object",
-        "allOf":[
-            {"$ref":"applicantInfoBase"},
-            {
-                "properties": {
-                    "organizationName": {
-                        "sudsField":"orgCode",
-                        "default":"",
-                        "fromIntake":true,
-                        "sudsEndpoint":["/contact/organization"],
-                        "type": "string"
-                    },
-                    "orgType":{
-                      "sudsField":"orgType",
-                        "description":"Organization Type",
-                        "enum":[
-                            "Association",
-                            "Corporation",
-                            "Educational and Research",
-                            "Federal Govt",
-                            "State Govt",
-                            "Local Govt",
-                            "Married Common Property",
-                            "Limited Liability Company",
-                            "Limited Partnership",
-                            "Person",
-                            "Non profit org",
-                            "Trust"
-                        ],
-                        "madeOf":{
-                            "fields":[
-                                {
-                                    "fromIntake":true,
-                                    "field":"applicantInfo.orgType"
-                                }
-                            ],
-                            "function":"contId"
-                        },
-                        "fromIntake":false,
-                        "sudsEndpoint":["/contact/organization"],
-                        "type":"string"
-                    }
-                },
-                "required":["orgType"]
-            }
-        ]
-
     },
     "tempOutfitterFields": {
         "id": "/tempOutfitterFields",
@@ -256,7 +206,7 @@
             {
                 "properties":{
                     "applicantInfo": {
-                        "$ref": "noncommercialApplicantInfo"
+                        "$ref": "applicantInfo"
                     },
                     "type": {
                         "default": "noncommercial",
@@ -274,58 +224,6 @@
                 "required": ["applicantInfo", "type", "noncommercialFields"]
             }
         ]
-    },
-    "noncommercialApplicantInfo": {
-        "id": "/noncommercialApplicantInfo",
-        "type": "object",
-        "allOf":[
-            {"$ref":"applicantInfoBase"},
-            {
-                "properties": {
-                    "organizationName": {
-                        "sudsField":"orgCode",
-                        "default":"",
-                        "fromIntake":true,
-                        "sudsEndpoint":["/contact/organization"],
-                        "type": "string"
-                    },
-                    "orgType":{
-                        "sudsField":"orgType",
-                        "default":"",
-                        "enum":[
-                            "Association",
-                            "Corporation",
-                            "Educational and Research",
-                            "Federal Govt",
-                            "State Govt",
-                            "Local Govt",
-                            "Married Common Property",
-                            "Limited Liability Company",
-                            "Limited Partnership",
-                            "Person",
-                            "Non profit org",
-                            "Trust"
-                        ],
-                        "madeOf":{
-                            "fields":[
-                                {
-                                    "fromIntake":true,
-                                    "field":"applicantInfo.orgType"
-                                }
-                            ],
-                            "function":"contId"
-                        },
-                        "fromIntake":false,
-                        "sudsEndpoint":["/contact/organization"],
-                        "type":"string"
-                    }
-                },
-                "dependencies":{
-                    "organizationName":["orgType"]
-                }
-            }
-        ]
-
     },
     "noncommercialFields": {
         "id": "/noncommercialFields",
@@ -491,8 +389,8 @@
         "required": ["areaCode", "number", "phoneType"]
 
     },
-    "applicantInfoBase":{
-        "id":"/applicantInfoBase",
+    "applicantInfo":{
+        "id":"/applicantInfo",
         "type":"object",
         "properties":{
             "firstName": {
@@ -569,9 +467,50 @@
                 "default":"United States of America",
                 "sudsEndpoint":["/contact/address"],
                 "type": "string"
+            },
+            "organizationName": {
+                "sudsField": "orgCode",
+                "default": "",
+                "fromIntake": true,
+                "sudsEndpoint": [
+                    "/contact/organization"
+                ],
+                "type": "string"
+            },
+            "orgType": {
+                "sudsField": "orgType",
+                "description": "Organization Type",
+                "enum": [
+                    "Association",
+                    "Corporation",
+                    "Educational and Research",
+                    "Federal Govt",
+                    "State Govt",
+                    "Local Govt",
+                    "Married Common Property",
+                    "Limited Liability Company",
+                    "Limited Partnership",
+                    "Person",
+                    "Non profit org",
+                    "Trust"
+                ],
+                "madeOf": {
+                    "fields": [
+                        {
+                            "fromIntake": true,
+                            "field": "applicantInfo.orgType"
+                        }
+                    ],
+                    "function": "contId"
+                },
+                "fromIntake": false,
+                "sudsEndpoint": [
+                    "/contact/organization"
+                ],
+                "type": "string"
             }
         },
-        "required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState"]
+        "required": ["firstName", "lastName", "dayPhone", "emailAddress", "mailingAddress", "mailingCity", "mailingZIP", "mailingState", "orgType"]
     },
     "commonFields":{
         "id":"/commonFields",

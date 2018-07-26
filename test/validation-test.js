@@ -777,22 +777,6 @@ describe('noncommercial validation', function(){
 		});
 	});
 
-	describe('ensure fields with a dependency are checked', function(){
-		it('should report issues for orgName', function(){
-			const actual = validationHelper(noncommercialObjects.pathData,
-				noncommercialFactory.create({ 'applicantInfo.organizationName': 'theOrg' }),
-				noncommercialObjects.derefSchema);
-			const expected = [
-				{
-					field: 'applicantInfo.organizationName',
-					errorType: 'dependencies',
-					dependency:'applicantInfo.orgType'
-				}
-			];
-			expect (actual).to.eql(expected);
-		});
-	});
-
 	describe('ensure fields is right length', function(){
 		it('should report issues for invalid length', function(){
 			const actual = validationHelper(noncommercialObjects.pathData,
