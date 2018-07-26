@@ -41,6 +41,7 @@ jobs:
       - run:
           name: Snyk vulnerability test
           command: |
+            sudo npm install -g snyk
             set +x
             mkdir -p a=rw snyk
             export DATE_STRING=`date +"%m-%d-%Y-%H"`
