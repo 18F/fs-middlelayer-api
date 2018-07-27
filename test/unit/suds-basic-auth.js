@@ -2,7 +2,7 @@ const chai = require('chai');
 const expect = chai.expect;
 
 const sinon = require('sinon');
-const request = require('request-promise');
+const request = require('request-promise-native');
 
 const testData = require('./suds-basic-auth.json');
 const SUDSConnection = require('../../src/controllers/sudsconnection');
