@@ -112,8 +112,7 @@ function contId(person, fieldMakeUp) {
  * @return {String} fieldValue - the string of the fieldValue
  */
 function contName(person, fieldMakeUp){
-	let index = 1; // if orgname
-	const index = person ? 0 : 1; // set to lastname
+	const index = person ? 0 : 1; //set to lastname if person (0) & orgName if false
 	return fieldMakeUp[index].slice(0, 60); // 60 to handle SUDS char limit for ContName
 }
 
