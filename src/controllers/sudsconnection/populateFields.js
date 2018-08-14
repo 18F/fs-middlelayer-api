@@ -113,10 +113,8 @@ function contId(person, fieldMakeUp) {
  */
 function contName(person, fieldMakeUp){
 	let index = 1; // if orgname
-	if (person) {
-		index = 0; // set to lastname
-	}
-	return fieldMakeUp[index].slice(0, 60); 
+	const index = person ? 0 : 1; // set to lastname
+	return fieldMakeUp[index].slice(0, 60); // 60 to handle SUDS char limit for ContName
 }
 
 /**
