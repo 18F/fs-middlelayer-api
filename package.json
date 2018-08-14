@@ -107,7 +107,8 @@
   },
   "resolutions": {
     "mime": "^2.3.1",
-    "lodash": "^4.17.10"
+    "lodash": "^4.17.10",
+    "extend": "^3.0.2"
   },
   "snyk": true
 }

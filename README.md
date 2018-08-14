@@ -312,7 +312,14 @@ These are the properties for AWS S3 data storage, which is a bound service creat
 
 ## Environment Variables
 
-These are the environment variables that must be created on the Node.js server for the application to run:
+These are the environment variables that must be created on the Node.js server for the application to run.
+
+We use a specific implementation of [environment variables](https://docs.run.pivotal.io/devguide/deploy-apps/environment-variable.html) that are accessible to the applications' cloud.gov-deployed environment through a variable called `VCAP_SERVICES`. These services are individually defined and must be bound to the application via the manifests located in the `.cg-deploy` directory. The services are available at the `space` level within cloud.gov, but the bindings are application specific. I.e. a service would need to be bound to both the server and the frontend to be available to both. This environment variable is provided as an object and parsed in the `server/vcap-constants.es6`. These services also include access keys to the `s3` bucket and ci deployer keys.
+
+These services are defined in the [Forest Service Cloud Migration Repository](https://github.com/18F/fs-cloud-gov-migration).
+
+To emulate the deployed environment variables we provide a list of local `VCAP_SERVICES` that will be automattically pulled in.
+
 
 ### Required for Production and Testing
 
