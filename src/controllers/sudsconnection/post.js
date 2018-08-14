@@ -13,7 +13,7 @@
 
 //*******************************************************************
 // required modules
-const request = require('request-promise');
+const request = require('request-promise-native');
 
 //*******************************************************************
 // other files

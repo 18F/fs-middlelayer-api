@@ -35,3 +35,6 @@ cmd
 # Mock API
 src/mocks
 src/routes/mocks/**
+
+# New relic
+newrelic.js

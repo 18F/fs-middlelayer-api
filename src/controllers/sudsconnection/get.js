@@ -2,7 +2,7 @@
 
 //*******************************************************************
 // required modules
-const request = require('request-promise');
+const request = require('request-promise-native');
 const auth = require('./auth.js');
 const error = require('../errors/error.js');
 const logger = require('../utility.js').logger;
