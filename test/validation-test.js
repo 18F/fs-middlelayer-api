@@ -204,7 +204,6 @@ describe('outfitters validation ', function(){
 			expect(actual).to.eql([]);
 		});
 
-
 		it('should report issues when no tempOutfitterFields/activity description is provided', function(){
 			const actual = validationHelper(outfittersObjects.pathData,
 				tempOutfitterFactory.create({ 'tempOutfitterFields.activityDescription': undefined }),
@@ -771,22 +770,6 @@ describe('noncommercial validation', function(){
 				{
 					field: 'applicantInfo.orgType',
 					errorType: 'enum'
-				}
-			];
-			expect (actual).to.eql(expected);
-		});
-	});
-
-	describe('ensure fields with a dependency are checked', function(){
-		it('should report issues for orgName', function(){
-			const actual = validationHelper(noncommercialObjects.pathData,
-				noncommercialFactory.create({ 'applicantInfo.organizationName': 'theOrg' }),
-				noncommercialObjects.derefSchema);
-			const expected = [
-				{
-					field: 'applicantInfo.organizationName',
-					errorType: 'dependencies',
-					dependency:'applicantInfo.orgType'
 				}
 			];
 			expect (actual).to.eql(expected);

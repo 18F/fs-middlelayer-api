@@ -514,7 +514,7 @@
     }
   },
   "definitions": {
-      "applicantInfoNoncommercial": {
+      "applicantInfo": {
       "type": "object",
       "properties": {
         "firstName": { "type": "string" },
@@ -548,45 +548,7 @@
       },
       "required": ["firstName","lastName","dayPhone","emailAddress","mailingAddress","mailingCity","mailingZIP","mailingState"],
       "xml": {
-        "name": "applicantInfoNoncommercial"
-      }
-    },
-    "applicantInfoTempOutfitter": {
-      "type": "object",
-      "properties": {
-        "firstName": { "type": "string" },
-        "lastName": { "type": "string" },
-        "dayPhone": { "$ref": "#/definitions/phoneNumber" },
-        "eveningPhone": { "$ref": "#/definitions/phoneNumber" },
-        "emailAddress": { "type": "string" },
-        "mailingAddress": { "type": "string" },
-        "mailingAddress2": { "type": "string" },
-        "mailingCity": { "type": "string" },
-        "mailingState": { "type": "string" },
-        "mailingZIP": { "type": "string" },
-        "organizationName": { "type": "string" },
-        "website":{"type": "string"},
-        "orgType":{
-          "type":"string",
-          "description":"Organization Type",
-          "enum":[
-            "Association",
-            "Corporation",
-            "Educational and Research",
-            "Federal Govt",
-            "State Govt",
-            "Local Govt",
-            "Married Common Property",
-            "Limited Liability Company",
-            "Limited Partnership",
-            "Person",
-            "Trust"
-          ]
-        }
-      },
-      "required": ["firstName","lastName","dayPhone","emailAddress","mailingAddress","mailingCity","mailingZIP","mailingState","orgType"],
-      "xml": {
-        "name": "applicantInfoTempOutfitter"
+        "name": "applicantInfo"
       }
     },
     "phoneNumber": {
@@ -643,7 +605,7 @@
         "authorizingOfficerName": { "type" : "string" },
         "authorizingOfficerTitle": { "type" : "string" },
         "applicantInfo": {
-          "$ref": "#/definitions/applicantInfoNoncommercial"
+          "$ref": "#/definitions/applicantInfo"
         },
         "type": {
           "type": "string",
@@ -673,7 +635,7 @@
         "authorizingOfficerName": { "type" : "string"},
         "authorizingOfficerTitle": { "type" : "string"},
         "applicantInfo": {
-          "$ref": "#/definitions/applicantInfoNoncommercial"
+          "$ref": "#/definitions/applicantInfo"
         },
         "type": {
           "type": "string",
@@ -701,7 +663,7 @@
         "authorizingOfficerName": { "type" : "string"},
         "authorizingOfficerTitle": { "type" : "string"},
         "applicantInfo": {
-          "$ref": "#/definitions/applicantInfoTempOutfitter"
+          "$ref": "#/definitions/applicantInfo"
         },
         "type": {
           "type": "string",
@@ -731,7 +693,7 @@
         "authorizingOfficerName": { "type" : "string"},
         "authorizingOfficerTitle": { "type" : "string"},
         "applicantInfo": {
-          "$ref": "#/definitions/applicantInfoTempOutfitter"
+          "$ref": "#/definitions/applicantInfo"
         },
         "type": {
           "type": "string",

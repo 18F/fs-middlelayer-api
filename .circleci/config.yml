@@ -28,7 +28,6 @@ jobs:
           command: |
             npm install
             sudo npm install -g istanbul
-            sudo npm install -g snyk
       - save_cache:
           paths:
             - ./node_modules
@@ -42,6 +41,7 @@ jobs:
       - run:
           name: Snyk vulnerability test
           command: |
+            sudo npm install -g snyk
             set +x
             mkdir -p a=rw snyk
             export DATE_STRING=`date +"%m-%d-%Y-%H"`

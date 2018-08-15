@@ -2,7 +2,7 @@
 
 //*******************************************************************
 // required modules
-const request = require('request-promise');
+const request = require('request-promise-native');
 
 const vcapConstants = require('../vcap-constants.js');
 const errorUtil = require('../errors/error.js');
