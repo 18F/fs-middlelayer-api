@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "US Forest Service ePermit Middlelayer API",
   "engines": {
-    "node": "^8.9.4"
+    "node": "^8.11.3"
   },
   "main": "src/index.js",
   "scripts": {
@@ -95,6 +95,7 @@
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "pg": "^6.2.2",
+    "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
     "s3-zip": "^1.0.4",
     "sequelize": "^4.38.0",
