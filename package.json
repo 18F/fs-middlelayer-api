@@ -1,7 +1,7 @@
 {
-  "name": "fs-middlelayer-api",
+  "name": "fs-open-forest-middlelayer-api",
   "version": "1.0.1",
-  "description": "US Forest Service ePermit Middlelayer API",
+  "description": "US Forest Service Open Forest Middlelayer API",
   "engines": {
     "node": "^8.11.3"
   },
