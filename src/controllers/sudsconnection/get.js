@@ -19,11 +19,11 @@ const rejectWithError = require('../errors/error.js').rejectWithError;
  */
 function handleGetError(err, req, res, reject){
 	if (err.statusCode && err.statusCode === 404) {
-		logger.error('ERROR:', error);
+		logger.error('ERROR: ServerError: SUDS unavailable-', error);
 		return error.sendError(req, res, 503, 'underlying service unavailable.');
 	}
 	else if (err.error && err.error.code === 'ETIMEDOUT') {
-		logger.error('ERROR:', error);
+		logger.error('ERROR: ServerError: SUDS timeout-', error);
 		return error.sendError(req, res, 504, 'underlying service has timed out.');
 	}
 	else {
