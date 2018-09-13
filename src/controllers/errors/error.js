@@ -30,14 +30,14 @@ function sendError(req, res, code, message, errors){
 		errors
 	};
 
-	logger.error('ERROR:', req.url, req.method, message);
+	logger.error('ERROR: ServerError:', req.url, req.method, message);
 
 	res.status(code).json(output);
 
 }
 
 function SUDSServiceError(req, res, err){
-	logger.error('ERROR:', err);
+	logger.error('ERROR: ServerError: SUDSError-', err);
 	if (err.statusCode && err.statusCode === 404){
 		return this.sendError(req, res, 503, 'underlying SUDS service unavailable.');
 	}
@@ -50,7 +50,7 @@ function SUDSServiceError(req, res, err){
 }
 
 function getErrorHandle(req, res, err) {
-	logger.error('ERROR:', err);
+	logger.error('ERROR: ServerError: Application Retrieval-', err);
 	if (err.message === '404') {
 		return sendError(req, res, 404, 'file not found in the database.');
 	}
@@ -66,7 +66,7 @@ function rejectWithError(error, reject, controller) {
 	if (error.message === ''){
 		error.message = 'Promise rejected in chain';
 	}
-	logger.error(`ERROR: ${error.message} in ${controller} controller`);
+	logger.error(`ERROR: ServerError: Controller- ${error.message} in ${controller} controller`);
 	reject(error);
 }
 

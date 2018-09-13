@@ -79,7 +79,7 @@ function postApplication(req, res, reqData){
 			});
 		})
 		.catch((err) => {
-			logger.error('ERROR:', err);
+			logger.error('ERROR: ServerError:', err);
 			if (err instanceof DuplicateContactsError) {
 				if (err.duplicateContacts) {
 					return errorUtil.sendError(req, res, 400, err.duplicateContacts.length + ' duplicate contacts found.', err.duplicateContacts);

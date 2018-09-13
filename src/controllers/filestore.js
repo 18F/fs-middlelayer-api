@@ -108,7 +108,7 @@ function getFilesZip(controlNumber, dbFiles, res){
 	} 
 	catch (e) {
 		const err = 'catched error: ' + e;
-		logger.error('ERROR: ', err);
+		logger.error('ERROR: ServerError: Zip catch error- ', err);
 		context.fail(err);
 	}
 	
@@ -179,11 +179,11 @@ function getControlNumberFileName(req, res, reqData) {
 			res.send(fileData.Body);
 		})
 		.catch((error) => {
-			logger.error('ERROR:', error);
+			logger.error('ERROR: ServerError: file not found-', error);
 			errorUtil.sendError(req, res, 404, 'file not found in the database.');
 		});
 	}).catch((error) =>{
-		logger.error('ERROR:', error);
+		logger.error('ERROR: ServerError: file s3 retrieval-', error);
 		errorUtil.sendError(req, res, 500, 'error while getting file from data store.');
 	});
 }
