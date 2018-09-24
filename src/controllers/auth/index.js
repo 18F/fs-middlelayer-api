@@ -37,7 +37,7 @@ passport.use(new Strategy(
 		}).then(function(user) {
 			if (user){
 				if (bcrypt.compareSync(pw, user.passHash)){
-					logger.info(`AUTHENTICATION: ${user.userName}:${user.userRole} authenicated session for the middlelayer.`);
+					logger.info(`AUTHENTICATION: ${user.userName}:${user.userRole} authenticated session for the middlelayer.`);
 					done(null, {
 						id: user.userName,
 						role: user.userRole,
@@ -54,7 +54,7 @@ passport.use(new Strategy(
 				done(null, false);
 			}
 		}).catch(function (err) {
-			logger.warn('AUTHENTICATION: Error:', err);
+			logger.warn('ERROR: ServerError: AUTHENTICATION-', err);
 			done(null, false);
 		});
 	}

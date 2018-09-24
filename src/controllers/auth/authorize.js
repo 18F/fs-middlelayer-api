@@ -29,7 +29,7 @@ const logger = require('../utility.js').logger;
 function authorize(req, res, next){
 
 	if (req.decoded.role === 'admin'){
-		logger.info(`AUTHENICATION: ${req.decoded.id}:${req.decoded.role} authorized`);
+		logger.info(`AUTHENTICATION: ${req.decoded.id}:${req.decoded.role} authorized`);
 		return next();
 	}
 
