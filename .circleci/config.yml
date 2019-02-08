@@ -4,7 +4,7 @@ _run:
   command: |
     curl -L "https://cli.run.pivotal.io/stable?release=linux64-binary&source=github" | tar -zx
     sudo mv cf /usr/local/bin
-    
+
 version: 2
 jobs:
   run-tests:
@@ -66,8 +66,8 @@ jobs:
           name: Deploy
           command: |
             if [ "${CIRCLE_PROJECT_USERNAME}" == "18F" ];
-              then ./.cg-deploy/deploy.sh api-production;
-            fi 
+              then ./.cg-deploy/deploy.sh middlelayer-production;
+            fi
   staging-deploy:
     docker:
       - image: circleci/node:8.9.4
@@ -78,7 +78,7 @@ jobs:
           name: Deploy
           command: |
             if [ "${CIRCLE_PROJECT_USERNAME}" == "18F" ];
-              then ./.cg-deploy/deploy.sh api-staging;
+              then ./.cg-deploy/deploy.sh middlelayer-staging;
             fi
 
   nightly-snyk:
@@ -129,9 +129,9 @@ jobs:
       - run:
           name: Recycle Production instances
           command: |
-            cf t -o usda-forest-service -s api-production
+            cf t -o usda-forest-service -s middlelayer-production
             cf recycle fs-middlelayer-api
-            
+
 workflows:
   version: 2
   build-deploy:
@@ -160,4 +160,4 @@ workflows:
       jobs:
         - nightly-snyk
         - recycle-production
-  
+

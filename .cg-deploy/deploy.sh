@@ -11,12 +11,12 @@ echo "Usage: deploy <space>"
 exit
 fi
 
-if [ $SPACE = 'api-production' ]; then
+if [ $SPACE = 'middlelayer-production' ]; then
   NAME="fs-middlelayer-api"
   MANIFEST="./.cg-deploy/manifests/manifest.yml"
   CF_USERNAME=$CF_USERNAME_PROD
   CF_PASSWORD=$CF_PASSWORD_PROD
-elif [ $SPACE = 'api-staging' ]; then
+elif [ $SPACE = 'middlelayer-staging' ]; then
   NAME="fs-middlelayer-api-staging"
   MANIFEST="./.cg-deploy/manifests/manifest-staging.yml"
   CF_USERNAME=$CF_USERNAME_DEV
