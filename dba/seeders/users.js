@@ -12,12 +12,14 @@ module.exports = {
 			userAccounts.push({user_name: process.env.USERROLE_USER, pass_hash: process.env.USERROLE_HASH, user_role: 'user', created: 'now()', updated: 'now()'});
 		}
 		if(userAccounts.length > 0){
-			return queryInterface.bulkInsert('users', userAccounts);	
+			return queryInterface.bulkInsert('users', userAccounts);
+		} else {
+			return Promise.resolve();
 		}
 	},
-	down: function (queryInterface, Sequelize) { 
+	down: function (queryInterface, Sequelize) {
 		return queryInterface.bulkDelete('users', [
-			{user_name: [process.env.ADMINROLE_USER,process.env.USERROLE_USER]} 
+			{user_name: [process.env.ADMINROLE_USER,process.env.USERROLE_USER]}
 		]);
 	}
 };

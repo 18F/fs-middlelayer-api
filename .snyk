@@ -1,9 +1,9 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.12.0
+version: v1.13.3
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  'npm:mem:20180117':
-    - sequelize-cli > yargs > os-locale > mem:
-        reason: Not accessible to user
-        expires: '2018-10-12T18:23:13.317Z'
+  SNYK-JS-MARKED-73637:
+    - jsdoc > marked:
+        reason: No resolution available and low probably of internal attack.
+        expires: '2019-03-09T04:57:33.983Z'
 patch: {}
