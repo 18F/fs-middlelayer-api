@@ -6,4 +6,8 @@ ignore:
     - jsdoc > marked:
         reason: No resolution available and low probably of internal attack.
         expires: '2019-03-09T04:57:33.983Z'
+  SNYK-JS-JSYAML-173999:
+    - json-schema-faker > json-schema-ref-parser > js-yaml:
+        reason: No remediation available.
+        expires: '2019-05-01T22:05:48.627Z'
 patch: {}

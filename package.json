@@ -21,6 +21,7 @@
     "doc": "./node_modules/.bin/jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -R README.md -r .",
     "postinstall": "npm run doc",
     "snyk-protect": "snyk protect",
+    "snyk-wizard": "snyk wizard",
     "prepare": "npm run snyk-protect",
     "watch": "./node_modules/.bin/nodemon src/index.js"
   },
