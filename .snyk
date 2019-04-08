@@ -8,6 +8,14 @@ ignore:
         expires: '2019-03-09T04:57:33.983Z'
   SNYK-JS-JSYAML-173999:
     - json-schema-faker > json-schema-ref-parser > js-yaml:
-        reason: No remediation available.
-        expires: '2019-05-01T22:05:48.627Z'
+        reason: 'Medium severity, no remediation available.'
+        expires: '2019-05-08T17:24:29.276Z'
+  SNYK-JS-JSYAML-174129:
+    - json-schema-faker > json-schema-ref-parser > js-yaml:
+        reason: 'High severity, no remediation available.'
+        expires: '2019-05-08T17:24:29.276Z'
+  SNYK-JS-MARKED-174116:
+    - jsdoc > marked:
+        reason: 'Medium severity, no remediation available.'
+        expires: '2019-05-08T17:24:29.276Z'
 patch: {}
