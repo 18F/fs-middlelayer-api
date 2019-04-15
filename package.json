@@ -100,7 +100,7 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
     "s3-zip": "^1.0.4",
-    "sequelize": "^4.42.0",
+    "sequelize": "^5.5.0",
     "sequelize-cli": "^5.4.0",
     "sinon": "^2.3.4",
     "url": "^0.11.0",
