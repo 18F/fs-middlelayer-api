@@ -1,8 +1,8 @@
 /*
 
-  ___ ___       ___               _ _       _   ___ ___ 
+  ___ ___       ___               _ _       _   ___ ___
  | __/ __|  ___| _ \___ _ _ _ __ (_) |_    /_\ | _ \_ _|
- | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| | 
+ | _|\__ \ / -_)  _/ -_) '_| '  \| |  _|  / _ \|  _/| |
  |_| |___/ \___|_| \___|_| |_|_|_|_|\__| /_/ \_\_| |___|
 
 */
@@ -45,7 +45,7 @@ function uploadFile(fileInfo){
 	return new Promise((fulfill, reject) => {
 		s3.putObject(params, function (err) {
 			if (err) {
-				util.rejectWithEror(err, reject);
+				errorUtil.rejectWithError(err, reject);
 			}
 			return fulfill();
 		});
@@ -63,13 +63,13 @@ function getFile(controlNumber, fileName){
 	const filePath = `${controlNumber}/${fileName}`;
 
 	const getParams = {
-		Bucket: config.bucketName, 
+		Bucket: config.bucketName,
 		Key: filePath
 	};
 	return new Promise((resolve, reject) => {
 		s3.getObject(getParams, function (err, data) {
 			if (err) {
-				util.rejectWithEror(err, reject);
+				errorUtil.rejectWithError(err, reject);
 			}
 			return resolve(data);
 		});
@@ -105,13 +105,13 @@ function getFilesZip(controlNumber, dbFiles, res){
 			.archive({ s3: s3Client, bucket: config.bucketName }, filePath, fileNames)
 			.pipe(res);
 
-	} 
+	}
 	catch (e) {
 		const err = 'catched error: ' + e;
 		logger.error('ERROR: ServerError: Zip catch error- ', err);
 		context.fail(err);
 	}
-	
+
 }
 
 /** Saves all information for a file upload to the DB and uploads the file to S3.
@@ -142,7 +142,7 @@ function saveAndUploadFiles(possbileFiles, files, controlNumber, application) {
 							});
 						})
 						.catch((err) => {
-							errorUtil.rejectWithEror(err, reject, 'filestore.saveAndUpload.uploadFile');
+							errorUtil.rejectWithError(err, reject, 'filestore.saveAndUpload.uploadFile');
 						});
 				}
 				else {
