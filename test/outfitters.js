@@ -380,6 +380,15 @@ describe('tempOutfitters GET/POST zip file validation: ', function(){
 
 	describe('post a new application with files, get that application, get files zipped', function(){
 
+		beforeEach(function() {
+			AWS.mock('S3', 'putObject', {});
+			AWS.mock('S3', 'getObject', {});
+		});
+
+		afterEach(function() {
+			AWS.restore('S3');
+		});
+
 		it('should return valid json when application submitted with three required files', function(done) {
 
 			this.timeout(10000);
