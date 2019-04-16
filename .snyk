@@ -18,4 +18,8 @@ ignore:
     - jsdoc > marked:
         reason: 'Medium severity, no remediation available.'
         expires: '2019-05-08T17:24:29.276Z'
+  SNYK-JS-SEQUELIZECLI-174320:
+    - sequelize-cli:
+        reason: 'Low severity, no remediation available.'
+        expires: '2019-05-15T21:10:29.665Z'
 patch: {}

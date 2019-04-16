@@ -21,8 +21,7 @@ const dbConfig = {
 	logging: function (sql, sequelizeObject) {
 		logger.info(`SEQUELIZE: ${sql}`);
 	},
-	seederStorage: 'sequelize',
-	operatorsAliases: false
+	seederStorage: 'sequelize'
 };
 
 if (dbParams.hostname !== 'localhost' &&
