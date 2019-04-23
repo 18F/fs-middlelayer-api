@@ -21,6 +21,11 @@ elif [ $SPACE = 'middlelayer-staging' ]; then
   MANIFEST="./.cg-deploy/manifests/manifest-staging.yml"
   CF_USERNAME=$CF_USERNAME_DEV
   CF_PASSWORD=$CF_PASSWORD_DEV
+elif [ $SPACE = 'middlelayer-dev' ]; then
+  NAME="fs-middlelayer-api-dev"
+  MANIFEST="./.cg-deploy/manifests/manifest-dev.yml"
+  CF_USERNAME=$CF_USERNAME_DEV
+  CF_PASSWORD=$CF_PASSWORD_DEV
 else
 echo "Unknown space: $SPACE"
 exit
