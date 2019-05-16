@@ -8,18 +8,18 @@ ignore:
         expires: '2019-03-09T04:57:33.983Z'
   SNYK-JS-JSYAML-173999:
     - json-schema-faker > json-schema-ref-parser > js-yaml:
-        reason: 'Medium severity, no remediation available.'
-        expires: '2019-05-08T17:24:29.276Z'
+        reason: No remediation available.
+        expires: '2019-06-15T23:31:20.268Z'
   SNYK-JS-JSYAML-174129:
     - json-schema-faker > json-schema-ref-parser > js-yaml:
-        reason: 'High severity, no remediation available.'
-        expires: '2019-05-08T17:24:29.276Z'
+        reason: no remediation available.
+        expires: '2019-06-15T23:31:20.268Z'
   SNYK-JS-MARKED-174116:
     - jsdoc > marked:
         reason: 'Medium severity, no remediation available.'
         expires: '2019-05-08T17:24:29.276Z'
   SNYK-JS-SEQUELIZECLI-174320:
     - sequelize-cli:
-        reason: 'Low severity, no remediation available.'
-        expires: '2019-05-15T21:10:29.665Z'
+        reason: No remediation available.
+        expires: '2019-06-15T23:31:20.268Z'
 patch: {}
