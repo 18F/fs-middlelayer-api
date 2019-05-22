@@ -237,13 +237,16 @@ A separate route, `/auth`, generates token. This token-based authentication is h
 This API uses the `passport-local` strategy. This strategy authenticates users with a username and password and verifies that information against the database. When the user enters a username and password, the `bcrypt-nodejs` module verifies the submitted password against the hash in the database. Upon successful authentication, the application sends back a token using the `jsonwebtoken` module. The `jsonwebtoken` module uses a secret key, stored as an environment variable, to generate the token, which is set to be valid for 120 minutes.
 
 ### Create an admin user
+
 In order to authenticate with this application, the `platform` needs authentication credentials for an admin user. The user role can be either 'user' or 'admin', but the ‘admin’ role has permission to access all routes, while the ‘user’ role does not currently have permission to access any routes, so is not useful. These credentials will need to be included in the environment variables for the application.
 
 #### Create an admin user locally
+
 - From the project root
 - `npm run create-admin -- -u <username> -p <password>`
 
 ### Create an admin user on Cloud[.]gov
+
 - From the project root
 - `cf login -sso -o usda-forest-service`
 - `ct t -s <space>`
@@ -342,9 +345,9 @@ The Node.js server will look for the AWS properties in the system's environment 
 - `JWT_SECRET_KEY=<secret key to generate tokens>`
 - `VCAP_SERVICES`: an object to replicate the bound services of the SUDS_API_URL and the S3 bucket. 
 
-
   The value for `VCAP_SERVICES` should be in the following format (spaces and newlines removed):
-  ```
+
+  ```json
   {
     "user-provided": <VCAP_SERVICES>,
     "s3": [
