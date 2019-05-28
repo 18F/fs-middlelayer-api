@@ -11,6 +11,7 @@
     "test": "mocha test --recursive --exit",
     "test:mock": "npm --mock=Y run test",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- --recursive --exit",
+    "create-admin": "node cmd/createUser.js -r admin",
     "lint": "npm-run-all -c -s lint:es lint:es:out lint:md lint:tsc",
     "lint:tsc": "tsc",
     "lint:es": "eslint . -f stylish",
