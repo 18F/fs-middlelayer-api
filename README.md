@@ -37,7 +37,7 @@ This repository was partially developed under a task order of the Agile Blanket 
 2. Run `npm install` to install application and all dependencies.
 3. Set the [environment variables](#environment-variables)
 4. Setup a database and run `npm run dba`.
-5. [Create a test user](#create-a-user).
+5. [Create a test user](#create-an-admin-user).
 6. Run `npm run watch` to start Node.js server.
 
 ## Dependencies
