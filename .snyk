@@ -9,11 +9,11 @@ ignore:
   SNYK-JS-JSYAML-173999:
     - json-schema-faker > json-schema-ref-parser > js-yaml:
         reason: No remediation available.
-        expires: '2019-06-15T23:31:20.268Z'
+        expires: '2019-07-21T14:29:43.672Z'
   SNYK-JS-JSYAML-174129:
     - json-schema-faker > json-schema-ref-parser > js-yaml:
         reason: no remediation available.
-        expires: '2019-06-15T23:31:20.268Z'
+        expires: '2019-07-21T14:29:43.672Z'
   SNYK-JS-MARKED-174116:
     - jsdoc > marked:
         reason: 'Medium severity, no remediation available.'
