@@ -1,5 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.13.3
+version: v1.13.5
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
   SNYK-JS-MARKED-73637:
@@ -22,4 +22,36 @@ ignore:
     - sequelize-cli:
         reason: No remediation available.
         expires: '2019-06-15T23:31:20.268Z'
-patch: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-450202:
+    - jsdoc > requizzle > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - sequelize > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - async > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - express-winston > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - json-schema-deref-sync > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - jsdoc > catharsis > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - sequelize-cli > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - request-promise-native > request-promise-core > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - s3-zip > archiver > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - newrelic > async > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - s3-zip > archiver > async > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - s3-zip > archiver > archiver-utils > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - s3-zip > archiver > zip-stream > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
+    - s3-zip > archiver > zip-stream > archiver-utils > lodash:
+        patched: '2019-07-09T19:39:03.728Z'
