@@ -1,5 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.13.3
+version: v1.13.5
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
   SNYK-JS-MARKED-73637:
@@ -8,12 +8,12 @@ ignore:
         expires: '2019-03-09T04:57:33.983Z'
   SNYK-JS-JSYAML-173999:
     - json-schema-faker > json-schema-ref-parser > js-yaml:
-        reason: No remediation available.
-        expires: '2019-07-21T14:29:43.672Z'
+        reason: None given
+        expires: '2019-08-11T14:25:44.308Z'
   SNYK-JS-JSYAML-174129:
     - json-schema-faker > json-schema-ref-parser > js-yaml:
-        reason: no remediation available.
-        expires: '2019-07-21T14:29:43.672Z'
+        reason: None given
+        expires: '2019-08-11T14:25:44.308Z'
   SNYK-JS-MARKED-174116:
     - jsdoc > marked:
         reason: 'Medium severity, no remediation available.'
@@ -22,4 +22,8 @@ ignore:
     - sequelize-cli:
         reason: No remediation available.
         expires: '2019-06-15T23:31:20.268Z'
+  SNYK-JS-MARKED-451341:
+    - jsdoc > marked:
+        reason: None given
+        expires: '2019-08-11T14:25:44.308Z'
 patch: {}
