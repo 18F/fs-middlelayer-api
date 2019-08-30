@@ -65,7 +65,7 @@ jobs:
       - run:
           name: Deploy
           command: |
-            if [ "${CIRCLE_PROJECT_USERNAME}" == "18F" ];
+            if [ "${CIRCLE_PROJECT_USERNAME}" == "USDAForestService" ];
               then ./.cg-deploy/deploy.sh middlelayer-production;
             fi
   staging-deploy:
@@ -77,7 +77,7 @@ jobs:
       - run:
           name: Deploy
           command: |
-            if [ "${CIRCLE_PROJECT_USERNAME}" == "18F" ];
+            if [ "${CIRCLE_PROJECT_USERNAME}" == "USDAForestService" ];
               then ./.cg-deploy/deploy.sh middlelayer-staging;
             fi
 
