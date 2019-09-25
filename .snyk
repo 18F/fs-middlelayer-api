@@ -8,12 +8,12 @@ ignore:
         expires: '2019-03-09T04:57:33.983Z'
   SNYK-JS-JSYAML-173999:
     - json-schema-faker > json-schema-ref-parser > js-yaml:
-        reason: None given
-        expires: '2019-09-20T14:28:12.059Z'
+        reason: ignore for 30days
+        expires: '2019-10-25T13:34:24.752Z'
   SNYK-JS-JSYAML-174129:
     - json-schema-faker > json-schema-ref-parser > js-yaml:
-        reason: None given
-        expires: '2019-09-20T14:28:12.059Z'
+        reason: ignore for 30days
+        expires: '2019-10-25T13:34:24.752Z'
   SNYK-JS-MARKED-174116:
     - jsdoc > marked:
         reason: 'Medium severity, no remediation available.'
