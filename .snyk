@@ -26,4 +26,8 @@ ignore:
     - jsdoc > marked:
         reason: None given
         expires: '2019-08-11T14:25:44.308Z'
+  SNYK-JS-HELMETCSP-469436:
+    - helmet > helmet-csp:
+        reason: ignore for 30days
+        expires: '2019-10-30T14:24:08.842Z'
 patch: {}
