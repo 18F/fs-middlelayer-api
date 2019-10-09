@@ -10,3 +10,4 @@ applications:
     - nrm-suds-url-service
     - auth-service
     - new-relic
+    - splunk
