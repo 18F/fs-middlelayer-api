@@ -25,13 +25,17 @@ ignore:
   SNYK-JS-MARKED-451341:
     - jsdoc > marked:
         reason: None given
-        expires: '2019-08-11T14:25:44.308Z'
+        expires: '2019-12-27T14:25:44.308Z'
   SNYK-JS-HELMETCSP-469436:
     - helmet > helmet-csp:
         reason: ignore for 30days
-        expires: '2019-11-01T13:38:12.592Z'
+        expires: '2019-12-27T13:38:12.592Z'
   SNYK-JS-HTTPSPROXYAGENT-469131:
     - newrelic > https-proxy-agent:
         reason: ignore for 30days
-        expires: '2019-11-01T13:38:12.592Z'
+        expires: '2019-12-27T13:38:12.592Z'
+  SNYK-JS-MARKDOWNIT-459438:
+    - jsdoc > markdown-it:
+        reason: ignore for 30days
+        expires: '2019-12-27T13:34:48.413Z'
 patch: {}
