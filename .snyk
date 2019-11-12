@@ -8,12 +8,12 @@ ignore:
         expires: '2019-03-09T04:57:33.983Z'
   SNYK-JS-JSYAML-173999:
     - json-schema-faker > json-schema-ref-parser > js-yaml:
-        reason: ignore for 30days
-        expires: '2019-11-01T13:38:12.592Z'
+        reason: ignore for more days
+        expires: '2020-02-12T16:02:40.494Z'
   SNYK-JS-JSYAML-174129:
     - json-schema-faker > json-schema-ref-parser > js-yaml:
         reason: ignore for 30days
-        expires: '2019-11-01T13:38:12.592Z'
+        expires: '2020-02-12T16:02:40.494Z'
   SNYK-JS-MARKED-174116:
     - jsdoc > marked:
         reason: 'Medium severity, no remediation available.'
@@ -25,17 +25,17 @@ ignore:
   SNYK-JS-MARKED-451341:
     - jsdoc > marked:
         reason: None given
-        expires: '2019-12-27T14:25:44.308Z'
+        expires: '2020-02-27T14:25:44.308Z'
   SNYK-JS-HELMETCSP-469436:
     - helmet > helmet-csp:
-        reason: ignore for 30days
-        expires: '2019-12-27T13:38:12.592Z'
+        reason: ignore for more days
+        expires: '2020-02-12T16:02:40.494Z'
   SNYK-JS-HTTPSPROXYAGENT-469131:
     - newrelic > https-proxy-agent:
-        reason: ignore for 30days
-        expires: '2019-12-27T13:38:12.592Z'
+        reason: ignore for more days
+        expires: '2020-02-12T16:02:40.494Z'
   SNYK-JS-MARKDOWNIT-459438:
     - jsdoc > markdown-it:
         reason: ignore for 30days
-        expires: '2019-12-27T13:34:48.413Z'
+        expires: '2020-02-12T16:02:40.494Z'
 patch: {}
