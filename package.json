@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "US Forest Service Open Forest Middlelayer API",
   "engines": {
-    "node": "^8.11.3"
+    "node": "^10.18.0"
   },
   "main": "src/index.js",
   "scripts": {
