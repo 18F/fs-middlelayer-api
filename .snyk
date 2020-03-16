@@ -38,4 +38,27 @@ ignore:
     - jsdoc > markdown-it:
         reason: ignore for 30days
         expires: '2020-06-12T16:02:40.494Z'
+  SNYK-JS-YARGSPARSER-560381:
+    - sequelize-cli > yargs > yargs-parser:
+        reason: None given
+        expires: '2020-06-15T19:24:44.419Z'
+  SNYK-JS-MINIMIST-559764:
+    - jsdoc > mkdirp > minimist:
+        reason: None given
+        expires: '2020-06-15T19:24:44.420Z'
+      minimist:
+        reason: None given
+        expires: '2020-06-15T19:28:01.289Z'
+    - mocha > mkdirp > minimist:
+        reason: None given
+        expires: '2020-06-15T19:24:44.420Z'
+      mkdirp > minimist:
+        reason: None given
+        expires: '2020-06-15T19:28:01.289Z'
+    - multer > mkdirp > minimist:
+        reason: None given
+        expires: '2020-06-15T19:24:44.420Z'
+    - sequelize-cli > js-beautify > mkdirp > minimist:
+        reason: None given
+        expires: '2020-06-15T19:24:44.420Z'
 patch: {}
