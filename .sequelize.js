@@ -9,6 +9,9 @@ console.log(logger);
 logger.info('SEQUELIZE initiated');
 console.log('Entering 4');
 console.log(process.env.DATABASE_URL);
+
+process.env.DATABASE_URL = 'postgres://ubuntu@127.0.0.1/circle_test';
+
 const dbParams = url.parse(process.env.DATABASE_URL, true);
 console.log('Entering 5');
 console.log(dbParams);
