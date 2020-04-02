@@ -1,7 +1,9 @@
 require('dotenv').config();
-
+console.log('Entering');
 const url = require('url');
+console.log(url);
 const logger = require('./src/controllers/utility.js').logger;
+console.log(logger);
 logger.info('SEQUELIZE initiated');
 
 const dbParams = url.parse(process.env.DATABASE_URL, true);
