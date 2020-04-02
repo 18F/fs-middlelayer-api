@@ -74,7 +74,7 @@ pipeline {
 		    sh '''
         	pwd
             npm install
-            npm install -g istanbul
+            sudo npm install -g istanbul
             npm run dba	        
 	'''
       sh '''
