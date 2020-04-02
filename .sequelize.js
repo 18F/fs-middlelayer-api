@@ -1,16 +1,20 @@
 require('dotenv').config();
-console.log('Entering');
+console.log('Entering 1');
 const url = require('url');
+console.log('Entering 2');
 console.log(url);
 const logger = require('./src/controllers/utility.js').logger;
+console.log('Entering 3');
 console.log(logger);
 logger.info('SEQUELIZE initiated');
-
+console.log('Entering 4');
 const dbParams = url.parse(process.env.DATABASE_URL, true);
+console.log('Entering 5');
+console.log(dbParams);
 const dbAuth = dbParams.auth.split(':');
-
+console.log('Entering 6');
 const Sequelize = require('sequelize');
-
+console.log('Entering 7');
 
 const dbConfig = {
 	database: dbParams.pathname.split('/')[1],
