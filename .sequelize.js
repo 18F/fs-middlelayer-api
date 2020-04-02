@@ -8,6 +8,7 @@ console.log('Entering 3');
 console.log(logger);
 logger.info('SEQUELIZE initiated');
 console.log('Entering 4');
+console.log(process.env.DATABASE_URL);
 const dbParams = url.parse(process.env.DATABASE_URL, true);
 console.log('Entering 5');
 console.log(dbParams);
