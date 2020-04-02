@@ -19,6 +19,9 @@ const dbAuth = dbParams.auth.split(':');
 console.log('Entering 6');
 const Sequelize = require('sequelize');
 console.log('Entering 7');
+console.log(dbAuth[0]);
+console.log(dbAuth[1]);
+
 
 const dbConfig = {
 	database: dbParams.pathname.split('/')[1],
