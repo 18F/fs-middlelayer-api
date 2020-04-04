@@ -86,7 +86,7 @@
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.12",
     "matchstick": "^1.2.1",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.3",
     "mkdirp": "^0.5.1",
     "mocha": "^7.1.1",
     "mock-aws-s3": "^2.6.0",
