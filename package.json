@@ -21,7 +21,6 @@
     "dba": "sequelize db:migrate && sequelize db:seed:all",
     "doc": "./node_modules/.bin/jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -R README.md -r .",
     "postinstall": "npm run doc",
-    "prepare": "npm run snyk-protect",
     "watch": "./node_modules/.bin/nodemon src/index.js"
   },
   "repository": {
