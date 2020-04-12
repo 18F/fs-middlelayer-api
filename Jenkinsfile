@@ -70,10 +70,8 @@ pipeline {
       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "pending","context":"ci/jenkins: install-dependencies", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests are queued behind your running builds!"}'
       '''
 		    sh '''
-        	pwd
             npm install
-            sudo npm install -g istanbul
-           
+            sudo npm install -g istanbul           
 	'''
       sh '''
       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-apimiddlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "success","context":"ci/jenkins: install-dependencies", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests passed on Jenkins!"}'
