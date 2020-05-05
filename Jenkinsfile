@@ -37,7 +37,9 @@ pipeline {
     DB_URL = 'postgres://fs_open_forest:fs_open_forest@localhost/fs_open_forest'
     DB_URL_Docker = 'postgres://fs_open_forest:fs_open_forest@10.0.0.102/fs_open_forest'
     VCAP_APPLICATION='{"uris":["http://localhost:8080/"]}'
-
+	    
+    VCAP_SERVICES='{"s3":[{"credentials":{"access_key_id": "AKIAKASQJKYCFNKZ7YJA","additional_buckets": [],"bucket": "cg-62009640-385b-4fb3-98c2-d4d829b98737","region": "us-gov-west-1","secret_access_key": "hbVbx4ikekICygxroYEYB/TA8e7nwpxpBBp+f45o"},"label":"s3","name":"fs-api-s3","plan":"basic","provider":null,"syslog_drain_url":null,"tags":["AWS","S3","object-storage"],"volume_mounts":[]}],"user-provided":[{"credentials":{"SUDS_API_URL":"MOCKS","password":"a","username":"b"},"label":"user-provided","name":"nrm-suds-url-service","syslog_drain_url":"","tags":[],"volume_mounts":[]},{"credentials":{"JWT_SECRET_KEY":"lkasjdfoaislkjjlkjjoqiwjf"},"label":"user-provided","name":"auth-service","syslog_drain_url":"","tags":[],"volume_mounts":[]},{"credentials":{"key":"", "app_name": "FSMIDDLELAYER"},"label":"user-provided","name":"new-relic","syslog_drain_url":"","tags":[],"volume_mounts":[]}]}'
+    LOG_S3='{"access_key_id": "AKIAKNI6BAAP56PU4PAQ",  "additional_buckets": [],  "bucket": "cg-1fd744b3-4846-47ea-b7f6-24391c05b217",  "region": "us-gov-west-1",  "secret_access_key": "SO44pI3iGgmS7LZcuZOsMaI7fpV2aV5NSnjx87QL",  "uri": "s3://AKIAKNI6BAAP56PU4PAQ:SO44pI3iGgmS7LZcuZOsMaI7fpV2aV5NSnjx87QL@s3-us-gov-west-1.amazonaws.com/cg-1fd744b3-4846-47ea-b7f6-24391c05b217" }'
 
     CF_USERNAME_DEV = credentials('CF_USERNAME_DEV')  
     CF_PASSWORD_DEV = credentials('CF_PASSWORD_DEV')  
