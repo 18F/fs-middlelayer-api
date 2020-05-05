@@ -5,6 +5,8 @@ const logger = require('./src/controllers/utility.js').logger;
 logger.info('SEQUELIZE initiated');
 
 const dbParams = url.parse(process.env.DATABASE_URL, true);
+console.log(process.env.DATABASE_URL);
+
 const dbAuth = dbParams.auth.split(':');
 
 const Sequelize = require('sequelize');
