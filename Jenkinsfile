@@ -29,6 +29,19 @@ pipeline {
         BASIC_AUTH_USER=credentials('BASIC_AUTH_USER')
         JENKINS_URL="https://jenkins.fedgovcloud.us"
         SONARQUBE_URL="https://sca.fedgovcloud.us/dashboard?id=fs-openforest-middlelayer-api"
+	    
+	 POSTGRES_HOST = 'localhost'
+       POSTGRES_USER = 'postgres'
+    HOME='.' 
+    currentdate= sh (returnStdout: true, script: 'date +%Y%m%d%H%M%S').trim()
+    DB_URL = 'postgres://fs_open_forest:fs_open_forest@10.0.0.102/'
+
+    CF_USERNAME_DEV = credentials('CF_USERNAME_DEV')  
+    CF_PASSWORD_DEV = credentials('CF_PASSWORD_DEV')  
+    CF_USERNAME_STAGING = credentials('CF_USERNAME_STAGING')  
+    CF_PASSWORD_STAGING = credentials('CF_PASSWORD_STAGING')  
+    CF_USERNAME_PROD = credentials('CF_USERNAME_PROD')  
+    CF_PASSWORD_PROD = credentials('CF_PASSWORD_PROD')     
     }
 
     options {
@@ -72,6 +85,11 @@ pipeline {
 		    sh '''
             npm install
             sudo npm install -g istanbul           
+            export DATABASE_URL="${DB_URL}${currentdate}"
+	     npm run createdb
+             npm run migrate
+             npm run seed
+		
 	    npm run dba
 	'''
       sh '''
@@ -236,6 +254,15 @@ post{
     success {
 	    script
 	    {
+		    
+		    sh '''
+                pwd
+                export DATABASE_URL="${DB_URL}${currentdate}"
+                printenv
+                cd server
+                printenv
+                npm run dropdb
+            '''
 	    	env.LCHECKOUT_STATUS = "${CHECKOUT_STATUS}"
  	    	env.LINSTALL_DEPENDENCIES_STATUS = "${INSTALL_DEPENDENCIES_STATUS}"
 		env.LRUN_LINT_STATUS = "${RUN_LINT_STATUS}"
@@ -254,6 +281,16 @@ post{
     failure {
 	        script
 	    {
+		    
+		    sh '''
+                pwd
+                export DATABASE_URL="${DB_URL}${currentdate}"
+                printenv
+                cd server
+                printenv
+                npm run dropdb
+            '''
+		    
 	    	env.LCHECKOUT_STATUS = "${CHECKOUT_STATUS}"
  	    	env.LINSTALL_DEPENDENCIES_STATUS = "${INSTALL_DEPENDENCIES_STATUS}"
   		env.LRUN_LINT_STATUS = "${RUN_LINT_STATUS}"
