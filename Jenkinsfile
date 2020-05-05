@@ -72,6 +72,7 @@ pipeline {
 		    sh '''
             npm install
             sudo npm install -g istanbul           
+	    npm run dba
 	'''
       sh '''
       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-apimiddlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "success","context":"ci/jenkins: install-dependencies", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests passed on Jenkins!"}'
@@ -105,6 +106,8 @@ stage('run-unit-tests'){
       '''
 			sh '''
 	            pwd
+		     npm run coverage
+            ./node_modules/codecov/bin/codecov
 	        '''
 
     sh '''
