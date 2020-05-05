@@ -11,6 +11,8 @@ echo "Usage: deploy <space>"
 exit
 fi
 
+echo "SPACE: $SPACE"
+
 if [ $SPACE = 'middlelayer-production' ]; then
   NAME="fs-middlelayer-api"
   MANIFEST="./.cg-deploy/manifests/manifest.yml"
@@ -19,8 +21,8 @@ if [ $SPACE = 'middlelayer-production' ]; then
 elif [ $SPACE = 'middlelayer-staging' ]; then
   NAME="fs-middlelayer-api-staging"
   MANIFEST="./.cg-deploy/manifests/manifest-staging.yml"
-  CF_USERNAME=$CF_USERNAME_DEV
-  CF_PASSWORD=$CF_PASSWORD_DEV
+  CF_USERNAME=$CF_USERNAME_STAGING
+  CF_PASSWORD=$CF_PASSWORD_STAGING
 elif [ $SPACE = 'middlelayer-dev' ]; then
   NAME="fs-middlelayer-api-dev"
   MANIFEST="./.cg-deploy/manifests/manifest-dev.yml"
