@@ -124,24 +124,19 @@ stage('run-unit-tests'){
       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "pending","context":"ci/jenkins: run-unit-tests", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests are queued behind your running builds!"}'
       '''
 		
-		 docker.image('circleci/node:8.9.4').withRun() {
-                docker.image('circleci/node:8.9.4').inside() {
+	//	 docker.image('circleci/node:8.9.4').withRun() {
+         //       docker.image('circleci/node:8.9.4').inside() {
                   sh '''
-                  export DATABASE_URL="${DB_URL_Docker}"
-		  export VCAP_APPLICATION='{"uris":["http://localhost:8080/"]}'
                   pwd
                   ls -ltr
-                  printenv                  
-		  
-            	npm install
-            	npm install istanbul           
+                  printenv                  		  
 		
   	      npm run coverage
             ./node_modules/codecov/bin/codecov
 
                   '''
-                  }
-              }
+           //       }
+            //  }
 		
 
     sh '''
