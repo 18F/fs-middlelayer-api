@@ -35,6 +35,7 @@ pipeline {
     HOME='.' 
     currentdate= sh (returnStdout: true, script: 'date +%Y%m%d%H%M%S').trim()
     DB_URL = 'postgres://fs_open_forest:fs_open_forest@localhost/fs_open_forest'
+    DB_URL_Docker = 'postgres://fs_open_forest:fs_open_forest@10.0.0.102/fs_open_forest'
 
     CF_USERNAME_DEV = credentials('CF_USERNAME_DEV')  
     CF_PASSWORD_DEV = credentials('CF_PASSWORD_DEV')  
@@ -122,7 +123,7 @@ stage('run-unit-tests'){
 		 docker.image('circleci/node:8.9.4').withRun() {
                 docker.image('circleci/node:8.9.4').inside() {
                   sh '''
-                  export DATABASE_URL="${DB_URL}${currentdate}"
+                  export DATABASE_URL="${DB_URL_Docker}"
                   pwd
                   ls -ltr
                   printenv                  
