@@ -85,7 +85,7 @@ pipeline {
       '''
 		    sh '''
             npm install
-            sudo npm install -g istanbul           
+            npm install istanbul           
             export DATABASE_URL="${DB_URL}"		
 	    npm run dba
 	'''
@@ -264,16 +264,7 @@ sh '''
 post{
     success {
 	    script
-	    {
-		    
-		    sh '''
-                pwd
-                export DATABASE_URL="${DB_URL}${currentdate}"
-                printenv
-                cd server
-                printenv
-                npm run dropdb
-            '''
+	    {		    
 	    	env.LCHECKOUT_STATUS = "${CHECKOUT_STATUS}"
  	    	env.LINSTALL_DEPENDENCIES_STATUS = "${INSTALL_DEPENDENCIES_STATUS}"
 		env.LRUN_LINT_STATUS = "${RUN_LINT_STATUS}"
@@ -293,14 +284,6 @@ post{
 	        script
 	    {
 		    
-		    sh '''
-                pwd
-                export DATABASE_URL="${DB_URL}${currentdate}"
-                printenv
-                cd server
-                printenv
-                npm run dropdb
-            '''
 		    
 	    	env.LCHECKOUT_STATUS = "${CHECKOUT_STATUS}"
  	    	env.LINSTALL_DEPENDENCIES_STATUS = "${INSTALL_DEPENDENCIES_STATUS}"
