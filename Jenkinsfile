@@ -128,6 +128,7 @@ stage('run-unit-tests'){
          //       docker.image('circleci/node:8.9.4').inside() {
                   sh '''
                   pwd
+		  export DATABASE_URL="${DB_URL}"		
                   ls -ltr
                   printenv                  		  
 		
