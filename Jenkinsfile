@@ -229,7 +229,7 @@ sh '''
       	'''
         sh '''
         pwd
-	source /home/Jenkins/middlelayerapi.sh
+	
         ./.cg-deploy/deploy.sh middlelayer-dev;
         '''
 	sh '''
@@ -261,7 +261,7 @@ sh '''
       	'''
         sh '''
         pwd
-	source /home/Jenkins/middlelayerapi.sh
+	
         ./.cg-deploy/deploy.sh middlelayer-staging;
         '''
 	sh '''
@@ -293,7 +293,7 @@ sh '''
       	'''
         sh '''
         pwd
-	source /home/Jenkins/middlelayerapi.sh
+	
         ./.cg-deploy/deploy.sh middlelayer-prod1;
         '''
 	sh '''
