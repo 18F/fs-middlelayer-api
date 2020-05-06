@@ -1,5 +1,5 @@
 set -e
-
+source /home/Jenkins/middlelayerapi.sh
 cf install-plugin -f -r CF-Community autopilot
 
 API="https://api.fr.cloud.gov"
