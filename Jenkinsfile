@@ -81,7 +81,7 @@ pipeline {
             npm install
             npm install istanbul           
             export DATABASE_URL="${DB_URL}"		
-	    npm run dba
+	    #npm run dba
 	'''
       sh '''
       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-apimiddlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "success","context":"ci/jenkins: install-dependencies", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests passed on Jenkins!"}'
