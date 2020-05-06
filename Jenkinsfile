@@ -27,6 +27,12 @@ pipeline {
 
         BASIC_AUTH_PASS=credentials('BASIC_AUTH_PASS')
         BASIC_AUTH_USER=credentials('BASIC_AUTH_USER')
+	CF_USERNAME_DEV=credentials('CF_USERNAME_DEV_MIDAPI')
+        CF_PASSWORD_DEV=credentials('CF_PASSWORD_DEV_MIDAPI')
+	VCAP_SERVICES=credentials('VCAP_SERVICES_MIDAPI')
+	LOG_S3=credentials('LOG_S3_MIDAPI')
+	    
+	    
         JENKINS_URL="https://jenkins.fedgovcloud.us"
         SONARQUBE_URL="https://sca.fedgovcloud.us/dashboard?id=fs-openforest-middlelayer-api"
 	    
@@ -229,7 +235,10 @@ sh '''
       	'''
         sh '''
         pwd
-	
+	export CF_USERNAME_DEV="${CF_USERNAME_DEV}"		
+	    export CF_PASSWORD_DEV="${CF_PASSWORD_DEV}"		
+	    export VCAP_SERVICES="${VCAP_SERVICES}"		
+	    export LOG_S3="${LOG_S3}"		
         ./.cg-deploy/deploy.sh middlelayer-dev;
         '''
 	sh '''
@@ -261,7 +270,10 @@ sh '''
       	'''
         sh '''
         pwd
-	
+	export CF_USERNAME_DEV="${CF_USERNAME_DEV}"		
+	    export CF_PASSWORD_DEV="${CF_PASSWORD_DEV}"		
+	    export VCAP_SERVICES="${VCAP_SERVICES}"		
+	    export LOG_S3="${LOG_S3}"		
         ./.cg-deploy/deploy.sh middlelayer-staging;
         '''
 	sh '''
@@ -293,7 +305,10 @@ sh '''
       	'''
         sh '''
         pwd
-	
+	export CF_USERNAME_DEV="${CF_USERNAME_DEV}"		
+	    export CF_PASSWORD_DEV="${CF_PASSWORD_DEV}"		
+	    export VCAP_SERVICES="${VCAP_SERVICES}"		
+	    export LOG_S3="${LOG_S3}"		
         ./.cg-deploy/deploy.sh middlelayer-prod1;
         '''
 	sh '''
