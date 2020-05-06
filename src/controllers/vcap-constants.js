@@ -8,7 +8,6 @@ const logger = require('./utility.js').logger;
 const vcapConstants = {};
 /** VCAP environment variables are used by cloud.gov to pass in instance specific settings. */
 let vcapServices;
-console.log(process.env.VCAP_SERVICES);
 
 if (process.env.VCAP_SERVICES) {
 	vcapServices = JSON.parse(process.env.VCAP_SERVICES);
