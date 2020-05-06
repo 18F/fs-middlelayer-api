@@ -6,6 +6,8 @@ API="https://api.fr.cloud.gov"
 ORG="usda-forest-service"
 SPACE=$1
 
+echo "CF: $CF_USERNAME_DEV"
+
 if [ $# -ne 1 ]; then
 echo "Usage: deploy <space>"
 exit
