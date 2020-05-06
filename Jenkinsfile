@@ -12,7 +12,7 @@ pipeline {
         CURRENTBUILD_DISPLAYNAME = "fs-open-forest-middlelayer-api Build #$BUILD_NUMBER"
         CURRENT_BUILDDESCRIPTION = "fs-open-forest-middlelayer-api Build #$BUILD_NUMBER"
         SONAR_HOST = credentials('SONAR_HOST')
-	    SONAR_TOKEN = credentials('SONAR_TOKEN_FSOPENFORESTMID')
+	SONAR_TOKEN = credentials('SONAR_TOKEN_FSOPENFORESTMID')
         GITHUB_TOKEN = credentials('GITHUB_TOKEN')
         GITHUB_PROJECT_NAME = "USDAForestService/fs-open-forest-middlelayer-api"
         SONAR_PROJECT_NAME = "fs-openforest-middlelayer-api"
@@ -24,25 +24,15 @@ pipeline {
         RUN_UNIT_TESTS_STATUS = 'Pending'
         DEPLOY_STATUS = 'Pending'
         RUN_SONARQUBE_STATUS = 'Pending'
-
-        BASIC_AUTH_PASS=credentials('BASIC_AUTH_PASS')
-        BASIC_AUTH_USER=credentials('BASIC_AUTH_USER')
-	CF_USERNAME_DEV=credentials('CF_USERNAME_DEV_MIDAPI')
-        CF_PASSWORD_DEV=credentials('CF_PASSWORD_DEV_MIDAPI')
-	VCAP_SERVICES=credentials('VCAP_SERVICES_MIDAPI')
-	LOG_S3=credentials('LOG_S3_MIDAPI')
-	    
 	    
         JENKINS_URL="https://jenkins.fedgovcloud.us"
-        SONARQUBE_URL="https://sca.fedgovcloud.us/dashboard?id=fs-openforest-middlelayer-api"
-	    
+        SONARQUBE_URL="https://sca.fedgovcloud.us/dashboard?id=fs-openforest-middlelayer-api"	    
 	 POSTGRES_HOST = 'localhost'
-       POSTGRES_USER = 'postgres'
-    HOME='.' 
-    currentdate= sh (returnStdout: true, script: 'date +%Y%m%d%H%M%S').trim()
-    DB_URL = 'postgres://fs_open_forest:fs_open_forest@localhost/fs_open_forest'
-    DB_URL_Docker = 'postgres://fs_open_forest:fs_open_forest@10.0.0.102/fs_open_forest'    
-
+        POSTGRES_USER = 'postgres'
+        HOME='.' 
+        currentdate= sh (returnStdout: true, script: 'date +%Y%m%d%H%M%S').trim()
+        DB_URL = 'postgres://fs_open_forest:fs_open_forest@localhost/fs_open_forest'
+        DB_URL_Docker = 'postgres://fs_open_forest:fs_open_forest@10.0.0.102/fs_open_forest'    
     }
 
     options {
@@ -87,7 +77,7 @@ pipeline {
             npm install
             npm install istanbul           
             export DATABASE_URL="${DB_URL}"		
-	    #npm run dba
+	    npm run dba
 	'''
       sh '''
       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-apimiddlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "success","context":"ci/jenkins: install-dependencies", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests passed on Jenkins!"}'
@@ -123,9 +113,9 @@ stage('run-unit-tests'){
 	 docker.image('circleci/node:8.9.4').withRun() {
                 docker.image('circleci/node:8.9.4').inside() {
                   sh '''
-                  pwd
 		  export DATABASE_URL="${DB_URL}"		
-                  ls -ltr		
+                  npm run coverage
+                  ./node_modules/codecov/bin/codecov
                   '''
                   }
               }
@@ -191,14 +181,14 @@ stage('run-sonarqube'){
 	def scannerhome = tool 'SonarQubeScanner';
         withSonarQubeEnv('SonarQube') {
           sh label: '', script: '''/home/Jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin/sonar-scanner -Dsonar.login=$SONAR_TOKEN -Dsonar.projectKey=$SONAR_PROJECT_NAME -Dsonar.sources=. -Dsonar.exclusions=frontend/node_modules/**,frontend/dist/**,frontend/e2e/**,,server/node_modules/**,server/docs/**,server/frontend-assets/**,server/dba/**,server/test/**,docs/**'''
-      	  sh 'rm -rf sonarqubereports'
-          sh 'mkdir sonarqubereports'
-  	  sh 'sleep 30'
-          sh 'java -jar /home/Jenkins/sonar-cnes-report-3.1.0.jar -t $SONAR_TOKEN -s $SONAR_HOST -p $SONAR_PROJECT_NAME -o sonarqubereports'
-          sh 'cp sonarqubereports/*analysis-report.docx sonarqubereports/sonarqubeanalysisreport.docx'
-          sh 'cp sonarqubereports/*issues-report.xlsx sonarqubereports/sonarqubeissuesreport.xlsx'
-  	  archiveArtifacts artifacts: 'sonarqubereports/sonarqubeanalysisreport.docx', fingerprint: true
-   	  archiveArtifacts artifacts: 'sonarqubereports/sonarqubeissuesreport.xlsx', fingerprint: true
+ //     	  sh 'rm -rf sonarqubereports'
+  //        sh 'mkdir sonarqubereports'
+ // 	  sh 'sleep 30'
+  //        sh 'java -jar /home/Jenkins/sonar-cnes-report-3.1.0.jar -t $SONAR_TOKEN -s $SONAR_HOST -p $SONAR_PROJECT_NAME -o sonarqubereports'
+   //       sh 'cp sonarqubereports/*analysis-report.docx sonarqubereports/sonarqubeanalysisreport.docx'
+    //      sh 'cp sonarqubereports/*issues-report.xlsx sonarqubereports/sonarqubeissuesreport.xlsx'
+  //	  archiveArtifacts artifacts: 'sonarqubereports/sonarqubeanalysisreport.docx', fingerprint: true
+  // 	  archiveArtifacts artifacts: 'sonarqubereports/sonarqubeissuesreport.xlsx', fingerprint: true
   sh '''
       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "success","context":"ci/jenkins: run-sonarqube", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests passed on Jenkins!"}'
       '''
@@ -233,10 +223,15 @@ sh '''
 	sh '''
       		curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "pending","context":"ci/jenkins: build-deploy", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests are queued behind your running builds!"}'
       	'''
+	CF_USERNAME=credentials('CF_USERNAME_DEV_MIDAPI')
+        CF_PASSWORD=credentials('CF_PASSWORD_DEV_MIDAPI')		
+	VCAP_SERVICES=credentials('VCAP_SERVICES_MIDAPI')
+	LOG_S3=credentials('LOG_S3_MIDAPI')
+		
         sh '''
         pwd
-	export CF_USERNAME_DEV="${CF_USERNAME_DEV}"		
-	    export CF_PASSWORD_DEV="${CF_PASSWORD_DEV}"		
+	   export CF_USERNAME_DEV="${CF_USERNAME}"		
+	    export CF_PASSWORD_DEV="${CF_PASSWORD}"		
 	    export VCAP_SERVICES="${VCAP_SERVICES}"		
 	    export LOG_S3="${LOG_S3}"		
         ./.cg-deploy/deploy.sh middlelayer-dev;
@@ -268,10 +263,16 @@ sh '''
 	sh '''
       		curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "pending","context":"ci/jenkins: build-deploy", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests are queued behind your running builds!"}'
       	'''
+
+	CF_USERNAME=credentials('CF_USERNAME_STAGING_MIDAPI')
+        CF_PASSWORD=credentials('CF_PASSWORD_STAGING_MIDAPI')		
+        VCAP_SERVICES=credentials('VCAP_SERVICES_STAGING_MIDAPI')
+	LOG_S3=credentials('LOG_S3_STAGING_MIDAPI')
+
         sh '''
         pwd
-	export CF_USERNAME_DEV="${CF_USERNAME_DEV}"		
-	    export CF_PASSWORD_DEV="${CF_PASSWORD_DEV}"		
+	export CF_USERNAME_DEV="${CF_USERNAME}"		
+	    export CF_PASSWORD_DEV="${CF_PASSWORD}"		
 	    export VCAP_SERVICES="${VCAP_SERVICES}"		
 	    export LOG_S3="${LOG_S3}"		
         ./.cg-deploy/deploy.sh middlelayer-staging;
@@ -303,10 +304,16 @@ sh '''
 	sh '''
       		curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "pending","context":"ci/jenkins: build-deploy", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests are queued behind your running builds!"}'
       	'''
+	
+	CF_USERNAME=credentials('CF_USERNAME_PROD_MIDAPI')
+        CF_PASSWORD=credentials('CF_PASSWORD_PROD_MIDAPI')	    		
+        VCAP_SERVICES=credentials('VCAP_SERVICES_PROD_MIDAPI')
+	LOG_S3=credentials('LOG_S3_PROD_MIDAPI')
+
         sh '''
         pwd
-	export CF_USERNAME_DEV="${CF_USERNAME_DEV}"		
-	    export CF_PASSWORD_DEV="${CF_PASSWORD_DEV}"		
+	export CF_USERNAME_DEV="${CF_USERNAME}"		
+	    export CF_PASSWORD_DEV="${CF_PASSWORD}"		
 	    export VCAP_SERVICES="${VCAP_SERVICES}"		
 	    export LOG_S3="${LOG_S3}"		
         ./.cg-deploy/deploy.sh middlelayer-prod1;
