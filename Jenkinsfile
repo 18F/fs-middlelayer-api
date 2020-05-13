@@ -31,6 +31,7 @@ pipeline {
         HOME='.' 
         currentdate= sh (returnStdout: true, script: 'date +%Y%m%d%H%M%S').trim()
         DB_URL = 'postgres://fs_open_forest:fs_open_forest@10.0.0.102/'    
+        VCAP_SERVICES = "${env.VCAP_SERVICES_DEV}"
     }
 
     options {
@@ -114,8 +115,6 @@ stage('run-unit-tests'){
            //     docker.image('circleci/node:8.9.4').inside() {
                   sh '''
 		  export DATABASE_URL="${DB_URL}${currentdate}"
-		  chmod 765 deploy.sh
-		  ./deploy.sh
                   npm run coverage --silent
                   '''
 		}
