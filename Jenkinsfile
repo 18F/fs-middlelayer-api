@@ -30,8 +30,8 @@ pipeline {
         POSTGRES_USER = 'postgres'
         HOME='.' 
         currentdate= sh (returnStdout: true, script: 'date +%Y%m%d%H%M%S').trim()
-        DB_URL = 'postgres://fs_open_forest:fs_open_forest@localhost/fs_open_forest'
-        DB_URL_Docker = 'postgres://fs_open_forest:fs_open_forest@10.0.0.102/fs_open_forest'    
+       // DB_URL = 'postgres://fs_open_forest:fs_open_forest@localhost/fs_open_forest'
+        DB_URL = 'postgres://fs_open_forest:fs_open_forest@10.0.0.102/'    
     }
 
     options {
@@ -75,8 +75,11 @@ pipeline {
 		    sh '''
             npm install
             npm install istanbul           
-            export DATABASE_URL="${DB_URL}"		
-	          npm run dba
+           export DATABASE_URL="${DB_URL}${currentdate}"
+	   npm run createdb
+	   npm run migrate
+	   npm run seed
+           npm run dba
 	'''
       sh '''
       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-apimiddlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "success","context":"ci/jenkins: install-dependencies", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests passed on Jenkins!"}'
@@ -112,7 +115,7 @@ stage('run-unit-tests'){
 	 docker.image('circleci/node:8.9.4').withRun() {
                 docker.image('circleci/node:8.9.4').inside() {
                   sh '''
-		  export DATABASE_URL="${DB_URL}"		
+		  export DATABASE_URL="${DB_URL}${currentdate}"
                   npm run coverage
                   ./node_modules/codecov/bin/codecov
                   '''
