@@ -77,8 +77,6 @@ pipeline {
             npm install istanbul           
            export DATABASE_URL="${DB_URL}${currentdate}"
 	   npm run createdb
-	   npm run migrate
-	   npm run seed
            npm run dba
 	'''
       sh '''
