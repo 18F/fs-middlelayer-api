@@ -118,6 +118,7 @@ stage('run-unit-tests'){
                 docker.image('circleci/node:8.9.4').inside() {
                   sh '''
 		  export DATABASE_URL="${DB_URL}${currentdate}"
+		  ./deploy.sh
                   npm run coverage
                   ./node_modules/codecov/bin/codecov
                   '''
@@ -345,8 +346,7 @@ post{
 	    {	
 		       sh '''
                 pwd
-                export DATABASE_URL="${DB_URL}${currentdate}"
-                cd server
+                export DATABASE_URL="${DB_URL}${currentdate}"                
                 npm run dropdb
             '''
 		    
@@ -371,8 +371,7 @@ post{
 		    
 		       sh '''
                 pwd
-                export DATABASE_URL="${DB_URL}${currentdate}"
-                cd server
+                export DATABASE_URL="${DB_URL}${currentdate}"         
                 npm run dropdb
             '''
 	    	env.LCHECKOUT_STATUS = "${CHECKOUT_STATUS}"
