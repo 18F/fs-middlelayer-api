@@ -12,7 +12,7 @@ pipeline {
         CURRENTBUILD_DISPLAYNAME = "fs-open-forest-middlelayer-api Build #$BUILD_NUMBER"
         CURRENT_BUILDDESCRIPTION = "fs-open-forest-middlelayer-api Build #$BUILD_NUMBER"
         SONAR_HOST = credentials('SONAR_HOST')
-	      SONAR_TOKEN = credentials('SONAR_TOKEN_FSOPENFORESTMID')
+	SONAR_TOKEN = credentials('SONAR_TOKEN_FSOPENFORESTMID')
         GITHUB_TOKEN = credentials('GITHUB_TOKEN')
         GITHUB_PROJECT_NAME = "USDAForestService/fs-open-forest-middlelayer-api"
         SONAR_PROJECT_NAME = "fs-openforest-middlelayer-api"
