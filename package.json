@@ -19,6 +19,7 @@
     "lint:es:fix": "eslint . --fix",
     "lint:md": "markdownlint ./docs ./README.md",
     "createdb": "sequelize db:create",
+    "dropdb": "sequelize db:drop",
     "dba": "sequelize db:migrate && sequelize db:seed:all",
     "doc": "./node_modules/.bin/jsdoc -c .jsdoc.json -d docs/code -t ./node_modules/ink-docstrap/template -R README.md -r .",
     "postinstall": "npm run doc",
