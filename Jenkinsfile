@@ -16,7 +16,7 @@ pipeline {
         GITHUB_TOKEN = credentials('GITHUB_TOKEN')
         GITHUB_PROJECT_NAME = "USDAForestService/fs-open-forest-middlelayer-api"
         SONAR_PROJECT_NAME = "fs-openforest-middlelayer-api"
-        MAILING_LIST = 'ikumarasamy@techtrend.us'
+        MAILING_LIST = 'matthew.reiss@usda.gov,abdul.qureshi@usda.gov,SM.FS.OpenFrstOps@usda.gov,michael.laney@usda.gov,Brian.Davidson2@usda.gov,Dylan.Mcafee@usda.gov,Rebekah.Hernandez@usda.gov,jonathan.lerner@usda.gov,shadat.mahmud@usda.gov,bdavidson@cynerge.com,ilayaraja.kumarasamy@usda.gov'
         CHECKOUT_STATUS = 'Pending'
         INSTALL_DEPENDENCIES_STATUS= 'Pending'
         RUN_LINT_STATUS = 'Pending'
