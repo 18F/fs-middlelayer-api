@@ -116,6 +116,8 @@ stage('run-unit-tests'){
                 docker.image('circleci/node:8.9.4').inside() {
                   sh '''
 		  export DATABASE_URL="${DB_URL}${currentdate}"
+		  export VCAP_SERVICES="${VCAP_SERVICES}"		
+	    	  export LOG_S3="${LOG_S3}"	
                   npm run coverage
                   ./node_modules/codecov/bin/codecov
                   '''
