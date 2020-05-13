@@ -76,10 +76,7 @@ pipeline {
             npm install istanbul           
            export DATABASE_URL="${DB_URL}${currentdate}"
 	   npm run createdb
-           npm run dba
-	   
-	   chmod 765 deploy.sh
-  	   ./deploy.sh 
+           npm run dba	   
 	'''
       sh '''
       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-apimiddlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "success","context":"ci/jenkins: install-dependencies", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests passed on Jenkins!"}'
@@ -116,11 +113,8 @@ stage('run-unit-tests'){
 	 //docker.image('circleci/node:8.9.4').withRun() {
            //     docker.image('circleci/node:8.9.4').inside() {
                   sh '''
-		  chmod 765 deploy.sh
-  	   		./deploy.sh 
 		  export DATABASE_URL="${DB_URL}${currentdate}"
                   npm run coverage --silent
-                 # ./node_modules/codecov/bin/codecov
                   '''
 //                  }
   //            }
@@ -151,24 +145,19 @@ sh '''
     steps {
         script
         {
- sh '''
+      sh '''
       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "pending","context":"ci/jenkins: run-lint", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests are queued behind your running builds!"}'
-      '''
-		   sh '''
-	            pwd	    
-	            npm run lint
-    	   '''
-    sh '''
+      npm run lint
       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "success","context":"ci/jenkins: run-lint", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests passed on Jenkins!"}'
       '''
-	        RUN_LINT_STATUS= 'Success'
+	  RUN_LINT_STATUS= 'Success'
         }
 	}
 	post {
                 failure {
                      script {
         		RUN_LINT_STATUS= 'Failed'
-sh '''
+     sh '''
       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "failure","context":"ci/jenkins: run-lint", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests failed on Jenkins!"}'
       '''
     		}
@@ -235,9 +224,7 @@ sh '''
         sh '''
         pwd
 	   export CF_USERNAME_DEV="${CF_USERNAME}"		
-	    export CF_PASSWORD_DEV="${CF_PASSWORD}"		
- 	chmod 765 deploy.sh
-	./deploy.sh 
+          export CF_PASSWORD_DEV="${CF_PASSWORD}"		
         ./.cg-deploy/deploy.sh middlelayer-dev;
         '''
 	sh '''
@@ -272,12 +259,8 @@ sh '''
         CF_PASSWORD=credentials('CF_PASSWORD_STAGING_MIDAPI')		
 
         sh '''
-        pwd
 	export CF_USERNAME_DEV="${CF_USERNAME}"		
-	    export CF_PASSWORD_DEV="${CF_PASSWORD}"		
-	chmod 765 deploy.sh
-	./deploy.sh 
-
+        export CF_PASSWORD_DEV="${CF_PASSWORD}"		
 
 	./.cg-deploy/deploy.sh middlelayer-staging;
         '''
@@ -312,17 +295,11 @@ sh '''
 	CF_USERNAME=credentials('CF_USERNAME_PROD_MIDAPI')
         CF_PASSWORD=credentials('CF_PASSWORD_PROD_MIDAPI')	    		
 
-
         sh '''
-        pwd
 	export CF_USERNAME_DEV="${CF_USERNAME}"		
         export CF_PASSWORD_DEV="${CF_PASSWORD}"		
-	chmod 765 deploy.sh
-	./deploy.sh 
         ./.cg-deploy/deploy.sh middlelayer-prod1;
-        '''
-	sh '''
-      		curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "success","context":"ci/jenkins: build-deploy", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests passed on Jenkins!"}'
+       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "success","context":"ci/jenkins: build-deploy", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests passed on Jenkins!"}'
       	'''
         DEPLOY_STATUS= 'Success'
         }
@@ -344,11 +321,10 @@ post{
     success {
 	    script
 	    {	
-		       sh '''
-                pwd
+	       sh '''
                 export DATABASE_URL="${DB_URL}${currentdate}"                
                 npm run dropdb
-            '''
+        	   '''
 		    
 	    	env.LCHECKOUT_STATUS = "${CHECKOUT_STATUS}"
  	    	env.LINSTALL_DEPENDENCIES_STATUS = "${INSTALL_DEPENDENCIES_STATUS}"
@@ -370,11 +346,10 @@ post{
 	        script
 	    {
 		    
-		       sh '''
-                pwd
+		sh '''                
                 export DATABASE_URL="${DB_URL}${currentdate}"         
                 npm run dropdb
-            '''
+            	'''
 	    	env.LCHECKOUT_STATUS = "${CHECKOUT_STATUS}"
  	    	env.LINSTALL_DEPENDENCIES_STATUS = "${INSTALL_DEPENDENCIES_STATUS}"
   		env.LRUN_LINT_STATUS = "${RUN_LINT_STATUS}"
