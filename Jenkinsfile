@@ -118,7 +118,6 @@ stage('run-unit-tests'){
                 docker.image('circleci/node:8.9.4').inside() {
                   sh '''
 		  export DATABASE_URL="${DB_URL}${currentdate}"
-		  ./deploy.sh
                   npm run coverage
                   ./node_modules/codecov/bin/codecov
                   '''
