@@ -29,7 +29,6 @@ pipeline {
         POSTGRES_USER = 'postgres'
         HOME='.' 
         currentdate= sh (returnStdout: true, script: 'date +%Y%m%d%H%M%S').trim()
-       // DB_URL = 'postgres://fs_open_forest:fs_open_forest@localhost/fs_open_forest'
         DB_URL = 'postgres://fs_open_forest:fs_open_forest@10.0.0.102/'    
     }
 
