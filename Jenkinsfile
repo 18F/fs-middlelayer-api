@@ -118,7 +118,7 @@ stage('run-unit-tests'){
                   sh '''
 		  chmod 765 deploy.sh
   	   		./deploy.sh 
-		#  export DATABASE_URL="${DB_URL}${currentdate}"
+		  export DATABASE_URL="${DB_URL}${currentdate}"
                   npm run coverage --silent
                  # ./node_modules/codecov/bin/codecov
                   '''
