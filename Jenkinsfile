@@ -116,6 +116,8 @@ stage('run-unit-tests'){
 	 //docker.image('circleci/node:8.9.4').withRun() {
            //     docker.image('circleci/node:8.9.4').inside() {
                   sh '''
+		  chmod 765 deploy.sh
+  	   		./deploy.sh 
 		#  export DATABASE_URL="${DB_URL}${currentdate}"
                   npm run coverage --silent
                  # ./node_modules/codecov/bin/codecov
