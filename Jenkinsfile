@@ -230,15 +230,13 @@ sh '''
 	CF_USERNAME=credentials('CF_USERNAME_DEV_MIDAPI')
         CF_PASSWORD=credentials('CF_PASSWORD_DEV_MIDAPI')		
 	
-	chmod 765 deploy.sh
-	./deploy.sh 
 		
         sh '''
         pwd
 	   export CF_USERNAME_DEV="${CF_USERNAME}"		
 	    export CF_PASSWORD_DEV="${CF_PASSWORD}"		
-	    export VCAP_SERVICES="${VCAP_SERVICES}"		
-	    export LOG_S3="${LOG_S3}"		
+ 	chmod 765 deploy.sh
+	./deploy.sh 
         ./.cg-deploy/deploy.sh middlelayer-dev;
         '''
 	sh '''
@@ -271,8 +269,6 @@ sh '''
 
 	CF_USERNAME=credentials('CF_USERNAME_STAGING_MIDAPI')
         CF_PASSWORD=credentials('CF_PASSWORD_STAGING_MIDAPI')		
-        VCAP_SERVICES=credentials('VCAP_SERVICES_STAGING_MIDAPI')
-	LOG_S3=credentials('LOG_S3_STAGING_MIDAPI')
 
         sh '''
         pwd
@@ -315,15 +311,13 @@ sh '''
 	CF_USERNAME=credentials('CF_USERNAME_PROD_MIDAPI')
         CF_PASSWORD=credentials('CF_PASSWORD_PROD_MIDAPI')	    		
 
-	chmod 765 deploy.sh
-	./deploy.sh 
 
         sh '''
         pwd
 	export CF_USERNAME_DEV="${CF_USERNAME}"		
-	    export CF_PASSWORD_DEV="${CF_PASSWORD}"		
-	    export VCAP_SERVICES="${VCAP_SERVICES}"		
-	    export LOG_S3="${LOG_S3}"		
+        export CF_PASSWORD_DEV="${CF_PASSWORD}"		
+	chmod 765 deploy.sh
+	./deploy.sh 
         ./.cg-deploy/deploy.sh middlelayer-prod1;
         '''
 	sh '''
