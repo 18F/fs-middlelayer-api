@@ -114,7 +114,8 @@ stage('run-unit-tests'){
            //     docker.image('circleci/node:8.9.4').inside() {
                   sh '''
 		  export DATABASE_URL="${DB_URL}${currentdate}"
-		  export VCAP_SERVICES="${VCAP_SERVICES_DEV}"
+		  chmod 765 deploy.sh
+		  ./deploy.sh
                   npm run coverage --silent
                   '''
 		}
