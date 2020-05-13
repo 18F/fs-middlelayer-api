@@ -1,2 +1,2 @@
 #!/bin/bash
-source /home/Jenkins/middlelayerapi.sh
+export VCAP_SERVICES="${VCAP_SERVICES_DEV}"
