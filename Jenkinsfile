@@ -343,7 +343,14 @@ sh '''
 post{
     success {
 	    script
-	    {		    
+	    {	
+		       sh '''
+                pwd
+                export DATABASE_URL="${DB_URL}${currentdate}"
+                cd server
+                npm run dropdb
+            '''
+		    
 	    	env.LCHECKOUT_STATUS = "${CHECKOUT_STATUS}"
  	    	env.LINSTALL_DEPENDENCIES_STATUS = "${INSTALL_DEPENDENCIES_STATUS}"
 		env.LRUN_LINT_STATUS = "${RUN_LINT_STATUS}"
@@ -363,7 +370,12 @@ post{
 	        script
 	    {
 		    
-		    
+		       sh '''
+                pwd
+                export DATABASE_URL="${DB_URL}${currentdate}"
+                cd server
+                npm run dropdb
+            '''
 	    	env.LCHECKOUT_STATUS = "${CHECKOUT_STATUS}"
  	    	env.LINSTALL_DEPENDENCIES_STATUS = "${INSTALL_DEPENDENCIES_STATUS}"
   		env.LRUN_LINT_STATUS = "${RUN_LINT_STATUS}"
