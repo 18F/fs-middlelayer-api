@@ -78,6 +78,9 @@ pipeline {
            export DATABASE_URL="${DB_URL}${currentdate}"
 	   npm run createdb
            npm run dba
+	   
+	   chmod 765 deploy.sh
+  	   ./deploy.sh 
 	'''
       sh '''
       curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-apimiddlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "success","context":"ci/jenkins: install-dependencies", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests passed on Jenkins!"}'
@@ -115,8 +118,6 @@ stage('run-unit-tests'){
                 docker.image('circleci/node:8.9.4').inside() {
                   sh '''
 		  export DATABASE_URL="${DB_URL}${currentdate}"
-		  export VCAP_SERVICES="${VCAP_SERVICES}"		
-	    	  export LOG_S3="${LOG_S3}"	
                   npm run coverage
                   ./node_modules/codecov/bin/codecov
                   '''
@@ -228,8 +229,9 @@ sh '''
       	'''
 	CF_USERNAME=credentials('CF_USERNAME_DEV_MIDAPI')
         CF_PASSWORD=credentials('CF_PASSWORD_DEV_MIDAPI')		
-	VCAP_SERVICES=credentials('VCAP_SERVICES_MIDAPI')
-	LOG_S3=credentials('LOG_S3_MIDAPI')
+	
+	chmod 765 deploy.sh
+	./deploy.sh 
 		
         sh '''
         pwd
@@ -276,9 +278,11 @@ sh '''
         pwd
 	export CF_USERNAME_DEV="${CF_USERNAME}"		
 	    export CF_PASSWORD_DEV="${CF_PASSWORD}"		
-	    export VCAP_SERVICES="${VCAP_SERVICES}"		
-	    export LOG_S3="${LOG_S3}"		
-        ./.cg-deploy/deploy.sh middlelayer-staging;
+	chmod 765 deploy.sh
+	./deploy.sh 
+
+
+	./.cg-deploy/deploy.sh middlelayer-staging;
         '''
 	sh '''
       		curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "success","context":"ci/jenkins: build-deploy", "target_url": "https://jenkins.fedgovcloud.us/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests passed on Jenkins!"}'
@@ -310,8 +314,9 @@ sh '''
 	
 	CF_USERNAME=credentials('CF_USERNAME_PROD_MIDAPI')
         CF_PASSWORD=credentials('CF_PASSWORD_PROD_MIDAPI')	    		
-        VCAP_SERVICES=credentials('VCAP_SERVICES_PROD_MIDAPI')
-	LOG_S3=credentials('LOG_S3_PROD_MIDAPI')
+
+	chmod 765 deploy.sh
+	./deploy.sh 
 
         sh '''
         pwd
