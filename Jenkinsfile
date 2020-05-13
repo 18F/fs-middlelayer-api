@@ -343,7 +343,7 @@ post{
     	env.BLUE_OCEAN_URL_SQ_DOCX="${env.BUILD_URL}artifact/sonarqubereports/sonarqubeanalysisreport.docx"
 		env.BLUE_OCEAN_URL_SQ_XLSX="${env.BUILD_URL}artifact/sonarqubereports/sonarqubeissuesreport.xlsx"
 		env.LSONARQUBE_URL="${SONARQUBE_URL}"
-      		emailext attachLog: false, attachmentsPattern: '', body: '''${SCRIPT, template="openforest_simple.template"}''', mimeType: 'text/html', replyTo: 'builds@usda.gov', subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: "${MAILING_LIST}"
+      		emailext attachLog: false, attachmentsPattern: '', body: '''${SCRIPT, template="openforest_midapi.template"}''', mimeType: 'text/html', replyTo: 'builds@usda.gov', subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: "${MAILING_LIST}"
 	    }
         }
 
@@ -367,7 +367,7 @@ post{
 		env.BLUE_OCEAN_URL_SQ_DOCX="${env.BUILD_URL}artifact/sonarqubereports/sonarqubeanalysisreport.docx"
 		env.BLUE_OCEAN_URL_SQ_XLSX="${env.BUILD_URL}artifact/sonarqubereports/sonarqubeissuesreport.xlsx"
 		env.LSONARQUBE_URL="${SONARQUBE_URL}"
-        emailext attachLog: false, attachmentsPattern: '', body: '''${SCRIPT, template="openforest_simple.template"}''', mimeType: 'text/html', replyTo: 'builds@usda.gov', subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: "${MAILING_LIST}"
+        emailext attachLog: false, attachmentsPattern: '', body: '''${SCRIPT, template="openforest_midapi.template"}''', mimeType: 'text/html', replyTo: 'builds@usda.gov', subject: '$PROJECT_NAME - Build # $BUILD_NUMBER - $BUILD_STATUS!', to: "${MAILING_LIST}"
 	    }
         }
     }
