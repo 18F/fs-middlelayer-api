@@ -41,7 +41,7 @@ jobs:
       - run:
           name: Snyk vulnerability test
           command: |
-            sudo npm install -g snyk
+           sudo npm install -g snyk
             set +x
             mkdir -p a=rw snyk
             export DATE_STRING=`date +"%m-%d-%Y-%H"`
@@ -56,108 +56,108 @@ jobs:
           name: Clean s3 bucket
           command: ./.circleci/clean-s3-bucket.sh
 
-  prod-deploy:
-    docker:
-      - image: circleci/node:8.9.4
-    steps:
-      - checkout
-      - run: *install_cf
-      - run:
-          name: Deploy
-          command: |
-            if [ "${CIRCLE_PROJECT_USERNAME}" == "USDAForestService" ];
-              then ./.cg-deploy/deploy.sh middlelayer-production;
-            fi
-  staging-deploy:
-    docker:
-      - image: circleci/node:8.9.4
-    steps:
-      - checkout
-      - run: *install_cf
-      - run:
-          name: Deploy
-          command: |
-            if [ "${CIRCLE_PROJECT_USERNAME}" == "USDAForestService" ];
-              then ./.cg-deploy/deploy.sh middlelayer-staging;
-            fi
+#  prod-deploy:
+#    docker:
+#      - image: circleci/node:8.9.4
+#    steps:
+#      - checkout
+#      - run: *install_cf
+#      - run:
+#          name: Deploy
+#         command: |
+#            if [ "${CIRCLE_PROJECT_USERNAME}" == "USDAForestService" ];
+#              then ./.cg-deploy/deploy.sh middlelayer-production;
+#            fi
+#  staging-deploy:
+#    docker:
+#      - image: circleci/node:8.9.4
+#    steps:
+#      - checkout
+#      - run: *install_cf
+#      - run:
+#          name: Deploy
+#          command: |
+#            if [ "${CIRCLE_PROJECT_USERNAME}" == "USDAForestService" ];
+#              then ./.cg-deploy/deploy.sh middlelayer-staging;
+#            fi
 
-  nightly-snyk:
-    docker:
-        - image: circleci/node:8.9.4
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - fs-ml-deps-{{ checksum "package.json" }}
+#  nightly-snyk:
+#    docker:
+#        - image: circleci/node:8.9.4
+#    steps:
+#      - checkout
+#      - restore_cache:
+#          keys:
+#          - fs-ml-deps-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
-          - fs-ml-deps-
-      - run:
-          name: Install dependencies
-          command: |
-            npm install
-            sudo npm install -g snyk
-      - run:
-          name: Snyk check and upload
-          command: |
-            set +x
-            mkdir -p a=rw snyk
-            export DATE_STRING=`date +"%m-%d-%Y-%H"`
-            export SNYK_REPORT=snyk-${CIRCLE_PR_REPONAME}-${DATE_STRING}.csv
-            snyk test #For human
-            snyk test --json > snyk/snyk.json
-            sudo cat snyk/snyk.json  \
-            | jq -r '["Package", "CVE", "CWE", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Paths"], (.vulnerabilities[] | [.packageName, .identifiers.CVE[0], .identifiers.CWE[0], .severity, .cvssScore, .title,.disclosureTime, .description, .from[1], .from[2]] )| @csv' >  \
-            "snyk/${SNYK_REPORT}"
-            ./.circleci/store-snyk.sh
+#          - fs-ml-deps-
+#      - run:
+#          name: Install dependencies
+#          command: |
+#            npm install
+#            sudo npm install -g snyk
+#      - run:
+#          name: Snyk check and upload
+#          command: |
+#            set +x
+#            mkdir -p a=rw snyk
+#            export DATE_STRING=`date +"%m-%d-%Y-%H"`
+#            export SNYK_REPORT=snyk-${CIRCLE_PR_REPONAME}-${DATE_STRING}.csv
+#            snyk test #For human
+#            snyk test --json > snyk/snyk.json
+#           sudo cat snyk/snyk.json  \
+#            | jq -r '["Package", "CVE", "CWE", "Severity", "CVSSScore", "Title", "Disclosure Time", "Description", "Library Paths"], (.vulnerabilities[] | [.packageName, .identifiers.CVE[0], .identifiers.CWE[0], .severity, .cvssScore, .title,.disclosureTime, .description, .from[1], .from[2]] )| @csv' >  \
+#            "snyk/${SNYK_REPORT}"
+#            ./.circleci/store-snyk.sh
 
-  recycle-production:
-    docker:
-      - image: circleci/node:8.9.4
-    steps:
-      - run: *install_cf
-      - run:
-          name: Install cf-recycle-plugin 2.0.1 release
-          command: |
-            sudo wget https://github.com/Comcast/cf-recycle-plugin/releases/download/v2.0.1/cf-recycle-plugin-2.0.1.tgz
-            sudo tar -zxvf cf-recycle-plugin-2.0.1.tgz
-            cf install-plugin cf-recycle-plugin-linux -f
-      - run:
-          name: Login to cloud.gov Production
-          command: |
-            CF_API="https://api.fr.cloud.gov"
-            cf login -a ${CF_API} -u ${CF_USERNAME_PROD} -p ${CF_PASSWORD_PROD}
-      - run:
-          name: Recycle Production instances
-          command: |
-            cf t -o usda-forest-service -s middlelayer-production
-            cf recycle fs-middlelayer-api
+#  recycle-production:
+#    docker:
+#      - image: circleci/node:8.9.4
+#    steps:
+#      - run: *install_cf
+#      - run:
+#          name: Install cf-recycle-plugin 2.0.1 release
+#          command: |
+#            sudo wget https://github.com/Comcast/cf-recycle-plugin/releases/download/v2.0.1/cf-recycle-plugin-2.0.1.tgz
+#            sudo tar -zxvf cf-recycle-plugin-2.0.1.tgz
+#            cf install-plugin cf-recycle-plugin-linux -f
+#      - run:
+#          name: Login to cloud.gov Production
+#          command: |
+#            CF_API="https://api.fr.cloud.gov"
+#            cf login -a ${CF_API} -u ${CF_USERNAME_PROD} -p ${CF_PASSWORD_PROD}
+#      - run:
+#          name: Recycle Production instances
+#          command: |
+#            cf t -o usda-forest-service -s middlelayer-production
+#            cf recycle fs-middlelayer-api
 
 workflows:
   version: 2
   build-deploy:
     jobs:
       - run-tests
-      - staging-deploy:
-          requires:
-            - run-tests
-          filters:
-            branches:
-              only: dev
-      - prod-deploy:
-          requires:
-              - run-tests
-          filters:
-            branches:
-              only: master
-  nightly:
-      triggers:
-        - schedule:
-            cron: "0 0 * * *"
-            filters:
-              branches:
-                only:
-                  - master
-      jobs:
-        - nightly-snyk
-        - recycle-production
+#      - staging-deploy:
+#          requires:
+#            - run-tests
+#          filters:
+#            branches:
+#              only: dev
+#      - prod-deploy:
+#          requires:
+#              - run-tests
+#          filters:
+#            branches:
+#              only: master
+#  nightly:
+#      triggers:
+#        - schedule:
+#            cron: "0 0 * * *"
+#            filters:
+#              branches:
+#                only:
+#                  - master
+#      jobs:
+#        - nightly-snyk
+#        - recycle-production
 
