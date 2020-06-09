@@ -25,7 +25,7 @@ pipeline {
         RUN_SONARQUBE_STATUS = 'Pending'   
 
         SONARQUBE_URL="https://sca.fedgovcloud.us/dashboard?id=fs-openforest-middlelayer-api"	    
-	      POSTGRES_HOST = 'localhost'
+	POSTGRES_HOST = 'localhost'
         POSTGRES_USER = 'postgres'
         HOME='.' 
         currentdate= sh (returnStdout: true, script: 'date +%Y%m%d%H%M%S').trim()
