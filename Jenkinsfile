@@ -335,6 +335,9 @@ post{
     	         GIT_EMAIL=$(git --no-pager show -s --format='%ae' $GIT_COMMIT)
 	        	 rm -f ${WORKSPACE}/pipeline.properties
 		         touch ${WORKSPACE}/pipeline.properties 
+		AuthorVar="GIT_AUTHOR_NAME=$GIT_AUTHOR_NAME"
+                 echo $AuthorVar > ${WORKSPACE}/pipeline.properties			 			 
+			 
             '''
 
         properties = readProperties file: 'pipeline.properties'
@@ -367,6 +370,9 @@ post{
     	         GIT_EMAIL=$(git --no-pager show -s --format='%ae' $GIT_COMMIT)
 	        	 rm -f ${WORKSPACE}/pipeline.properties
 		         touch ${WORKSPACE}/pipeline.properties 
+ 		AuthorVar="GIT_AUTHOR_NAME=$GIT_AUTHOR_NAME"
+                 echo $AuthorVar > ${WORKSPACE}/pipeline.properties			 
+
             '''
 
         properties = readProperties file: 'pipeline.properties'
