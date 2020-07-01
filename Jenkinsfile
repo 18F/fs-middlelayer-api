@@ -225,7 +225,7 @@ sh '''
 
  stage('dev-deploy'){
   when{
-	branch 'dev'
+	branch 'jenkinsfix'
 	}
     steps {
         script {
