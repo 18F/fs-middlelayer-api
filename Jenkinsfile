@@ -31,6 +31,15 @@ pipeline {
         currentdate= sh (returnStdout: true, script: 'date +%Y%m%d%H%M%S').trim()
         DB_URL = 'postgres://fs_open_forest:fs_open_forest@10.0.0.102/'    
         VCAP_SERVICES = "${env.VCAP_SERVICES_DEV}"
+	    
+     CF_USERNAME_DEV = credentials('CF_USERNAME_DEV_MIDAPI')  
+    CF_PASSWORD_DEV = credentials('CF_PASSWORD_DEV_MIDAPI')  
+    CF_USERNAME_STAGING = credentials('CF_USERNAME_STAGING_MIDAPI')  
+    CF_PASSWORD_STAGING = credentials('CF_PASSWORD_STAGING_MIDAPI') 	    
+    
+    CF_USERNAME_PROD = credentials('CF_USERNAME_PROD_MIDAPI')  
+    CF_PASSWORD_PROD = credentials('CF_PASSWORD_PROD_MIDAPI')  
+	    
     }
 
     options {
@@ -223,14 +232,8 @@ sh '''
 	sh '''
       		curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "pending","context":"ci/jenkins: build-deploy", "target_url": "https://jenkins.fs.usda.gov/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests are queued behind your running builds!"}'
       	'''
-	CF_USERNAME=credentials('CF_USERNAME_DEV_MIDAPI')
-        CF_PASSWORD=credentials('CF_PASSWORD_DEV_MIDAPI')		
-	
 		
         sh '''
-        pwd
-	   export CF_USERNAME_DEV="${CF_USERNAME}"		
-          export CF_PASSWORD_DEV="${CF_PASSWORD}"		
         ./.cg-deploy/deploy.sh middlelayer-dev;
         '''
 	sh '''
@@ -260,14 +263,7 @@ sh '''
 	sh '''
       		curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "pending","context":"ci/jenkins: build-deploy", "target_url": "https://jenkins.fs.usda.gov/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests are queued behind your running builds!"}'
       	'''
-
-	CF_USERNAME=credentials('CF_USERNAME_STAGING_MIDAPI')
-        CF_PASSWORD=credentials('CF_PASSWORD_STAGING_MIDAPI')		
-
         sh '''
-	export CF_USERNAME_DEV="${CF_USERNAME}"		
-        export CF_PASSWORD_DEV="${CF_PASSWORD}"		
-
 	./.cg-deploy/deploy.sh middlelayer-staging;
         '''
 	sh '''
@@ -298,13 +294,9 @@ sh '''
       		curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "pending","context":"ci/jenkins: build-deploy", "target_url": "https://jenkins.fs.usda.gov/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests are queued behind your running builds!"}'
       	'''
 	
-	CF_USERNAME=credentials('CF_USERNAME_PROD_MIDAPI')
-        CF_PASSWORD=credentials('CF_PASSWORD_PROD_MIDAPI')	    		
 
         sh '''
-	export CF_USERNAME_DEV="${CF_USERNAME}"		
-        export CF_PASSWORD_DEV="${CF_PASSWORD}"		
-        ./.cg-deploy/deploy.sh middlelayer-prod1;
+        ./.cg-deploy/deploy.sh middlelayer-prod;
        curl -XPOST -H "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/USDAForestService/fs-open-forest-middlelayer-api/statuses/$(git rev-parse HEAD) -d '{"state": "success","context":"ci/jenkins: build-deploy", "target_url": "https://jenkins.fs.usda.gov/blue/organizations/jenkins/fs-open-forest-middlelayer-api/activity","description": "Your tests passed on Jenkins!"}'
       	'''
         DEPLOY_STATUS= 'Success'
