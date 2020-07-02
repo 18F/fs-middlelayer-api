@@ -34,6 +34,21 @@ ignore:
     - newrelic > https-proxy-agent:
         reason: ignore for more days
         expires: '2020-06-12T16:02:40.494Z'
+      pac-proxy-agent > https-proxy-agent:
+        reason: None given
+        expires: '2020-06-13T15:39:04.231Z'
+    - proxy-agent > https-proxy-agent:
+        reason: None given
+        expires: '2020-06-13T15:39:04.231Z'
+    - proxy-agent > pac-proxy-agent > https-proxy-agent:
+        reason: None given
+        expires: '2020-06-13T15:39:04.232Z'
+    - snyk > proxy-agent > https-proxy-agent:
+        reason: None given
+        expires: '2020-06-13T15:39:04.232Z'
+    - snyk > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        reason: None given
+        expires: '2020-06-13T15:39:04.232Z'
   SNYK-JS-MARKDOWNIT-459438:
     - jsdoc > markdown-it:
         reason: ignore for 30days
@@ -46,19 +61,148 @@ ignore:
     - jsdoc > mkdirp > minimist:
         reason: None given
         expires: '2020-06-15T19:24:44.420Z'
-      minimist:
+      '@types/package-json > package-json > registry-auth-token > rc > minimist':
         reason: None given
-        expires: '2020-06-15T19:28:01.289Z'
+        expires: '2020-06-13T15:39:04.236Z'
     - mocha > mkdirp > minimist:
         reason: None given
         expires: '2020-06-15T19:24:44.420Z'
-      mkdirp > minimist:
+      '@types/package-json > package-json > registry-url > rc > minimist':
         reason: None given
-        expires: '2020-06-15T19:28:01.289Z'
+        expires: '2020-06-13T15:39:04.236Z'
     - multer > mkdirp > minimist:
         reason: None given
         expires: '2020-06-15T19:24:44.420Z'
+      snyk > snyk-resolve-deps > @types/package-json > package-json > registry-auth-token > rc > minimist:
+        reason: None given
+        expires: '2020-06-13T15:39:04.236Z'
     - sequelize-cli > js-beautify > mkdirp > minimist:
         reason: None given
         expires: '2020-06-15T19:24:44.420Z'
+      snyk > update-notifier > latest-version > package-json > registry-auth-token > rc > minimist:
+        reason: None given
+        expires: '2020-06-13T15:39:04.236Z'
+    - minimist:
+        reason: None given
+        expires: '2020-06-15T19:28:01.289Z'
+      snyk > snyk-resolve-deps > @types/package-json > package-json > registry-url > rc > minimist:
+        reason: None given
+        expires: '2020-06-13T15:39:04.236Z'
+    - mkdirp > minimist:
+        reason: None given
+        expires: '2020-06-15T19:28:01.289Z'
+      snyk > update-notifier > latest-version > package-json > registry-url > rc > minimist:
+        reason: None given
+        expires: '2020-06-13T15:39:04.237Z'
+  SNYK-JS-LODASH-567746:
+    - '@snyk/composer-lockfile-parser > lodash':
+        reason: None given
+        expires: '2020-06-13T15:39:04.232Z'
+    - inquirer > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.232Z'
+    - snyk > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.232Z'
+    - snyk > inquirer > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.232Z'
+    - jsdoc > catharsis > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.232Z'
+    - jsdoc > requizzle > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.233Z'
+    - mocha > yargs-unparser > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.233Z'
+    - snyk > snyk-config > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.233Z'
+    - snyk > snyk-mvn-plugin > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.233Z'
+    - snyk > snyk-nodejs-lockfile-parser > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.233Z'
+    - snyk > snyk-nuget-plugin > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.233Z'
+    - snyk > snyk-php-plugin > @snyk/composer-lockfile-parser > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.233Z'
+    - lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.233Z'
+    - '@snyk/dep-graph > lodash':
+        reason: None given
+        expires: '2020-06-13T15:39:04.233Z'
+    - async > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.233Z'
+    - dotnet-deps-parser > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.233Z'
+    - express-winston > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.234Z'
+    - json-schema-deref-sync > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.234Z'
+    - sequelize > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.234Z'
+    - sequelize-cli > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.234Z'
+    - '@snyk/dep-graph > graphlib > lodash':
+        reason: None given
+        expires: '2020-06-13T15:39:04.234Z'
+    - snyk > @snyk/dep-graph > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.234Z'
+    - newrelic > async > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.234Z'
+    - request-promise-native > request-promise-core > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.234Z'
+    - s3-zip > archiver > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.234Z'
+    - snyk > @snyk/dep-graph > graphlib > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.234Z'
+    - snyk > snyk-go-plugin > graphlib > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.234Z'
+    - snyk > snyk-nodejs-lockfile-parser > graphlib > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.235Z'
+    - s3-zip > archiver > async > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.235Z'
+    - snyk > snyk-nuget-plugin > dotnet-deps-parser > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.235Z'
+    - s3-zip > archiver > archiver-utils > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.235Z'
+    - s3-zip > archiver > zip-stream > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.235Z'
+    - s3-zip > archiver > zip-stream > archiver-utils > lodash:
+        reason: None given
+        expires: '2020-06-13T15:39:04.235Z'
+  SNYK-JS-TREEKILL-536781:
+    - snyk > snyk-sbt-plugin > tree-kill:
+        reason: None given
+        expires: '2020-06-13T15:39:04.235Z'
+  SNYK-JS-DOTPROP-543489:
+    - snyk > configstore > dot-prop:
+        reason: None given
+        expires: '2020-06-13T15:39:04.235Z'
+    - snyk > update-notifier > configstore > dot-prop:
+        reason: None given
+        expires: '2020-06-13T15:39:04.236Z'
 patch: {}
