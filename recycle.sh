@@ -18,13 +18,13 @@ exit
 fi
 
 
-if [ $SPACE = 'platform-production' ]; then
+if [ $SPACE = 'middlelayer-production' ]; then
   CF_USERNAME=$CF_USERNAME_PROD
   CF_PASSWORD=$CF_PASSWORD_PROD
-elif [ $SPACE = 'platform-staging' ]; then
+elif [ $SPACE = 'middlelayer-staging' ]; then
   CF_USERNAME=$CF_USERNAME_STAGING
   CF_PASSWORD=$CF_PASSWORD_STAGING
-elif [ $SPACE = 'platform-dev' ]; then
+elif [ $SPACE = 'middlelayer-dev' ]; then
   CF_USERNAME=$CF_USERNAME_DEV
   CF_PASSWORD=$CF_PASSWORD_DEV
 else
